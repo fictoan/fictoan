@@ -8,11 +8,7 @@ import Link from "next/link";
 import {
     Element,
     Heading1,
-    Heading2,
-    Heading3,
     Heading4,
-    Heading5,
-    Heading6,
     Divider,
     Portion,
     Row,
@@ -22,23 +18,18 @@ import {
     Card,
     Form,
     Header,
-    InputField,
     Select,
     Breadcrumbs,
     Div,
-    RadioTabGroup,
     CodeBlock,
 } from "fictoan-react";
-
-// COMPONENTS ==========================================================================================================
 
 // STYLES ==============================================================================================================
 import "./page-breadcrumbs.css";
 
-// ASSETS ==============================================================================================================
-
 // HOOKS ===============================================================================================================
 import { useThemeVariables } from "../../../utils/useThemeVariables";
+import { createPropsConfigurator } from "../../../utils/propsConfigurator";
 
 // UTILS ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
@@ -49,10 +40,24 @@ import { breadcrumbsProps } from "./config";
 
 const BreadcrumbsDocs = () => {
     const [selectedBgColour, setSelectedBgColour] = useState("");
-    const [separator, setSeparator] = useState("/");
-    const [selectedSpacing, setSelectedSpacing] = useState("small");
-
     const [showCurrentPageMessage, setShowCurrentPageMessage] = useState(false);
+
+    // PROPS CONFIGURATOR //////////////////////////////////////////////////////////////////////////////////////////////
+    const {
+        propsConfigurator,
+        componentProps: propsConfig,
+    } = createPropsConfigurator(
+        "Breadcrumbs",
+        ["separator", "spacing"],
+        colourOptions,
+        {
+            isSelfClosing: false,
+            canHaveChildren: true,
+            defaultChildren: `    <Link href="/">Home</Link>
+    <Link href="/components">Components</Link>
+    <Link href="/components/breadcrumbs">Breadcrumbs</Link>`
+        }
+    );
 
     useEffect(() => {
         let timer;
@@ -108,10 +113,7 @@ const BreadcrumbsDocs = () => {
                             {...(
                                 selectedBgColour !== undefined ? { bgColour : selectedBgColour } : {}
                             )}
-                            {...(
-                                separator !== undefined ? { separator } : {}
-                            )}
-                            spacing={selectedSpacing}
+                            {...propsConfig}
                         >
                             <Link href="/">Home</Link>
                             <Link href="/components">Components</Link>
@@ -127,65 +129,7 @@ const BreadcrumbsDocs = () => {
 
                 {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////// */}
                 <Portion desktopSpan="half">
-                    <Form>
-                        <Card padding="micro" shape="rounded">
-                            <Header verticallyCentreItems pushItemsToEnds marginBottom="micro">
-                                <Text size="large" weight="700" textColour="white">
-                                    Configure props
-                                </Text>
-                            </Header>
-
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton>
-                                        {[
-                                            `// Paste this in your content file`,
-                                            `<Breadcrumbs`,
-                                            `    separator="${separator}"`,
-                                            `    spacing="${selectedSpacing}"`,
-                                            `>`,
-                                            `    <Link href="/">Home</Link>`,
-                                            `    <Link href="/components">Components</Link>`,
-                                            `    <Link href="/components/breadcrumbs">Breadcrumbs</Link>`,
-                                            `</Breadcrumbs>`,
-                                        ].filter(Boolean).join("\n")}
-                                    </CodeBlock>
-                                </Portion>
-
-                                {/* MIN ============================================================================ */}
-                                <Portion desktopSpan="half">
-                                    <InputField
-                                        type="text"
-                                        label="Separator"
-                                        placeholder="Enter a character to separate breadcrumbs"
-                                        value={separator}
-                                        onChange={(value) => setSeparator(value)}
-                                    />
-                                </Portion>
-
-                                {/* POSITION ======================================================================= */}
-                                <Portion>
-                                    <RadioTabGroup
-                                        id="spacing" label="Spacing" name="spacing"
-                                        options={[
-                                            { id : "spacing-opt-0", value : "none", label : "none" },
-                                            { id : "spacing-opt-1", value : "nano", label : "nano" },
-                                            { id : "spacing-opt-2", value : "micro", label : "micro" },
-                                            { id : "spacing-opt-3", value : "tiny", label : "tiny" },
-                                            { id : "spacing-opt-4", value : "small", label : "small" },
-                                            { id : "spacing-opt-5", value : "medium", label : "medium" },
-                                            { id : "spacing-opt-6", value : "large", label : "large" },
-                                            { id : "spacing-opt-7", value : "huge", label : "huge" },
-                                        ]}
-                                        value={selectedSpacing}
-                                        onChange={(value) => setSelectedSpacing(value)}
-                                    />
-
-                                    <Divider kind="secondary" horizontalMargin="none" marginTop="micro" />
-                                </Portion>
-                            </Row>
-                        </Card>
-                    </Form>
+                    {propsConfigurator()}
                 </Portion>
 
                 {/* GLOBAL THEME /////////////////////////////////////////////////////////////////////////////////// */}

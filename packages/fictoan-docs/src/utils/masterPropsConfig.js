@@ -147,6 +147,30 @@ export const MASTER_PROPS_CONFIG = {
         isRequired   : true,
     },
 
+    // BREADCRUMBS ====================================================================================================
+    separator : {
+        type : "text",
+        default : {
+            label : "Separator",
+            value : "/",
+        },
+    },
+    
+    spacing : {
+        type    : "spacing",
+        label   : "Spacing",
+        options : [
+            { id : "spacing-opt-0", value : "none", label : "none" },
+            { id : "spacing-opt-1", value : "nano", label : "nano" },
+            { id : "spacing-opt-2", value : "micro", label : "micro" },
+            { id : "spacing-opt-3", value : "tiny", label : "tiny" },
+            { id : "spacing-opt-4", value : "small", label : "small" },
+            { id : "spacing-opt-5", value : "medium", label : "medium" },
+            { id : "spacing-opt-6", value : "large", label : "large" },
+            { id : "spacing-opt-7", value : "huge", label : "huge" },
+        ],
+    },
+
     // TOOLTIP =========================================================================================================
     showOn : {
         type    : "showOn",
