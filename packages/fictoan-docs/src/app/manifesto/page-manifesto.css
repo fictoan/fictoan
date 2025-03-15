@@ -1,0 +1,9 @@
+#page-manifesto {
+    video { width : 100%; }
+
+    #down-arrow {
+        font-size : 14rem;
+        transform : rotate(-90deg);
+        margin    : 40vh 10vh;
+    }
+}

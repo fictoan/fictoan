@@ -1,0 +1,78 @@
+[data-sidebar-item] {
+    display               : grid;
+    align-items           : center;
+    grid-template-columns : var(--sidebar-width-collapsed) 1fr;
+    grid-template-rows    : 40px;
+    line-height           : 1;
+
+    & > a { width : unset; }
+
+    &:hover {
+        color            : var(--sidebar-item-text-hover);
+        background-color : var(--sidebar-item-bg-hover);
+    }
+
+    &:hover a [data-sidebar-item-text] {
+        color : var(--sidebar-item-text-hover);
+    }
+
+    /* ICON MANAGEMENT ====================================================== */
+    & svg,
+    & img {
+        width  : var(--sidebar-item-icon-width);
+        height : var(--sidebar-item-icon-width);
+    }
+
+    & svg {
+        fill         : none;
+        stroke       : var(--sidebar-item-icon-stroke-default);
+        stroke-width : var(--sidebar-item-icon-stroke-width-default);
+    }
+
+    &.has-empty-icon {
+        grid-template-columns : var(--sidebar-width-collapsed) 1fr;
+    }
+
+    &.has-no-icon {
+        grid-template-columns : 1fr;
+    }
+
+    /* This will centre the icon in the first div */
+    & > *:first-child {
+        justify-self : center;
+    }
+
+    /* This will negate the above rule when there is no icon */
+    &.has-no-icon > *:first-child {
+        justify-self : unset;
+    }
+
+    /* ALERT BADGE ========================================================== */
+    &.has-alert {
+        position : relative;
+
+        &::after {
+            position         : absolute;
+            content          : "";
+            display          : block;
+            pointer-events   : none;
+            right            : 6px;
+            height           : 8px;
+            width            : 8px;
+            border-radius    : 50%;
+            background-color : var(--sidebar-item-alert-bg);
+        }
+    }
+
+}
+
+/* This moves the chevron a little bit to account for the red badge when the
+   sidebar-item has as `hasAlert` prop */
+[data-expandable-content] summary:has([data-sidebar-item])::after {
+    top   : calc(50% - 2px);
+    right : 22px;
+}
+
+[data-expandable-content][open] > summary:has([data-sidebar-item])::after {
+    transform : translateY(calc(50% - 4px)) rotate(225deg);
+}

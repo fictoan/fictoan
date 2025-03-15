@@ -1,0 +1,114 @@
+#theme-toggle {
+    position : relative;
+
+    #celestial-bodies {
+        cursor           : pointer;
+        position         : relative;
+        user-select      : none;
+        height           : 120px;
+        display          : flex;
+        flex-direction   : column;
+        justify-content  : space-between;
+        transform-origin : center center;
+        top              : 42px;
+        transition       : all 1s cubic-bezier(1, 0, 0, 1);
+
+        p {
+            font-size : 24px;
+            display   : block;
+        }
+
+        #theme-light {
+            transform        : rotateZ(150deg);
+            transform-origin : 70% 50%;
+        }
+    }
+
+    #stars {
+        width           : 60px;
+        display         : flex;
+        top             : 0;
+        position        : absolute;
+        justify-content : space-between;
+        transform       : translateX(-20px) translateY(20px);
+        transition      : opacity 0.5s cubic-bezier(1, 0, 0, 1);
+
+        & > p:first-child {
+            transform : translateX(-10px) translateY(16px);
+        }
+
+        & > p:last-child {
+            transform : translateY(32px) scale(0.64);
+        }
+    }
+
+    #clouds {
+        position   : absolute;
+        top        : 0;
+        left       : 0;
+        transition : all 5s ease-in-out;
+
+        & > p:first-child {
+            transition : all 5s ease-in-out;
+            transform  : translateX(16px) translateY(52px);
+        }
+    }
+
+    #landscape {
+        display  : flex;
+        position : absolute;
+        width    : 100px;
+        bottom   : 26px;
+        left     : 30px;
+        z-index  : 5;
+
+        & > p:last-child {
+            transform : scale(0.8) translateX(-8px) translateY(4px);
+        }
+    }
+
+    #airplane {
+        position : absolute;
+        top      : 0;
+        left     : 0;
+
+        p {
+            position  : relative;
+            font-size : 28px;
+            animation : 140s infinite animateAirplane;
+            clip-path : inset(0 0 32% 0);
+
+            &::after {
+                content       : "";
+                position      : absolute;
+                opacity       : 0;
+                top           : 18px;
+                left          : 6px;
+                border-radius : 50%;
+                width         : 2px;
+                height        : 2px;
+                background    : var(--green);
+                box-shadow    : 0 0 2px 1px var(--green-light10);
+                animation     : 2s infinite blinkingLight,
+                140s infinite lightColor;
+            }
+        }
+    }
+}
+
+.theme-light #stars { opacity : 0; }
+
+.theme-dark #stars { opacity : 1; }
+
+.theme-dark #landscape {
+    filter : grayscale(1) brightness(0.5);
+}
+
+.theme-light #clouds { opacity : 1; }
+
+.theme-dark #theme-toggle #clouds {
+    opacity : 0;
+    & > p:first-child {
+        transform : translateX(0px) translateY(52px);
+    }
+}

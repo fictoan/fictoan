@@ -1,0 +1,82 @@
+[data-switch] {
+    display        : inline-flex;
+    flex-direction : row;
+    align-items    : center;
+
+    &:only-of-type {
+        margin-right : 0;
+    }
+
+    input[type="checkbox"] {
+        position : absolute;
+        height   : 1px;
+        width    : 1px;
+        overflow : hidden;
+        clip     : rect(1px 1px 1px 1px); /* IE6, IE7 */
+        clip     : rect(1px, 1px, 1px, 1px);
+    }
+
+    label {
+        display      : inline-flex;
+        position     : relative;
+        font-family  : var(--paragraph-font);
+        color        : var(--paragraph-text-colour);
+        cursor       : pointer;
+        line-height  : 1;
+        user-select  : none;
+        padding-left : 44px;
+
+        &::before,
+        &::after {
+            display    : inline-flex;
+            content    : "";
+            transition : all 0.1s ease-out;
+        }
+    }
+
+    /* The grey stadium shape for the case ================================== */
+    label::before {
+        position      : absolute;
+        top           : 50%;
+        left          : 0;
+        transform     : translateY(-50%);
+        border-radius : 16px;
+        margin-right  : 4px;
+        background    : var(--switch-bg-default);
+        width         : 36px;
+        height        : 18px;
+    }
+
+    /* The white inner circle actuator ====================================== */
+    label::after {
+        position      : absolute;
+        top           : 50%;
+        transform     : translateY(-50%);
+        display       : inline-block;
+        background    : var(--switch-slider-bg-default);
+        border-radius : 50%;
+        box-shadow    : 0 2px 4px -2px hsla(0, 0%, 0%, 0.6);
+        left          : 3px;
+        width         : 12px;
+        height        : 12px;
+    }
+}
+
+/* HOVER */
+[data-switch]:has(input[type="checkbox"]:hover) > label::before {
+    background : var(--switch-bg-hover);
+}
+
+[data-switch]:has(input[type="checkbox"]:hover) > label::after {
+    background : var(--switch-slider-bg-hover);
+}
+
+/* CHECKED */
+[data-switch]:has(input[type="checkbox"]:checked) > label::before {
+    background : var(--switch-bg-checked);
+}
+
+[data-switch] [data-form-item]:has(input[type="checkbox"]:checked) > label::after {
+    transform  : translateY(-50%) translateX(18px);
+    background : var(--switch-slider-bg-checked);
+}

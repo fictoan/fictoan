@@ -1,0 +1,81 @@
+[data-badge] {
+    position            : relative;
+    font-family         : var(--badge-font);
+    font-size           : 92%;
+    text-decoration     : none;
+    transition          : all 0.2s ease-in-out;
+    background-position : center;
+    user-select         : none;
+    width               : fit-content;
+    height              : fit-content;
+    display             : flex;
+    align-items         : center;
+    background-color    : var(--badge-bg);
+    color               : var(--badge-text);
+    border-color        : var(--badge-border);
+    border-style        : solid;
+
+    /* To make sure a badge’s children don’t style themselves like a d-bag*/
+    > * { all : unset; }
+
+    &.shape-rounded { border-radius : var(--badge-border-radius); }
+    &.shape-curved { border-radius : 5000px; }
+
+    &[class*="border-"] { border-width : var(--badge-border-width); }
+    &.border-none { border-width : 0 !important; }
+
+    & .badge-dismiss-button {
+        position    : relative;
+        margin-left : 8px;
+        font-size   : 1.6rem;
+        cursor      : pointer;
+        line-height : 1;
+        top         : -1px;
+        font-weight : 400;
+
+        &:hover {
+            transform  : scale(1.1);
+            transition : all 0.1s;
+        }
+
+        &:active {
+            transform : scale(0.9);
+        }
+    }
+
+    /* DIFFERENT SIZES ////////////////////////////////////////////////////// */
+    &.size-nano {
+        padding   : 1px 2px;
+        font-size : 0.48rem;
+    }
+
+    &.size-micro {
+        padding   : 2px 4px;
+        font-size : 0.56rem;
+    }
+
+    &.size-tiny {
+        padding   : 2px 8px;
+        font-size : 0.64rem;
+    }
+
+    &.size-small {
+        padding   : 4px 10px;
+        font-size : 0.72rem;
+    }
+
+    &.size-medium {
+        padding   : 6px 12px;
+        font-size : 0.88rem;
+    }
+
+    &.size-large {
+        padding   : 8px 16px;
+        font-size : 1.16rem;
+    }
+
+    &.size-huge {
+        padding   : 12px 24px;
+        font-size : 1.24rem;
+    }
+}

@@ -1,0 +1,42 @@
+[data-notifications-wrapper] {
+    display : none;
+}
+
+[data-notifications-wrapper]:has([data-notification-item]) {
+    position   : fixed;
+    display    : flex;
+    width      : 400px;
+    height     : auto;
+    max-height : 100vh;
+    z-index    : 5000000;
+    padding    : 3vh;
+    overflow-x : hidden;
+    overflow-y : auto;
+    gap        : 1rem;
+
+    &.left { left : 0; }
+
+    &.right { right : 0; }
+
+    &.top {
+        top             : 0;
+        justify-content : flex-start;
+    }
+
+    &.bottom {
+        bottom          : 0;
+        justify-content : flex-end;
+    }
+
+    &.new-on-top { flex-direction : column-reverse; }
+
+    &.new-on-bottom { flex-direction : column; }
+}
+
+[data-notifications-wrapper]::-webkit-scrollbar {
+    display : none; /* Webkit browsers */
+}
+
+[data-notifications-wrapper] {
+    scrollbar-width : none; /* Firefox */
+}

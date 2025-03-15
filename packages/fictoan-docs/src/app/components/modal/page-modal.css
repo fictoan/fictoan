@@ -1,0 +1,14 @@
+#page-modal {
+    [data-modal] {
+        width : 400px;
+    }
+
+    [data-modal] .dismiss-button {
+        position    : absolute;
+        top         : 0;
+        right       : 5px;
+        line-height : 1;
+        font-weight : 400;
+        cursor      : pointer;
+    }
+}

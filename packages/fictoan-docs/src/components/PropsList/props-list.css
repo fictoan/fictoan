@@ -1,0 +1,9 @@
+.props-values-list {
+    display        : flex;
+    flex-direction : column;
+
+    code {
+        width  : fit-content;
+        margin : 4px 0;
+    }
+}

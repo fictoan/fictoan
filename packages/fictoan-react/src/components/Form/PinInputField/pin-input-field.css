@@ -1,0 +1,22 @@
+[data-pin-input-field] {
+    display        : flex;
+    flex-direction : row;
+    gap            : 16px;
+
+    &.full-width [data-form-item] {
+        width : 100%;
+    }
+
+    [data-form-item] {
+        flex-direction : row;
+        width          : 3rem;
+        height         : 3rem;
+    }
+
+    & input {
+        font-weight : bold;
+        text-align  : center;
+        width       : 3rem;
+        height      : 3rem;
+    }
+}

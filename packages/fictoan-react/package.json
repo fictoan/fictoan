@@ -1,0 +1,106 @@
+{
+    "name"                 : "fictoan-react",
+    "version"              : "1.11.10",
+    "private"              : false,
+    "description"          : "A full-featured, designer-friendly, yet performant framework with plain-English props and focus on rapid iteration.",
+    "repository"           : {
+        "type" : "git",
+        "url"  : "https://github.com/fictoan/fictoan-react"
+    },
+    "bugs"                 : {
+        "url" : "https://github.com/fictoan/fictoan-react/issues"
+    },
+    "homepage"             : "https://fictoan.io",
+    "type"                 : "module",
+    "sideEffects"          : [
+        "./src/styles/*.css",
+        "./src/components/**/typography.css"
+    ],
+    "files"                : [
+        "dist",
+        "dist/types"
+    ],
+    "main"                 : "./dist/index.js",
+    "module"               : "./dist/index.js",
+    "types"                : "./dist/types/index.d.ts",
+    "exports"              : {
+        "."              : {
+            "types"   : "./dist/types/index.d.ts",
+            "default" : "./dist/index.js"
+        },
+        "./components/*" : {
+            "types"   : "./dist/types/components/*.d.ts",
+            "default" : "./dist/components/*.js"
+        },
+        "./dist/"        : "./dist/"
+    },
+    "scripts"              : {
+        "watch"            : "vite build --watch",
+        "build"            : "tsc && vite build",
+        "build:umd"        : "tsc && vite build -c vite.config.umd.js",
+        "tree-shake"       : "agadoo",
+        "test"             : "echo \"Error: no test specified\" && exit 1",
+        "generate-colours" : "tsx scripts/generateColourClasses.ts"
+    },
+    "keywords"             : [
+        "react",
+        "ui",
+        "library",
+        "component",
+        "framework",
+        "components",
+        "ui-library",
+        "react-library",
+        "fictoan",
+        "fictoan-react"
+    ],
+    "author"               : "Sujan Sundareswaran <sujan.sundareswaran@gmail.com> (https://sujansundareswaran.com)",
+    "contributors"         : [
+        "Naresh <ghostwriternr@gmail.com> (https://ghostwriternr.me/)",
+        "Dhruv Misra (https://dhruvmisra.com/)",
+        "Aditya Gannavarapu <adityagannavarapu.67@gmail.com> (https://aditya-67.github.io/)",
+        "Dhiraj Bhakta K <dhirajbhakta110@gmail.com>",
+        "Sreejit De <sreejitde7@gmail.com> (https://www.sreejit.dev)",
+        "Rohit Singhal"
+    ],
+    "license"              : "MIT",
+    "devDependencies"      : {
+        "@babel/compat-data"                             : "^7.26.2",
+        "@babel/preset-env"                              : "^7.23.6",
+        "@babel/preset-react"                            : "^7.23.3",
+        "@rollup/plugin-terser"                          : "^0.4.4",
+        "@types/node"                                    : "^20.11.0",
+        "@types/prismjs"                                 : "^1.26.4",
+        "@types/react"                                   : "^18.2.45",
+        "@types/react-dom"                               : "^18.2.0",
+        "@vitejs/plugin-react"                           : "^4.2.1",
+        "agadoo"                                         : "^3.0.0",
+        "autoprefixer"                                   : "^10.4.14",
+        "babel-plugin-transform-react-remove-prop-types" : "^0.4.24",
+        "glob"                                           : "^10.3.10",
+        "html-react-parser"                              : "^5.1.15",
+        "postcss"                                        : "^8.4.30",
+        "postcss-nesting"                                : "^12.0.1",
+        "prismjs"                                        : "^1.29.0",
+        "react"                                          : "^18.2.0",
+        "react-dom"                                      : "^18.2.0",
+        "rollup-plugin-visualizer"                       : "^5.11.0",
+        "ts-node"                                        : "^10.9.2",
+        "tsx"                                            : "^4.19.2",
+        "typescript"                                     : "^5.3.3",
+        "vite"                                           : "5.4.6",
+        "vite-plugin-dts"                                : "^3.6.4",
+        "vite-plugin-lib-inject-css"                     : "^1.3.0",
+        "vite-plugin-svgr"                               : "^4.2.0"
+    },
+    "peerDependencies"     : {
+        "react"     : "^18.2.0",
+        "react-dom" : "^18.2.0",
+        "prismjs"   : "^1.29.0"
+    },
+    "peerDependenciesMeta" : {
+        "prismjs" : {
+            "optional" : true
+        }
+    }
+}

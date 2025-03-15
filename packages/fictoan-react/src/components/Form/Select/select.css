@@ -1,0 +1,44 @@
+[data-select] {
+    position         : relative;
+    width            : max-content;
+    border-radius    : var(--input-border-radius-default);
+
+    &::after {
+        content        : "";
+        display        : inline-block;
+        position       : absolute;
+        top            : 50%;
+        right          : 12px;
+        width          : 10px;
+        height         : 10px;
+        border-style   : solid;
+        border-width   : 0 2px 2px 0;
+        transform      : translateY(-50%) rotate(45deg);
+        color          : var(--select-chevron);
+        transition     : transform 0.2s linear;
+        z-index        : 500;
+        pointer-events : none;
+    }
+
+    &[disabled]::after {
+        color : var(--input-text-read-only);
+    }
+
+    select {
+        display          : flex;
+        height           : 100%;
+        padding          : 12px 36px 12px 12px;
+        font-family      : var(--paragraph-font);
+        color            : var(--input-text-default);
+        background-color : var(--input-bg-default);
+        border-radius    : var(--input-border-radius-default);
+        align-items      : center;
+        border           : var(--global-border-width) solid var(--input-border-default);
+        width            : 100%;
+
+        &:focus {
+            background-color : var(--input-bg-focus);
+            border           : var(--global-border-width) solid var(--input-border-focus);
+        }
+    }
+}

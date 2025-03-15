@@ -1,0 +1,60 @@
+#site-header {
+    display         : flex;
+    flex-direction  : row;
+    border-bottom   : 1px solid var(--site-header-border);
+    position        : sticky;
+    top             : 0;
+    z-index         : 50000;
+    background      : var(--site-header-bg);
+    backdrop-filter : blur(16px);
+    height          : 56px;
+    align-items     : center;
+    justify-content : space-between;
+    overflow        : hidden;
+
+    > * { line-height : 1; }
+
+    /* MOBILE MENU TOGGLE /////////////////////////////////////////////////// */
+    #menu-toggle * {
+        line-height : 9px;
+        cursor      : pointer;
+    }
+
+    /* LINKS //////////////////////////////////////////////////////////////// */
+    #links-wrapper {
+        display     : flex;
+        align-items : center;
+
+        a {
+            font-weight : normal;
+            color       : var(--paragraph-text-colour);
+        }
+    }
+
+    #github-link svg {
+        width        : 20px;
+        height       : 20px;
+        fill         : white;
+        margin-right : 6px;
+    }
+
+    /* SEARCH /////////////////////////////////////////////////////////////// */
+    #search-wrapper {
+        display         : flex;
+        justify-content : center;
+        align-items     : center;
+        z-index         : 500;
+    }
+
+    #toggle-and-badge-wrapper {
+        display        : flex;
+        align-items    : center;
+        flex-direction : row;
+        gap            : 32px;
+    }
+}
+
+.theme-light #site-header #github-link svg {
+    fill: black;
+}
+

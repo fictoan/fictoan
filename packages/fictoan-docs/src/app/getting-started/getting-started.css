@@ -1,0 +1,24 @@
+#page-getting-started {
+    .tutorial-steps > li + li {
+        margin-top: 12px;
+    }
+
+    .tutorial-steps > div:has(pre) + li {
+        margin-top: 12px;
+    }
+
+    #interactive-card {
+        transition : all 0.2s ease-in-out;
+    }
+
+    #boilerplate-structure {
+        .token-line:hover span.token.plain {
+            color : var(--blue);
+        }
+    }
+
+    .tab-labels-list svg {
+        width  : 16px;
+        height : 16px;
+    }
+}

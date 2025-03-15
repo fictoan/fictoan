@@ -1,0 +1,7 @@
+#page-breadcrumbs {
+    #current-page-message {
+        position : absolute;
+        top      : 8px;
+        margin   : 0 auto;
+    }
+}

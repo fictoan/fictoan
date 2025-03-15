@@ -1,0 +1,217 @@
+.theme-light {
+    /* BODY ///////////////////////////////////////////////////////////////// */
+    --body-bg                                 : var(--white);
+
+    /* BODY ///////////////////////////////////////////////////////////////// */
+    --callout-border-radius                   : var(--global-border-radius);
+    --callout-border-width                    : var(--nano);
+
+    --callout-info-bg                         : var(--blue-dark60);
+    --callout-info-border                     : var(--blue-dark20);
+
+    --callout-success-bg                      : var(--green-light40);
+    --callout-success-border                  : var(--green-dark40);
+
+    --callout-warning-bg                      : var(--amber-light40);
+    --callout-warning-border                  : var(--amber-dark40);
+
+    --callout-error-bg                        : var(--red-light40);
+    --callout-error-border                    : var(--red-dark40);
+
+    /* CARD ///////////////////////////////////////////////////////////////// */
+    --card-bg                                 : var(--white);
+    --card-border                             : var(--slate-light60);
+    --card-border-width                       : var(--global-border-width);
+    --card-border-radius                      : 16px;
+
+    /* CODE ///////////////////////////////////////////////////////////////// */
+    --code-inline-bg                          : var(--slate-dark70);
+    --code-inline-text                        : var(--slate-light40);
+
+    --code-block-bg                           : var(--slate-light80);
+    --code-block-font-size                    : 0.98rem;
+
+    /* BREADCRUMBS ////////////////////////////////////////////////////////// */
+    --token-plain                             : var(--black);
+    --token-comment                           : var(--slate-opacity70);
+    --token-attrName                          : var(--blue);
+    --token-attrValue                         : var(--purple);
+
+    /* BREADCRUMBS ////////////////////////////////////////////////////////// */
+    --breadcrumbs-wrapper-bg                  : var(--transparent);
+
+    --breadcrumb-item-separator               : "/";
+    --breadcrumb-item-separator-colour        : var(--slate-light10);
+
+    --breadcrumb-item-text-colour             : var(--paragraph-text-colour);
+    --breadcrumb-item-text-colour-active      : var(--paragraph-text-colour);
+
+    /* DIVIDER ////////////////////////////////////////////////////////////// */
+    --divider-height                          : 1px;
+
+    --divider-primary-height                  : 2px;
+    --divider-primary-bg                      : var(--grey-light20);
+
+    --divider-secondary-height                : 2px;
+    --divider-secondary-bg                    : var(--grey-light60);
+
+    --divider-tertiary-height                 : 1px;
+    --divider-tertiary-bg                     : var(--grey-light80);
+
+    /* INPUT FIELD ////////////////////////////////////////////////////////// */
+    --input-bg-default                        : var(--grey-light90);
+    --input-border-default                    : var(--grey-light40);
+    --input-border-radius-default             : var(--global-border-radius);
+    --input-label-default                     : var(--paragraph-text-colour);
+    --input-placeholder-default               : var(--slate-light20);
+    --input-text-default                      : var(--slate-dark60);
+
+    --input-bg-focus                          : var(--grey-light70);
+    --input-border-focus                      : var(--grey-light20);
+    --input-text-focus                        : var(--slate-dark60);
+
+    --input-bg-valid                          : var(--white);
+    --input-border-valid                      : var(--green-dark30);
+    --input-label-valid                       : var(--shade);
+
+    --input-bg-invalid                        : var(--red-light60);
+    --input-border-invalid                    : var(--red-dark30);
+    --input-label-invalid                     : var(--red);
+    --input-text-invalid                      : var(--red);
+    --input-error-text-invalid                : var(--red);
+
+    --input-bg-disabled                       : var(--slate-light40);
+    --input-border-disabled                   : var(--slate-light40);
+    --input-label-disabled                    : var(--slate-dark40);
+    --input-text-disabled                     : var(--slate-dark60);
+
+    --input-bg-read-only                      : var(--slate-light40);
+    --input-border-read-only                  : var(--slate-light40);
+    --input-label-read-only                   : var(--slate-dark40);
+    --input-text-read-only                    : var(--slate-dark60);
+
+    --input-required-indicator                : var(--red);
+
+    --input-helptext                          : var(--slate-dark40);
+    --input-helptext-scale                    : 92%;
+
+    --input-icon-default                      : var(--slate-light40);
+    --input-icon-focus                        : var(--hue);
+    --input-icon-valid                        : var(--green-dark30);
+
+    /* KEYBOARD ///////////////////////////////////////////////////////////// */
+    --kbd-bg                                  : var(--slate-light70);
+    --kbd-text                                : var(--slate-light10);
+
+    /* RADIO BUTTON ///////////////////////////////////////////////////////// */
+    --radio-tabs-height                       : 32px;
+    --radio-tabs-bg                           : var(--slate-light70);
+    --radio-tabs-border                       : var(--slate-light70);
+
+    /* SIDEBAR ////////////////////////////////////////////////////////////// */
+    --sidebar-bg                              : var(--grey-light90);
+    --sidebar-header-bg                       : var(--grey-light90);
+    --sidebar-header-border-bottom            : var(--grey-light70);
+    --sidebar-border                          : var(--grey-light60);
+
+    --sidebar-item-text-colour-default        : var(--grey-dark20);
+    --sidebar-item-icon-stroke-default        : var(--grey-light40);
+
+    --sidebar-item-bg-hover                   : var(--blue-light70);
+    --sidebar-item-icon-stroke-hover          : var(--blue-light30);
+
+    --sidebar-item-bg-active                  : var(--blue-light80);
+    --sidebar-item-text-active                : var(--blue);
+    --sidebar-item-icon-stroke-active         : var(--blue);
+
+    --sidebar-item-icon-default-stroke-colour : var(--slate-dark40);
+
+    --sidebar-footer-bg                       : var(--grey-light90);
+    --sidebar-footer-border-top               : var(--grey-light70);
+
+    /* SKELETON ///////////////////////////////////////////////////////////// */
+    :root {
+        --skeleton-bg        : var(--slate-light40);
+        --skeleton-highlight : var(--slate-light60);
+    }
+
+
+    /* SWITCH /////////////////////////////////////////////////////////////// */
+    --switch-bg-default                       : var(--slate-dark40);
+    --switch-bg-hover                         : var(--slate-dark20);
+    --switch-bg-checked                       : var(--hue);
+
+    --switch-slider-bg-default                : var(--white);
+    --switch-slider-bg-hover                  : var(--white);
+    --switch-slider-bg-checked                : var(--white);
+    --switch-slider-bg-disabled               : var(--slate-light40);
+
+    /* TABLE //////////////////////////////////////////////////////////////// */
+    --table-bg                                : var(--slate-light10);
+    --table-border                            : var(--slate-dark60);
+    --table-font-family                       : var(--paragraph-font);
+    --table-text                              : var(--paragraph-text-colour);
+
+    --table-striped-header-bg                 : var(--blue-light10);
+    --table-striped-cell-bg                   : var(--slate-light50);
+
+    --table-bg-hover                          : var(--amber-light20);
+    --table-text-hover                        : var(--paragraph-text-colour);
+
+    --table-pagination-bg                     : var(--white);
+    --table-pagination-border-radius          : var(--global-border-radius);
+    --table-pagination-text                   : var(--paragraph-text-colour);
+    --table-pagination-nav-icon-bg-hover      : var(--slate-dark60);
+
+    /* TEXT ///////////////////////////////////////////////////////////////// */
+    --font-sans-serif                         : "Inter", sans-serif;
+    --font-mono                               : "Geist Mono", monospace;
+
+    --paragraph-font-size                     : 1rem;
+    --paragraph-line-height                   : 1.6;
+    --paragraph-text-colour                   : var(--slate-dark90);
+
+    --heading-text-colour                     : var(--slate-dark60);
+    --heading-size-multiplier                 : 1.2;
+    --heading-line-height                     : 1.2;
+
+    --token-imports                           : var(--sky-dark40);
+    --token-string                            : var(--black);
+
+    /* ////////////////////////////////////////////////////////////////////// */
+    /* CUSTOM COMPONENTS */
+    /* ////////////////////////////////////////////////////////////////////// */
+    --component-card-bg                       : var(--grey-light90);
+    --component-card-footer-border            : var(--slate-light60);
+
+    --site-header-bg                          : var(--white-opacity20);
+    --site-header-border                      : var(--grey-light60);
+
+    /* USP CARDS //////////////////////////////////////////////////////////// */
+    --usp-section-bg                          : var(--amber-light70);
+
+    --usp-card-gradient-top                   : var(--grey-light90);
+    --usp-card-gradient-bottom                : var(--grey-light70);
+
+    --usp-card-1-bg                           : var(--blue-light70);
+    --usp-card-1-border                       : var(--blue-light30);
+    --usp-card-2-bg                           : var(--green-light70);
+    --usp-card-2-border                       : var(--green-light50);
+    --usp-card-3-bg                           : var(--salmon-light70);
+    --usp-card-3-border                       : var(--salmon-light50);
+    --usp-card-4-bg                           : var(--violet-light70);
+    --usp-card-4-border                       : var(--violet-light50);
+    --usp-card-5-bg                           : var(--teal-light70);
+    --usp-card-5-border                       : var(--teal-light50);
+
+    /* SEARCH /////////////////////////////////////////////////////////////// */
+    --search-input-bg                         : var(--grey-light90);
+    --search-input-border                     : var(--grey-light40);
+    --search-input-text                       : var(--slate);
+
+    --search-result-item-bg-default           : var(--slate-dark80);
+    --search-result-item-bg-hover             : var(--blue-dark80);
+    --search-result-item-border-hover         : var(--blue-dark60);
+
+    --scale-ratio-max  : 1.16;
+}

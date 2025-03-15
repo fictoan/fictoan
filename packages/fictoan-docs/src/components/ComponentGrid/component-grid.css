@@ -1,0 +1,140 @@
+#component-grid {
+    /* GRID COMPONENTS ////////////////////////////////////////////////////// */
+    #grid-wrapper {
+        display               : grid;
+        grid-template-columns : repeat(4, 1fr);
+        grid-template-rows    : repeat(7, 300px);
+        grid-gap              : 12px;
+        grid-template-areas   :
+            "button      type        notification notification"
+            "input       table       table        progress    "
+            "select      table       table        colour      "
+            "breadcrumbs breadcrumbs radio        colour      "
+            "callout     callout     callout      badge       "
+            "checkbox    code        code         badge       "
+            "optionCard  optionCard  modal        pinInput    ";
+
+        .grid-item {
+            p,
+            td,
+            div { font-weight : 400 !important;}
+        }
+
+        @media all and (max-width : 1000px) {
+            display        : flex;
+            flex-direction : column;
+
+            .grid-item { aspect-ratio : 6/3; }
+
+            & > div {
+                width : 100%;
+
+                img { width : 90% }
+            }
+        }
+    }
+
+    /* GRID ITEMS =========================================================== */
+    #type-card { grid-area : type; }
+
+    #notification-card { grid-area : notification; }
+
+    #input-card { grid-area : input; }
+
+    #select-card { grid-area : select; }
+
+    #checkbox-card { grid-area : checkbox; }
+
+    #badge-card {
+        grid-area      : badge;
+        container-type : size;
+    }
+
+    #badge-wrapper {
+        display        : flex;
+        flex-direction : row;
+        flex-wrap      : wrap;
+        align-items    : center;
+    }
+
+    @container (max-width: 400px) {
+        #badge-wrapper {
+            flex-direction : column;
+        }
+    }
+
+    #table-card {
+        grid-area : table;
+
+        a { width : 100%; }
+    }
+
+    #code-card { grid-area : code; }
+
+    #breadcrumbs-card { grid-area : breadcrumbs; }
+
+    #radio-card { grid-area : radio; }
+
+    #progress-card { grid-area : progress; }
+
+    #progress-card progress { width : 160px; }
+
+    #colour-card { grid-area : colour; }
+
+    #gradient-card {
+        display       : grid;
+        width         : 100px;
+        height        : 320px;
+        place-content : center;
+        border        : none;
+        background    : linear-gradient(180deg,
+        rgba(255, 201, 0, 1) 0%,
+        rgba(230, 65, 65, 1) 25%,
+        rgba(241, 105, 236, 1) 50%,
+        rgba(87, 116, 255, 1) 75%,
+        rgba(95, 246, 247, 1) 100%);
+    }
+
+    #callout-card { grid-area : callout; }
+
+    #option-card { grid-area : optionCard; }
+
+    #modal-card { grid-area : modal; }
+
+    #pin-input-card { grid-area : pinInput; }
+
+    /* CARD COMMON CLASSES ================================================== */
+    .component-wrapper {
+        background-color : var(--component-card-bg);
+        overflow         : hidden;
+    }
+
+    .component-card {
+        position      : relative;
+        display       : grid;
+        place-content : center;
+        overflow      : hidden;
+        width         : 100%;
+        height        : 100%;
+
+        .footer-bottom {
+            width           : 100%;
+            position        : absolute;
+            bottom          : 0;
+            left            : 0;
+            cursor          : pointer;
+            border-top      : 0 solid var(--component-card-footer-border);
+            padding         : 12px;
+            backdrop-filter : blur(8px);
+            transform       : translateY(100%);
+            transition      : transform 0.2s cubic-bezier(1, 0, 0, 1);
+        }
+
+        &:hover {
+            .footer-bottom {
+                transform  : translateY(0);
+                border-top : 1px solid var(--component-card-footer-border);
+            }
+        }
+    }
+}

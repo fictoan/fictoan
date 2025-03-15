@@ -1,0 +1,81 @@
+[data-tabs] {
+    nav {
+        width       : 100%;
+        display     : flex;
+        align-items : center;
+        background  : var(--tabs-bg);
+
+        &.align-centre,
+        &.align-center { justify-content : center; }
+        &.align-right { justify-content : flex-end; }
+
+        ul.tab-labels-list {
+            margin      : 0;
+            padding     : 0;
+            display     : flex;
+            align-items : center;
+
+            li { list-style-type : none; }
+
+            .tab-label {
+                padding       : 16px 0;
+                border-bottom : 2px solid transparent;
+                position      : relative;
+                color         : var(--tab-label-default);
+            }
+
+            li:not(:last-child) > .tab-label {
+                margin-right : 24px;
+                font-weight  : 400;
+            }
+
+            .tab-label:hover { color : var(--tab-label-hover); }
+
+            .tab-label.is-active { color : var(--tab-label-active); }
+
+            .tab-label.is-right-aligned {
+                margin-left  : auto;
+                margin-right : 0;
+            }
+
+            /* ACTIVE TAB INDICATOR ========================================= */
+            .tab-label.is-active::after {
+                display                 : block;
+                position                : absolute;
+                width                   : 100%;
+                height                  : 3px;
+                bottom                  : -3px;
+                left                    : 0;
+                content                 : "";
+                border-top-left-radius  : 3px;
+                border-top-right-radius : 3px;
+                background-color        : var(--tab-border-active);
+            }
+
+            /* HAS ALERT BADGE ============================================== */
+            .tab-label.has-alert::before {
+                position         : absolute;
+                top              : 12px;
+                left             : 94%;
+                border           : 3px solid var(--tab-alert-badge-border);
+                width            : 14px;
+                height           : 14px;
+                background-color : var(--tab-alert-badge-bg);
+                border-radius    : 50%;
+                content          : "";
+            }
+
+            p.disabled-navlink {
+                color  : var(--tab-label-disabled);
+                cursor : not-allowed;
+            }
+        }
+    }
+
+    .tabs-content {
+        opacity    : 1;
+        transition : opacity 0.4s ease-in-out;
+
+        &.exiting { opacity : 0; }
+    }
+}

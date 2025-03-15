@@ -1,0 +1,55 @@
+{
+    "compilerOptions" : {
+        "target"                           : "es2016",
+        "esModuleInterop"                  : true,
+        "resolveJsonModule"                : true,
+        "forceConsistentCasingInFileNames" : true,
+        "strict"                           : true,
+        "skipLibCheck"                     : true,
+        "jsx"                              : "react",
+        "module"                           : "ESNext",
+        "sourceMap"                        : true,
+        "outDir"                           : "dist",
+        "moduleResolution"                 : "bundler",
+        "resolvePackageJsonExports"        : true,
+        "preserveSymlinks"                 : true,
+        "allowSyntheticDefaultImports"     : true,
+        "rootDir"                          : "./src",
+        "declaration"                      : true,
+        "declarationDir"                   : "./dist/types",
+        "emitDeclarationOnly"              : true,
+        "declarationMap"                   : true,
+        "allowJs"                          : true,
+        "isolatedModules"                  : true,
+        "noEmitOnError"                    : true,
+        "composite"                        : true,
+        "baseUrl"                          : ".",
+        "types"                            : [
+            "vite-plugin-svgr/client",
+            "node",
+            "react",
+            "react-dom"
+        ],
+        "paths"                            : {
+            "@/*"          : [
+                "./src/*"
+            ],
+            "components/*" : [
+                "./src/components/*"
+            ]
+        }
+    },
+    "include"         : [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.d.ts",
+        "vite.config.ts"
+    ],
+    "exclude"         : [
+        "node_modules",
+        "dist",
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/*.stories.tsx"
+    ]
+}

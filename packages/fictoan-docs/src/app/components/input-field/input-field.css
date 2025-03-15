@@ -1,0 +1,6 @@
+#page-input-field {
+    #sample-component [data-form-item] {
+        width     : 480px;
+        /*transform : scale(2);*/
+    }
+}

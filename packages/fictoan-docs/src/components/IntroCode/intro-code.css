@@ -1,0 +1,46 @@
+#intro-code {
+    #intro-section {
+        position : relative;
+
+        #viz-row {
+            position    : absolute;
+            top         : 0;
+            left        : 0;
+            width       : 100%;
+            height      : 100%;
+            user-select : none;
+
+            [data-portion] {
+                background-color : hsla(0, 100%, 50%, 0.2);
+
+                p {
+                    opacity     : 1;
+                    color       : var(--paragraph-text-colour);
+                    font-size   : 0.64rem;
+                    margin-top  : -20px;
+                }
+            }
+        }
+
+        .portion-width-indicator {
+            position         : absolute;
+            bottom           : 0;
+            right            : 12px;
+            background-color : red;
+            border-radius    : 4px 4px 0 0;
+            padding          : 0 8px;
+            color            : white;
+            font-size        : 0.8rem;
+        }
+    }
+
+    #intro-code-block pre {
+        font-size : 105%;
+
+        /*.plain-text { opacity: 0.4; }*/
+    }
+
+    .demo-portion {
+        position : relative;
+    }
+}

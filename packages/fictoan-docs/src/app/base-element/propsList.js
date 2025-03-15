@@ -1,0 +1,101 @@
+export const listOfBaseElementProps = {
+    elementName : "Base element",
+    props       : [
+        {
+            name         : "as",
+            description  : `Any HTML element. Pick from <a href="https://www.w3.org/TR/2012/WD-html-markup-20121025/elements.html" rel="noopener noreferrer" target="_blank">this list</a>.`,
+            values       : ["div", "span", "a", "p", "h1", "h2", "h3", "h4", "h5", "h6", "...and so on"],
+            defaultValue : "div",
+        },
+        {
+            name         : "id",
+            description  : "The ID of the element. Must be unique.",
+            values       : [],
+            defaultValue : "",
+        },
+        {
+            name         : "className",
+            description  : "The class name of the element. Can be several, and can be shared with other elements.",
+            values       : [],
+            defaultValue : "",
+        },
+        {
+            name         : "bgColour / bgColor",
+            description  : "The background colour of the element.",
+            values       : [],
+            defaultValue : "",
+        },
+        {
+            name         : "borderColour / borderColor",
+            description  : "The border colour of the element. Border width is set in the theme.",
+            values       : [],
+            defaultValue : "",
+        },
+        {
+            name         : "hideOnDesktop",
+            description  : "Don’t show the element on screen widths greater than 1200px.",
+            values       : [],
+            defaultValue : "",
+        },
+        {
+            name         : "hideOnMobile",
+            description  : "Don’t show the element on screen widths less than 600px.",
+            values       : [],
+            defaultValue : "",
+        },
+        {
+            name         : "hideOnTabletLandscape",
+            description  : "Don’t show the element on screen widths between 900px and 1200px.",
+            values       : [],
+            defaultValue : "",
+        },
+        {
+            name         : "hideOnTabletPortrait",
+            description  : "Don’t show the element on screen widths between 600px and 900px.",
+            values       : [],
+            defaultValue : "",
+        },
+        {
+            name         : "horizontalMargin",
+            description  : "The left and right margin of the element.",
+            values       : [],
+            defaultValue : "",
+        },
+        {
+            name         : "horizontalPadding",
+            description  : "The left and right padding of the element.",
+            values       : [],
+            defaultValue : "",
+        },
+        {
+            name         : "horizontallyCenterThis / horizontallyCentreThis",
+            description  : "Centres the element horizontally.",
+            values       : [],
+            defaultValue : "",
+        },
+        {
+            name         : "isFullHeight",
+            description  : "Makes the element 100% height of its parent.",
+            values       : [],
+            defaultValue : "",
+        },
+        {
+            name         : "isFullWidth",
+            description  : "Makes the element 100% width of its parent.",
+            values       : [],
+            defaultValue : "",
+        },
+        {
+            name         : "layoutAsFlexbox",
+            description  : "Makes the element a flexbox. You can use <code>equaliseChildren</code> / <code>equalizeChildren</code> to make the children equal width.",
+            values       : [],
+            defaultValue : "",
+        },
+        {
+            name         : "layoutAsGrid",
+            description  : "Makes the element a grid. Note: Add the <code>columns</code> prop to set number of columns.",
+            values       : [],
+            defaultValue : "",
+        },
+    ],
+};

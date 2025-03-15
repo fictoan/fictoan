@@ -1,0 +1,116 @@
+@import "fictoan-react/dist/index.css";
+@import "./fonts.css";
+@import "./theme-dark.css";
+@import "./theme-test.css";
+@import "./theme-light.css";
+
+img { width : auto; }
+
+* {
+    transition : all 0.2s ease-in-out;
+}
+
+/* MANIFESTO CARD BORDER ANIMATION ========================================== */
+/* This is the glowing rotating card border on the home page */
+/* For some reason, unable to keep this with the home page CSS, so putting it here */
+@keyframes border-glow {
+    0% { transform : translateY(-25%) translateX(40%) rotate(0deg); }
+    25% { transform : translateY(0) translateX(0) rotate(90deg); }
+    50% { transform : translateY(-25%) translateX(-40%) rotate(180deg); }
+    75% { transform : translateY(0) translateX(0) rotate(270deg); }
+    100% { transform : translateY(-25%) translateX(40%) rotate(360deg); }
+}
+
+/* LOGO CHANGE BLACK AND WHITE BASED ON THEME =============================== */
+.theme-dark .header-logo {
+    filter : invert(1);
+}
+
+[data-radio-tab-group] label {
+    padding : 0 12px;
+}
+
+[data-centered-children] {
+    display     : grid;
+    place-items : center;
+    position    : relative;
+}
+
+.demo-row pre {
+    height : 300px;
+}
+
+#component-wrapper {
+    position : sticky;
+    top      : 72px;
+    z-index  : 5000;
+}
+
+@keyframes blink {
+    50% {
+        opacity : 0;
+    }
+}
+
+#codeAnimation::after {
+    content   : "|";
+    animation : blink 1s step-end infinite;
+}
+
+@keyframes CopiedFadeIn {
+    from {
+        opacity   : 0;
+        transform : translateY(4px);
+    }
+    to {
+        opacity   : 1;
+        transform : translateY(0);
+    }
+}
+
+/**:focus {*/
+/*    outline : 2px solid var(--blue);*/
+/*}*/
+
+li { color : var(--paragraph-text-colour); }
+
+
+@keyframes gradient {
+    0% { background-position : 0 50%; }
+    50% { background-position : 100% 50%; }
+    100% { background-position : 0 50%; }
+}
+
+/* Airplane =========================================== */
+@keyframes animateAirplane {
+    0% { transform: translateX(-102vw) translateY(50px) rotate(12deg); } /* Source, facing right */
+    5% { transform: translateX(-102vw) translateY(50px) rotate(12deg); } /* Source, facing right */
+
+
+    49% { transform : translateX(102vw) translateY(50px) rotate(12deg); } /* Destination, facing right */
+    51% { transform : translateX(102vw) translateY(50px) scaleX(-1) rotate(12deg); } /* Destination, facing left */
+
+
+    95% { transform : translateX(-102vw) translateY(50px) scaleX(-1) rotate(12deg); } /* Source, facing left */
+    99% { transform : translateX(-102vw) translateY(50px) scaleX(-1) rotate(12deg); } /* Source, facing left */
+    100% { transform : translateX(-102vw) translateY(50px) rotate(12deg); } /* Source, facing right */
+}
+
+/* Blinking light of the airplane =========================================== */
+@keyframes blinkingLight {
+    0% { opacity : 1; }
+    10% { opacity : 0; }
+    90% { opacity : 0; }
+    100% { opacity : 1; }
+}
+
+@keyframes lightColor {
+    0%, 49% {
+        background: var(--green);
+        box-shadow: 0 0 2px 1px var(--green-light10);
+    }
+    50%, 100% {
+        background: var(--red);
+        box-shadow: 0 0 2px 1px var(--red-light10);
+    }
+}

@@ -1,0 +1,123 @@
+/* HEADER SEARCH ///////////////////////////////////////////////////////////// */
+#header-search-input {
+    flex             : 1;
+    max-width        : 600px;
+    width            : 320px;
+    padding          : 6px 12px;
+    font-size        : 14px;
+    background-color : var(--search-input-bg);
+    border           : 1px solid var(--search-input-border);
+    border-radius    : 6px;
+    transition       : all 0.2s ease;
+}
+
+kbd {
+    position    : relative;
+    transform   : scale(0.8) translateX(-40px);
+    text-shadow : none !important;
+}
+
+#header-search-icon {
+    width        : 24px;
+    height       : 24px;
+    flex-shrink  : 0;
+    stroke       : var(--sidebar-item-icon-stroke-default);
+    stroke-width : var(--sidebar-item-icon-stroke-width-default);
+    fill         : none;
+}
+
+/* SEARCH MODAL ///////////////////////////////////////////////////////////// */
+#search-modal {
+    width         : 600px;
+    max-width     : 96vw;
+    max-height    : 60vh;
+    overflow-y    : auto;
+    border-radius : calc(var(--global-border-radius) + 1px);
+
+    .dismiss-button {
+        display : none;
+    }
+}
+
+.search-results {
+    max-height      : 60vh;
+    overflow-y      : auto;
+    scroll-behavior : smooth;
+}
+
+/* Make sure selected item is visible by scrolling it into view */
+.search-result-item[data-selected="true"] {
+    scroll-margin : 8px;
+}
+
+.search-result-item {
+    line-height : unset;
+    transition  : all 0.2s ease-out;
+}
+
+
+.search-result-item + .search-result-item {
+    margin-top : 8px;
+}
+
+.result-card {
+    display               : grid;
+    grid-template-columns : 24px 1fr;
+    gap                   : 8px;
+    transition            : background-color 0.2s ease;
+    cursor                : pointer;
+
+    &:hover,
+    &.highlighted {
+        background   : var(--search-result-item-bg-hover) !important;
+        border-color : var(--search-result-item-border-hover) !important;
+    }
+
+    .result-icon {
+        width        : 24px;
+        height       : 24px;
+        flex-shrink  : 0;
+        stroke       : var(--sidebar-item-icon-stroke-default);
+        stroke-width : var(--sidebar-item-icon-stroke-width-default);
+        fill         : none;
+
+        svg {
+            width  : 100%;
+            height : 100%;
+        }
+    }
+}
+
+.result-card.result-theme {
+    align-items           : center;
+    grid-template-columns : 1fr;
+
+    pre { padding : 8px 12px; }
+
+    .copied-variable-confirmation {
+        position      : absolute;
+        right         : 12px;
+        z-index       : 50;
+        border-radius : calc(var(--card-border-radius) - 4px);
+        animation     : CopiedFadeIn 0.2s ease-out;
+    }
+}
+
+.no-results {
+    padding    : 24px;
+    text-align : center;
+}
+
+.keyboard-shortcut {
+    display     : inline-flex;
+    gap         : 4px;
+    margin-left : auto;
+    color       : var(--slate-light40);
+}
+
+.keyboard-shortcut kbd {
+    padding       : 2px 6px;
+    border-radius : 4px;
+    background    : var(--slate-light80);
+    font-size     : 0.8em;
+}

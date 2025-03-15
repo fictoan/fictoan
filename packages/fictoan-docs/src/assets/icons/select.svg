@@ -1,0 +1,4 @@
+<svg viewBox="0 0 24 24">
+  <rect x="8" y="3" width="8" height="18" rx="1" transform="translate(0 24) rotate(-90)" />
+  <polyline points="14 11 16 13 18 11" />
+</svg>

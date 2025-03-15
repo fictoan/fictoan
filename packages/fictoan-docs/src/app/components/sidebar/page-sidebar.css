@@ -1,0 +1,39 @@
+#page-sidebar {
+    [data-sidebar-wrapper] {
+        position : relative;
+    }
+
+    .example-component-content {
+        position : sticky;
+        top      : 72px;
+    }
+
+    #demo-sidebar {
+        width            : 240px;
+        height           : 640px;
+        background-color : var(--blue-light60);
+        display          : flex;
+        flex-direction   : column;
+        justify-content  : space-between;
+
+        header {
+            display          : grid;
+            place-items      : center;
+            height           : 80px;
+            background-color : var(--blue-opacity60);
+        }
+
+        footer {
+            display          : grid;
+            place-items      : center;
+            height           : 40px;
+            background-color : var(--blue-opacity60);
+        }
+    }
+
+    #demo-page-content {
+        display          : flex;
+        background-color : var(--slate-opacity40);
+        margin-right     : calc(var(--small) * -1);
+    }
+}
