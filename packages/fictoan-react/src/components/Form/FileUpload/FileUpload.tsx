@@ -13,7 +13,7 @@ import "./file-upload.css";
 // TYPES ===============================================================================================================
 import { BaseInputComponentProps } from "../BaseInputComponent/constants";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
-import { ColourPropTypes } from "components/Element/constants";
+import { ColourPropTypes } from "$components/Element/constants";
 
 export type FileUploadElementType = HTMLInputElement;
 export type FileUploadProps = Omit<BaseInputComponentProps<HTMLInputElement>, "onChange"> &

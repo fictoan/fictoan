@@ -2,8 +2,8 @@
 import React, { createContext, useContext, useState, ReactNode, useCallback, useRef, useEffect } from "react";
 
 // FICTOAN =============================================================================================================
-import { Element } from "$element/Element";
-import { Div } from "$element/Tags";
+import { Element } from "$element";
+import { Div } from "$tags";
 import { Card, CardElementType, CardProps } from "../Card/Card";
 
 // STYLES ==============================================================================================================
