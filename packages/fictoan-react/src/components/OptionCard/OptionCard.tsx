@@ -2,8 +2,8 @@
 import React, { createContext, useContext, useState, ReactNode, useCallback, useRef, useEffect } from "react";
 
 // FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
-import { Div } from "../Element/Tags";
+import { Element } from "$element/Element";
+import { Div } from "$element/Tags";
 import { Card, CardElementType, CardProps } from "../Card/Card";
 
 // STYLES ==============================================================================================================
@@ -24,7 +24,7 @@ export type TickPosition =
     | "center-bottom"
     | "centre-bottom"
     | "centre"
-    | "center"
+    | "center";
 
 export interface OptionCardsProviderProps {
     children                  : ReactNode;
@@ -43,10 +43,10 @@ export interface OptionCardProps extends CardProps {
 }
 
 export interface OptionCardsGroupRef {
-    selectAllOptions: () => void;
-    clearAllOptions: () => void;
-    setSelectedOptions: (ids: string[]) => void;
-    setSelectedIds: (ids: Set<string>) => void;
+    selectAllOptions   : () => void;
+    clearAllOptions    : () => void;
+    setSelectedOptions : (ids: string[]) => void;
+    setSelectedIds     : (ids: Set<string>) => void;
 }
 
 interface OptionCardsContextType {
