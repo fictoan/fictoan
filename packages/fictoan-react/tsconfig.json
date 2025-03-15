@@ -31,11 +31,29 @@
             "react-dom"
         ],
         "paths"                            : {
-            "@/*"          : [
+            "$/*"           : [
                 "./src/*"
             ],
-            "components/*" : [
+            "$components/*" : [
                 "./src/components/*"
+            ],
+            "$hooks/*"      : [
+                "./src/hooks/*"
+            ],
+            "$element/*"    : [
+                "./src/components/Element/*"
+            ],
+            "$form/*"       : [
+                "./src/components/Form/*"
+            ],
+            "$styles/*"     : [
+                "./src/styles/*"
+            ],
+            "$types/*"      : [
+                "./src/types/*"
+            ],
+            "$utils/*"      : [
+                "./src/utils/*"
             ]
         }
     },
