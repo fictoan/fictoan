@@ -5,7 +5,7 @@ import React from "react";
 export const buttonProps = {
     component  : "Button",
     properties : [
-        "label",
+        "strings",
         "kind",
         "size",
         "shape",
@@ -13,7 +13,7 @@ export const buttonProps = {
         "bgColour",
         "textColour",
         "borderColour",
-        "is-loading",
+        "isLoading",
     ],
     variables  : {
         // PRIMARY BUTTON ======================================================

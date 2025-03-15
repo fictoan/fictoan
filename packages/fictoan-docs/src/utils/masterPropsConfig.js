@@ -16,6 +16,10 @@ export const MASTER_PROPS_CONFIG = {
             label : "Content",
             value : "Badge",
         },
+        Button  : {
+            label : "Label",
+            value : "Button",
+        },
         Tooltip : {
             label : "Target ID + isTooltipFor",
             value : "tooltip-target",
@@ -62,6 +66,17 @@ export const MASTER_PROPS_CONFIG = {
             { id : "shape-opt-0", value : "none", label : "none" },
             { id : "shape-opt-1", value : "rounded", label : "rounded" },
             { id : "shape-opt-2", value : "curved", label : "curved" },
+        ],
+    },
+    
+    shadow : {
+        type    : "shape",
+        label   : "Shadow",
+        options : [
+            { id : "shadow-opt-0", value : "none", label : "none" },
+            { id : "shadow-opt-1", value : "mild", label : "mild" },
+            { id : "shadow-opt-2", value : "hard", label : "hard" },
+            { id : "shadow-opt-3", value : "soft", label : "soft" },
         ],
     },
 
@@ -113,6 +128,10 @@ export const MASTER_PROPS_CONFIG = {
         type  : "boolean",
         label : "Show a delete icon",
     },
+    isLoading       : {
+        type  : "boolean",
+        label : "Is loading",
+    },
 
     // KIND/EMPHASIS PROPS =============================================================================================
     kind : {
@@ -122,6 +141,13 @@ export const MASTER_PROPS_CONFIG = {
             // DEFAULT OPTIONS FOR MOST COMPONENTS ---------------------------------------------------------------------
             default : [
                 { id : "kind-opt-0", value : "none", label : "none" },
+                { id : "kind-opt-1", value : "primary", label : "primary" },
+                { id : "kind-opt-2", value : "secondary", label : "secondary" },
+                { id : "kind-opt-3", value : "tertiary", label : "tertiary" },
+            ],
+            // BUTTON --------------------------------------------------------------------------------------------------
+            button : [
+                { id : "kind-opt-0", value : "custom", label : "custom" },
                 { id : "kind-opt-1", value : "primary", label : "primary" },
                 { id : "kind-opt-2", value : "secondary", label : "secondary" },
                 { id : "kind-opt-3", value : "tertiary", label : "tertiary" },
@@ -136,6 +162,7 @@ export const MASTER_PROPS_CONFIG = {
         },
         defaultValues : {
             callout : "info",
+            button  : "custom",
         },
     },
 
