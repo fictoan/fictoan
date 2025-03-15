@@ -15,9 +15,6 @@ import { Sidebar } from "../components/Sidebar/Sidebar";
 import { SiteHeader } from "../components/Header/Header";
 import { SiteFooter } from "../components/Footer/Footer";
 
-// CONTEXTS ============================================================================================================
-import { useNavigationProgress } from "./slow/usePageLoadProgress";
-
 // STYLES ==============================================================================================================
 import "../styles/globals.css";
 
@@ -33,10 +30,6 @@ export const RootLayoutClient = ({ children }) => {
     };
 
     const listOfThemes = ["theme-light", "theme-dark", "theme-test"];
-
-    // LOADING BAR =====================================================================================================
-    const loadingBarRef = useRef(null);
-    useNavigationProgress(loadingBarRef);
 
     return (
         <html lang="en">
