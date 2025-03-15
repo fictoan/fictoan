@@ -261,8 +261,8 @@ export const createPropsConfigurator = (
                             id={propName}
                             label={label}
                             name={propName}
-                            isChecked={propValues[propName] || false}
-                            onChange={(value) => handlePropChange(propName, e.target.checked)}
+                            checked={propValues[propName] || false}
+                            onChange={(checked) => handlePropChange(propName, checked)}
                         />
                     </Portion>
                 );

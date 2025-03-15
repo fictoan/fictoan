@@ -134,7 +134,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </SidebarItem>
 
             {/* GETTING STARTED ==================================================================================== */}
-            <Link href="/getting-started">
+            <Link href="/getting-started" className={`${pathname === "/getting-started" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <HomeIcon />
                     <Text weight="400">Getting started</Text>
@@ -151,7 +151,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* BASE ELEMENT ======================================================================================= */}
-            <Link href="/base-element">
+            <Link href="/base-element" className={`${pathname === "/base-element" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <BaseElementIcon />
 
@@ -160,7 +160,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* LAYOUT ============================================================================================= */}
-            <Link href="/layout">
+            <Link href="/layout" className={`${pathname === "/layout" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <LayoutIcon />
                     <Text weight="400">Layout</Text>
@@ -168,7 +168,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* TYPOGRAPHY ========================================================================================= */}
-            <Link href="/typography">
+            <Link href="/typography" className={`${pathname === "/typography" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <TypographyIcon />
                     <Text weight="400">Typography</Text>
@@ -176,7 +176,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* COLOUR ============================================================================================= */}
-            <Link href="/colour">
+            <Link href="/colour" className={`${pathname === "/colour" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <ColourIcon />
                     <Text weight="400">Colour</Text>
@@ -193,7 +193,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </SidebarItem>
 
             {/* ACCORDION ========================================================================================== */}
-            <Link href="/components/accordion">
+            <Link href="/components/accordion" className={`${pathname === "/components/accordion" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <AccordionIcon />
                     <Text weight="400">Accordion</Text>
@@ -201,7 +201,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* BADGE ============================================================================================== */}
-            <Link href="/components/badge">
+            <Link href="/components/badge" className={`${pathname === "/components/badge" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <BadgeIcon />
                     <Text weight="400">Badge</Text>
@@ -209,7 +209,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* BREADCRUMBS ======================================================================================== */}
-            <Link href="/components/breadcrumbs">
+            <Link href="/components/breadcrumbs" className={`${pathname === "/components/breadcrumbs" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <BreadcrumbsIcon />
                     <Text weight="400">Breadcrumbs</Text>
@@ -217,7 +217,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* BUTTON ============================================================================================= */}
-            <Link href="/components/button">
+            <Link href="/components/button" className={`${pathname === "/components/button" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <ButtonIcon />
                     <Text weight="400">Button</Text>
@@ -225,7 +225,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* CALLOUT ============================================================================================ */}
-            <Link href="/components/callout">
+            <Link href="/components/callout" className={`${pathname === "/components/callout" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <CalloutIcon />
                     <Text weight="400">Callout</Text>
@@ -233,7 +233,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* CARD =============================================================================================== */}
-            <Link href="/components/card">
+            <Link href="/components/card" className={`${pathname === "/components/card" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <CardIcon />
                     <Text weight="400">Card</Text>
@@ -241,7 +241,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* CHECKBOX / SWITCH ================================================================================== */}
-            <Link href="/components/checkbox">
+            <Link href="/components/checkbox" className={`${pathname === "/components/checkbox" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <CheckboxIcon />
                     <Text weight="400">Checkbox / Switch</Text>
@@ -249,7 +249,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* CODE BLOCK ========================================================================================= */}
-            <Link href="/components/code-block">
+            <Link href="/components/code-block" className={`${pathname === "/components/code-block" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <CodeIcon />
                     <Text weight="400">Code block</Text>
@@ -257,7 +257,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* DIVIDER ============================================================================================ */}
-            <Link href="/components/divider">
+            <Link href="/components/divider" className={`${pathname === "/components/divider" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <DividerIcon />
                     <Text weight="400">Divider</Text>
@@ -265,7 +265,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* DRAWER ============================================================================================= */}
-            <Link href="/components/drawer">
+            <Link href="/components/drawer" className={`${pathname === "/components/drawer" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <InfoPanelIcon />
                     <Text weight="400">Drawer</Text>
@@ -273,7 +273,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* FORM WRAPPER ======================================================================================= */}
-            <Link href="/components/form">
+            <Link href="/components/form" className={`${pathname === "/components/form" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <FormWrapperIcon />
                     <Text weight="400">Form</Text>
@@ -281,7 +281,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* INPUT FIELD ======================================================================================== */}
-            <Link href="/components/input-field">
+            <Link href="/components/input-field" className={`${pathname === "/components/input-field" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <InputFieldIcon />
                     <Text weight="400">Input field</Text>
@@ -289,7 +289,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* METER ============================================================================================== */}
-            <Link href="/components/list-box">
+            <Link href="/components/list-box" className={`${pathname === "/components/list-box" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <ListBoxIcon />
                     <Text weight="400">List box</Text>
@@ -297,7 +297,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* METER ============================================================================================== */}
-            <Link href="/components/meter">
+            <Link href="/components/meter" className={`${pathname === "/components/meter" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <ProgressBarIcon />
                     <Text weight="400">Meter</Text>
@@ -305,7 +305,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* MODAL ============================================================================================== */}
-            <Link href="/components/modal">
+            <Link href="/components/modal" className={`${pathname === "/components/modal" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <ModalIcon />
                     <Text weight="400">Modal</Text>
@@ -313,7 +313,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* NOTIFICATIONS ====================================================================================== */}
-            <Link href="/components/notifications">
+            <Link href="/components/notifications" className={`${pathname === "/components/notifications" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <NotificationIcon />
                     <Text weight="400">Notifications</Text>
@@ -321,7 +321,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* OPTION CARDS ======================================================================================= */}
-            <Link href="/components/option-cards">
+            <Link href="/components/option-cards" className={`${pathname === "/components/option-cards" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <OptionCardsIcon />
                     <Text weight="400">Option cards</Text>
@@ -329,7 +329,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* PAGINATION ========================================================================================= */}
-            <Link href="/components/pagination">
+            <Link href="/components/pagination" className={`${pathname === "/components/pagination" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <PaginationIcon />
                     <Text weight="400">Pagination</Text>
@@ -337,7 +337,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* PIN INPUT FIELD ==================================================================================== */}
-            <Link href="/components/pin-input-field">
+            <Link href="/components/pin-input-field" className={`${pathname === "/components/pin-input-field" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <PinInputIcon />
                     <Text weight="400">Pin Input</Text>
@@ -345,7 +345,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* PROGRESS BAR ======================================================================================= */}
-            <Link href="/components/progress-bar">
+            <Link href="/components/progress-bar" className={`${pathname === "/components/progress-bar" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <ProgressBarIcon />
                     <Text weight="400">Progress bar</Text>
@@ -353,7 +353,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* RADIO BUTTON ======================================================================================= */}
-            <Link href="/components/radio-button">
+            <Link href="/components/radio-button" className={`${pathname === "/components/radio-button" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <RadioButtonIcon />
                     <Text weight="400">Radio button</Text>
@@ -361,7 +361,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* RADIO TABS ========================================================================================= */}
-            <Link href="/components/radio-tab-group">
+            <Link href="/components/radio-tab-group" className={`${pathname === "/components/radio-tab-group" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <TabsIcon />
                     <Text weight="400">Radio tab group</Text>
@@ -369,7 +369,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* SELECT ============================================================================================= */}
-            <Link href="/components/range">
+            <Link href="/components/range" className={`${pathname === "/components/range" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <RangeIcon />
                     <Text weight="400">Range</Text>
@@ -377,7 +377,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* SELECT ============================================================================================= */}
-            <Link href="/components/select">
+            <Link href="/components/select" className={`${pathname === "/components/select" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <SelectIcon />
                     <Text weight="400">Select</Text>
@@ -391,13 +391,13 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
                     <Text weight="400">Sidebar</Text>
                 </SidebarItem>
             )}>
-                <Link href="/components/sidebar">
+                <Link href="/components/sidebar" className={`${pathname === "/components/sidebar" ? "active" : ""}`}>
                     <SidebarItem onClick={closeMobileSidebar} hasEmptyIcon>
                         <Text weight="400" marginLeft="micro">Wrapper</Text>
                     </SidebarItem>
                 </Link>
 
-                <Link href="/components/sidebar-item">
+                <Link href="/components/sidebar-item" className={`${pathname === "/components/sidebar-item" ? "active" : ""}`}>
                     <SidebarItem onClick={closeMobileSidebar} hasEmptyIcon>
                         <Text weight="400" marginLeft="micro">Item</Text>
                     </SidebarItem>
@@ -405,7 +405,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Accordion>
 
             {/* SKELETON =========================================================================================== */}
-            <Link href="/components/skeleton">
+            <Link href="/components/skeleton" className={`${pathname === "/components/skeleton" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <SkeletonIcon />
                     <Text weight="400">Skeleton</Text>
@@ -413,7 +413,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* TABLE ============================================================================================== */}
-            <Link href="/components/table">
+            <Link href="/components/table" className={`${pathname === "/components/table" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <TableIcon />
                     <Text weight="400">Table</Text>
@@ -421,7 +421,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* TABS =============================================================================================== */}
-            <Link href="/components/tabs">
+            <Link href="/components/tabs" className={`${pathname === "/components/tabs" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <TabsIcon />
                     <Text weight="400">Tabs</Text>
@@ -429,7 +429,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* TOAST ============================================================================================== */}
-            <Link href="/components/toast">
+            <Link href="/components/toast" className={`${pathname === "/components/toast" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <ToastIcon />
                     <Text weight="400">Toast</Text>
@@ -437,7 +437,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* TOOLTIP ============================================================================================ */}
-            <Link href="/components/tooltip">
+            <Link href="/components/tooltip" className={`${pathname === "/components/tooltip" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <TooltipIcon />
                     <Text weight="400">Tooltip</Text>
