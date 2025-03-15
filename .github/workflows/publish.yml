@@ -23,8 +23,8 @@ jobs:
         run: npm install -g yarn
       - name: Install dependencies
         run: yarn install
-      - name: Build packages
-        run: yarn build
+      - name: Build fictoan-react
+        run: yarn workspace fictoan-react build
       - name: Publish fictoan-react
         working-directory: ./packages/fictoan-react
         run: npm publish --access public
