@@ -67,6 +67,19 @@ function createVisualizer() {
 }
 
 export default defineConfig({
+    resolve : {
+        alias : {
+            "$"           : path.resolve(__dirname, "./src"),
+            "$components" : path.resolve(__dirname, "./src/components"),
+            "$element"    : path.resolve(__dirname, "./src/components/Element/Element"),
+            "$hooks"      : path.resolve(__dirname, "./src/hooks"),
+            "$form"       : path.resolve(__dirname, "./src/components/Form"),
+            "$styles"     : path.resolve(__dirname, "./src/styles"),
+            "$tags"       : path.resolve(__dirname, "./src/components/Element/Tags"),
+            "$types"      : path.resolve(__dirname, "./src/types"),
+            "$utils"      : path.resolve(__dirname, "./src/utils"),
+        },
+    },
     build   : {
         minify        : "terser",
         terserOptions : {
@@ -116,8 +129,17 @@ export default defineConfig({
             compilerOptions  : {
                 baseUrl             : ".",
                 paths               : {
-                    "@/*"          : ["./src/*"],
-                    "components/*" : ["./src/components/*"],
+                    "@/*"           : ["./src/*"],
+                    "components/*"  : ["./src/components/*"],
+                    "$/*"           : ["./src/*"],
+                    "$components/*" : ["./src/components/*"],
+                    "$element"      : ["./src/components/Element/Element"],
+                    "$hooks/*"      : ["./src/hooks/*"],
+                    "$form/*"       : ["./src/components/Form/*"],
+                    "$styles/*"     : ["./src/styles/*"],
+                    "$tags"         : ["./src/components/Element/Tags"],
+                    "$types/*"      : ["./src/types/*"],
+                    "$utils/*"      : ["./src/utils/*"],
                 },
                 esModuleInterop     : true,
                 allowJs             : true,

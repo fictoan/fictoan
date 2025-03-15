@@ -37,17 +37,20 @@
             "$components/*" : [
                 "./src/components/*"
             ],
+            "$element"    : [
+                "./src/components/Element/Element"
+            ],
             "$hooks/*"      : [
                 "./src/hooks/*"
-            ],
-            "$element/*"    : [
-                "./src/components/Element/*"
             ],
             "$form/*"       : [
                 "./src/components/Form/*"
             ],
             "$styles/*"     : [
                 "./src/styles/*"
+            ],
+            "$tags"      : [
+                "./src/components/Element/Tags"
             ],
             "$types/*"      : [
                 "./src/types/*"
