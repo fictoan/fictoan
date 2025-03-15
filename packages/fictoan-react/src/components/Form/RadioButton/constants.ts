@@ -1,7 +1,7 @@
 import React from "react";
 
 import { BaseInputComponentProps } from "../BaseInputComponent/constants";
-import { SpacingTypes } from "@/components/Element/constants";
+import { SpacingTypes } from "$components/Element/constants";
 
 // RADIO BUTTON ////////////////////////////////////////////////////////////////////////////////////////////////////////
 export type RadioButtonElementType = HTMLDivElement;

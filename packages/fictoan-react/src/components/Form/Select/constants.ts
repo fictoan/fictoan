@@ -1,4 +1,4 @@
-import { CommonAndHTMLProps } from "@/components/Element/constants";
+import { CommonAndHTMLProps } from "$components/Element/constants";
 
 export type SelectElementType = HTMLSelectElement;
 

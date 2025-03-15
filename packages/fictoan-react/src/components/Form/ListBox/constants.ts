@@ -1,5 +1,5 @@
 import React, { FormEvent } from "react";
-import { ColourPropTypes, CommonAndHTMLProps } from "@/components/Element/constants";
+import { ColourPropTypes, CommonAndHTMLProps } from "$components/Element/constants";
 
 type NonZeroNumber = Exclude<number, 0>;
 
