@@ -6,9 +6,9 @@
         "packages/*"
     ],
     "scripts"        : {
-        "dev"       : "turbo run dev",
-        "build"     : "turbo run build",
-        "updateLib" : "cd packages/fictoan-react && yarn build && cd ../../ && node scripts/copy-lib.js"
+        "dev"   : "turbo run dev",
+        "build" : "turbo run build",
+        "test"  : "cd packages/fictoan-react && yarn build && cd ../../ && node scripts/copy-lib.js"
     },
     "dependencies"   : {
         "turbo" : "^2.4.0"

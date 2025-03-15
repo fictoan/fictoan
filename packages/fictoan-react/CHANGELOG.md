@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 1.11.10
-- `OptionCardsGroup` has a simplified implementation, using `useState` instead of `refs`
+- `OptionCardsGroup` now supports `setSelectedIds` that you can manage using `useState`
 - Remove redundant styles from `Badge`
 
 ## 1.11.9
