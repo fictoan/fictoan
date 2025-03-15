@@ -31,13 +31,13 @@
 
 ## Key features ✨
 
-### For Designers
+### For designers
 - **Familiar like Figma**: Props mirror properties in your favourite design tool—`bgColour`, `shadow`, `shape`, `marginBottom`, `weight` and so on.
 - **Theme to your heart’s content**: Intricate control over every aspect of the UI
 - **Iterate like crazy**: Change properties as easily as you would in a design tool
 - **For one and all**: Accessible components and elements
 
-### For Developers
+### For developers
 - **Just your type**: Fully typed, and a clean consistent component API
 - **Light as a feather**: ~14kb [gzipped bundle size](https://bundlephobia.com/package/fictoan-react@1.10.4) with no dependencies
 - **Bare metal**: Plain CSS styling, no JS bloat
