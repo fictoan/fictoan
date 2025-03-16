@@ -1,11 +1,10 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// FRAMEWORK ===========================================================================================================
 import React, { useState } from "react";
 import { FormEvent, FormEventHandler, ChangeEvent } from "react";
 
-
-// INTERNAL DEPS =======================================================================================================
+// FICTOAN =============================================================================================================
 import {
     Element,
     Div,
@@ -38,9 +37,11 @@ import {
     ListBox, RadioGroup, TextArea, CheckboxGroup, SwitchGroup,
 } from "fictoan-react";
 
+// COMPONENTS ==========================================================================================================
+import { SampleForm } from "@/app/components/form/SampleForm";
+
 // STYLES ==============================================================================================================
 import "./page-form.css";
-import { SampleForm } from "@/app/components/form/SampleForm";
 
 const FormDocs = () => {
     // CONFIGURATOR STATE =============================================================================================
@@ -118,14 +119,6 @@ const FormDocs = () => {
                                             { id : "spacing-opt-5", value : "medium", label : "medium" },
                                             { id : "spacing-opt-6", value : "large", label : "large" },
                                             { id : "spacing-opt-7", value : "huge", label : "huge" },
-                                            { id : "spacing-opt-8", value : "gigantic", label : "gigantic" },
-                                            { id : "spacing-opt-9", value : "enormous", label : "enormous" },
-                                            { id : "spacing-opt-10", value : "colossal", label : "colossal" },
-                                            { id : "spacing-opt-11", value : "massive", label : "massive" },
-                                            { id : "spacing-opt-12", value : "giga", label : "giga" },
-                                            { id : "spacing-opt-13", value : "tera", label : "tera" },
-                                            { id : "spacing-opt-14", value : "peta", label : "peta" },
-                                            { id : "spacing-opt-15", value : "exa", label : "exa" },
                                         ]}
                                         value={selectedSpacing}
                                         onChange={(value) => setSelectedSpacing(value)}

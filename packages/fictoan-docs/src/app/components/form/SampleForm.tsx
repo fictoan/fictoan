@@ -1,7 +1,9 @@
 "use client";
 
+// FRAMEWORK ===========================================================================================================
 import React, { FormEvent, useState } from "react";
 
+// FICTOAN =============================================================================================================
 import {
     Button,
     Card,
@@ -24,8 +26,9 @@ import {
     TextArea,
 } from "fictoan-react";
 
-import EyeOpenIcon from "../../../assets/icons/eye-open.svg";
+// OTHER ===============================================================================================================
 import EyeClosedIcon from "../../../assets/icons/eye-closed.svg";
+import EyeOpenIcon from "../../../assets/icons/eye-open.svg";
 
 export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
     // FORM STATE ====================================================================================================
@@ -175,7 +178,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                     <Text size="large" weight="700" marginBottom="micro">Sign up</Text>
 
                     <Form
-                        // spacing={spacing}
+                        spacing={spacing}
                         onSubmit={handleSubmit}
                     >
                         {/* FIRST NAME AND LAST NAME =============================================================== */}
@@ -437,19 +440,19 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                         </FormItemGroup>
 
                         {/* FOOD =================================================================================== */}
-                        {/* <CheckboxGroup */}
-                        {/*     label="Preferred cuisine" */}
-                        {/*     name="food" */}
-                        {/*     options={[ */}
-                        {/*         { id : "indian", value : "indian", label : "Indian" }, */}
-                        {/*         { id : "italian", value : "italian", label : "Italian" }, */}
-                        {/*         { id : "French", value : "French", label : "French" }, */}
-                        {/*         { id : "greek", value : "greek", label : "Greek" }, */}
-                        {/*         { id : "thai", value : "thai", label : "Thai" }, */}
-                        {/*     ]} */}
-                        {/*     value={formData.food} */}
-                        {/*     onChange={(values: any) => setFormData({ ...formData, food : values })} */}
-                        {/* /> */}
+                        <CheckboxGroup
+                            label="Preferred cuisine"
+                            name="food"
+                            options={[
+                                { id : "indian", value : "Indian", label : "Indian" },
+                                { id : "italian", value : "Italian", label : "Italian" },
+                                { id : "French", value : "French", label : "French" },
+                                { id : "greek", value : "Greek", label : "Greek" },
+                                { id : "thai", value : "Thai", label : "Thai" },
+                            ]}
+                            value={formData.food}
+                            onChange={(values: any) => setFormData({ ...formData, food : values })}
+                        />
 
                         <FormItemGroup equalWidthForChildren>
                             {/* NOTIFICATIONS ========================================================================== */}

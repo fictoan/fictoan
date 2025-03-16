@@ -1,10 +1,10 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
-import React, { useEffect, useState } from "react";
+// FRAMEWORK ===========================================================================================================
 import Link from "next/link";
+import React, { useEffect, useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
+// FICTOAN =============================================================================================================
 import {
     Element,
     Heading1,
@@ -27,16 +27,11 @@ import {
 // STYLES ==============================================================================================================
 import "./page-breadcrumbs.css";
 
-// HOOKS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
-
-// UTILS ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
-
-// DATA ================================================================================================================
+// OTHER ===============================================================================================================
 import { breadcrumbsProps } from "./config";
-
+import { colourOptions } from "../../colour/colours";
+import { createPropsConfigurator } from "../../../utils/propsConfigurator";
+import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 const BreadcrumbsDocs = () => {
     const [selectedBgColour, setSelectedBgColour] = useState("");
@@ -45,18 +40,18 @@ const BreadcrumbsDocs = () => {
     // PROPS CONFIGURATOR //////////////////////////////////////////////////////////////////////////////////////////////
     const {
         propsConfigurator,
-        componentProps: propsConfig,
+        componentProps : propsConfig,
     } = createPropsConfigurator(
         "Breadcrumbs",
         ["separator", "spacing"],
         colourOptions,
         {
-            isSelfClosing: false,
-            canHaveChildren: true,
-            defaultChildren: `    <Link href="/">Home</Link>
+            isSelfClosing   : false,
+            canHaveChildren : true,
+            defaultChildren : `    <Link href="/">Home</Link>
     <Link href="/components">Components</Link>
-    <Link href="/components/breadcrumbs">Breadcrumbs</Link>`
-        }
+    <Link href="/components/breadcrumbs">Breadcrumbs</Link>`,
+        },
     );
 
     useEffect(() => {

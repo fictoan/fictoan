@@ -1,9 +1,9 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
-import React, { useState } from "react";
+// FRAMEWORK ===========================================================================================================
+import React, { useState, useEffect, useMemo } from "react";
 
-// INTERNAL DEPS =======================================================================================================
+// FICTOAN =============================================================================================================
 import {
     Element,
     Heading1,
@@ -26,22 +26,18 @@ import {
     ToastsWrapper,
     Button,
     Range, Checkbox, Switch,
-CodeBlock
+    CodeBlock,
+    CheckboxGroup,
+    SwitchGroup,
 } from "fictoan-react";
-
-// COMPONENTS ==========================================================================================================
 
 // STYLES ==============================================================================================================
 import "./page-checkbox.css";
 
-// HOOKS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-
-// UTILS ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
-
-// DATA ================================================================================================================
+// OTHER ===============================================================================================================
 import { checkboxProps } from "./config";
+import { colourOptions } from "../../colour/colours";
+import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 const CheckboxDocs = () => {
     const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(checkboxProps.variables);
@@ -52,6 +48,27 @@ const CheckboxDocs = () => {
     const [isSwitch, setIsSwitch] = useState(false);
     const [defaultChecked, setDefaultChecked] = useState(false);
     const [defaultDisabled, setDefaultDisabled] = useState(false);
+    const [showGroup, setShowGroup] = useState(false);
+    const [groupValue, setGroupValue] = useState([]);
+    const [currentlyShown, setCurrentlyShown] = useState(isSwitch ? "switch" : "checkbox");
+
+    // Create group options with memoization to update when dependencies change
+    const groupOptions = useMemo(() => [
+        {
+            id             : "option1",
+            value          : "option1",
+            label          : "Option 1",
+            defaultChecked : defaultChecked,
+            disabled       : defaultDisabled,
+        },
+        { id : "option2", value : "option2", label : "Option 2" },
+        { id : "option3", value : "option3", label : "Option 3" },
+    ], [defaultChecked, defaultDisabled]);
+
+    // Update currentlyShown whenever isSwitch changes
+    useEffect(() => {
+        setCurrentlyShown(isSwitch ? "switch" : "checkbox");
+    }, [isSwitch]);
 
     // THEME ===========================================================================================================
 
@@ -70,7 +87,8 @@ const CheckboxDocs = () => {
                     <Heading4 marginBottom="micro">Characteristics</Heading4>
                     <ul>
                         <li>
-                            The Checkbox and the Switch are the exact same underneath, the only difference is how they look
+                            The Checkbox and the Switch are the exact same underneath, the only difference is how they
+                            look
                         </li>
                     </ul>
                 </Portion>
@@ -88,26 +106,40 @@ const CheckboxDocs = () => {
                         as="div" padding="small" shape="rounded" bgColour="slate-light80"
                         data-centered-children
                     >
-                        {isSwitch ? (
-                            <Switch
-                                key={`switch-${defaultChecked}`}
-                                id="switch-1"
-                                value="switch-1"
-                                name="switch-1"
-                                label="Check me"
-                                defaultChecked={defaultChecked}
-                                disabled={defaultDisabled}
-                            />
+                        {showGroup ? (
+                            isSwitch ? (
+                                <SwitchGroup
+                                    name="switch-group"
+                                    options={groupOptions}
+                                    value={groupValue}
+                                    onChange={(values) => setGroupValue(values)}
+                                />
+                            ) : (
+                                <CheckboxGroup
+                                    name="checkbox-group"
+                                    options={groupOptions}
+                                    value={groupValue}
+                                    onChange={(values) => setGroupValue(values)}
+                                />
+                            )
                         ) : (
-                            <Checkbox
-                                key={`checkbox-${defaultChecked}`}
-                                id="checkbox-1"
-                                value="checkbox-1"
-                                name="checkbox-1"
-                                label="Check me"
-                                defaultChecked={defaultChecked}
-                                disabled={defaultDisabled}
-                            />
+                            isSwitch ? (
+                                <Switch
+                                    key={`switch-${defaultChecked}`}
+                                    id="switch-1"
+                                    label="Check me"
+                                    defaultChecked={defaultChecked}
+                                    disabled={defaultDisabled}
+                                />
+                            ) : (
+                                <Checkbox
+                                    key={`checkbox-${defaultChecked}`}
+                                    id="checkbox-1"
+                                    label="Check me"
+                                    defaultChecked={defaultChecked}
+                                    disabled={defaultDisabled}
+                                />
+                            )
                         )}
                     </Element>
                 </Portion>
@@ -124,18 +156,43 @@ const CheckboxDocs = () => {
 
                             <Row marginBottom="none">
                                 <Portion>
-                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton marginBottom="micro">
-                                        {[
-                                            `// Paste this in your content file`,
-                                            isSwitch ? `<Switch` : `<Checkbox`,
-                                            `    id="${isSwitch ? "switch-1" : "checkbox-1"}"`,
-                                            `    value="${isSwitch ? "switch-1" : "checkbox-1"}"`,
-                                            `    name="${isSwitch ? "switch-1" : "checkbox-1"}"`,
-                                            `    label="Check me"`,
-                                            defaultChecked ? `   defaultChecked` : null,
-                                            defaultDisabled ? `   disabled` : null,
-                                            `/>`,
-                                        ].filter(Boolean).join("\n")}
+                                    <CodeBlock
+                                        withSyntaxHighlighting language="jsx" showCopyButton
+                                        marginBottom="micro"
+                                    >
+                                        {showGroup ? (
+                                            [
+                                                `// Paste this in your content file`,
+                                                isSwitch ? `<SwitchGroup` : `<CheckboxGroup`,
+                                                `    name="${isSwitch ? "switch-group" : "checkbox-group"}"`,
+                                                `    options={[`,
+                                                `        { `,
+                                                `            id: "option1", `,
+                                                `            value: "option1", `,
+                                                `            label: "Option 1",`,
+                                                defaultChecked ? `            defaultChecked,` : null,
+                                                defaultDisabled ? `            disabled,` : null,
+                                                `        },`,
+                                                `        { id: "option2", value: "option2", label: "Option 2" },`,
+                                                `        { id: "option3", value: "option3", label: "Option 3" },`,
+                                                `    ]}`,
+                                                `    value={${JSON.stringify(groupValue)}}`,
+                                                `    onChange={(values) => setGroupValue(values)}`,
+                                                `/>`,
+                                            ].filter(Boolean).join("\n")
+                                        ) : (
+                                            [
+                                                `// Paste this in your content file`,
+                                                isSwitch ? `<Switch` : `<Checkbox`,
+                                                `    id="${isSwitch ? "switch-1" : "checkbox-1"}"`,
+                                                `    value="${isSwitch ? "switch-1" : "checkbox-1"}"`,
+                                                `    name="${isSwitch ? "switch-1" : "checkbox-1"}"`,
+                                                `    label="Check me"`,
+                                                defaultChecked ? `    defaultChecked` : null,
+                                                defaultDisabled ? `    disabled` : null,
+                                                `/>`,
+                                            ].filter(Boolean).join("\n")
+                                        )}
                                     </CodeBlock>
                                 </Portion>
 
@@ -144,8 +201,6 @@ const CheckboxDocs = () => {
                                     {isSwitch ?
                                         <Switch
                                             id="checkbox-switch-switcher"
-                                            value="checkbox-switch-switcher"
-                                            name="checkbox-switch-switcher"
                                             label="Make it a switch"
                                             checked={isSwitch}
                                             onChange={() => setIsSwitch(!isSwitch)}
@@ -153,8 +208,6 @@ const CheckboxDocs = () => {
                                         :
                                         <Checkbox
                                             id="checkbox-switch-switcher"
-                                            value="checkbox-switch-switcher"
-                                            name="checkbox-switch-switcher"
                                             label="Make it a switch"
                                             onChange={() => setIsSwitch(!isSwitch)}
                                         />
@@ -167,9 +220,7 @@ const CheckboxDocs = () => {
                                 <Portion>
                                     <Checkbox
                                         id="checkbox-default-checked"
-                                        value="checkbox-default-checked"
-                                        name="checkbox-default-checked"
-                                        label="Checked by default"
+                                        label={showGroup ? "First item checked by default" : "Checked by default"}
                                         onChange={() => setDefaultChecked(!defaultChecked)}
                                     />
 
@@ -180,11 +231,28 @@ const CheckboxDocs = () => {
                                 <Portion>
                                     <Checkbox
                                         id="checkbox-default-disabled"
-                                        value="checkbox-default-disabled"
-                                        name="checkbox-default-disabled"
-                                        label="Disabled"
+                                        label={showGroup ? "First item disabled" : "Disabled"}
                                         onChange={() => setDefaultDisabled(!defaultDisabled)}
                                     />
+
+                                    <Divider kind="secondary" horizontalMargin="none" marginTop="micro" />
+                                </Portion>
+
+                                {/* GROUP ========================================================================= */}
+                                <Portion>
+                                    <Button
+                                        id="create-group-button"
+                                        type="button" size="small"
+                                        kind="secondary"
+                                        onClick={() => {
+                                            setShowGroup(!showGroup);
+                                            if (!showGroup) {
+                                                setGroupValue([]);
+                                            }
+                                        }}
+                                    >
+                                        {showGroup ? `Show single ${currentlyShown}` : `Create a ${currentlyShown} group`}
+                                    </Button>
                                 </Portion>
                             </Row>
                         </Card>
