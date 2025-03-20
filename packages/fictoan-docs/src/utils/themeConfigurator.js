@@ -26,9 +26,24 @@ const findLongestVarNameLength = (variables) => {
 // COLOR VARIABLE HANDLING =============================================================================================
 // Check if a CSS variable value refers to a color variable ------------------------------------------------------------
 const isColorVariable = (value) => {
+    // Special known text/color variables
+    const knownColorVars = [
+        "transparent", "link-text-default", "paragraph-text-colour", 
+        "text-", "border-", "bg-", "background-", "color-", "colour-"
+    ];
+    
     if (value?.startsWith("var(--")) {
         const varName = value.match(/var\(--([^)]+)\)/)?.[1];
-        return varName ? listOfColours.some(color => varName === color || varName.startsWith(`${color}-`)) : false;
+        
+        // Check if it's a known color from the color list
+        const isKnownColor = varName ? listOfColours.some(color => 
+            varName === color || varName.startsWith(`${color}-`)) : false;
+            
+        // Check if it's a known text/color variable
+        const isTextOrColorVar = varName ? knownColorVars.some(prefix => 
+            varName === prefix || varName.startsWith(prefix)) : false;
+            
+        return isKnownColor || isTextOrColorVar;
     }
     return false;
 };
@@ -105,6 +120,73 @@ const RangeInput = ({ name, defaultValue, onChange, suffix = "px" }) => {
     );
 };
 
+// Format CSS variables into a readable string for display =============================================================
+const formatVariablesList = (vars) => {
+    if (!Object.keys(vars).length) return "";
+
+    const longestLength = findLongestVarNameLength(vars);
+    const variablesList = Object.entries(vars)
+        .map(([name, value]) => {
+            const fullVarName = `--${name}`;
+            const paddedName = fullVarName.padEnd(longestLength);
+            return `${paddedName} : ${value};`;
+        })
+        .join("\n");
+
+    return `/* Paste this in your theme file */\n${variablesList}`;
+};
+
+// Extract variables from theme CSS files ==============================================================================
+const extractThemeVariables = (componentPrefix) => {
+    const variables = {};
+    
+    try {
+        // Iterate through all stylesheets
+        Array.from(document.styleSheets).forEach(styleSheet => {
+            try {
+                // Skip non-CSS files or external stylesheets
+                if (!styleSheet.href || !styleSheet.href.includes('.css')) return;
+                
+                Array.from(styleSheet.cssRules || styleSheet.rules).forEach(rule => {
+                    // Look for rules containing #interactive-component or :root selectors
+                    if (rule.selectorText === "#interactive-component" || rule.selectorText === ":root") {
+                        // Extract CSS variables from the rule
+                        Array.from(rule.style).forEach(prop => {
+                            if (prop.startsWith("--")) {
+                                const varName = prop.substring(2);
+                                // Check if the variable matches our component prefix
+                                if (Array.isArray(componentPrefix)) {
+                                    // Handle multiple prefixes
+                                    if (componentPrefix.some(prefix => varName.startsWith(prefix))) {
+                                        const value = rule.style.getPropertyValue(prop).trim();
+                                        variables[varName] = value;
+                                    }
+                                } else if (typeof componentPrefix === 'function') {
+                                    // Handle function filter
+                                    if (componentPrefix(varName)) {
+                                        const value = rule.style.getPropertyValue(prop).trim();
+                                        variables[varName] = value;
+                                    }
+                                } else if (typeof componentPrefix === 'string' && varName.startsWith(componentPrefix)) {
+                                    // Handle string prefix
+                                    const value = rule.style.getPropertyValue(prop).trim();
+                                    variables[varName] = value;
+                                }
+                            }
+                        });
+                    }
+                });
+            } catch (e) {
+                // Skip cross-origin stylesheets silently
+            }
+        });
+    } catch (e) {
+        console.warn("Could not read theme stylesheets:", e);
+    }
+    
+    return variables;
+};
+
 // THEME CONFIGURATOR CREATOR //////////////////////////////////////////////////////////////////////////////////////////
 export const createThemeConfigurator = (componentName, filter) => {
     // STATE AND REFS ==================================================================================================
@@ -119,23 +201,21 @@ export const createThemeConfigurator = (componentName, filter) => {
     // CSS VARIABLE FORMATTING =========================================================================================
     // Format CSS variables into a readable string for display ---------------------------------------------------------
     const formatCSSVariablesList = useCallback((vars) => {
-        if (!Object.keys(vars).length) return "";
-
-        const longestLength = findLongestVarNameLength(vars);
-        const variablesList = Object.entries(vars)
-            .map(([name, value]) => {
-                const fullVarName = `--${name}`;
-                const paddedName = fullVarName.padEnd(longestLength);
-                return `${paddedName} : ${value};`;
-            })
-            .join("\n");
-
-        return `/* Paste this in your theme file */\n${variablesList}`;
+        return formatVariablesList(vars);
     }, []);
 
     // VARIABLE EXTRACTION =============================================================================================
     // Extract CSS variables from stylesheets --------------------------------------------------------------------------
     const extractVariables = useCallback(() => {
+        // First try to extract variables from theme files
+        const themeVars = extractThemeVariables(filter);
+        
+        // If we found theme variables, use them
+        if (Object.keys(themeVars).length > 0) {
+            return themeVars;
+        }
+        
+        // Otherwise fall back to extracting from the component's inline styles
         const extractedVars = {};
         try {
             Array.from(document.styleSheets).forEach(styleSheet => {
@@ -170,6 +250,14 @@ export const createThemeConfigurator = (componentName, filter) => {
                 cssVariablesList: formattedCss,
             });
             isInitializedRef.current = true;
+            
+            // Apply the variables to the interactive element if it exists
+            const element = interactiveElementRef.current;
+            if (element) {
+                Object.entries(vars).forEach(([name, value]) => {
+                    element.style.setProperty(`--${name}`, value);
+                });
+            }
         }
     }, [extractVariables, formatCSSVariablesList]);
 
