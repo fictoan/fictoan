@@ -31,6 +31,15 @@ export const createPropsConfigurator = (
             children : componentConfig.defaultChildren || null,
         };
 
+        // For CodeBlock, set default language and sample code
+        if (componentName === "CodeBlock") {
+            defaults.language = "jsx";
+            // Set default usage approach for CodeBlock
+            defaults.source = "import"; // This controls import vs embed approach
+            // We'll store the actual code content in sourceContent
+            defaults.sourceContent = ""; // Will be filled by the page component
+        }
+
         propsToConfig.forEach(prop => {
             const config = MASTER_PROPS_CONFIG[prop];
 
@@ -101,6 +110,10 @@ export const createPropsConfigurator = (
                 if (key === "children") {
                     return false;
                 }
+                // Skip usage prop for CodeBlock - will handle separately
+                if (componentName === "CodeBlock" && key === "usage") {
+                    return false;
+                }
                 return value !== undefined && value !== "select-default";
             })
             .map(([key, value]) => {
@@ -139,6 +152,60 @@ export const createPropsConfigurator = (
         const additionalProps = propValues.withDelete
             ? `    onDelete={() => doSomething()}`
             : ``;
+
+        // STEP 1d : SPECIAL HANDLING FOR CODE BLOCK USAGE =============================================================
+        if (componentName === "CodeBlock") {
+            const usageApproach = propValues.source || "import";
+            
+            // Generate common props for both examples
+            const commonProps = [
+                "    language=\"jsx\"",
+                "    withSyntaxHighlighting",
+                "    showCopyButton",
+                "    showLineNumbers"
+            ].join("\n");
+
+            if (usageApproach === "import") {
+                return [
+                    `{/* Option 1: Import approach */}`,
+                    `import { ${componentName} } from "fictoan-react";`,
+                    `import { sampleCode } from "./codeSamples.js";`,
+                    ``,
+                    `<${componentName}`,
+                    commonProps,
+                    `    source={sampleCode}`,
+                    `/>`
+                ].filter(Boolean).join("\n");
+            } else if (usageApproach === "inline") {
+                // Sample code for inline approach
+                const inlineCode = [
+                    `import React from "react";`,
+                    `import { CodeBlock } from "fictoan-react";`,
+                    `import { sampleCode } from "./sampleCode";`,
+                    ``,
+                    `<CodeBlock`,
+                    `    language="jsx"`,
+                    `    withSyntaxHighlighting`,
+                    `    showCopyButton`,
+                    `    showLineNumbers`,
+                    `    source={sampleCode}`,
+                    `/>`
+                ];
+                
+                return [
+                    `{/* Option 2: Inline approach */}`,
+                    `import { ${componentName} } from "fictoan-react";`,
+                    ``,
+                    `<${componentName}`,
+                    commonProps,
+                    `>`,
+                    `{[`,
+                    ...inlineCode.map(line => `    \`${line}\``),
+                    `].join("\\n")}`,
+                    `</${componentName}>`
+                ].filter(Boolean).join("\n");
+            }
+        }
 
         // STEP 2 : CONSOLIDATE PROPS ==================================================================================
         const hasProps = props.length > 0 || additionalProps || reactNodeProps;
@@ -202,8 +269,12 @@ export const createPropsConfigurator = (
 
     // GENERATE CONTROLS FOR DIFFERENT PROP TYPES //////////////////////////////////////////////////////////////////////
     const generateControl = useCallback((propName) => {
+        console.log(`Generating control for: ${propName}`);
         const config = MASTER_PROPS_CONFIG[propName];
-        if (!config) return null;
+        if (!config) {
+            console.log(`No config found for prop: ${propName}`);
+            return null;
+        }
 
         const { type, label, options } = config;
 
@@ -215,17 +286,21 @@ export const createPropsConfigurator = (
             case "position":
             case "emphasis":
             case "showOn":
-
+            case "source":
+                // Special handling for CodeBlock usage to switch between import/embed approaches
                 return (
                     <Portion key={propName}>
                         <RadioTabGroup
                             id={propName}
-                            label={label}
+                            label="Usage approach"
                             name={propName}
                             // Get the variant options or fall back to default options
                             options={options || config.variants?.[componentName.toLowerCase()] || config.variants?.default || []}
                             value={propValues[propName]}
-                            onChange={(value) => handlePropChange(propName, value)}
+                            onChange={(value) => {
+                                console.log(`Changing usage to: ${value}`);
+                                handlePropChange(propName, value);
+                            }}
                         />
                     </Portion>
                 );
@@ -252,6 +327,55 @@ export const createPropsConfigurator = (
                         />
                     </Portion>
                 );
+
+            // LISTBOX FOR LANGUAGE SELECTION ==========================================================================
+            case "language":
+                // For CodeBlock page - special handling to update the sample code based on language
+                if (componentName === "CodeBlock") {
+                    const [selectedLanguage, setSelectedLanguage] = useState(propValues.language || "jsx");
+
+                    const handleLanguageChange = (value) => {
+                        // Update the language prop
+                        handlePropChange("language", value);
+                        // Update local state for this component
+                        setSelectedLanguage(value);
+
+                        // If we're in the CodeBlock page, we need to trigger the sample code update
+                        if (typeof window !== "undefined") {
+                            // Create and dispatch a custom event
+                            const event = new CustomEvent("codeblock-language-changed", {
+                                detail: { language: value }
+                            });
+                            window.dispatchEvent(event);
+                        }
+                    };
+
+                    return (
+                        <Portion key={propName} desktopSpan="whole">
+                            <ListBox
+                                id="language"
+                                label="Language"
+                                name="list-of-languages"
+                                options={[
+                                    { label : "Bash", value : "bash" },
+                                    { label : "CSharp", value : "csharp" },
+                                    { label : "CSS", value : "css" },
+                                    { label : "HTML", value : "html" },
+                                    { label : "JSX", value : "jsx" },
+                                    { label : "Kotlin", value : "kotlin" },
+                                    { label : "Markdown", value : "markdown" },
+                                    { label : "ObjectiveC", value : "objectivec" },
+                                    { label : "Python", value : "python" },
+                                    { label : "Rust", value : "rust" },
+                                    { label : "Swift", value : "swift" },
+                                ]}
+                                onChange={handleLanguageChange}
+                                value={selectedLanguage}
+                                isFullWidth
+                            />
+                        </Portion>
+                    );
+                }
 
             // CHECKBOX FOR BOOLEAN PROPS ==============================================================================
             case "boolean":
@@ -358,5 +482,6 @@ export const createPropsConfigurator = (
         propsConfigurator,
         componentProps,
         propValues,
+        setPropValues,
     };
 };

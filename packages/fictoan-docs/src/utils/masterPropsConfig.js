@@ -68,7 +68,7 @@ export const MASTER_PROPS_CONFIG = {
             { id : "shape-opt-2", value : "curved", label : "curved" },
         ],
     },
-    
+
     shadow : {
         type    : "shape",
         label   : "Shadow",
@@ -111,6 +111,12 @@ export const MASTER_PROPS_CONFIG = {
         defaultOption      : "Select colour",
         customOptionPrefix : "border",
     },
+    language : {
+        type               : "language",
+        label              : "Language",
+        defaultOption      : "Select a language",
+    },
+
 
     // BOOLEAN PROPS ===================================================================================================
     canHaveChildren : {
@@ -124,14 +130,34 @@ export const MASTER_PROPS_CONFIG = {
         type  : "boolean",
         label : "Disabled",
     },
+    // BADGE PROPS -----------------------------------------------------------------------------------------------------
     withDelete      : {
         type  : "boolean",
         label : "Show a delete icon",
     },
+    // BUTTON PROPS ----------------------------------------------------------------------------------------------------
     isLoading       : {
         type  : "boolean",
         label : "Is loading",
     },
+    // CODE BLOCK PROPS ------------------------------------------------------------------------------------------------
+    showCopyButton  : {
+        type  : "boolean",
+        label : "Show copy button",
+    },
+    showLineNumbers  : {
+        type  : "boolean",
+        label : "Show line numbers",
+    },
+    withSyntaxHighlighting : {
+        type  : "boolean",
+        label : "Add syntax highlighting",
+    },
+    makeEditable    : {
+        type  : "boolean",
+        label : "Make content editable",
+    },
+
 
     // KIND/EMPHASIS PROPS =============================================================================================
     kind : {
@@ -176,13 +202,13 @@ export const MASTER_PROPS_CONFIG = {
 
     // BREADCRUMBS ====================================================================================================
     separator : {
-        type : "text",
+        type    : "text",
         default : {
             label : "Separator",
             value : "/",
         },
     },
-    
+
     spacing : {
         type    : "spacing",
         label   : "Spacing",
@@ -205,6 +231,16 @@ export const MASTER_PROPS_CONFIG = {
         options : [
             { id : "show-opt-0", value : "hover", label : "hover" },
             { id : "show-opt-1", value : "click", label : "click" },
+        ],
+    },
+
+    // CODE BLOCK ======================================================================================================
+    source : {
+        type    : "source",
+        label   : "Usage",
+        options : [
+            { id : "usage-opt-0", value : "import", label : "Import" },
+            { id : "usage-opt-1", value : "inline", label : "Inline" },
         ],
     },
 };

@@ -1,10 +1,10 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
-import React, { useEffect, useRef, useState } from "react";
+// FRAMEWORK ===========================================================================================================
 import Link from "next/link";
+import React, { useEffect, useRef, useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
+// FICTOAN =============================================================================================================
 import {
     Button,
     Div,
@@ -16,7 +16,7 @@ import {
     Section,
     Switch,
     Text,
-    CodeBlock
+    CodeBlock,
 } from "fictoan-react";
 
 // STYLES ==============================================================================================================
@@ -69,19 +69,24 @@ export const IntroCode = () => {
         const newProps = parseCodeToProperties(newContent);
 
         // Update all component props based on parsed content
-        setRowProps(prev => ({ ...prev, ...newProps.Row }));
+        setRowProps(prev => ({ ...prev, ...newProps.Row }
+        ));
 
         // Update portions
         if (newProps.Portion[0]) setPortion1Props(newProps.Portion[0]);
         if (newProps.Portion[1]) setPortion2Props(newProps.Portion[1]);
 
         // Update headings
-        setMainHeadingProps(prev => ({ ...prev, ...newProps.Heading1 }));
-        if (newProps.Heading5[0]) setSubHeading1Props(prev => ({ ...prev, ...newProps.Heading5[0] }));
-        if (newProps.Heading5[1]) setSubHeading2Props(prev => ({ ...prev, ...newProps.Heading5[1] }));
+        setMainHeadingProps(prev => ({ ...prev, ...newProps.Heading1 }
+        ));
+        if (newProps.Heading5[0]) setSubHeading1Props(prev => ({ ...prev, ...newProps.Heading5[0] }
+        ));
+        if (newProps.Heading5[1]) setSubHeading2Props(prev => ({ ...prev, ...newProps.Heading5[1] }
+        ));
 
         // Update button
-        setButtonProps(prev => ({ ...prev, ...newProps.Button }));
+        setButtonProps(prev => ({ ...prev, ...newProps.Button }
+        ));
     };
 
     const codeBlockRef = useRef(null);
@@ -139,10 +144,10 @@ export const IntroCode = () => {
     useEffect(() => {
         const checkPrism = () => {
             if (window.Prism) {
-                console.log('Prism is loaded');
+                console.log("Prism is loaded");
                 setMountKey(prev => prev + 1);
             } else {
-                console.log('Prism not loaded yet, retrying...');
+                console.log("Prism not loaded yet, retrying...");
                 setTimeout(checkPrism, 100);
             }
         };
@@ -216,7 +221,7 @@ export const IntroCode = () => {
                 <Portion>
                     <Div verticallyCentreItems pushItemsToEnds marginBottom="nano">
                         <Text textColour="blue" weight="700">
-                            GO AHEAD, EDIT THESE  PROPS AND VALUES HERE—
+                            GO AHEAD, EDIT THESE PROPS AND VALUES HERE—
                         </Text>
 
                         <Switch
@@ -234,7 +239,7 @@ export const IntroCode = () => {
                             withSyntaxHighlighting
                             language="jsx"
                             showCopyButton
-                            contentEditable
+                            makeEditable
                             suppressContentEditableWarning={true}
                             onChange={handleCodeChange}
                             marginBottom="micro"

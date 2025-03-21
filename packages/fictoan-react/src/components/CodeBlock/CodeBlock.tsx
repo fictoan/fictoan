@@ -1,14 +1,14 @@
+// FRAMEWORK ===========================================================================================================
 import React, { useState, useEffect, useRef, useCallback } from "react";
-
-import { Element } from "../Element/Element";
-import { Button } from "../Button/Button";
-import { Badge } from "../Badge/Badge";
 
 // STYLES ==============================================================================================================
 import "./CodeBlock.css";
 
-// TYPES ===============================================================================================================
+// OTHER ===============================================================================================================
+import { Badge } from "../Badge/Badge";
+import { Button } from "../Button/Button";
 import { CommonAndHTMLProps } from "../Element/constants";
+import { Element } from "../Element/Element";
 
 interface PrismType {
     languages : { [key: string]: any };
@@ -27,7 +27,7 @@ export interface CodeBlockCustomProps {
     showLineNumbers        ? : boolean;
     description            ? : string;
     withSyntaxHighlighting ? : boolean;
-    contentEditable        ? : boolean;
+    makeEditable           ? : boolean;
     onChange               ? : (content: string) => void;
 }
 
@@ -45,7 +45,7 @@ export const CodeBlock = React.forwardRef((
         showLineNumbers,
         description,
         withSyntaxHighlighting = false,
-        contentEditable = false,
+        makeEditable = false,
         onChange,
         ...props
     }: CodeBlockProps,
@@ -130,7 +130,7 @@ export const CodeBlock = React.forwardRef((
 
         try {
             // Store cursor position before modifying content
-            const cursorPosition = contentEditable ? getCursorPosition() : null;
+            const cursorPosition = makeEditable ? getCursorPosition() : null;
 
             // Apply Prism highlighting
             const highlighted = prismModule.highlight(
@@ -141,7 +141,7 @@ export const CodeBlock = React.forwardRef((
             codeElement.innerHTML = highlighted;
 
             // Restore cursor position for editable content
-            if (contentEditable && cursorPosition !== null) {
+            if (makeEditable && cursorPosition !== null) {
                 const selection = window.getSelection();
                 const newRange = document.createRange();
                 const treeWalker = document.createTreeWalker(
@@ -171,7 +171,7 @@ export const CodeBlock = React.forwardRef((
                 codeElement.textContent = content;
             }
         }
-    }, [language, withSyntaxHighlighting, contentEditable, prismModule, getCursorPosition, codeElement]);
+    }, [language, withSyntaxHighlighting, makeEditable, prismModule, getCursorPosition, codeElement]);
 
     // CONTENT EDITING =================================================================================================
     // Handle content changes in editable mode
@@ -190,13 +190,13 @@ export const CodeBlock = React.forwardRef((
     // Setup input handler for editable content
     useEffect(() => {
         const element = codeElement;
-        if (!element || !contentEditable) return;
+        if (!element || !makeEditable) return;
 
         element.addEventListener("input", handleInput);
         return () => {
             element.removeEventListener("input", handleInput);
         };
-    }, [contentEditable, handleInput, codeElement]);
+    }, [makeEditable, handleInput, codeElement]);
 
     // Initial highlighting when component loads
     useEffect(() => {
@@ -291,7 +291,7 @@ export const CodeBlock = React.forwardRef((
                 {/* Code Content */}
                 <code
                     ref={setCodeElement}
-                    contentEditable={contentEditable}
+                    contentEditable={makeEditable}
                     suppressContentEditableWarning={true}
                     spellCheck="false"
                     className={`language-${language} ${isLoading ? "is-loading" : ""}`}

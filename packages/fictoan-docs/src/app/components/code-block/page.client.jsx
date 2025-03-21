@@ -1,9 +1,9 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// FRAMEWORK ===========================================================================================================
 import React, { useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
+// FICTOAN =============================================================================================================
 import {
     Div,
     Heading1,
@@ -21,22 +21,13 @@ import {
     Range,
     Checkbox,
     RadioTabGroup,
-CodeBlock
+    CodeBlock, ListBox,
 } from "fictoan-react";
-
-// COMPONENTS ==========================================================================================================
 
 // STYLES ==============================================================================================================
 import "./page-code-block.css";
 
-// HOOKS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-
-// UTILS ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
-
-// DATA ================================================================================================================
-import { toastProps } from "./config";
+// OTHER ===============================================================================================================
 import {
     sampleCodeBlock,
     sampleBashCode,
@@ -51,15 +42,79 @@ import {
     samplePythonCode,
     sampleSwiftCode,
 } from "./CodeSamples";
+import { colourOptions } from "../../colour/colours";
+import { createPropsConfigurator } from "../../../utils/propsConfigurator";
+import { toastProps } from "./config";
+import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 const CodeBlockDocs = () => {
-
     // SAMPLE ==========================================================================================================
     const [selectedApproach, setSelectedApproach] = useState("import");
     const [enableCopyButton, setEnableCopyButton] = useState(false);
     const [enableLineNumbers, setEnableLineNumbers] = useState(false);
-    const [selectedLanguage, setSelectedLanguage] = useState("bash");
-    const [selectedSampleCode, setSelectedSampleCode] = useState(sampleBashCode);
+    const [selectedLanguage, setSelectedLanguage] = useState("jsx");
+    const [selectedSampleCode, setSelectedSampleCode] = useState(sampleJSXCode);
+
+    // Event listener for language changes from the configurator
+    React.useEffect(() => {
+        const handleLanguageChange = (event) => {
+            const language = event.detail.language;
+            setSelectedLanguage(language);
+            showSelectedLanguageCode(language);
+        };
+
+        window.addEventListener("codeblock-language-changed", handleLanguageChange);
+
+        return () => {
+            window.removeEventListener("codeblock-language-changed", handleLanguageChange);
+        };
+    }, []);
+
+
+    // PROPS CONFIG ====================================================================================================
+    const {
+        propsConfigurator,
+        componentProps : propsConfig,
+        propValues,
+        setPropValues,
+    } = createPropsConfigurator(
+        "CodeBlock",
+        [
+            "usage", // Add usage type to handle import/embed approach
+            "source",
+            "language", // Custom type that will be handled in propsConfigurator
+            "showCopyButton",
+            "showLineNumbers",
+            "description",
+            "withSyntaxHighlighting",
+            "makeEditable",
+        ],
+        colourOptions,
+        {
+            canHaveChildren : true,
+            isSelfClosing   : false,
+        },
+    );
+
+    // Track usage value changes
+    const [currentUsage, setCurrentUsage] = useState("import");
+    
+    // Listen for changes to the usage prop from the RadioTabGroup
+    React.useEffect(() => {
+        if (propValues && propValues.source !== undefined) {
+            console.log("Current source/usage value:", propValues.source);
+            setCurrentUsage(propValues.source);
+        }
+    }, [propValues]);
+    
+    // Update the source property when selectedSampleCode changes
+    React.useEffect(() => {
+        if (setPropValues && selectedSampleCode) {
+            setPropValues(prev => {
+                return { ...prev, source : selectedSampleCode };
+            });
+        }
+    }, [selectedSampleCode, setPropValues]);
 
     const showSelectedLanguageCode = (language) => {
         switch (language) {
@@ -124,14 +179,14 @@ const CodeBlockDocs = () => {
                             For embedded code block usage, wrap your code in <code>{"{[]}"}</code> for it to work
                         </li>
                         <li>
-                            For some languages such as JSX, you might need to wrap the lines with <code>``</code> backticks
-                            as well
+                            For some languages such as JSX, you might need to wrap individual lines
+                            with <code>``</code> backticks as well, and then do a <code>.join("\n")</code> at the end.
                         </li>
                     </ul>
 
                     <ul>
                         <li>
-                            For inline code block usage, wrap with tags <code>{"<code> </code>"}</code> for it to work
+                            For inline code block usage, wrap with tags <code>{"<code></code>"}</code> for it to work
                         </li>
                     </ul>
                 </Portion>
@@ -148,136 +203,46 @@ const CodeBlockDocs = () => {
                     <Div padding="micro" shape="rounded" bgColour="slate-light80"
                          data-centered-children
                     >
-                        <CodeBlock
-                            withSyntaxHighlighting
-                            source={selectedSampleCode}
-                            language={selectedLanguage}
-                            showCopyButton={enableCopyButton}
-                            showLineNumbers={enableLineNumbers}
-                        />
+                        {currentUsage === "import" ? (
+                            <CodeBlock
+                                id="interactive-component"
+                                source={selectedSampleCode}
+                                language={propValues.language || "jsx"}
+                                showCopyButton={propValues.showCopyButton}
+                                showLineNumbers={propValues.showLineNumbers}
+                                withSyntaxHighlighting={propValues.withSyntaxHighlighting}
+                                makeEditable={propValues.makeEditable}
+                            />
+                        ) : (
+                            <CodeBlock
+                                id="interactive-component"
+                                language={propValues.language || "jsx"}
+                                showCopyButton={propValues.showCopyButton}
+                                showLineNumbers={propValues.showLineNumbers}
+                                withSyntaxHighlighting={propValues.withSyntaxHighlighting}
+                                makeEditable={propValues.makeEditable}
+                            >
+                                {[
+                                    `import React from "react";`,
+                                    `import { CodeBlock } from "fictoan-react";`,
+                                    `import { sampleCode } from "./sampleCode";`,
+                                    ``,
+                                    `<CodeBlock`,
+                                    `    language="jsx"`,
+                                    `    withSyntaxHighlighting`,
+                                    `    showCopyButton`,
+                                    `    showLineNumbers`,
+                                    `    source={sampleCode}`,
+                                    `/>`
+                                ].join("\n")}
+                            </CodeBlock>
+                        )}
                     </Div>
                 </Portion>
 
                 {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////// */}
                 <Portion desktopSpan="half">
-                    <Form spacing="none">
-                        <Card padding="micro" shape="rounded">
-                            <Header verticallyCentreItems pushItemsToEnds marginBottom="micro">
-                                <Text size="large" weight="700" textColour="white">
-                                    Configure props
-                                </Text>
-                            </Header>
-
-                            <Row marginBottom="none">
-                                <Portion>
-                                    {selectedApproach === "embed" ? (
-                                            <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton marginBottom="micro">
-                                                {[
-                                                    `// Paste this in your content file`,
-                                                    selectedApproach === "import" ? `import { sampleCode } from "./codeSamples.js"; \n` : null,
-                                                    `<CodeBlock`,
-                                                    `    language="${selectedLanguage}"`,
-                                                    enableCopyButton ? `    showCopyButton` : null,
-                                                    enableLineNumbers ? `    showLineNumbers` : null,
-                                                    `>`,
-                                                    `{[`,
-                                                    ...selectedSampleCode.split("\n").map(line => `    \`${line.replace(/`/g, "\\`")}\``),
-                                                    `]}`,
-                                                    `</CodeBlock>`,
-                                                ].filter(Boolean).join("\n")}
-                                            </CodeBlock>
-                                        )
-                                        : (
-                                            <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton marginBottom="micro">
-                                                {[
-                                                    `// Paste this in your content file`,
-                                                    selectedApproach === "import" ? `import { sampleCode } from "./codeSamples.js"; \n` : null,
-                                                    `<CodeBlock`,
-                                                    `    source={sampleCode}`,
-                                                    `    language="${selectedLanguage}"`,
-                                                    enableCopyButton ? `    showCopyButton` : null,
-                                                    enableLineNumbers ? `    showLineNumbers` : null,
-                                                    `>`,
-                                                ].filter(Boolean).join("\n")}
-                                            </CodeBlock>
-                                        )
-                                    }
-                                </Portion>
-
-                                {/* COPY BUTTON ==================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        id="language"
-                                        label="Language"
-                                        name="list-of-languages"
-                                        options={[
-                                            { label : "Bash", value : "bash" },
-                                            { label : "CSharp", value : "csharp" },
-                                            { label : "CSS", value : "css" },
-                                            { label : "HTML", value : "html" },
-                                            { label : "JSX", value : "jsx" },
-                                            { label : "Kotlin", value : "kotlin" },
-                                            { label : "Markdown", value : "markdown" },
-                                            { label : "ObjectiveC", value : "objectivec" },
-                                            { label : "Python", value : "python" },
-                                            { label : "Rust", value : "rust" },
-                                            { label : "Swift", value : "swift" },
-                                        ]}
-                                        onChange={(value) => {
-                                            setSelectedLanguage(value);
-                                            showSelectedLanguageCode(value);
-                                        }}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                <Portion>
-                                    <Divider kind="secondary" horizontalMargin="none" verticalMargin="micro" />
-                                </Portion>
-
-                                {/* SHAPE ========================================================================== */}
-                                <Portion>
-                                    <RadioTabGroup
-                                        id="usage" label="Usage" name="usage"
-                                        options={[
-                                            { id : "approach-opt-0", value : "import", label : "import" },
-                                            { id : "approach-opt-1", value : "embed", label : "embed" },
-                                        ]}
-                                        value={selectedApproach}
-                                        onChange={(value) => setSelectedApproach(value !== "none" ? value : undefined)}
-                                    />
-
-                                    <Divider kind="secondary" horizontalMargin="none" verticalMargin="micro" />
-                                </Portion>
-
-                                {/* COPY BUTTON ==================================================================== */}
-                                <Portion>
-                                    <Checkbox
-                                        id="checkbox-copy-button"
-                                        value="checkbox-copy-button"
-                                        name="checkbox-copy-button"
-                                        label="Show Copy button"
-                                        checked={enableCopyButton}
-                                        onChange={(checked) => setEnableCopyButton(checked)}
-                                    />
-
-                                    <Divider kind="secondary" horizontalMargin="none" verticalMargin="micro" />
-                                </Portion>
-
-                                {/* LINE NUMBERS =================================================================== */}
-                                <Portion>
-                                    <Checkbox
-                                        id="checkbox-line-numbers"
-                                        value="checkbox-line-numbers"
-                                        name="checkbox-line-numbers"
-                                        label="Show line numbers"
-                                        checked={enableLineNumbers}
-                                        onChange={(checked) => setEnableLineNumbers(checked)}
-                                    />
-                                </Portion>
-                            </Row>
-                        </Card>
-                    </Form>
+                    {propsConfigurator()}
                 </Portion>
 
                 {/* GLOBAL THEME /////////////////////////////////////////////////////////////////////////////////// */}
