@@ -86,13 +86,17 @@ export const Drawer = React.forwardRef(
 
         const closeDrawer = () => closeWhen?.();
 
-        useClickOutside(effectiveRef, closeOnClickOutside ? closeDrawer : () => {
-        });
+        useClickOutside(effectiveRef, closeOnClickOutside ? closeDrawer : () => {});
 
         const handleKeyDown = (e : React.KeyboardEvent) => {
             if (e.key === "Escape" && isDismissible) {
                 closeDrawer();
             }
+        };
+
+        // Stop propagation of click events inside the drawer content
+        const handleContentClick = (e: React.MouseEvent) => {
+            e.stopPropagation();
         };
 
         return shouldRender ? (
@@ -108,15 +112,13 @@ export const Drawer = React.forwardRef(
                     aria-modal="true"
                     aria-label={label || "Drawer"}
                     tabIndex={-1}
-                    {...(
-                        closeOnClickOutside ? { onClick : closeDrawer } : {}
-                    )}
                     {...props}
                 >
                     {openWhen && showOverlay && (
                         <Div
                             className={`rest-of-page-overlay ${openWhen ? "visible" : ""}`}
                             aria-hidden="true"
+                            onClick={closeOnClickOutside ? closeDrawer : undefined}
                         />
                     )}
 
@@ -127,6 +129,7 @@ export const Drawer = React.forwardRef(
                         bgColor={bgColor}
                         bgColour={bgColour}
                         role="document"
+                        onClick={handleContentClick}
                     >
                         {isDismissible && (
                             <button

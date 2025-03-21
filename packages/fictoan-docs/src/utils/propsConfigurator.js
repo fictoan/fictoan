@@ -292,13 +292,12 @@ export const createPropsConfigurator = (
                     <Portion key={propName}>
                         <RadioTabGroup
                             id={propName}
-                            label="Usage approach"
+                            label={propName}
                             name={propName}
                             // Get the variant options or fall back to default options
                             options={options || config.variants?.[componentName.toLowerCase()] || config.variants?.default || []}
                             value={propValues[propName]}
                             onChange={(value) => {
-                                console.log(`Changing usage to: ${value}`);
                                 handlePropChange(propName, value);
                             }}
                         />

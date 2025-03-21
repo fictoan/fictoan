@@ -34,12 +34,12 @@
         border-width     : 1px;
 
         &.padding-all-nano { padding : 8px; }
-        &.padding-all-micro { padding : 24px; }
-        &.padding-all-tiny { padding : 02vw; }
-        &.padding-all-small { padding : 04vw; }
-        &.padding-all-medium { padding : 06vw; }
-        &.padding-all-large { padding : 08vw; }
-        &.padding-all-huge { padding : 12vw; }
+        &.padding-all-micro { padding : 16px; }
+        &.padding-all-tiny { padding : 24px; }
+        &.padding-all-small { padding : 48px; }
+        &.padding-all-medium { padding : 64px; }
+        &.padding-all-large { padding : 80px; }
+        &.padding-all-huge { padding : 96px; }
 
         &:not([class*="bg-"]) {
             background-color : var(--drawer-bg);
