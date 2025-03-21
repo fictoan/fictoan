@@ -223,6 +223,35 @@ const DrawerDocs = () => {
                 <Heading2 marginBottom="nano">Hello</Heading2>
                 <Text>You can add all sorts of content here inside the info panel.</Text>
                 <Button onClick={() => setIsSampleDrawerOpen(false)}>Close</Button>
+
+                <Row marginTop="medium" marginBottom="medium">
+                    {/* PROBLEM ================================================ */}
+                    <Portion>
+                        <Text weight="700" marginBottom="small">MANIFESTO</Text>
+                    </Portion>
+
+                    <Portion>
+                        <Heading1 weight="400" marginBottom="micro">
+                            The hand-off process is broken
+                        </Heading1>
+
+                        <Text size="large" marginBottom="micro">
+                            Hand-offs are treated akin to passing baton, and a its-your-problem-now attitude.
+                        </Text>
+
+                        <Text size="large" marginBottom="micro">
+                            Designers and developers bickering over details is a common sight.
+                        </Text>
+
+                        <Text size="large" marginBottom="micro">
+                            Back and forth over specifics is a massive time-sponge.
+                        </Text>
+
+                        <Text size="large" marginBottom="micro">
+                            It shouldn’t be this way.
+                        </Text>
+                    </Portion>
+                </Row>
             </Drawer>
         </Article>
     );
