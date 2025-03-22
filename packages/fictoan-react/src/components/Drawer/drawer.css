@@ -22,19 +22,67 @@
     }
 
     /* MAIN CONTENT ========================================================= */
-    .drawer-content-wrapper {
+    .drawer-wrapper {
         position         : fixed;
         transition       : all 0.4s ease-in-out;
-        box-shadow       : 4px 0 24px -16px rgba(0, 0, 0, 0.92);
+        transition-delay : 0.2s;
         z-index          : 100000;
-        width            : 100%;
-        border-radius    : var(--drawer-border-radius);
-        border           : solid var(--drawer-border);
-        border-width     : 1px;
-        overflow-y       : auto; /* Enable vertical scrolling */
-        overflow-x       : hidden; /* Prevent horizontal scrolling */
         display          : flex;
         flex-direction   : column;
+    }
+
+    /* OPEN STATE =========================================================== */
+    &.open.left .drawer-wrapper,
+    &.open.right .drawer-wrapper { transform : translateX(0); }
+
+    &.open.top .drawer-wrapper,
+    &.open.bottom .drawer-wrapper { transform : translateY(0); }
+
+    /* POSITIONS ============================================================ */
+    &.top .drawer-wrapper {
+        top        : 0;
+        left       : 0;
+        transform  : translateY(-200%);
+        max-height : 92vh;
+        height     : auto;
+        width      : 100%;
+    }
+
+    &.bottom .drawer-wrapper {
+        bottom     : 0;
+        left       : 0;
+        transform  : translateY(200%);
+        max-height : 92vh;
+        height     : auto;
+        width      : 100%;
+    }
+
+    &.left .drawer-wrapper {
+        left      : 0;
+        top       : 0;
+        transform : translateX(-200%);
+        max-width : 92vw;
+        height    : 100vh;
+        width     : fit-content;
+    }
+
+    &.right .drawer-wrapper {
+        right     : 0;
+        top       : 0;
+        transform : translateX(200%);
+        max-width : 92vw;
+        height    : 100vh;
+        width     : fit-content;
+    }
+
+    .drawer-content-wrapper {
+        box-shadow    : 4px 0 24px -16px rgba(0, 0, 0, 0.92);
+        border-width  : 1px;
+        border-radius : var(--drawer-border-radius);
+        border        : solid var(--drawer-border);
+        overflow-y    : auto; /* Enable vertical scrolling */
+        overflow-x    : hidden; /* Prevent horizontal scrolling */
+        height        : 100%;
 
         &.padding-all-nano { padding : 8px; }
         &.padding-all-micro { padding : 16px; }
@@ -49,47 +97,8 @@
         }
 
         .drawer-inner-content {
-            flex       : 1;
-            overflow-y : auto;
-            width      : 100%;
+            width : 100%;
         }
-    }
-
-    /* POSITIONS ============================================================ */
-    &.top .drawer-content-wrapper {
-        top        : 0;
-        left       : 0;
-        transform  : translateY(-200%);
-        max-height : 92vh;
-        height     : auto;
-        width      : 100%;
-    }
-
-    &.bottom .drawer-content-wrapper {
-        bottom     : 0;
-        left       : 0;
-        transform  : translateY(200%);
-        max-height : 92vh;
-        height     : auto;
-        width      : 100%;
-    }
-
-    &.left .drawer-content-wrapper {
-        left      : 0;
-        top       : 0;
-        transform : translateX(-200%);
-        max-width : 92vw;
-        height    : 100vh;
-        width     : fit-content;
-    }
-
-    &.right .drawer-content-wrapper {
-        right     : 0;
-        top       : 0;
-        transform : translateX(200%);
-        max-width : 92vw;
-        height    : 100vh;
-        width     : fit-content;
     }
 
     --drawer-width-tiny    : 8vw;
@@ -131,13 +140,6 @@
     &.huge.left .drawer-content-wrapper { width : var(--drawer-width-huge); }
     &.huge.top .drawer-content-wrapper,
     &.huge.bottom .drawer-content-wrapper { height : var(--drawer-height-huge); }
-
-    /* OPEN STATE =========================================================== */
-    &.open.left .drawer-content-wrapper,
-    &.open.right .drawer-content-wrapper { transform : translateX(0); }
-
-    &.open.top .drawer-content-wrapper,
-    &.open.bottom .drawer-content-wrapper { transform : translateY(0); }
 
     /* DISMISS BUTTON ======================================================= */
     & .drawer-dismiss-button {

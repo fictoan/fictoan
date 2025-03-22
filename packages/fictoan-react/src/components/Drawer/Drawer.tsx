@@ -119,28 +119,30 @@ export const Drawer = React.forwardRef(
                 )}
 
                 {/* CONTENT ======================================================================================== */}
-                <Div
-                    className="drawer-content-wrapper"
-                    padding={padding}
-                    bgColor={bgColor}
-                    bgColour={bgColour}
-                    role="document"
-                    onClick={handleContentClick}
-                >
-                    <Div className="drawer-inner-content">
-                        {children}
+                <Div className="drawer-wrapper">
+                    <Div
+                        className="drawer-content-wrapper"
+                        padding={padding}
+                        bgColor={bgColor}
+                        bgColour={bgColour}
+                        role="document"
+                        onClick={handleContentClick}
+                    >
+                        <Div className="drawer-inner-content">
+                            {children}
+                        </Div>
                     </Div>
-                </Div>
 
-                {/* DISMISS BUTTON ================================================================================= */}
-                {isDismissible && (
-                    <button
-                        className="drawer-dismiss-button"
-                        onClick={closeDrawer}
-                        aria-label="Close drawer"
-                        tabIndex={0}
-                    />
-                )}
+                    {/* DISMISS BUTTON ============================================================================= */}
+                    {isDismissible && (
+                        <button
+                            className="drawer-dismiss-button"
+                            onClick={closeDrawer}
+                            aria-label="Close drawer"
+                            tabIndex={0}
+                        />
+                    )}
+                </Div>
             </Element>
         ) : null;
     },

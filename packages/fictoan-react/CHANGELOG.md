@@ -2,7 +2,7 @@
 
 ## 1.11.11
 - The `contentEditable` prop for `CodeBlock` is renamed to `makeEditable`, to be more consistent with Fictoan prop 
-  convention
+  conventions
 - Fix `Drawer` scroll issue and `drawer-dismiss-button` positioning issue
 
 ## 1.11.10
