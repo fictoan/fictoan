@@ -130,16 +130,19 @@ export const MASTER_PROPS_CONFIG = {
         type  : "boolean",
         label : "Disabled",
     },
+
     // BADGE PROPS -----------------------------------------------------------------------------------------------------
     withDelete      : {
         type  : "boolean",
         label : "Show a delete icon",
     },
+
     // BUTTON PROPS ----------------------------------------------------------------------------------------------------
     isLoading       : {
         type  : "boolean",
         label : "Is loading",
     },
+
     // CODE BLOCK PROPS ------------------------------------------------------------------------------------------------
     showCopyButton  : {
         type  : "boolean",
@@ -156,6 +159,20 @@ export const MASTER_PROPS_CONFIG = {
     makeEditable    : {
         type  : "boolean",
         label : "Make content editable",
+    },
+
+    // DRAWER PROPS ----------------------------------------------------------------------------------------------------
+    closeOnClickOutside : {
+        type  : "boolean",
+        label : "Close on clicking outside",
+    },
+    showOverlay        : {
+        type  : "boolean",
+        label : "Show overlay",
+    },
+    isDismissible      : {
+        type  : "boolean",
+        label : "Is dismissible",
     },
 
 

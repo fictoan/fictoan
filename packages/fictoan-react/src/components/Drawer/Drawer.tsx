@@ -1,29 +1,24 @@
 // FRAMEWORK ===========================================================================================================
 import React, { useState, useEffect, useRef, RefObject } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
-import { Div } from "../Element/Tags";
-
 // STYLES ==============================================================================================================
 import "./drawer.css";
 
-// HOOKS ===============================================================================================================
+// OTHER ===============================================================================================================
+import { CommonAndHTMLProps, SpacingTypes } from "../Element/constants";
+import { Div } from "../Element/Tags";
+import { Element } from "../Element/Element";
 import { useClickOutside } from "../../hooks/UseClickOutside";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps, SpacingTypes } from "../Element/constants";
-
-// prettier-ignore
 export interface DrawerCustomProps {
-    position              : "top" | "right" | "bottom" | "left";
-    size                ? : SpacingTypes;
-    openWhen            ? : boolean;
-    closeWhen           ? : () => void;
-    closeOnClickOutside ? : boolean;
-    isDismissible       ? : boolean;
-    showOverlay         ? : boolean;
-    label               ? : string;
+    position : "top" | "right" | "bottom" | "left";
+    size? : SpacingTypes;
+    openWhen? : boolean;
+    closeWhen? : () => void;
+    closeOnClickOutside? : boolean;
+    isDismissible? : boolean;
+    showOverlay? : boolean;
+    label? : string;
 }
 
 export type DrawerElementType = HTMLDivElement;
@@ -39,7 +34,7 @@ export const Drawer = React.forwardRef(
             closeOnClickOutside,
             padding,
             position,
-            size,
+            size = "medium",
             bgColor,
             bgColour,
             isDismissible = true,
@@ -95,51 +90,60 @@ export const Drawer = React.forwardRef(
             }
         };
 
-        return shouldRender ? (
-            <>
-                <Element<DrawerElementType>
-                    as="div"
-                    data-drawer
-                    ref={effectiveRef}
-                    classNames={classNames}
-                    onAnimationEnd={onAnimationEnd}
-                    onKeyDown={handleKeyDown}
-                    role="dialog"
-                    aria-modal="true"
-                    aria-label={label || "Drawer"}
-                    tabIndex={-1}
-                    {...(
-                        closeOnClickOutside ? { onClick : closeDrawer } : {}
-                    )}
-                    {...props}
-                >
-                    {openWhen && showOverlay && (
-                        <Div
-                            className={`rest-of-page-overlay ${openWhen ? "visible" : ""}`}
-                            aria-hidden="true"
-                        />
-                    )}
+        // Stop propagation of click events inside the drawer content
+        const handleContentClick = (e : React.MouseEvent) => {
+            e.stopPropagation();
+        };
 
-                    <Element
-                        as="div"
+        return shouldRender ? (
+            <Element<DrawerElementType>
+                as="div"
+                data-drawer
+                ref={effectiveRef}
+                classNames={classNames}
+                onAnimationEnd={onAnimationEnd}
+                onKeyDown={handleKeyDown}
+                role="dialog"
+                aria-modal="true"
+                aria-label={label || "Drawer"}
+                tabIndex={-1}
+                {...props}
+            >
+                {/* OVERLAY ======================================================================================== */}
+                {openWhen && showOverlay && (
+                    <Div
+                        className={`rest-of-page-overlay ${openWhen ? "visible" : ""}`}
+                        aria-hidden="true"
+                        onClick={closeOnClickOutside ? closeDrawer : undefined}
+                    />
+                )}
+
+                {/* CONTENT ======================================================================================== */}
+                <Div className="drawer-wrapper">
+                    <Div
                         className="drawer-content-wrapper"
                         padding={padding}
                         bgColor={bgColor}
                         bgColour={bgColour}
                         role="document"
+                        onClick={handleContentClick}
                     >
-                        {isDismissible && (
-                            <button
-                                className="drawer-dismiss-button"
-                                onClick={closeDrawer}
-                                aria-label="Close drawer"
-                                tabIndex={0}
-                            />
-                        )}
-                        {children}
-                    </Element>
-                </Element>
-            </>
+                        <Div className="drawer-inner-content">
+                            {children}
+                        </Div>
+                    </Div>
+
+                    {/* DISMISS BUTTON ============================================================================= */}
+                    {isDismissible && (
+                        <button
+                            className="drawer-dismiss-button"
+                            onClick={closeDrawer}
+                            aria-label="Close drawer"
+                            tabIndex={0}
+                        />
+                    )}
+                </Div>
+            </Element>
         ) : null;
     },
 );
