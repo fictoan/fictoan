@@ -175,6 +175,15 @@ export const MASTER_PROPS_CONFIG = {
         label : "Is dismissible",
     },
 
+    // LISTBOX PROPS ---------------------------------------------------------------------------------------------------
+    allowMultiSelect : {
+        type  : "boolean",
+        label : "Allow selecting multiple options",
+    },
+    allowCustomEntries : {
+        type  : "boolean",
+        label : "Allow adding custom entries",
+    },
 
     // KIND/EMPHASIS PROPS =============================================================================================
     kind : {
