@@ -1,7 +1,7 @@
 {
     "name"                 : "fictoan-react",
-    "version"              : "1.11.11",
-    "private"              : false,
+    "version"              : "1.11.11-build1",
+    "private"              : true,
     "description"          : "A full-featured, designer-friendly, yet performant framework with plain-English props and focus on rapid iteration.",
     "repository"           : {
         "type" : "git",

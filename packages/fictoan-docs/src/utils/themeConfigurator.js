@@ -27,16 +27,16 @@ const findLongestVarNameLength = (variables) => {
 // Check if a CSS variable value refers to a color variable ------------------------------------------------------------
 const isColorVariable = (value) => {
     // IMPORTANT: Check for numeric values and numeric strings - these are NEVER colors
-    if (typeof value === 'number') {
+    if (typeof value === "number") {
         return false;
     }
-    
-    if (typeof value === 'string') {
+
+    if (typeof value === "string") {
         // If it's just a number (like "20") it's not a color
         if (/^\d+$/.test(value)) {
             return false;
         }
-        
+
         // If it's a var(--XX) where XX is just a number, it's not a color
         if (value.startsWith("var(--")) {
             const varMatch = value.match(/var\(--(\d+)[^)]*\)/);
@@ -56,7 +56,7 @@ const isColorVariable = (value) => {
 
     if (value?.startsWith("var(--")) {
         const varName = value.match(/var\(--([^)]+)\)/)?.[1];
-        
+
         // If varName is purely numeric, it can't be a color
         if (varName && /^\d+$/.test(varName)) {
             console.log(`Variable name ${varName} is just a number, not a color`);
@@ -445,16 +445,17 @@ export const createThemeConfigurator = (componentName, filter) => {
         const originalVarValue = variables.componentVariables[varName];
 
         // CRITICAL: First check if this is definitely a number, regardless of any other type detection
-        const isDefinitelyNumeric = 
-            typeof newValue === "number" || 
-            (typeof newValue === "string" && /^\d+$/.test(newValue));
-        
+        const isDefinitelyNumeric =
+            typeof newValue === "number" ||
+            (typeof newValue === "string" && /^\d+$/.test(newValue)
+            );
+
         console.log(`Initial type check: ${varName}=${newValue}, type=${typeof newValue}, isNumeric=${isDefinitelyNumeric}`);
-        
+
         // If it's definitely a number, force it to be treated as a number regardless of other detection
         let isColor = false;
         let isNumber = false;
-        
+
         if (isDefinitelyNumeric) {
             // Force type detection to treat this as a number
             isNumber = true;

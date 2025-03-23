@@ -1,7 +1,7 @@
 {
     "name"           : "fictoan-monorepo",
     "version"        : "1.0.0",
-    "private"        : false,
+    "private"        : true,
     "workspaces"     : [
         "packages/*"
     ],
