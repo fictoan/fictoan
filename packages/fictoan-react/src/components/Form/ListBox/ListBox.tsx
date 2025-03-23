@@ -7,25 +7,19 @@ import React, {
     KeyboardEvent,
 } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
-import { Div } from "../../Element/Tags";
-import { InputField } from "../InputField/InputField";
-import { Badge } from "../../Badge/Badge";
-import { Text } from "../../Typography/Text";
-import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
-
-// HOOKS ===============================================================================================================
-import { useClickOutside } from "../../../hooks/UseClickOutside";
-
-// UTILS ===============================================================================================================
-import { searchOptions } from "./listBoxUtils";
-
 // STYLES ==============================================================================================================
 import "./list-box.css";
 
-// TYPES ===============================================================================================================
+// OTHER ===============================================================================================================
+import { Badge } from "../../Badge/Badge";
+import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
+import { Div } from "../../Element/Tags";
+import { Element } from "../../Element/Element";
+import { InputField } from "../InputField/InputField";
 import { ListBoxProps, OptionForListBoxProps, ListBoxElementType, ListBoxCustomProps } from "./constants";
+import { Text } from "../../Typography/Text";
+import { searchOptions } from "./listBoxUtils";
+import { useClickOutside } from "../../../hooks/UseClickOutside";
 
 const ListBoxWithOptions = (
     {
@@ -281,7 +275,7 @@ const ListBoxWithOptions = (
                                             bgColour={badgeBgColour || badgeBgColor}
                                             textColour={badgeTextColour || badgeTextColor}
                                         >
-                                            {option.label}
+                                            <Text>{option.label}</Text>
                                         </Badge>
                                     ))}
                                 </Div>

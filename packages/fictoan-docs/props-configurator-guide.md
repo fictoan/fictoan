@@ -1,6 +1,6 @@
 # Fictoan props configurator system
 
-This document explains the props configuration system used in Fictoan documentation to create consistent and interactive component examples with minimal code duplication.
+Fictoan documentation uses a props configuration system to create consistent and interactive component examples with minimal code duplication.
 
 ## Overview
 
@@ -20,7 +20,7 @@ This system allows for:
 
 ### 1. Master props configuration
 
-The `masterPropsConfig.js` file defines all available props for Fictoan components:
+The `masterPropsConfig.js`[packages/fictoan-docs/src/utils/masterPropsConfig.js] file defines all available props for Fictoan components:
 
 - Each prop has a defined type (boolean, text, select, size, spacing, etc.)
 - Predefined options for props like size, spacing, and emphasis
@@ -65,7 +65,7 @@ Example prop definition:
 
 ### 2. Props configurator
 
-The `propsConfigurator.js` file creates a function called `createPropsConfigurator` that:
+The `propsConfigurator.js`[packages/fictoan-docs/src/utils/propsConfigurator.js] file creates a function called `createPropsConfigurator` that:
 
 1. Initialises state for the selected props
 2. Generates UI controls for each prop type

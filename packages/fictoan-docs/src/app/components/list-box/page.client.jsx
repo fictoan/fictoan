@@ -1,7 +1,9 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
-import React, { useState } from "react";
+// FRAMEWORK ===========================================================================================================
+import React from "react";
+
+// FICTOAN =============================================================================================================
 import {
     Element,
     Heading1,
@@ -11,50 +13,63 @@ import {
     Row,
     Text,
     Article,
-    Card,
-    Form,
-    Header,
-    Select,
-    InputField,
-    Checkbox,
-    CodeBlock,
     ListBox,
+    Section,
 } from "fictoan-react";
-// INTERNAL DEPS =======================================================================================================
-
-// COMPONENTS ==========================================================================================================
 
 // STYLES ==============================================================================================================
 import "./page-list-box.css";
 
-// HOOKS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-
-// UTILS ===============================================================================================================
-
-// DATA ================================================================================================================
-import { listBoxProps } from "./config";
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-
+import { createPropsConfigurator } from "../../../utils/propsConfigurator";
+import { createThemeConfigurator } from "../../../utils/themeConfigurator";
 
 const ListBoxDocs = () => {
-    const [label, setLabel] = useState("Select an option");
-    const [placeholder, setPlaceholder] = useState("Choose...");
-    const [allowMultiSelect, setAllowMultiSelect] = useState(false);
-    const [allowCustomEntries, setAllowCustomEntries] = useState(false);
-    const [disabled, setDisabled] = useState(false);
-    const [selectionLimit, setSelectionLimit] = useState(null);
-    // const [selectedBadgeBgColour, setSelectedBadgeBgColour] = useState("");
-    // const [selectedBadgeTextColour, setSelectedBadgeTextColour] = useState("");
+    // PROPS CONFIG ====================================================================================================
+    const {
+        propsConfigurator,
+        componentProps: propsConfig,
+    } = createPropsConfigurator(
+        "ListBox",
+        [
+            "strings",
+            "placeholder",
+            "allowMultiSelect",
+            "allowCustomEntries",
+            "selectionLimit",
+            "disabled",
+        ],
+        colourOptions,
+        {
+            isSelfClosing: false,
+            canHaveChildren: false,
+            defaultOptions: [
+                { value: "option1", label: "Option 1" },
+                { value: "option2", label: "Option 2" },
+                { value: "option3", label: "Option 3" },
+                { value: "option4", label: "Option 4", disabled: true },
+            ]
+        }
+    );
 
-    const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(listBoxProps.variables);
+    // THEME CONFIG ====================================================================================================
+    const ListBoxComponent = (varName) => {
+        // Remove debug log in production
+        // console.log("Checking variable:", varName);
+        return varName.startsWith("list-box-");
+    };
+
+    const {
+        interactiveElementRef,
+        componentProps: themeConfig,
+        themeConfigurator,
+    } = createThemeConfigurator("ListBox", ListBoxComponent);
 
     return (
         <Article id="page-list-box">
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/* HEADER */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Row horizontalPadding="huge" marginTop="medium">
+            {/* HEADER //////////////////////////////////////////////////////////////////////////////////////////////// */}
+            <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                 <Portion>
                     <Heading1>List box</Heading1>
                     <Text size="large" marginBottom="small">
@@ -73,234 +88,46 @@ const ListBoxDocs = () => {
 
             <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/*  CONFIGURATOR */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Row horizontalPadding="small" className="rendered-component">
-                {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////// */}
-                <Portion id="component-wrapper">
-                    <Element
-                        as="div"
-                        padding="small"
-                        shape="rounded"
-                        bgColor="slate-light80"
-                        data-centered-children
-                    >
-                        <ListBox
-                            id="interactive-component"
-                            label={label}
-                            placeholder={placeholder}
-                            allowMultiSelect={allowMultiSelect}
-                            allowCustomEntries={allowCustomEntries}
-                            selectionLimit={selectionLimit}
-                            disabled={disabled}
-                            options={[
-                                { value : "option1", label : "Option 1" },
-                                { value : "option2", label : "Option 2" },
-                                { value : "option3", label : "Option 3" },
-                                { value : "option4", label : "Option 4", disabled : true },
-                            ]}
-                        />
-                    </Element>
-                </Portion>
+            {/* INTERACTIVE COMPONENT ////////////////////////////////////////////////////////////////////////////////// */}
+            <Section>
+                {/* DEMO COMPONENT /////////////////////////////////////////////////////////////////////////////////// */}
+                <Row id="component-wrapper" horizontalPadding="small" className="rendered-component">
+                    <Portion>
+                        <Element
+                            as="div"
+                            padding="small"
+                            shape="rounded"
+                            bgColour="slate-light80"
+                            data-centered-children
+                        >
+                            <ListBox
+                                id="interactive-component"
+                                ref={interactiveElementRef}
+                                {...propsConfig}
+                                {...themeConfig}
+                                options={[
+                                    { value: "option1", label: "Option 1" },
+                                    { value: "option2", label: "Option 2" },
+                                    { value: "option3", label: "Option 3" },
+                                    { value: "option4", label: "Option 4", disabled: true },
+                                ]}
+                            />
+                        </Element>
+                    </Portion>
+                </Row>
 
-                {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Form spacing="none">
-                        <Card padding="micro" shape="rounded">
-                            <Header verticallyCentreItems pushItemsToEnds marginBottom="nano">
-                                <Text size="large" weight="700" textColor="white">
-                                    Configure props
-                                </Text>
-                            </Header>
+                <Row horizontalPadding="small">
+                    {/* PROPS CONFIGURATOR =========================================================================== */}
+                    <Portion desktopSpan="half">
+                        {propsConfigurator()}
+                    </Portion>
 
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton marginBottom="micro">
-                                        {[
-                                            `// Paste this in your content file`,
-                                            `<ListBox`,
-                                            `    options={[`,
-                                            `       { value: "option-1", label: "Option 1" }`,
-                                            `       { value: "option-2", label: "Option 2" }`,
-                                            `       { value: "option-3", label: "Option 3" }`,
-                                            `       { value: "option-4", label: "Option 4", disabled: true },`,
-                                            `    ]}`,
-                                            label ? `    label="${label}"` : null,
-                                            placeholder ? `    placeholder="${placeholder}"` : null,
-                                            allowMultiSelect && `    allowMultiSelect`,
-                                            allowCustomEntries && `    allowCustomEntries`,
-                                            allowMultiSelect && selectionLimit ? `    selectionLimit="${selectionLimit}"` : null,
-                                            // allowMultiSelect && selectedBadgeBgColour ? `    badgeBgColour=${selectedBadgeBgColour}` : null,
-                                            // allowMultiSelect && selectedBadgeTextColour ? `    badgeTextColour=${selectedBadgeTextColour}` : null,
-                                            disabled && `    disabled`,
-                                            `/>`,
-                                        ].filter(Boolean).join("\n")}
-                                    </CodeBlock>
-                                </Portion>
-
-                                {/* LABEL ========================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <InputField
-                                        type="text"
-                                        label="Label"
-                                        value={label}
-                                        onChange={(value) => setLabel(value)}
-                                    />
-                                </Portion>
-
-                                {/* PLACEHOLDER ==================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <InputField
-                                        type="text"
-                                        label="Placeholder"
-                                        value={placeholder}
-                                        onChange={(value) => setPlaceholder(value)}
-                                    />
-                                </Portion>
-
-                                {/* MULTI-SELECT =================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Checkbox
-                                        id="multi-select"
-                                        label="Allow multi-select"
-                                        checked={allowMultiSelect}
-                                        onChange={(checked) => setAllowMultiSelect(checked)}
-                                    />
-                                </Portion>
-
-                                {allowMultiSelect && (
-                                    <Portion desktopSpan="half">
-                                        {/* SELECTION LIMIT -------------------------------------------------------- */}
-                                        <InputField
-                                            type="number"
-                                            label="Selection limit"
-                                            placeholder="Enter a number"
-                                            value={selectionLimit || ""}
-                                            onChange={(value) => setSelectionLimit(parseInt(value) || null)}
-                                            min="1"  // Prevent negative numbers
-                                            step="1" // Only allow whole numbers
-                                            marginBottom="micro"
-                                        />
-
-                                        {/* CUSTOM ENTRIES --------------------------------------------------------- */}
-                                        <Checkbox
-                                            id="custom-entries"
-                                            label="Allow custom entries"
-                                            checked={allowCustomEntries}
-                                            onChange={(checked) => setAllowCustomEntries(checked)}
-                                        />
-
-                                        {/* BADGE BG COLOUR -------------------------------------------------------- */}
-                                        {/* <ListBox */}
-                                        {/*     label="Badge BG colour" */}
-                                        {/*     options={[{ */}
-                                        {/*         label    : "Select a colour", */}
-                                        {/*         value    : "select-a-colour", */}
-                                        {/*         disabled : true, */}
-                                        {/*         selected : true, */}
-                                        {/*     }, */}
-                                        {/*         ...colourOptions, */}
-                                        {/*     ]} */}
-                                        {/*     defaultValue={selectedBadgeBgColour || "select-a-colour"} */}
-                                        {/*     onChange={(value) => setSelectedBadgeBgColour(value)} */}
-                                        {/*     isFullWidth */}
-                                        {/*     marginTop="micro" marginBottom="micro" */}
-                                        {/* /> */}
-
-                                        {/* BADGE TEXT COLOUR ------------------------------------------------------ */}
-                                        {/* <ListBox */}
-                                        {/*     label="Badge text colour" */}
-                                        {/*     options={[{ */}
-                                        {/*         label    : "Select a colour", */}
-                                        {/*         value    : "select-a-colour", */}
-                                        {/*         disabled : true, */}
-                                        {/*         selected : true, */}
-                                        {/*     }, */}
-                                        {/*         ...colourOptions, */}
-                                        {/*     ]} */}
-                                        {/*     defaultValue={selectedBadgeTextColour || "select-a-colour"} */}
-                                        {/*     onChange={(value) => setSelectedBadgeTextColour(value)} */}
-                                        {/*     isFullWidth */}
-                                        {/* /> */}
-                                    </Portion>
-                                )}
-
-                                {/* DISABLED ======================================================================= */}
-                                <Portion>
-                                    <Divider kind="secondary" horizontalMargin="none" verticalMargin="nano" />
-
-                                    <Checkbox
-                                        id="disabled"
-                                        label="Disabled"
-                                        checked={disabled}
-                                        onChange={(checked) => setDisabled(checked)}
-                                    />
-                                </Portion>
-                            </Row>
-                        </Card>
-                    </Form>
-                </Portion>
-
-                {/* GLOBAL THEME /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Card padding="micro" shape="rounded">
-                        <Form>
-                            <Header verticallyCentreItems pushItemsToEnds>
-                                <Text size="large" weight="700" textColour="white" marginBottom="nano">
-                                    Set global theme values
-                                </Text>
-                            </Header>
-
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock
-                                        withSyntaxHighlighting
-                                        source={cssVariablesList}
-                                        language="css"
-                                        showCopyButton
-                                        marginBottom="micro"
-                                    />
-                                </Portion>
-                            </Row>
-
-                            <Row marginBottom="none">
-                                {/* BG COLOUR ====================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Background colour"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={listBoxProps.variables["list-box-badge-bg"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("list-box-badge-bg", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* TEXT COLOUR ==================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Text colour"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={listBoxProps.variables["list-box-badge-text"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("list-box-badge-text", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-                            </Row>
-                        </Form>
-                    </Card>
-                </Portion>
-            </Row>
+                    {/* THEME CONFIGURATOR =========================================================================== */}
+                    <Portion desktopSpan="half">
+                        {themeConfigurator()}
+                    </Portion>
+                </Row>
+            </Section>
         </Article>
     );
 };
