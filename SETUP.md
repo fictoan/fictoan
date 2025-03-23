@@ -1,8 +1,8 @@
-# Setup Guide
+# Setup guide
 
 The turborepo has been set up with the essential files from both projects. To complete the setup:
 
-## 1. Install Dependencies
+## 1. Install dependencies
 
 From the root of the turborepo, run:
 
@@ -10,7 +10,7 @@ From the root of the turborepo, run:
 yarn install
 ```
 
-## 2. Test the Basic Workflow
+## 2. Test the basic workflow
 
 1. Run the docs site:
    ```bash
@@ -19,14 +19,14 @@ yarn install
 
 2. Build the component library and update it in the docs:
    ```bash
-   yarn updateLib
+   yarn rebuild
    ```
 
-## What's Been Set Up
+## What's been set up
 
 - Essential files from both projects have been copied to the packages directory
 - The docs package.json has been updated to use the workspace version of fictoan-react
-- A script has been created to build the library and copy it to the docs node_modules
+- A script has been created to build the library and copy it to the docs `node_modules`
 
 ## Troubleshooting
 
