@@ -1,9 +1,9 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// FRAMEWORK ===========================================================================================================
 import React, { useRef, useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
+// FICTOAN =============================================================================================================
 import {
     Button,
     ContentWrapper,
@@ -12,13 +12,12 @@ import {
 
 // COMPONENTS ==========================================================================================================
 import { Sidebar } from "../components/Sidebar/Sidebar";
-import { SiteHeader } from "../components/Header/Header";
 import { SiteFooter } from "../components/Footer/Footer";
+import { SiteHeader } from "../components/Header/Header";
 
 // STYLES ==============================================================================================================
 import "../styles/globals.css";
 
-// ROOT LAYOUT /////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const RootLayoutClient = ({ children }) => {
     // SIDEBAR =========================================================================================================
     const [sidebarState, setSidebarState] = useState("");
@@ -35,8 +34,6 @@ export const RootLayoutClient = ({ children }) => {
         <html lang="en">
         <head>
             <title>Fictoan framework</title>
-            <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-jsx.min.js"></script>
         </head>
 
         <body>

@@ -125,7 +125,7 @@
     top              : calc(100% + 12px);
     left             : 0;
     right            : 0;
-    background-color : var(--list-box-bg-default);
+    background-color : var(--list-box-dropdown-bg);
     border           : var(--global-border-width) solid var(--input-border-default);
     border-radius    : var(--input-border-radius-default);
     padding          : 4px;

@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.11.12
+- Introduce a separate colour variable for `--list-box-dropdown-bg`
+- Tweak `Button` size increase to be more gradual
+- Fix `dismiss-button` width bug when inside a form
+- Remove font-style class names such as `font-sans`, `font-serif`, `font-mono` to avoid clashes
+- Fix `Badge` border colour bug
+- Fix `Drawer` height/width sizing bug
+
 ## 1.11.11
 - The `contentEditable` prop for `CodeBlock` is renamed to `makeEditable`, to be more consistent with Fictoan prop 
   conventions

@@ -6,6 +6,8 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// TODO: Fix border -> colour property
+
 const colors = {
     red       : { hue : 0, saturation : 84 },
     salmon    : { hue : 16, saturation : 100 },

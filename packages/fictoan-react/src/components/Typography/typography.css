@@ -150,12 +150,6 @@ li { color : var(--paragraph-text-colour); }
 .weight-800 { font-weight: 800; }
 .weight-900 { font-weight: 900; }
 
-/* TEXT STYLES AND UTILITIES ======================================== */
-.font-sans,
-.font-sans-serif { font-family : var(--font-sans-serif), sans-serif; }
-.font-serif { font-family : var(--font-serif), serif ; }
-.font-monospace { font-family : var(--font-mono), monospace; }
-
 /* TEXT SIZES ====================================================== */
 /* These are utility classes for one-off size adjustments */
 .text-nano { font-size: calc(var(--paragraph-font-size) * 0.56); }

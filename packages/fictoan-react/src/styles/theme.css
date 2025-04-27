@@ -287,6 +287,8 @@
     --list-box-text-disabled : var(--input-text-disabled);
     --list-box-focus-color   : var(--input-border-focus);
 
+    --list-box-dropdown-bg   : var(--input-bg-default);
+
     --list-box-badge-bg      : var(--slate-light20);
     --list-box-badge-border  : var(--slate-light50);
     --list-box-badge-text    : var(--paragraph-text-colour);

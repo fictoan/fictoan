@@ -242,6 +242,7 @@ const ListBoxWithOptions = (
     }, [activeIndex]);
 
     return (
+        // TODO: margin props should work at the parent level, not input box level
         // PARENT //////////////////////////////////////////////////////////////////////////////////////////////////////
         <Element
             as="div"

@@ -58,5 +58,5 @@ form[data-form] {
     &.spacing-large  [data-form-item-group] { gap : 40px; }
     &.spacing-huge   [data-form-item-group] { gap : 48px; }
 
-    button:not(.full-width) { width : fit-content; }
+    & > button:not(.full-width) { width : fit-content; }
 }

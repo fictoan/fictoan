@@ -3,6 +3,7 @@
 // FRAMEWORK ===========================================================================================================
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
+import dynamic from 'next/dynamic';
 
 // FICTOAN =============================================================================================================
 import {
@@ -16,8 +17,13 @@ import {
     Section,
     Switch,
     Text,
-    CodeBlock,
 } from "fictoan-react";
+
+// Dynamically import CodeBlock with SSR disabled
+const CodeBlock = dynamic(
+  () => import('fictoan-react').then((mod) => mod.CodeBlock),
+  { ssr: false }
+);
 
 // STYLES ==============================================================================================================
 import "./intro-code.css";
@@ -129,30 +135,12 @@ export const IntroCode = () => {
         return newProps;
     };
 
-    const [mountKey, setMountKey] = useState(0);
+    // For client-side only features
+    const [isMounted, setIsMounted] = useState(false);
 
-    // Use this effect to trigger a remount after the initial load
+    // Only run once when component mounts on client
     useEffect(() => {
-        // We'll wait for everything to settle
-        const remountTimer = setTimeout(() => {
-            setMountKey(prev => prev + 1);
-        }, 100);
-
-        return () => clearTimeout(remountTimer);
-    }, []); // Only run once on initial mount
-
-    useEffect(() => {
-        const checkPrism = () => {
-            if (window.Prism) {
-                console.log("Prism is loaded");
-                setMountKey(prev => prev + 1);
-            } else {
-                console.log("Prism not loaded yet, retrying...");
-                setTimeout(checkPrism, 100);
-            }
-        };
-
-        checkPrism();
+        setIsMounted(true);
     }, []);
 
 
@@ -234,41 +222,42 @@ export const IntroCode = () => {
                     </Div>
 
                     <Div id="intro-code-block">
-                        <CodeBlock
-                            key={mountKey}
-                            withSyntaxHighlighting
-                            language="jsx"
-                            showCopyButton
-                            makeEditable
-                            suppressContentEditableWarning={true}
-                            onChange={handleCodeChange}
-                            marginBottom="micro"
-                            theme="custom"
-                        >
-                            {[
-                                `<Row horizontalPadding="medium" marginTop="tiny" marginBottom="small"> {/* Try "none", "small", "medium", "large" or "huge" */}`,
-                                `    <Portion desktopSpan="half"> {/* Try "one-third", or whole numbers between 1–24 */}`,
-                                `        <Heading1 textColour="blue-light20" marginBottom="nano" weight="700">`,
-                                `            Ship UI in half the time.`,
-                                `        </Heading1> \n`,
-                                `        <Heading4 marginBottom="micro">`,
-                                `            Empower designers to edit code`,
-                                `        </Heading4> \n`,
-                                `        <Button kind="primary"> {/* "secondary", or kind="custom" with bgColour="amber" textColour="black" */}`,
-                                `            Get started &rarr;`,
-                                `        </Button>`,
-                                `    </Portion> \n`,
-                                `    <Portion desktopSpan="half"> {/* Try adding mobileSpan="half" */}`,
-                                `        <Heading5 weight="400" marginBottom="micro">`,
-                                `            Create ready-to-integrate UI in minutes with designer-friendly, plain-English syntax.`,
-                                `        </Heading5>\n`,
-                                `        <Heading5 weight="400" marginBottom="micro">`,
-                                `            Hand-off responsive, performant React code to your dev team.`,
-                                `        </Heading5>`,
-                                `    </Portion>`,
-                                `</Row>`,
-                            ].filter(Boolean).join("\n")}
-                        </CodeBlock>
+                        {isMounted && (
+                            <CodeBlock
+                                withSyntaxHighlighting
+                                language="jsx"
+                                showCopyButton
+                                makeEditable
+                                suppressContentEditableWarning={true}
+                                onChange={handleCodeChange}
+                                marginBottom="micro"
+                                theme="custom"
+                            >
+                                {[
+                                    `<Row horizontalPadding="medium" marginTop="tiny" marginBottom="small"> {/* Try "none", "small", "medium", "large" or "huge" */}`,
+                                    `    <Portion desktopSpan="half"> {/* Try "one-third", or whole numbers between 1–24 */}`,
+                                    `        <Heading1 textColour="blue-light20" marginBottom="nano" weight="700">`,
+                                    `            Ship UI in half the time.`,
+                                    `        </Heading1> \n`,
+                                    `        <Heading4 marginBottom="micro">`,
+                                    `            Empower designers to edit code`,
+                                    `        </Heading4> \n`,
+                                    `        <Button kind="primary"> {/* "secondary", or kind="custom" with bgColour="amber" textColour="black" */}`,
+                                    `            Get started &rarr;`,
+                                    `        </Button>`,
+                                    `    </Portion> \n`,
+                                    `    <Portion desktopSpan="half"> {/* Try adding mobileSpan="half" */}`,
+                                    `        <Heading5 weight="400" marginBottom="micro">`,
+                                    `            Create ready-to-integrate UI in minutes with designer-friendly, plain-English syntax.`,
+                                    `        </Heading5>\n`,
+                                    `        <Heading5 weight="400" marginBottom="micro">`,
+                                    `            Hand-off responsive, performant React code to your dev team.`,
+                                    `        </Heading5>`,
+                                    `    </Portion>`,
+                                    `</Row>`,
+                                ].filter(Boolean).join("\n")}
+                            </CodeBlock>
+                        )}
 
                         <Heading5>
                             Wasn&rsquo;t that some simple, elegant syntax?

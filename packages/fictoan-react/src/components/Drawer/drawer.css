@@ -77,7 +77,7 @@
 
     .drawer-content-wrapper {
         box-shadow    : 4px 0 24px -16px rgba(0, 0, 0, 0.92);
-        border-width  : 1px;
+        border-width  : var(--global-border-width);
         border-radius : var(--drawer-border-radius);
         border        : solid var(--drawer-border);
         overflow-y    : auto; /* Enable vertical scrolling */
@@ -107,37 +107,42 @@
     --drawer-width-large   : 32vw;
     --drawer-width-huge    : 48vw;
 
-    --drawer-height-tiny   : 8vw;
-    --drawer-height-small  : 12vw;
-    --drawer-height-medium : 24vw;
-    --drawer-height-large  : 32vw;
-    --drawer-height-huge   : 48vw;
+    --drawer-height-tiny   : 8vh;
+    --drawer-height-small  : 12vh;
+    --drawer-height-medium : 24vh;
+    --drawer-height-large  : 32vh;
+    --drawer-height-huge   : 48vh;
 
     /* SIZES ================================================================ */
     &.tiny.right .drawer-content-wrapper,
     &.tiny.left .drawer-content-wrapper { width : var(--drawer-width-tiny); }
+
     &.tiny.top .drawer-content-wrapper,
     &.tiny.bottom .drawer-content-wrapper { height : var(--drawer-height-tiny); }
 
     &.small.right .drawer-content-wrapper,
     &.small.left .drawer-content-wrapper { width : var(--drawer-width-small); }
+
     &.small.top .drawer-content-wrapper,
     &.small.bottom .drawer-content-wrapper { height : var(--drawer-height-small); }
 
     &.medium.right .drawer-content-wrapper,
     &.medium.left .drawer-content-wrapper { width : var(--drawer-width-medium); }
+
     &.medium.top .drawer-content-wrapper,
     &.medium.bottom .drawer-content-wrapper { height : var(--drawer-height-medium); }
 
 
     &.large.right .drawer-content-wrapper,
     &.large.left .drawer-content-wrapper { width : var(--drawer-width-large); }
+
     &.large.top .drawer-content-wrapper,
     &.large.bottom .drawer-content-wrapper { height : var(--drawer-height-large); }
 
 
     &.huge.right .drawer-content-wrapper,
     &.huge.left .drawer-content-wrapper { width : var(--drawer-width-huge); }
+
     &.huge.top .drawer-content-wrapper,
     &.huge.bottom .drawer-content-wrapper { height : var(--drawer-height-huge); }
 

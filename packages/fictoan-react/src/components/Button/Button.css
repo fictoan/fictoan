@@ -12,10 +12,6 @@
     user-select         : none;
 }
 
-[data-button]:not([class*="padding-"]) {
-    padding : 12px 24px;
-}
-
 /*To make sure a button’s children don’t style themselves like a d-bag*/
 > * { all : unset; }
 
@@ -40,6 +36,8 @@
     cursor         : not-allowed;
 }
 
+
+/* TODO : Check button radius when loading */
 /* PRIMARY BUTTON /////////////////////////////////////////////////////////// */
 [data-button].primary {
     font-family      : var(--button-primary-font), sans-serif;
@@ -178,6 +176,11 @@
 }
 
 /* DIFFERENT SIZES ////////////////////////////////////////////////////////// */
+/* Default size */
+[data-button]:not([class*="padding-"]) {
+    padding : 12px 24px;
+}
+
 [data-button].size-nano {
     padding   : 1px 2px;
     font-size : 48%;
@@ -194,7 +197,7 @@
 }
 
 [data-button].size-small {
-    padding   : 6px 12px;
+    padding   : 8px 16px;
     font-size : 80%;
 }
 

@@ -14,6 +14,7 @@
     color               : var(--badge-text);
     border-color        : var(--badge-border);
     border-style        : solid;
+    border-width        : var(--badge-border-width);
 
     /* To make sure a badge’s children don’t style themselves like a d-bag*/
     > * { all : unset; }
@@ -21,7 +22,6 @@
     &.shape-rounded { border-radius : var(--badge-border-radius); }
     &.shape-curved { border-radius : 5000px; }
 
-    &[class*="border-"] { border-width : var(--badge-border-width); }
     &.border-none { border-width : 0 !important; }
 
     & .badge-dismiss-button {
