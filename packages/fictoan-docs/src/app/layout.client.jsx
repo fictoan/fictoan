@@ -34,6 +34,10 @@ export const RootLayoutClient = ({ children }) => {
         <html lang="en">
         <head>
             <title>Fictoan framework</title>
+            <meta
+                httpEquiv="Content-Security-Policy"
+                content="script-src 'self' 'unsafe-eval' 'unsafe-inline';"
+            />
         </head>
 
         <body>
