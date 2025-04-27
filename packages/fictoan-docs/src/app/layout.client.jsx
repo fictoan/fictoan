@@ -35,6 +35,8 @@ export const RootLayoutClient = ({ children }) => {
         <html lang="en">
         <head>
             <title>Fictoan framework</title>
+            <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-jsx.min.js"></script>
         </head>
 
         <body>
