@@ -6,8 +6,6 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// TODO: Fix border -> colour property
-
 const colors = {
     red       : { hue : 0, saturation : 84 },
     salmon    : { hue : 16, saturation : 100 },
@@ -103,13 +101,13 @@ function generateCSS() {
 
             prefixes.forEach(prefix => {
                 css += prefix === "border" ?
-                    `.${prefix}-${baseClassName} { border: solid var(--global-border-width) var(--${baseClassName}); }\n` :
+                    `.${prefix}-${baseClassName} { border-color: var(--${baseClassName}); }\n` :
                     `.${prefix}-${baseClassName} { ${prefix === "bg" ? "background-" : ""}color: var(--${baseClassName}); }\n`;
 
                 alphaLevels.forEach(alpha => {
                     const className = `${baseClassName}-opacity${alpha}`;
                     css += prefix === "border" ?
-                        `.${prefix}-${className} { border: solid var(--global-border-width) var(--${className}); }\n` :
+                        `.${prefix}-${className} { border-color: var(--${className}); }\n` :
                         `.${prefix}-${className} { ${prefix === "bg" ? "background-" : ""}color: var(--${className}); }\n`;
                 });
             });
@@ -117,13 +115,26 @@ function generateCSS() {
     });
 
     prefixes.forEach(prefix => {
-        css += `.${prefix}-white { ${prefix === "bg" ? "background-" : ""}color: var(--white); }\n`;
-        css += `.${prefix}-black { ${prefix === "bg" ? "background-" : ""}color: var(--black); }\n`;
-        css += `.${prefix}-transparent { ${prefix === "bg" ? "background-" : ""}color: var(--transparent); }\n`;
+        css += prefix === "border" ?
+            `.${prefix}-white { border-color: var(--white); }\n` :
+            `.${prefix}-white { ${prefix === "bg" ? "background-" : ""}color: var(--white); }\n`;
+
+        css += prefix === "border" ?
+            `.${prefix}-black { border-color: var(--black); }\n` :
+            `.${prefix}-black { ${prefix === "bg" ? "background-" : ""}color: var(--black); }\n`;
+
+        css += prefix === "border" ?
+            `.${prefix}-transparent { border-color: var(--transparent); }\n` :
+            `.${prefix}-transparent { ${prefix === "bg" ? "background-" : ""}color: var(--transparent); }\n`;
 
         alphaLevels.forEach(alpha => {
-            css += `.${prefix}-white-opacity${alpha} { ${prefix === "bg" ? "background-" : ""}color: var(--white-opacity${alpha}); }\n`;
-            css += `.${prefix}-black-opacity${alpha} { ${prefix === "bg" ? "background-" : ""}color: var(--black-opacity${alpha}); }\n`;
+            css += prefix === "border" ?
+                `.${prefix}-white-opacity${alpha} { border-color: var(--white-opacity${alpha}); }\n` :
+                `.${prefix}-white-opacity${alpha} { ${prefix === "bg" ? "background-" : ""}color: var(--white-opacity${alpha}); }\n`;
+
+            css += prefix === "border" ?
+                `.${prefix}-black-opacity${alpha} { border-color: var(--black-opacity${alpha}); }\n` :
+                `.${prefix}-black-opacity${alpha} { ${prefix === "bg" ? "background-" : ""}color: var(--black-opacity${alpha}); }\n`;
         });
     });
 
