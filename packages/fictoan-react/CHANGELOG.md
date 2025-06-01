@@ -7,6 +7,8 @@
 - Remove font-style class names such as `font-sans`, `font-serif`, `font-mono` to avoid clashes
 - Fix `Badge` border colour bug
 - Fix `Drawer` height/width sizing bug
+- Fix `Tabs` re-render animation bug
+- Fix `border="transparent"` CSS property bug
 
 ## 1.11.11
 - The `contentEditable` prop for `CodeBlock` is renamed to `makeEditable`, to be more consistent with Fictoan prop 

@@ -158,7 +158,7 @@ A simple monorepo setup for Fictoan React component library and documentation si
 - `packages/fictoan-react`: The Fictoan React component library
 - `packages/fictoan-docs`: The documentation site for Fictoan
 
-## Development Workflow
+## Development workflow
 
 This monorepo is set up with a minimal, no-frills workflow for developing the Fictoan component library and documentation together.
 
@@ -167,13 +167,13 @@ This monorepo is set up with a minimal, no-frills workflow for developing the Fi
 - `yarn dev` - Run the documentation site on localhost
 - `yarn rebuild` - Build the component library and update it in the docs site automatically
 
-### Getting Started
+### Getting started
 
 1. Clone this repository
 2. Run `yarn install` at the root
 3. Run `yarn dev` to start developing
 
-### Working on the Component Library
+### Working on the component library
 
 When making changes to the component library:
 

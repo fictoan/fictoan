@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
+// FRAMEWORK ===========================================================================================================
+import React, { useEffect, useCallback } from "react";
 
-import { Element } from "../Element/Element";
-import { Div } from "../Element/Tags";
-import { Divider } from "../Divider/Divider";
-import { Text } from "../Typography/Text";
-
-import { CommonAndHTMLProps } from "../Element/constants";
-
+// STYLES ==============================================================================================================
 import "./tabs.css";
 
-// prettier-ignore
+// OTHER ===============================================================================================================
+import { CommonAndHTMLProps } from "../Element/constants";
+import { Div } from "../Element/Tags";
+import { Divider } from "../Divider/Divider";
+import { Element } from "../Element/Element";
+import { Text } from "../Typography/Text";
+
 interface TabType {
     key        : string;
     label      : React.ReactNode;
@@ -38,26 +39,34 @@ export const Tabs = React.forwardRef(
         );
         const [isExiting, setIsExiting] = React.useState<boolean>(false);
 
-        const handleTabChange = (tab: TabType) => {
-            setIsExiting(true);
-            setTimeout(() => {
-                setIsExiting(false);
+        const handleTabChange = useCallback((tab: TabType, animate: boolean = true) => {
+            if (animate && activeTab?.key !== tab.key) {
+                // Only animate when actually switching to a different tab
+                setIsExiting(true);
+                setTimeout(() => {
+                    setIsExiting(false);
+                    setActiveTab(tab);
+                }, 120);
+            } else {
+                // No animation for content updates or initial load
                 setActiveTab(tab);
-            }, 120);
-        };
+            }
+        }, [activeTab?.key]);
 
         useEffect(() => {
             if (tabs.length > 0) {
                 const matchingTab = tabs.find((tab) => tab.key === activeTab?.key);
                 if (matchingTab) {
-                    handleTabChange(matchingTab);
+                    // Update content without animation if it's the same tab
+                    setActiveTab(matchingTab);
                 } else {
-                    handleTabChange(tabs[0]);
+                    // Only animate if we're switching to a different tab
+                    handleTabChange(tabs[0], false);
                 }
             } else {
                 setActiveTab(undefined);
             }
-        }, [tabs]);
+        }, [tabs, activeTab?.key]); // Only depend on activeTab.key, not the whole object
 
         return (
             <Element<TabsElementType> as="div" data-tabs ref={ref} {...props}>
@@ -69,7 +78,7 @@ export const Tabs = React.forwardRef(
                                     <li key={tab.key}>
                                         <Text
                                             className={`tab-label is-clickable ${tab.key === activeTab.key ? "is-active" : ""} ${tab.hasAlert ? "has-alert" : ""}`}
-                                            onClick={() => handleTabChange(tab)}
+                                            onClick={() => handleTabChange(tab, true)}
                                             marginBottom="none"
                                         >
                                             {tab.label}
@@ -91,5 +100,5 @@ export const Tabs = React.forwardRef(
                 )}
             </Element>
         );
-    }
+}
 );
