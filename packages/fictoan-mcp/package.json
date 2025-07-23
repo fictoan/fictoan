@@ -1,0 +1,27 @@
+{
+    "name"            : "@fictoan/mcp-server",
+    "version"         : "0.1.0",
+    "description"     : "Model Context Protocol server for Fictoan React framework",
+    "type"            : "module",
+    "main"            : "dist/index.js",
+    "bin"             : {
+        "fictoan-mcp" : "dist/index.js"
+    },
+    "scripts"         : {
+        "build" : "tsc",
+        "dev"   : "tsx watch src/index.ts",
+        "start" : "node dist/index.js"
+    },
+    "dependencies"    : {
+        "@modelcontextprotocol/sdk" : "^1.0.4",
+        "globby"                    : "^14.0.2",
+        "typescript"                : "^5.7.2"
+    },
+    "devDependencies" : {
+        "@types/node" : "^22.10.2",
+        "tsx"         : "^4.19.2"
+    },
+    "engines"         : {
+        "node" : ">=18"
+    }
+}

@@ -188,6 +188,7 @@ fictoan-turborepo/
 ├── packages/
 │   ├── fictoan-react/     # Component library
 │   └── fictoan-docs/      # Documentation site
+│   └── fictoan-mcp/       # MCP setup for Fictoan
 ├── scripts/
 │   └── copy-lib.js        # Script to copy built files to docs
 ├── turbo.json             # Turborepo configuration
