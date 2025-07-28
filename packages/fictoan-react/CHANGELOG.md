@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.11.13
+- Rename `Drawer`’s `closeWhen` prop to `closeUsing` to better describe a callback
+
 ## 1.11.12
 - Introduce a separate colour variable for `--list-box-dropdown-bg`
 - Tweak `Button` size increase to be more gradual

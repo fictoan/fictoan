@@ -141,11 +141,23 @@ export const createPropsConfigurator = (
 
         // STEP 1b : Handle additional imports =========================================================================
         const imports = new Set([componentName]);
+        const reactImports = new Set();
+        
         // For Tooltip, we need Div component too
         if (componentName === "Tooltip") {
             imports.add("Div");
         }
-        const importsString = `import { ${Array.from(imports).join(", ")} } from "fictoan-react";`;
+        
+        // For Drawer, we need useState from React and Button component
+        if (componentName === "Drawer") {
+            reactImports.add("useState");
+            imports.add("Button");
+        }
+        
+        const importsString = [
+            reactImports.size > 0 ? `import React, { ${Array.from(reactImports).join(", ")} } from "react";` : null,
+            `import { ${Array.from(imports).join(", ")} } from "fictoan-react";`
+        ].filter(Boolean).join("\n");
 
         // STEP 1c : CONDITIONAL ADDITIONAL PROPS ======================================================================
         // Add any component-specific conditional props (like onDelete for Badge)
@@ -230,6 +242,49 @@ export const createPropsConfigurator = (
                 break;
             }
 
+            // Special handling for Drawer component ---------------------------------------------------------------
+            case "Drawer": {
+                // Add trigger button first
+                codeStructure.push(
+                    `<Button onClick={() => setIsDrawerOpen(true)}>`,
+                    `    Open Drawer`,
+                    `</Button>\n`
+                );
+
+                // Generate drawer props, replacing openWhen and closeUsing with state management
+                const drawerProps = Object.entries(propValues)
+                    .filter(([key, value]) => {
+                        if (key === "content" || key === "children") return false;
+                        return value !== undefined && value !== "select-default";
+                    })
+                    .map(([key, value]) => {
+                        const config = MASTER_PROPS_CONFIG[key];
+                        if (config?.type === "boolean") {
+                            return value === true ? `    ${key}` : null;
+                        }
+                        return `    ${key}="${value}"`;
+                    })
+                    .filter(Boolean)
+                    .join("\n");
+
+                // Add required state props
+                const stateProps = [
+                    `    openWhen={isDrawerOpen}`,
+                    `    closeUsing={() => setIsDrawerOpen(false)}`
+                ].join("\n");
+
+                // Build drawer opening tag
+                const allDrawerProps = [drawerProps, stateProps].filter(Boolean).join("\n");
+                const hasDrawerProps = allDrawerProps.length > 0;
+
+                codeStructure.push(
+                    `<${componentName}${hasDrawerProps ? "" : ">"}`,
+                    hasDrawerProps && allDrawerProps,
+                    hasDrawerProps && ">"
+                );
+                break;
+            }
+
             // Regular component opening tag ---------------------------------------------------------------------------
             default: {
                 codeStructure.push(
@@ -259,10 +314,18 @@ export const createPropsConfigurator = (
         // STEP 5 : Put it all together ================================================================================
         const componentCode = codeStructure.filter(Boolean).join("\n");
 
+        // STEP 6 : Add component-specific setup code ==================================================================
+        const setupCode = [];
+        if (componentName === "Drawer") {
+            setupCode.push("const [isDrawerOpen, setIsDrawerOpen] = useState(false);");
+            setupCode.push("");
+        }
+
         return [
             `{/* Paste this in your content file */}`,
             importsString,
             ` `,
+            ...setupCode,
             componentCode
         ].filter(Boolean).join("\n");
     }, [componentName, propValues, componentConfig, propsToConfig]);
