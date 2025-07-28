@@ -1,24 +1,27 @@
-// FRAMEWORK ===========================================================================================================
+
+// REACT CORE ==========================================================================================================
 import React, { useState, useEffect, useRef, RefObject } from "react";
+
+// HOOKS ===============================================================================================================
+import { useClickOutside } from "$hooks/UseClickOutside";
 
 // STYLES ==============================================================================================================
 import "./drawer.css";
 
 // OTHER ===============================================================================================================
 import { CommonAndHTMLProps, SpacingTypes } from "../Element/constants";
-import { Div } from "../Element/Tags";
-import { Element } from "../Element/Element";
-import { useClickOutside } from "../../hooks/UseClickOutside";
+import { Div } from "$tags";
+import { Element } from "$element";
 
 export interface DrawerCustomProps {
-    position : "top" | "right" | "bottom" | "left";
-    size? : SpacingTypes;
-    openWhen? : boolean;
-    closeWhen? : () => void;
-    closeOnClickOutside? : boolean;
-    isDismissible? : boolean;
-    showOverlay? : boolean;
-    label? : string;
+        position              : "top" | "right" | "bottom" | "left";
+        size                ? : SpacingTypes;
+        openWhen            ? : boolean;
+        closeUsing          ? : () => void;
+        closeOnClickOutside ? : boolean;
+        isDismissible       ? : boolean;
+        showOverlay         ? : boolean;
+        label               ? : string;
 }
 
 export type DrawerElementType = HTMLDivElement;
@@ -30,7 +33,7 @@ export const Drawer = React.forwardRef(
         {
             children,
             openWhen,
-            closeWhen,
+            closeUsing,
             closeOnClickOutside,
             padding,
             position,
@@ -79,7 +82,7 @@ export const Drawer = React.forwardRef(
             classNames.push(size);
         }
 
-        const closeDrawer = () => closeWhen?.();
+        const closeDrawer = () => closeUsing?.();
 
         useClickOutside(effectiveRef, closeOnClickOutside ? closeDrawer : () => {
         });

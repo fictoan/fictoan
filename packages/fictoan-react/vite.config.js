@@ -70,6 +70,7 @@ export default defineConfig({
     resolve : {
         alias : {
             "$"           : path.resolve(__dirname, "./src"),
+            "$colour"     : path.resolve(__dirname, "./src/colour/colour"),
             "$components" : path.resolve(__dirname, "./src/components"),
             "$element"    : path.resolve(__dirname, "./src/components/Element/Element"),
             "$hooks"      : path.resolve(__dirname, "./src/hooks"),

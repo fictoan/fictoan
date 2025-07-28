@@ -15,28 +15,28 @@ TERM_WIDTH=$(tput cols)
 
 # Function for section separator
 function draw_separator() {
-  local char=${1:-"━"}
-  local separator=""
-  
-  for ((i=0; i<TERM_WIDTH; i++)); do
-    separator="${separator}${char}"
-  done
-  
-  echo -e "\n${CYAN}${separator}${RESET}\n"
+    local char=${1:-"━"}
+    local separator=""
+
+    for ((i = 0; i < TERM_WIDTH; i++)); do
+        separator="${separator}${char}"
+    done
+
+    echo -e "\n${CYAN}${separator}${RESET}\n"
 }
 
 # Function for styled messages
 function step() {
-  local message=$1
-  echo -e "\n${BLUE}${BOLD}⚡️ $message${RESET}"
+    local message=$1
+    echo -e "\n${BLUE}${BOLD}⚡️ $message${RESET}"
 }
 
 function success() {
-  echo -e "${GREEN}${BOLD}✓ $1${RESET}"
+    echo -e "${GREEN}${BOLD}✓ $1${RESET}"
 }
 
 function info() {
-  echo -e "${CYAN}ℹ️  $1${RESET}"
+    echo -e "${CYAN}ℹ️  $1${RESET}"
 }
 
 # Show total progress
@@ -44,8 +44,8 @@ total_steps=6
 current_step=0
 
 function show_progress() {
-  current_step=$((current_step + 1))
-  echo -e "${MAGENTA}[Step $current_step/$total_steps]${RESET}"
+    current_step=$((current_step + 1))
+    echo -e "${MAGENTA}[Step $current_step/$total_steps]${RESET}"
 }
 
 # Intro
@@ -68,6 +68,7 @@ draw_separator
 # Install dependencies for docs
 show_progress
 step "Installing dependencies for documentation..."
+# shellcheck disable=SC2164
 cd packages/fictoan-docs
 yarn install
 success "Dependencies installed for fictoan-docs"
@@ -77,6 +78,7 @@ draw_separator
 # Build fictoan-react
 show_progress
 step "Building Fictoan components..."
+# shellcheck disable=SC2164
 cd packages/fictoan-react
 yarn build
 success "Fictoan React built successfully!"
