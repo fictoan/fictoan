@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.11.14
+- Refactor `Drawer` to behave more like the `Modal` for open and close behaviour
+
 ## 1.11.13
 - Rename `Drawer`’s `closeWhen` prop to `closeUsing` to better describe a callback
 

@@ -178,7 +178,7 @@ This monorepo is set up with a minimal, no-frills workflow for developing the Fi
 When making changes to the component library:
 
 1. Make your changes in `packages/fictoan-react`
-2. Run `yarn updateLib` to build the library and copy the files to the docs site
+2. Run `yarn rebuild` to build the library and copy the files to the docs site
 3. The docs site will now use your latest changes
 
 ## Repository Structure

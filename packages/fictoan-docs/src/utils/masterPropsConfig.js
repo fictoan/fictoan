@@ -24,6 +24,10 @@ export const MASTER_PROPS_CONFIG = {
             label : "Target ID + isTooltipFor",
             value : "tooltip-target",
         },
+        Drawer : {
+            label : "Label",
+            value : "Sample drawer",
+        },
     },
 
     // SIZE PROPS ======================================================================================================
@@ -169,6 +173,10 @@ export const MASTER_PROPS_CONFIG = {
     showOverlay        : {
         type  : "boolean",
         label : "Show overlay",
+    },
+    blurOverlay        : {
+        type  : "boolean",
+        label : "Blur overlay",
     },
     isDismissible      : {
         type  : "boolean",

@@ -40,7 +40,7 @@ function info() {
 }
 
 # Show total progress
-total_steps=6
+total_steps=5
 current_step=0
 
 function show_progress() {
@@ -92,9 +92,8 @@ node scripts/copy-lib.js
 success "Library copied to docs project"
 draw_separator
 
-# Start the dev server
+# All done
 show_progress
-step "Starting the development server..."
-echo -e "\n${MAGENTA}${BOLD}🎉 All done! Starting the dev server now...${RESET}\n"
-
-yarn dev
+step "Rebuild complete!"
+echo -e "\n${GREEN}${BOLD}🎉 All done! Fictoan React has been rebuilt and copied to docs.${RESET}"
+echo -e "${CYAN}ℹ️  You can now run 'yarn dev' to start the development server if needed.${RESET}\n"

@@ -5,7 +5,7 @@ export { Accordion, type AccordionProps } from "./Accordion";
 export { Badge, type BadgeProps } from "./Badge";
 
 // DRAWER ==============================================================================================================
-export { Drawer, type DrawerProps } from "./Drawer";
+export { Drawer, type DrawerProps, showDrawer, hideDrawer, toggleDrawer, isDrawerOpen } from "./Drawer";
 
 // BUTTON ==============================================================================================================
 export { Button, type ButtonProps } from "./Button";
