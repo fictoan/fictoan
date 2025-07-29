@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading2, Heading4, Divider, Portion, Row, Text, Article, Button, Drawer, Div } from "fictoan-react";
+import { Element, Heading1, Heading2, Heading4, Divider, Portion, Row, Text, Article, Button, Drawer, Div, showDrawer, hideDrawer } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createPropsConfigurator } from "@/utils/propsConfigurator";
@@ -17,19 +17,19 @@ import "./page-drawer.css";
 import { colourOptions } from "../../colour/colours";
 
 const DrawerDocs: React.FC = () => {
-    const [isSampleDrawerOpen, setIsSampleDrawerOpen] = useState<boolean>(false);
 
-    // PROPS CONFIG ====================================================================================================
     const {
         propsConfigurator,
         componentProps: propsConfig,
     } = createPropsConfigurator(
         "Drawer",
         [
+            "strings",
             "position",
             "size",
             "padding",
             "showOverlay",
+            "blurOverlay",
             "isDismissible",
             "closeOnClickOutside",
         ],
@@ -37,11 +37,10 @@ const DrawerDocs: React.FC = () => {
         {
             isSelfClosing: false,
             canHaveChildren: true,
-            defaultChildren: "Content goes here",
+            defaultChildren: "Drawer content goes here",
         },
     );
 
-    // THEME CONFIG ====================================================================================================
     const DrawerComponent = (varName) => {
         return varName.startsWith("drawer-");
     };
@@ -66,6 +65,7 @@ const DrawerDocs: React.FC = () => {
                     <Heading4 marginBottom="micro">Characteristics</Heading4>
                     <ul>
                         <li>Accepts any React node as children</li>
+                        <li>You can add as many Drawers you want on a page, as long as you match the IDs to the right triggers</li>
                     </ul>
                 </Portion>
             </Row>
@@ -83,7 +83,7 @@ const DrawerDocs: React.FC = () => {
                         data-centered-children
                     >
                         <Button
-                            onClick={() => setIsSampleDrawerOpen(true)}
+                            onClick={() => showDrawer("interactive-component")}
                             kind="primary"
                         >
                             Open the drawer
@@ -104,18 +104,19 @@ const DrawerDocs: React.FC = () => {
 
             {/* SAMPLE DRAWER ////////////////////////////////////////////////////////////////////////////////////// */}
             <Drawer
+                id="interactive-component"
                 ref={interactiveElementRef}
-                openWhen={isSampleDrawerOpen}
-                closeUsing={() => setIsSampleDrawerOpen(false)}
                 position={propsConfig.position || "right"}
                 size={propsConfig.size}
                 padding={propsConfig.padding}
                 showOverlay={propsConfig.showOverlay}
+                blurOverlay={propsConfig.blurOverlay}
                 isDismissible={propsConfig.isDismissible}
                 closeOnClickOutside={propsConfig.closeOnClickOutside}
+                label={propsConfig.content || "Sample drawer"}
                 {...themeConfig}
             >
-                <Heading2 marginBottom="nano">Hello</Heading2>
+                <Heading2 textColour="green" marginBottom="nano">Hello</Heading2>
 
                 <Text marginBottom="micro">
                     You can add all sorts of content here inside the info panel.
@@ -123,7 +124,7 @@ const DrawerDocs: React.FC = () => {
 
                 <Button
                     kind="secondary"
-                    onClick={() => setIsSampleDrawerOpen(false)}
+                    onClick={() => hideDrawer("interactive-component")}
                 >
                     Close
                 </Button>

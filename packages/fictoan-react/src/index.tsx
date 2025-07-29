@@ -1,58 +1,37 @@
 // CSS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// EXTERNAL ============================================================================================================
-import "./styles/Normalize.css";
 
-// RESET ===============================================================================================================
-import "./styles/reset.css";
-
-// GLOBAL ==============================================================================================================
-import "./styles/globals.css";
-
-// COLOURS =============================================================================================================
-import "./styles/custom-colours.css";
-import "./styles/colours.css";
-
-// UTILITIES ===========================================================================================================
-import "./styles/utilities.css";
-
-// THEME ===============================================================================================================
-import "./styles/theme.css";
-
-// TYPOGRAPHY ==========================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import "./components/Typography/typography.css";
 
-// KEYFRAMES ===========================================================================================================
+// STYLES ==============================================================================================================
+import "./styles/Normalize.css";
 import "./styles/animations.css";
+import "./styles/colours.css";
+import "./styles/custom-colours.css";
+import "./styles/globals.css";
+import "./styles/reset.css";
+import "./styles/theme.css";
+import "./styles/utilities.css";
 
 // COMPONENTS //////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ACCORDION ===========================================================================================================
 export { Accordion, type AccordionProps } from "./components/Accordion";
 
-// BADGE ===============================================================================================================
 export { Badge, type BadgeProps } from "./components/Badge";
 
-// BREADCRUMBS =========================================================================================================
 export { Breadcrumbs, type BreadcrumbsProps } from "./components/Breadcrumbs";
 
-// BUTTON ==============================================================================================================
 export { Button, type ButtonProps } from "./components/Button";
 
-// CALLOUT =============================================================================================================
 export { Callout, type CalloutProps } from "./components/Callout";
 
-// CARD ================================================================================================================
 export { Card, type CardProps } from "./components/Card";
 
-// CODE BLOCK ==========================================================================================================
 export { CodeBlock, type CodeBlockProps } from "./components/CodeBlock";
 
-// DIVIDER =============================================================================================================
 export { Divider, type DividerProps } from "./components/Divider";
 
-// DRAWER ==============================================================================================================
-export { Drawer, type DrawerProps } from "./components/Drawer";
+export { Drawer, type DrawerProps, showDrawer, hideDrawer, toggleDrawer, isDrawerOpen } from "./components/Drawer";
 
-// ELEMENT =============================================================================================================
 export {
     Element,
     type ElementProps,
@@ -69,7 +48,6 @@ export {
     Hyperlink
 } from "./components/Element";
 
-// FORM ================================================================================================================
 export {
     Form,
     type FormProps,
@@ -108,13 +86,10 @@ export {
     type ListBoxProps
 } from "./components/Form";
 
-// METER ===============================================================================================================
 export { Meter, type MeterProps, type MeterMetaProps } from "./components/Meter";
 
-// MODAL ===============================================================================================================
 export { Modal, type ModalProps, showModal, hideModal, toggleModal } from "./components/Modal";
 
-// NOTIFICATIONS  ======================================================================================================
 export {
     NotificationsWrapper,
     type NotificationsWrapperProps,
@@ -122,23 +97,17 @@ export {
     type NotificationItemProps,
 } from "./components/Notification";
 
-// OPTION CARD =========================================================================================================
 export { OptionCard, OptionCardsGroup, type OptionCardProps, type OptionCardsGroupRef } from "./components/OptionCard";
 export { useOptionCard, useOptionCardsGroup } from "./components/OptionCard";
 
-// PAGINATION ==========================================================================================================
 export { Pagination, type PaginationProps } from "./components/Pagination";
 
-// PORTION =============================================================================================================
 export { Portion, type PortionProps } from "./components/Portion";
 
-// PROGRESS BAR ========================================================================================================
 export { ProgressBar, type ProgressBarProps, type ProgressBarMetaProps } from "./components/ProgressBar";
 
-// ROW =================================================================================================================
 export { Row, type RowProps } from "./components/Row";
 
-// SIDEBAR + CONTENT WRAPPER ===========================================================================================
 export {
     SidebarWrapper,
     type SidebarWrapperNewProps,
@@ -152,7 +121,6 @@ export {
     type SidebarFooterNewProps,
 } from "./components/Sidebar";
 
-// SKELETON ============================================================================================================
 export {
     Skeleton,
     type SkeletonProps,
@@ -160,25 +128,18 @@ export {
     type SkeletonGroupProps,
 } from "./components/Skeleton";
 
-// SPINNER =============================================================================================================
 export { Spinner, type SpinnerProps } from "./components/Spinner";
 
-// TABLE ===============================================================================================================
 export { Table, type TableProps } from "./components/Table";
 
-// TABS  ===============================================================================================================
 export { Tabs, type TabsProps } from "./components/Tabs";
 
-// THEME PROVIDER  =====================================================================================================
 export { ThemeProvider, type ThemeProviderProps, useTheme } from "./components/ThemeProvider";
 
-// TOAST ===============================================================================================================
 export { ToastsWrapper, type ToastsWrapperProps, ToastItem, type ToastItemProps } from "./components/Toast";
 
-// TOOLTIP =============================================================================================================
 export { Tooltip, type TooltipProps } from "./components/Tooltip";
 
-// TYPOGRAPHY ==========================================================================================================
 export {
     Text,
     type TextProps,

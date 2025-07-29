@@ -148,10 +148,12 @@ export const createPropsConfigurator = (
             imports.add("Div");
         }
         
-        // For Drawer, we need useState from React and Button component
+        // For Drawer, we need showDrawer, hideDrawer utilities and Button component
         if (componentName === "Drawer") {
-            reactImports.add("useState");
             imports.add("Button");
+            imports.add("Text");
+            imports.add("showDrawer");
+            imports.add("hideDrawer");
         }
         
         const importsString = [
@@ -246,12 +248,12 @@ export const createPropsConfigurator = (
             case "Drawer": {
                 // Add trigger button first
                 codeStructure.push(
-                    `<Button onClick={() => setIsDrawerOpen(true)}>`,
-                    `    Open Drawer`,
+                    `<Button onClick={() => showDrawer("sample-drawer")}>`,
+                    `    Open drawer`,
                     `</Button>\n`
                 );
 
-                // Generate drawer props, replacing openWhen and closeUsing with state management
+                // Generate drawer props, ensuring id is always included
                 const drawerProps = Object.entries(propValues)
                     .filter(([key, value]) => {
                         if (key === "content" || key === "children") return false;
@@ -267,14 +269,14 @@ export const createPropsConfigurator = (
                     .filter(Boolean)
                     .join("\n");
 
-                // Add required state props
-                const stateProps = [
-                    `    openWhen={isDrawerOpen}`,
-                    `    closeUsing={() => setIsDrawerOpen(false)}`
-                ].join("\n");
+                // Add required id prop and optional label
+                const requiredProps = [
+                    `    id="sample-drawer"`,
+                    propValues.content && `    label="${propValues.content}"`
+                ].filter(Boolean).join("\n");
 
                 // Build drawer opening tag
-                const allDrawerProps = [drawerProps, stateProps].filter(Boolean).join("\n");
+                const allDrawerProps = [requiredProps, drawerProps].filter(Boolean).join("\n");
                 const hasDrawerProps = allDrawerProps.length > 0;
 
                 codeStructure.push(
@@ -300,11 +302,21 @@ export const createPropsConfigurator = (
         // STEP 4 : ADD CONTENT AND CLOSING TAGS =======================================================================
         // Children content only for non-self-closing components
         if (!componentConfig.isSelfClosing) {
-            // Add children content ------------------------------------------------------------------------------------
-            const content = propValues.children || (componentName === "Badge" ? propValues.content : null);
+            // Special content handling for Drawer
+            if (componentName === "Drawer") {
+                codeStructure.push(
+                    `    <Text>Your drawer content goes here</Text>`,
+                    `    <Button onClick={() => hideDrawer("sample-drawer")}>`,
+                    `        Close drawer`,
+                    `    </Button>`
+                );
+            } else {
+                // Add children content for other components
+                const content = propValues.children || (componentName === "Badge" ? propValues.content : null);
 
-            if (content) {
-                codeStructure.push(content);
+                if (content) {
+                    codeStructure.push(content);
+                }
             }
 
             // Add closing tag -----------------------------------------------------------------------------------------
@@ -316,10 +328,6 @@ export const createPropsConfigurator = (
 
         // STEP 6 : Add component-specific setup code ==================================================================
         const setupCode = [];
-        if (componentName === "Drawer") {
-            setupCode.push("const [isDrawerOpen, setIsDrawerOpen] = useState(false);");
-            setupCode.push("");
-        }
 
         return [
             `{/* Paste this in your content file */}`,

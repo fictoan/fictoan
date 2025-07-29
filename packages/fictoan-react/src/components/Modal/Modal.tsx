@@ -1,25 +1,25 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useEffect } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
-import { Text } from "../Typography/Text";
+// LOCAL COMPONENTS ====================================================================================================
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./modal.css";
 
-// TYPES ===============================================================================================================
+// OTHER ===============================================================================================================
 import { CommonAndHTMLProps } from "../Element/constants";
+import { Text } from "$/components";
 
 export type ModalElementType = HTMLDivElement;
 
 export interface ModalCustomProps {
-    id              : string;
-    isDismissible ? : boolean;
-    showBackdrop  ? : boolean;
-    blurBackdrop  ? : boolean;
-    label         ? : string;
-    description   ? : string;
+        id              : string;
+        isDismissible ? : boolean;
+        showBackdrop  ? : boolean;
+        blurBackdrop  ? : boolean;
+        label         ? : string;
+        description   ? : string;
 }
 
 export type ModalProps = Omit<CommonAndHTMLProps<ModalElementType>, keyof ModalCustomProps> & ModalCustomProps;

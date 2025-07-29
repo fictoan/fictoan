@@ -1,8 +1,10 @@
 const fs = require("fs");
 const path = require("path");
+const { execSync } = require("child_process");
 
 // Paths
-const sourceDir = path.resolve(__dirname, "../packages/fictoan-react/dist");
+const fictoanReactDir = path.resolve(__dirname, "../packages/fictoan-react");
+const sourceDir = path.resolve(fictoanReactDir, "dist");
 const targetNodeModulesDir = path.resolve(__dirname, "../packages/fictoan-docs/node_modules/fictoan-react");
 const targetDir = path.resolve(targetNodeModulesDir, "dist");
 
@@ -89,13 +91,31 @@ function copyPackageFiles() {
     });
 }
 
-// Execute the copy
-try {
-    // Copy all required package files
-    copyPackageFiles();
+// Build and copy function
+function buildAndCopy() {
+    console.log("Building fictoan-react...");
+    
+    // Build the library
+    try {
+        execSync("npm run build", { 
+            cwd: fictoanReactDir, 
+            stdio: "inherit" 
+        });
+        console.log("✓ Build completed successfully");
+    } catch (err) {
+        console.error("✗ Build failed:", err.message);
+        process.exit(1);
+    }
 
-    console.log("Successfully copied fictoan-react files to fictoan-docs node_modules");
-} catch (err) {
-    console.error("Error copying library files:", err);
-    process.exit(1);
+    // Copy all required package files
+    try {
+        copyPackageFiles();
+        console.log("✓ Successfully copied fictoan-react files to fictoan-docs node_modules");
+    } catch (err) {
+        console.error("✗ Error copying library files:", err);
+        process.exit(1);
+    }
 }
+
+// Execute the build and copy
+buildAndCopy();
