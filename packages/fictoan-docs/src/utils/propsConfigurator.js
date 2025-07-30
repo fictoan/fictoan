@@ -22,7 +22,7 @@ export const createPropsConfigurator = (
     componentConfig = {
         canHaveChildren : false,
         isSelfClosing   : false,
-        defaultChildren : null  ,
+        defaultChildren : null,
     }) => {
     // INITIALISE STATE WITH UNDEFINED VALUES //////////////////////////////////////////////////////////////////////////
     const [propValues, setPropValues] = useState(() => {
@@ -142,12 +142,12 @@ export const createPropsConfigurator = (
         // STEP 1b : Handle additional imports =========================================================================
         const imports = new Set([componentName]);
         const reactImports = new Set();
-        
+
         // For Tooltip, we need Div component too
         if (componentName === "Tooltip") {
             imports.add("Div");
         }
-        
+
         // For Drawer, we need showDrawer, hideDrawer utilities and Button component
         if (componentName === "Drawer") {
             imports.add("Button");
@@ -155,10 +155,10 @@ export const createPropsConfigurator = (
             imports.add("showDrawer");
             imports.add("hideDrawer");
         }
-        
+
         const importsString = [
             reactImports.size > 0 ? `import React, { ${Array.from(reactImports).join(", ")} } from "react";` : null,
-            `import { ${Array.from(imports).join(", ")} } from "fictoan-react";`
+            `import { ${Array.from(imports).join(", ")} } from "fictoan-react";`,
         ].filter(Boolean).join("\n");
 
         // STEP 1c : CONDITIONAL ADDITIONAL PROPS ======================================================================
@@ -170,13 +170,13 @@ export const createPropsConfigurator = (
         // STEP 1d : SPECIAL HANDLING FOR CODE BLOCK USAGE =============================================================
         if (componentName === "CodeBlock") {
             const usageApproach = propValues.source || "import";
-            
+
             // Generate common props for both examples
             const commonProps = [
                 "    language=\"jsx\"",
                 "    withSyntaxHighlighting",
                 "    showCopyButton",
-                "    showLineNumbers"
+                "    showLineNumbers",
             ].join("\n");
 
             if (usageApproach === "import") {
@@ -188,7 +188,7 @@ export const createPropsConfigurator = (
                     `<${componentName}`,
                     commonProps,
                     `    source={sampleCode}`,
-                    `/>`
+                    `/>`,
                 ].filter(Boolean).join("\n");
             } else if (usageApproach === "inline") {
                 // Sample code for inline approach
@@ -203,9 +203,9 @@ export const createPropsConfigurator = (
                     `    showCopyButton`,
                     `    showLineNumbers`,
                     `    source={sampleCode}`,
-                    `/>`
+                    `/>`,
                 ];
-                
+
                 return [
                     `{/* Option 2: Inline approach */}`,
                     `import { ${componentName} } from "fictoan-react";`,
@@ -216,7 +216,7 @@ export const createPropsConfigurator = (
                     `{[`,
                     ...inlineCode.map(line => `    \`${line}\``),
                     `].join("\\n")}`,
-                    `</${componentName}>`
+                    `</${componentName}>`,
                 ].filter(Boolean).join("\n");
             }
         }
@@ -227,7 +227,7 @@ export const createPropsConfigurator = (
         // STEP 3 : OPENING TAG ========================================================================================
         let codeStructure = [];
 
-        switch(componentName) {
+        switch (componentName) {
             // Need extra demo div for Tooltip -------------------------------------------------------------------------
             case "Tooltip": {
                 const targetId = propValues.isTooltipFor || "tooltip-target";
@@ -239,7 +239,7 @@ export const createPropsConfigurator = (
                     hasProps && props,
                     hasProps && additionalProps,
                     hasProps && reactNodeProps,
-                    hasProps && ">"
+                    hasProps && ">",
                 );
                 break;
             }
@@ -250,7 +250,7 @@ export const createPropsConfigurator = (
                 codeStructure.push(
                     `<Button onClick={() => showDrawer("sample-drawer")}>`,
                     `    Open drawer`,
-                    `</Button>\n`
+                    `</Button>\n`,
                 );
 
                 // Generate drawer props, ensuring id is always included
@@ -272,7 +272,7 @@ export const createPropsConfigurator = (
                 // Add required id prop and optional label
                 const requiredProps = [
                     `    id="sample-drawer"`,
-                    propValues.content && `    label="${propValues.content}"`
+                    propValues.content && `    label="${propValues.content}"`,
                 ].filter(Boolean).join("\n");
 
                 // Build drawer opening tag
@@ -282,7 +282,7 @@ export const createPropsConfigurator = (
                 codeStructure.push(
                     `<${componentName}${hasDrawerProps ? "" : ">"}`,
                     hasDrawerProps && allDrawerProps,
-                    hasDrawerProps && ">"
+                    hasDrawerProps && ">",
                 );
                 break;
             }
@@ -294,7 +294,8 @@ export const createPropsConfigurator = (
                     hasProps && props,
                     hasProps && additionalProps,
                     hasProps && reactNodeProps,
-                    hasProps && (componentConfig.isSelfClosing ? "/>" : ">")
+                    hasProps && (componentConfig.isSelfClosing ? "/>" : ">"
+                    ),
                 );
             }
         }
@@ -308,11 +309,12 @@ export const createPropsConfigurator = (
                     `    <Text>Your drawer content goes here</Text>`,
                     `    <Button onClick={() => hideDrawer("sample-drawer")}>`,
                     `        Close drawer`,
-                    `    </Button>`
+                    `    </Button>`,
                 );
             } else {
                 // Add children content for other components
-                const content = propValues.children || (componentName === "Badge" ? propValues.content : null);
+                const content = propValues.children || (componentName === "Badge" ? propValues.content : null
+                );
 
                 if (content) {
                     codeStructure.push(content);
@@ -334,7 +336,7 @@ export const createPropsConfigurator = (
             importsString,
             ` `,
             ...setupCode,
-            componentCode
+            componentCode,
         ].filter(Boolean).join("\n");
     }, [componentName, propValues, componentConfig, propsToConfig]);
 
@@ -414,7 +416,7 @@ export const createPropsConfigurator = (
                         if (typeof window !== "undefined") {
                             // Create and dispatch a custom event
                             const event = new CustomEvent("codeblock-language-changed", {
-                                detail: { language: value }
+                                detail : { language : value },
                             });
                             window.dispatchEvent(event);
                         }

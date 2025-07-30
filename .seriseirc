@@ -12,7 +12,7 @@ HEADER_CHAR = =
 // LIB = lib/
 // HOOKS = hooks/,
 // UTILS = utils/,
-// ASSETS = assets
+// ASSETS = assets/
 // TEMPLATES = templates/
 // ELEMENT = Element, $element, Element/
 // TYPOGRAPHY = typography/

@@ -12,19 +12,19 @@ export async function extractComponentMetadataFromClient(componentPath : string)
 }> {
     try {
         // Read the component source file directly and extract text content
-        const fs = await import('fs');
-        const path = await import('path');
-        
+        const fs = await import("fs");
+        const path = await import("path");
+
         let filePath;
         let fileContent;
-        
+
         try {
             filePath = path.resolve(`src/app/components/${componentPath}/page.client.tsx`);
-            fileContent = await fs.promises.readFile(filePath, 'utf-8');
+            fileContent = await fs.promises.readFile(filePath, "utf-8");
         } catch {
             try {
                 filePath = path.resolve(`src/app/components/${componentPath}/page.client.jsx`);
-                fileContent = await fs.promises.readFile(filePath, 'utf-8');
+                fileContent = await fs.promises.readFile(filePath, "utf-8");
             } catch {
                 throw new Error(`Could not find client component file for ${componentPath}`);
             }
@@ -70,19 +70,19 @@ export async function extractComponentMetadata(request : Request) : Promise<{
 
     try {
         // Read the component source file directly and extract text content
-        const fs = await import('fs');
-        const path = await import('path');
-        
+        const fs = await import("fs");
+        const path = await import("path");
+
         let filePath;
         let fileContent;
-        
+
         try {
             filePath = path.resolve(`src/app/components/${componentPath}/page.client.tsx`);
-            fileContent = await fs.promises.readFile(filePath, 'utf-8');
+            fileContent = await fs.promises.readFile(filePath, "utf-8");
         } catch {
             try {
                 filePath = path.resolve(`src/app/components/${componentPath}/page.client.jsx`);
-                fileContent = await fs.promises.readFile(filePath, 'utf-8');
+                fileContent = await fs.promises.readFile(filePath, "utf-8");
             } catch {
                 throw new Error(`Could not find client component file for ${componentPath}`);
             }
