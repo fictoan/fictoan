@@ -7,8 +7,8 @@ import React, { useState } from "react";
 import { Element, Heading1, Heading2, Heading4, Divider, Portion, Row, Text, Article, Button, Drawer, Div, showDrawer, hideDrawer } from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { createPropsConfigurator } from "@/utils/propsConfigurator";
-import { createThemeConfigurator } from "@/utils/themeConfigurator";
+import { createPropsConfigurator } from "$utils/propsConfigurator";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
 import "./page-drawer.css";
@@ -16,11 +16,10 @@ import "./page-drawer.css";
 // OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
 
-const DrawerDocs: React.FC = () => {
-
+const DrawerDocs : React.FC = () => {
     const {
         propsConfigurator,
-        componentProps: propsConfig,
+        componentProps : propsConfig,
     } = createPropsConfigurator(
         "Drawer",
         [
@@ -35,19 +34,19 @@ const DrawerDocs: React.FC = () => {
         ],
         colourOptions,
         {
-            isSelfClosing: false,
-            canHaveChildren: true,
-            defaultChildren: "Drawer content goes here",
+            isSelfClosing   : false,
+            canHaveChildren : true,
+            defaultChildren : null,
         },
     );
 
-    const DrawerComponent = (varName) => {
+    const DrawerComponent = (varName : string) => {
         return varName.startsWith("drawer-");
     };
 
     const {
         interactiveElementRef,
-        componentProps: themeConfig,
+        componentProps : themeConfig,
         themeConfigurator,
     } = createThemeConfigurator("Drawer", DrawerComponent);
 
@@ -65,18 +64,18 @@ const DrawerDocs: React.FC = () => {
                     <Heading4 marginBottom="micro">Characteristics</Heading4>
                     <ul>
                         <li>Accepts any React node as children</li>
-                        <li>You can add as many Drawers you want on a page, as long as you match the IDs to the right triggers</li>
+                        <li>
+                            You can add as many Drawers you want on a page, as long as you match the IDs to the right
+                            triggers
+                        </li>
                     </ul>
                 </Portion>
             </Row>
 
             <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/*  CONFIGURATOR */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
             <Row horizontalPadding="small" className="rendered-component">
-                {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////// */}
                 <Portion id="component-wrapper">
                     <Element
                         as="div" padding="small" shape="rounded" bgColour="slate-light80"
@@ -91,12 +90,12 @@ const DrawerDocs: React.FC = () => {
                     </Element>
                 </Portion>
 
-                {/* PROPS CONFIGURATOR ========================================================================= */}
+                {/* PROPS CONFIGURATOR ============================================================================= */}
                 <Portion desktopSpan="half">
                     {propsConfigurator()}
                 </Portion>
 
-                {/* THEME CONFIGURATOR ========================================================================= */}
+                {/* THEME CONFIGURATOR ============================================================================= */}
                 <Portion desktopSpan="half">
                     {themeConfigurator()}
                 </Portion>
@@ -107,14 +106,14 @@ const DrawerDocs: React.FC = () => {
                 id="interactive-component"
                 ref={interactiveElementRef}
                 position={propsConfig.position || "right"}
-                size={propsConfig.size}
-                padding={propsConfig.padding}
-                showOverlay={propsConfig.showOverlay}
-                blurOverlay={propsConfig.blurOverlay}
-                isDismissible={propsConfig.isDismissible}
-                closeOnClickOutside={propsConfig.closeOnClickOutside}
+                {...(propsConfig.size ? {size : propsConfig.size} : {})}
+                {...(propsConfig.padding ? {padding : propsConfig.padding} : {})}
+                {...(typeof propsConfig.showOverlay === "boolean" ? {showOverlay : propsConfig.showOverlay} : {})}
+                {...(typeof propsConfig.blurOverlay === "boolean" ? {blurOverlay : propsConfig.blurOverlay} : {})}
+                {...(typeof propsConfig.isDismissible === "boolean" ? {isDismissible : propsConfig.isDismissible} : {})}
+                {...(typeof propsConfig.closeOnClickOutside === "boolean" ? {closeOnClickOutside : propsConfig.closeOnClickOutside} : {})}
                 label={propsConfig.content || "Sample drawer"}
-                {...themeConfig}
+                {...(({id, ...rest}) => rest)(themeConfig)}
             >
                 <Heading2 textColour="green" marginBottom="nano">Hello</Heading2>
 

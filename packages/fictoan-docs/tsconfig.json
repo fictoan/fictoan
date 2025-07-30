@@ -1,29 +1,59 @@
 {
     "compilerOptions" : {
-        "lib"               : [
+        "target"                           : "es5",
+        "lib"                              : [
             "dom",
             "dom.iterable",
             "esnext"
         ],
-        "allowJs"           : true,
-        "skipLibCheck"      : true,
-        "strict"            : false,
-        "noEmit"            : true,
-        "incremental"       : true,
-        "esModuleInterop"   : true,
-        "module"            : "esnext",
-        "moduleResolution"  : "bundler",
-        "resolveJsonModule" : true,
-        "isolatedModules"   : true,
-        "jsx"               : "preserve",
-        "plugins"           : [
+        "allowJs"                          : true,
+        "skipLibCheck"                     : true,
+        "strict"                           : true,
+        "forceConsistentCasingInFileNames" : true,
+        "noEmit"                           : true,
+        "incremental"                      : true,
+        "esModuleInterop"                  : true,
+        "module"                           : "esnext",
+        "moduleResolution"                 : "bundler",
+        "resolveJsonModule"                : true,
+        "isolatedModules"                  : true,
+        "jsx"                              : "preserve",
+        "baseUrl"                          : ".",
+        "plugins"                          : [
             {
                 "name" : "next"
             }
         ],
         "paths"                            : {
-            "@/*" : [
+            "$/*"           : [
                 "./src/*"
+            ],
+            "$colour/*"     : [
+                "./src/colour/colour/*"
+            ],
+            "$components/*" : [
+                "./src/components/*"
+            ],
+            "$element"      : [
+                "./src/components/Element/Element"
+            ],
+            "$hooks/*"      : [
+                "./src/hooks/*"
+            ],
+            "$form/*"       : [
+                "./src/components/Form/*"
+            ],
+            "$styles/*"     : [
+                "./src/styles/*"
+            ],
+            "$tags"         : [
+                "./src/components/Element/Tags"
+            ],
+            "$types/*"      : [
+                "./src/types/*"
+            ],
+            "$utils/*"      : [
+                "./src/utils/*"
             ]
         }
     },

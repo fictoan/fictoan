@@ -22,7 +22,7 @@ export const createPropsConfigurator = (
     componentConfig = {
         canHaveChildren : false,
         isSelfClosing   : false,
-        defaultChildren : null,
+        defaultChildren : null  ,
     }) => {
     // INITIALISE STATE WITH UNDEFINED VALUES //////////////////////////////////////////////////////////////////////////
     const [propValues, setPropValues] = useState(() => {

@@ -1,35 +1,23 @@
 "use client";
 
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// INTERFACE ===========================================================================================================
-import {
-    Article,
-    Section,
-    Div,
-    Heading1,
-    Heading4,
-    Divider,
-    Row,
-    Portion,
-    Text,
-    Accordion,
-} from "fictoan-react";
-
-// STYLES ==============================================================================================================
-import "./page-accordion.css";
-import "../../../styles/fictoan-theme.css";
-
-// HOOKS ===============================================================================================================
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
-import { createThemeConfigurator } from "../../../utils/themeConfigurator";
+// UI ==================================================================================================================
+import { Article, Section, Div, Heading1, Heading4, Divider, Row, Portion, Text, Accordion } from "fictoan-react";
 
 // UTILS ===============================================================================================================
+import { createPropsConfigurator } from "$utils/propsConfigurator";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
+
+// STYLES ==============================================================================================================
+import "$styles/fictoan-theme.css";
+import "./page-accordion.css";
+
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
 
-const AccordionDocs = () => {
-    // PROPS CONFIG ====================================================================================================
+const AccordionDocs : React.FC = () => {
     const {
         propsConfigurator,
         componentProps : propsConfig,
@@ -39,11 +27,14 @@ const AccordionDocs = () => {
             "isFullWidth",
         ],
         colourOptions,
-        { canHaveChildren : true },
+        {
+            canHaveChildren : true,
+            isSelfClosing   : false,
+            defaultChildren : null,
+        },
     );
 
-    // THEME CONFIG ====================================================================================================
-    const AccordionComponent = (varName) => {
+    const AccordionComponent = (varName : string) : boolean => {
         return varName.startsWith("accordion-");
     };
 
@@ -69,7 +60,8 @@ const AccordionDocs = () => {
                         <Heading4 marginBottom="micro">Characteristics</Heading4>
                         <ul>
                             <li>
-                                The <code>summary</code> accepts any React node as a child. Feel free to style it however
+                                The <code>summary</code> accepts any React node as a child. Feel free to style it
+                                however
                                 you want with any element.
                             </li>
                             <li>The component is typically used with the <code>isFullWidth</code> prop</li>
@@ -92,7 +84,6 @@ const AccordionDocs = () => {
                             data-centered-children
                         >
                             <Accordion
-                                id="interactive-component"
                                 ref={interactiveElementRef}
                                 {...propsConfig}
                                 {...themeConfig}
