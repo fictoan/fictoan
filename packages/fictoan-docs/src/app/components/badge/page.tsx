@@ -2,10 +2,10 @@
 import { extractComponentMetadataFromClient } from "$utils/og-utils";
 
 // OTHER ===============================================================================================================
-import AccordionDocs from "./page.client";
+import BadgeDocs from "./page.client";
 
 export async function generateMetadata() {
-    const {componentName, description} = await extractComponentMetadataFromClient("accordion");
+    const {componentName, description} = await extractComponentMetadataFromClient("badge");
 
     return {
         title       : `${componentName} — Fictoan`,
@@ -36,5 +36,5 @@ export async function generateMetadata() {
 }
 
 export default function Page() {
-    return <AccordionDocs />;
+    return <BadgeDocs />;
 }

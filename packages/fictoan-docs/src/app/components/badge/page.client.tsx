@@ -35,7 +35,7 @@ const BadgeDocs = () => {
         {
             isSelfClosing   : false,
             canHaveChildren : true,
-            defaultChildren : "Badge",
+            defaultChildren : null,
         },
     );
 
