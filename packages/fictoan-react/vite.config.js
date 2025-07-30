@@ -77,6 +77,7 @@ export default defineConfig({
             "$form"       : path.resolve(__dirname, "./src/components/Form"),
             "$styles"     : path.resolve(__dirname, "./src/styles"),
             "$tags"       : path.resolve(__dirname, "./src/components/Element/Tags"),
+            "$typography" : path.resolve(__dirname, "./src/components/Typography"),
             "$types"      : path.resolve(__dirname, "./src/types"),
             "$utils"      : path.resolve(__dirname, "./src/utils"),
         },

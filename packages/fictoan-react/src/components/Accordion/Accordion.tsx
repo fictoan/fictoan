@@ -1,17 +1,16 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { ReactNode } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
-import { Text } from "../Typography/Text";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../Element/constants";
+import { Element } from "$element";
+
+// TYPOGRAPHY ==========================================================================================================
+import { Text } from "$typography/Text";
 
 // STYLES ==============================================================================================================
 import "./accordion.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../Element/constants";
-
-// prettier-ignore
 export interface AccordionCustomProps {
     open     ? : boolean;
     summary    : ReactNode;
@@ -25,7 +24,7 @@ export type AccordionProps =
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const Accordion = React.forwardRef(
-    ({ summary, children, open = false, ...props }: AccordionProps, ref: React.Ref<AccordionElementType>) => {
+    ({summary, children, open = false, ...props} : AccordionProps, ref : React.Ref<AccordionElementType>) => {
 
         return (
             <Element

@@ -1,10 +1,10 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
 // UTILS ===============================================================================================================
-import { createClassName } from "../../utils/classNames";
+import { createClassName } from "$utils/classNames";
 
-// TYPES ===============================================================================================================
+// OTHER ===============================================================================================================
 import { ElementProps } from "./constants";
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,60 +25,60 @@ export const Element = React.forwardRef(
         }, ref: React.LegacyRef<HTMLElement>
     ) => {
         const {
-                  classNames = [],
-                  bgColor,
-                  bgColour,
-                  borderColor,
-                  borderColour,
-                  className,
-                  columns,
-                  fillColor,
-                  fillColour,
-                  gap,
-                  hideOnDesktop,
-                  hideOnMobile,
-                  hideOnTabletLandscape,
-                  hideOnTabletPortrait,
-                  horizontalMargin,
-                  horizontalPadding,
-                  horizontallyCenterThis,
-                  horizontallyCentreThis,
-                  isFullHeight,
-                  isFullWidth,
-                  layoutAsFlexbox,
-                  layoutAsGrid,
-                  marginLeft,
-                  marginBottom,
-                  margin,
-                  marginRight,
-                  marginTop,
-                  opacity,
-                  paddingBottom,
-                  paddingLeft,
-                  padding,
-                  paddingRight,
-                  paddingTop,
-                  pushItemsToEnds,
-                  shadow,
-                  shape,
-                  showOnlyOnDesktop,
-                  showOnlyOnMobile,
-                  showOnlyOnTabletLandscape,
-                  showOnlyOnTabletPortrait,
-                  size,
-                  strokeColor,
-                  strokeColour,
-                  textColor,
-                  textColour,
-                  verticalMargin,
-                  verticalPadding,
-                  verticallyCenterItems,
-                  verticallyCentreItems,
-                  weight,
-                  ...minimalProps
-              } = props;
+            classNames = [],
+            bgColor,
+            bgColour,
+            borderColor,
+            borderColour,
+            className,
+            columns,
+            fillColor,
+            fillColour,
+            gap,
+            hideOnDesktop,
+            hideOnMobile,
+            hideOnTabletLandscape,
+            hideOnTabletPortrait,
+            horizontalMargin,
+            horizontalPadding,
+            horizontallyCenterThis,
+            horizontallyCentreThis,
+            isFullHeight,
+            isFullWidth,
+            layoutAsFlexbox,
+            layoutAsGrid,
+            marginLeft,
+            marginBottom,
+            margin,
+            marginRight,
+            marginTop,
+            opacity,
+            paddingBottom,
+            paddingLeft,
+            padding,
+            paddingRight,
+            paddingTop,
+            pushItemsToEnds,
+            shadow,
+            shape,
+            showOnlyOnDesktop,
+            showOnlyOnMobile,
+            showOnlyOnTabletLandscape,
+            showOnlyOnTabletPortrait,
+            size,
+            strokeColor,
+            strokeColour,
+            textColor,
+            textColour,
+            verticalMargin,
+            verticalPadding,
+            verticallyCenterItems,
+            verticallyCentreItems,
+            weight,
+            ...minimalProps
+        } = props;
 
-        const { className : _, classNames : __, ...sanitizedProps } = props;
+        const {className : _, classNames : __, ...sanitizedProps} = props;
 
         return (
             <Component
@@ -142,4 +142,4 @@ export const Element = React.forwardRef(
             />
         );
     },
-) as <K extends {}>(props: ElementProps<K> & { ref?: React.LegacyRef<HTMLElement> }) => React.ReactElement;
+) as <K extends {}>(props : ElementProps<K> & { ref? : React.LegacyRef<HTMLElement> }) => React.ReactElement;

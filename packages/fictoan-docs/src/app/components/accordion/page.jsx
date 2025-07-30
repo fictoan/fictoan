@@ -10,7 +10,7 @@ export const metadata = {
         siteName    : "Fictoan UI",
         images      : [
             {
-                url    : "https://fictoan.io/components/option-card/opengraph-image",
+                url    : "https://fictoan.io/components/accordion/opengraph-image",
                 width  : 1200,
                 height : 630,
                 alt    : "Accordion component — Fictoan UI",
@@ -23,7 +23,7 @@ export const metadata = {
         card        : "summary_large_image",
         title       : "Accordion component — Fictoan UI",
         description : "A simple click-to-toggle component to expand and collapse content inside",
-        images      : ["https://fictoan.io/components/option-card/opengraph-image"],
+        images      : ["https://fictoan.io/components/accordion/opengraph-image"],
     },
 };
 

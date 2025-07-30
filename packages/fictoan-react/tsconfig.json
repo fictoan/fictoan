@@ -58,6 +58,9 @@
             "$types/*"      : [
                 "./src/types/*"
             ],
+            "$typography/*"      : [
+                "./src/components/Typography/*"
+            ],
             "$utils/*"      : [
                 "./src/utils/*"
             ]

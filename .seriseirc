@@ -6,7 +6,7 @@ HEADER_CHAR = =
 # Use quotes to match the exact package name
 // REACT CORE = "react", "react-router-dom", "next/", tanstack, tauri, "react-use", dnd-kit, react-dom
 // UI = "fictoan-react", framer
-// LOCAL COMPONENTS = components/, Page, Element, $tags, $element,
+// LOCAL COMPONENTS = components/, Page
 // CONFIGS = configs/,
 // STATE MANAGEMENT = zustand, store/
 // LIB = lib/
@@ -14,6 +14,8 @@ HEADER_CHAR = =
 // UTILS = utils/,
 // ASSETS = assets
 // TEMPLATES = templates/
+// ELEMENT = Element, $element, Element/
+// TYPOGRAPHY = typography/
 // TYPES = types, typings, "CommonAndHTMLProps", "SpacingTypes"
 // SERVICES = services/
 // STYLES = .css, styles/
