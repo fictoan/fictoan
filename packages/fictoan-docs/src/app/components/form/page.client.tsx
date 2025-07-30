@@ -1,52 +1,20 @@
 "use client";
 
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useState } from "react";
-import { FormEvent, FormEventHandler, ChangeEvent } from "react";
 
-// FICTOAN =============================================================================================================
-import {
-    Element,
-    Div,
-    Heading1,
-    Heading2,
-    Heading3,
-    Heading4,
-    Heading5,
-    Heading6,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Card,
-    Form,
-    Header,
-    RadioTabGroup,
-    InputField,
-    ToastItem,
-    ToastsWrapper,
-    Button,
-    Range,
-    FormItemGroup,
-    Checkbox,
-    CodeBlock,
-    Select,
-    RadioButton,
-    Switch,
-    ListBox, RadioGroup, TextArea, CheckboxGroup, SwitchGroup,
-} from "fictoan-react";
-
-// COMPONENTS ==========================================================================================================
-import { SampleForm } from "@/app/components/form/SampleForm";
+// UI ==================================================================================================================
+import { Div, Heading1, Divider, Portion, Row, Text, Article, Card, Form, Header, RadioTabGroup, Checkbox, CodeBlock } from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./page-form.css";
 
+// OTHER ===============================================================================================================
+import { SampleForm } from "./SampleForm";
+
 const FormDocs = () => {
-    // CONFIGURATOR STATE =============================================================================================
-    const [ selectedSpacing, setSelectedSpacing ]     = useState("small");
-    const [ isJoint, setIsJoint ]                     = useState(false);
+    const [ selectedSpacing, setSelectedSpacing ] = useState("small");
+    const [ isJoint, setIsJoint ] = useState(false);
     const [ isButtonFullWidth, setIsButtonFullWidth ] = useState(false);
 
     return (
@@ -111,14 +79,14 @@ const FormDocs = () => {
                                         label="Spacing"
                                         name="spacing"
                                         options={[
-                                            { id : "spacing-opt-0", value : "none", label : "none" },
-                                            { id : "spacing-opt-1", value : "nano", label : "nano" },
-                                            { id : "spacing-opt-2", value : "micro", label : "micro" },
-                                            { id : "spacing-opt-3", value : "tiny", label : "tiny" },
-                                            { id : "spacing-opt-4", value : "small", label : "small" },
-                                            { id : "spacing-opt-5", value : "medium", label : "medium" },
-                                            { id : "spacing-opt-6", value : "large", label : "large" },
-                                            { id : "spacing-opt-7", value : "huge", label : "huge" },
+                                            {id : "spacing-opt-0", value : "none", label : "none"},
+                                            {id : "spacing-opt-1", value : "nano", label : "nano"},
+                                            {id : "spacing-opt-2", value : "micro", label : "micro"},
+                                            {id : "spacing-opt-3", value : "tiny", label : "tiny"},
+                                            {id : "spacing-opt-4", value : "small", label : "small"},
+                                            {id : "spacing-opt-5", value : "medium", label : "medium"},
+                                            {id : "spacing-opt-6", value : "large", label : "large"},
+                                            {id : "spacing-opt-7", value : "huge", label : "huge"},
                                         ]}
                                         value={selectedSpacing}
                                         onChange={(value) => setSelectedSpacing(value)}

@@ -1,37 +1,17 @@
 "use client";
 
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { FormEvent, useState } from "react";
 
-// FICTOAN =============================================================================================================
-import {
-    Button,
-    Card,
-    Checkbox,
-    CheckboxGroup,
-    CodeBlock, Divider, FileUpload, Footer,
-    Form,
-    FormItemGroup,
-    InputField,
-    ListBox,
-    Portion,
-    RadioGroup,
-    RadioTabGroup,
-    Range,
-    Row,
-    Select,
-    Switch,
-    SwitchGroup,
-    Text,
-    TextArea,
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Button, Card, Checkbox, CheckboxGroup, CodeBlock, Divider, FileUpload, Footer, Form, FormItemGroup, InputField, ListBox, Portion, RadioGroup, RadioTabGroup, Range, Row, Select, Switch, SwitchGroup, Text, TextArea } from "fictoan-react";
 
 // OTHER ===============================================================================================================
 import EyeClosedIcon from "../../../assets/icons/eye-closed.svg";
 import EyeOpenIcon from "../../../assets/icons/eye-open.svg";
 
+// @ts-ignore
 export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
-    // FORM STATE ====================================================================================================
     const [ formData, setFormData ] = useState({
         // Text inputs
         firstName   : "",
@@ -75,7 +55,6 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
 
     const [showPassword, setShowPassword] = useState(false);
 
-    // FORM HANDLERS ===================================================================================================
     const handleInputChange = (name: string) => (
         valueOrEvent: string | string[] | React.ChangeEvent<HTMLInputElement>,
     ) => {

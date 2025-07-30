@@ -10,7 +10,7 @@ export const metadata = {
         siteName    : "Fictoan UI",
         images      : [
             {
-                url    : "https://fictoan.s3.ap-south-1.amazonaws.com/open-graph/badge-fictoan-og.png",
+                url    : "https://fictoan.io/components/badge/opengraph-image",
                 width  : 1200,
                 height : 630,
                 alt    : "Badge component — Fictoan UI",
@@ -23,7 +23,7 @@ export const metadata = {
         card        : "summary_large_image",
         title       : "Badge component — Fictoan UI",
         description : "An inline-element to highlight information",
-        images      : ["https://fictoan.s3.ap-south-1.amazonaws.com/open-graph/badge-fictoan-og.png"],
+        images      : ["https://fictoan.io/components/badge/opengraph-image"],
     },
 };
 

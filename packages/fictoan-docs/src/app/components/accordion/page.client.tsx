@@ -50,10 +50,16 @@ const AccordionDocs : React.FC = () => {
             <Section>
                 <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                     <Portion>
-                        <Heading1>Accordion</Heading1>
-                        <Text size="large" marginBottom="small">
+                        <Heading1 id="component-name">
+                            Accordion
+                        </Heading1>
+
+                        <Heading4
+                            id="component-description"
+                            weight="400" marginBottom="small"
+                        >
                             A simple click to expand/collapse block element.
-                        </Text>
+                        </Heading4>
                     </Portion>
 
                     <Portion>

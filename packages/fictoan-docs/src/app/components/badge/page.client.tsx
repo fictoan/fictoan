@@ -1,38 +1,26 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Div,
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Badge,
-    Section,
-} from "fictoan-react";
-
-// STYLES ==============================================================================================================
-import "./page-badge.css";
-import "../../../styles/fictoan-theme.css";
-
-// HOOKS ===============================================================================================================
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
-import { createThemeConfigurator } from "../../../utils/themeConfigurator";
+// UI ==================================================================================================================
+import { Div, Heading1, Heading4, Divider, Portion, Row, Text, Article, Badge, Section } from "fictoan-react";
 
 // UTILS ===============================================================================================================
+import { createPropsConfigurator } from "$utils/propsConfigurator";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
+
+// STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
+import "./page-badge.css";
+
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
 
 const BadgeDocs = () => {
-    // PROPS CONFIG ====================================================================================================
     const {
         propsConfigurator,
-        componentProps: propsConfig,
+        componentProps : propsConfig,
     } = createPropsConfigurator(
         "Badge", [
             "strings",
@@ -41,23 +29,23 @@ const BadgeDocs = () => {
             "bgColour",
             "borderColour",
             "textColour",
-            "withDelete"
+            "withDelete",
         ],
         colourOptions,
         {
-            isSelfClosing : false,
+            isSelfClosing   : false,
             canHaveChildren : true,
-        }
+            defaultChildren : "Badge",
+        },
     );
 
-    // THEME CONFIG ====================================================================================================
-    const BadgeComponent = (varName) => {
+    const BadgeComponent = (varName : string) => {
         return varName.startsWith("badge-");
     };
 
     const {
         interactiveElementRef,
-        componentProps: themeConfig,
+        componentProps : themeConfig,
         themeConfigurator,
     } = createThemeConfigurator("Badge", BadgeComponent);
 
@@ -67,10 +55,16 @@ const BadgeDocs = () => {
             <Section>
                 <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                     <Portion>
-                        <Heading1>Badge</Heading1>
-                        <Text size="large" marginBottom="small">
-                            The badge is a small inline element that can be used to highlight a piece of information.
-                        </Text>
+                        <Heading1 id="component-name">
+                            Badge
+                        </Heading1>
+
+                        <Heading4
+                            id="component-description"
+                            weight="400" marginBottom="small"
+                        >
+                            A small inline element that can be used to highlight a piece of information.
+                        </Heading4>
                     </Portion>
 
                     <Portion>
@@ -97,7 +91,6 @@ const BadgeDocs = () => {
                             data-centered-children
                         >
                             <Badge
-                                id="interactive-component"
                                 ref={interactiveElementRef}
                                 {...propsConfig}
                                 {...themeConfig}

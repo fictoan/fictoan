@@ -424,13 +424,13 @@ async function generateSingleComponentPage(
     try {
         await mkdir(componentDir, {recursive : true});
 
-        // Generate page.jsx (metadata)
+        // Generate page.tsx (metadata)
         const pageContent = generatePageFile(doc);
-        await writeFile(join(componentDir, "page.jsx"), pageContent);
+        await writeFile(join(componentDir, "page.tsx"), pageContent);
 
-        // Generate page.client.jsx (main component)
+        // Generate page.client.tsx (main component)
         const clientContent = generateClientPageFile(doc, includeConfig);
-        await writeFile(join(componentDir, "page.client.jsx"), clientContent);
+        await writeFile(join(componentDir, "page.client.tsx"), clientContent);
 
         // Generate CSS file
         const cssContent = generateCSSFile(doc);
@@ -509,10 +509,8 @@ function generateClientPageFile(doc : ComponentDocumentation, includeConfig : bo
 
     let imports = `"use client";
 
-// EXTERNAL DEPS =======================================================================================================
 import React from "react";
 
-// INTERNAL DEPS =======================================================================================================
 import {
     Div,
     Heading1,
@@ -526,11 +524,9 @@ import {
     Section,
 } from "fictoan-react";
 
-// STYLES ==============================================================================================================
 import "./page-${kebabName}.css";
 import "../../../styles/fictoan-theme.css";
 
-// HOOKS ===============================================================================================================
 import { createPropsConfigurator } from "../../../utils/propsConfigurator";
 import { createThemeConfigurator } from "../../../utils/themeConfigurator";`;
 
@@ -538,14 +534,12 @@ import { createThemeConfigurator } from "../../../utils/themeConfigurator";`;
         "borderColour")) {
         imports += `
 
-// UTILS ===============================================================================================================
 import { colourOptions } from "../../colour/colours";`;
     }
 
     let content = `${imports}
 
 const ${doc.name}Docs = () => {
-    // PROPS CONFIG ====================================================================================================
     const {
         propsConfigurator,
         componentProps: propsConfig,
@@ -570,7 +564,6 @@ const ${doc.name}Docs = () => {
         }
     );
 
-    // THEME CONFIG ====================================================================================================
     const ${doc.name}Component = (varName) => {
         return varName.startsWith("${kebabName}-");
     };

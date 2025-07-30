@@ -2,41 +2,115 @@
 import { ImageResponse } from "next/og";
 
 interface OGImageOptions {
-    componentName   : string;
-    description     : string;
-    type          ? : "root" | "component";
+        componentName   : string;
+        description     : string;
+        type          ? : "root" | "component";
 }
 
-export async function extractComponentMetadata(request: Request): Promise<{ componentName: string; description: string }> {
-    const url = new URL(request.url);
-    const segments = url.pathname.split('/');
-    const componentPath = segments[segments.indexOf('components') + 1];
-    
-    if (!componentPath) {
-        throw new Error('Invalid component path');
-    }
-    
+export async function extractComponentMetadataFromClient(componentPath : string) : Promise<{
+    componentName : string; description : string
+}> {
     try {
-        const { metadata } = await import(`../app/components/${componentPath}/page.jsx`);
+        // Read the component source file directly and extract text content
+        const fs = await import('fs');
+        const path = await import('path');
         
-        if (!metadata) {
-            throw new Error('No metadata found in page');
+        let filePath;
+        let fileContent;
+        
+        try {
+            filePath = path.resolve(`src/app/components/${componentPath}/page.client.tsx`);
+            fileContent = await fs.promises.readFile(filePath, 'utf-8');
+        } catch {
+            try {
+                filePath = path.resolve(`src/app/components/${componentPath}/page.client.jsx`);
+                fileContent = await fs.promises.readFile(filePath, 'utf-8');
+            } catch {
+                throw new Error(`Could not find client component file for ${componentPath}`);
+            }
         }
-        
-        const titleMatch = metadata.title?.match(/^(.+?) component — Fictoan UI$/);
-        const componentName = titleMatch ? titleMatch[1] : componentPath.charAt(0).toUpperCase() + componentPath.slice(1);
-        const description = metadata.description || 'A Fictoan UI component';
-        
-        return { componentName, description };
+
+        // Extract component name from id="component-name" element in source
+        const componentNameMatch = fileContent.match(/id="component-name"[^>]*>\s*([^<]+?)\s*</);
+        // Extract description from id="component-description" element in source (handle multiline)
+        const componentDescriptionMatch = fileContent.match(/id="component-description"[^>]*>([\s\S]*?)<\//);
+
+        const componentName = componentNameMatch ?
+            componentNameMatch[1].trim() :
+            componentPath.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+        const description = componentDescriptionMatch ?
+            componentDescriptionMatch[1].replace(/\s+/g, " ").trim() :
+            "A UI component for modern web applications";
+
+        return {componentName, description};
     } catch (error) {
+        // Fallback to path-based naming
         const fallbackName = componentPath
-            .split('-')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ');
-        
+        .split("-")
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+
         return {
-            componentName: fallbackName,
-            description: 'A UI component for modern web applications'
+            componentName : fallbackName,
+            description   : "A UI component for modern web applications",
+        };
+    }
+}
+
+export async function extractComponentMetadata(request : Request) : Promise<{
+    componentName : string; description : string
+}> {
+    const url = new URL(request.url);
+    const segments = url.pathname.split("/");
+    const componentPath = segments[segments.indexOf("components") + 1];
+
+    if (!componentPath) {
+        throw new Error("Invalid component path");
+    }
+
+    try {
+        // Read the component source file directly and extract text content
+        const fs = await import('fs');
+        const path = await import('path');
+        
+        let filePath;
+        let fileContent;
+        
+        try {
+            filePath = path.resolve(`src/app/components/${componentPath}/page.client.tsx`);
+            fileContent = await fs.promises.readFile(filePath, 'utf-8');
+        } catch {
+            try {
+                filePath = path.resolve(`src/app/components/${componentPath}/page.client.jsx`);
+                fileContent = await fs.promises.readFile(filePath, 'utf-8');
+            } catch {
+                throw new Error(`Could not find client component file for ${componentPath}`);
+            }
+        }
+
+        // Extract component name from id="component-name" element in source
+        const componentNameMatch = fileContent.match(/id="component-name"[^>]*>\s*([^<]+?)\s*</);
+        // Extract description from id="component-description" element in source (handle multiline)
+        const componentDescriptionMatch = fileContent.match(/id="component-description"[^>]*>([\s\S]*?)<\//);
+
+        const componentName = componentNameMatch ?
+            componentNameMatch[1].trim() :
+            componentPath.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+        const description = componentDescriptionMatch ?
+            componentDescriptionMatch[1].replace(/\s+/g, " ").trim() :
+            "A UI component for modern web applications";
+
+        return {componentName, description};
+    } catch (error) {
+        // Fallback to path-based naming
+        const fallbackName = componentPath
+        .split("-")
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+
+        return {
+            componentName : fallbackName,
+            description   : "A UI component for modern web applications",
         };
     }
 }
