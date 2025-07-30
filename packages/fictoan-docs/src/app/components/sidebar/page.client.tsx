@@ -5,16 +5,16 @@ import Link from "next/link";
 import React, { useState } from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading4, Heading6, Divider, Portion, Row, Text, Article, Card, Form, Header, RadioTabGroup, Select, ToastItem, ToastsWrapper, Button, Range, SidebarWrapper, SidebarHeader, SidebarItem, SidebarFooter, CodeBlock, Section, Div, Footer } from "fictoan-react";
+import { Element, Heading1, Heading4, Heading6, Divider, Portion, Row, Text, Article, Card, Header, Select, Range, SidebarWrapper, SidebarHeader, SidebarItem, SidebarFooter, CodeBlock, Section, Div, Footer } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { useThemeVariables } from "$utils/useThemeVariables";
 
 // ASSETS ==============================================================================================================
-import FictoanIcon from "$assets/images/fictoan-icon.svg";
-import FictoanLogo from "$assets/images/fictoan-logo.svg";
-import HomeIcon from "$assets/icons/home.svg";
-import ThemeSwitchIcon from "$assets/icons/theme.svg";
+import FictoanIcon from "../../../assets/images/fictoan-icon.svg";
+import FictoanLogo from "../../../assets/images/fictoan-logo.svg";
+import HomeIcon from "../../../assets/icons/home.svg";
+import ThemeSwitchIcon from "../../../assets/icons/theme.svg";
 
 // STYLES ==============================================================================================================
 import "./page-sidebar.css";
