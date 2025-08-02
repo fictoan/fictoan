@@ -7,7 +7,6 @@ import React from "react";
 import { Div, Heading4, Divider, Portion, Row, Article, Badge, Section, Heading6 } from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { createPropsConfigurator } from "$utils/propsConfigurator";
 import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
@@ -15,29 +14,11 @@ import "../../../styles/fictoan-theme.css";
 import "./page-badge.css";
 
 // OTHER ===============================================================================================================
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 import { colourOptions } from "../../colour/colours";
 
 const BadgeDocs = () => {
-    const {
-        propsConfigurator,
-        componentProps : propsConfig,
-    } = createPropsConfigurator(
-        "Badge", [
-            "strings",
-            "size",
-            "shape",
-            "bgColour",
-            "borderColour",
-            "textColour",
-            "withDelete",
-        ],
-        colourOptions,
-        {
-            isSelfClosing   : false,
-            canHaveChildren : true,
-            defaultChildren : null,
-        },
-    );
+    const [props, setProps] = React.useState({});
 
     const BadgeComponent = (varName : string) => {
         return varName.startsWith("badge-");
@@ -91,10 +72,10 @@ const BadgeDocs = () => {
                         >
                             <Badge
                                 ref={interactiveElementRef}
-                                {...propsConfig}
+                                {...props}
                                 {...themeConfig}
                             >
-                                {propsConfig.content}
+                                {props.label || 'Badge'}
                             </Badge>
                         </Div>
                     </Portion>
@@ -103,7 +84,7 @@ const BadgeDocs = () => {
                 <Row horizontalPadding="small">
                     {/* PROPS CONFIGURATOR ========================================================================= */}
                     <Portion desktopSpan="half">
-                        {propsConfigurator()}
+                        <PropsConfigurator componentName="Badge" onPropsChange={setProps} />
                     </Portion>
 
                     {/* THEME CONFIGURATOR ========================================================================= */}
