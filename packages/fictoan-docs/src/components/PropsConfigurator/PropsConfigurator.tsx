@@ -283,7 +283,12 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
                 </Callout>
             )}
 
-            <CodeBlock language="tsx" marginBottom="micro">
+            <CodeBlock
+                language="tsx"
+                withSyntaxHighlighting
+                showCopyButton
+                marginBottom="micro"
+            >
                 {generateCodeString()}
             </CodeBlock>
 
