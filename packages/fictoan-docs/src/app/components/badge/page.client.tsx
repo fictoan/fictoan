@@ -15,10 +15,9 @@ import "./page-badge.css";
 
 // OTHER ===============================================================================================================
 import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
-import { colourOptions } from "../../colour/colours";
 
 const BadgeDocs = () => {
-    const [props, setProps] = React.useState({});
+    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
 
     const BadgeComponent = (varName : string) => {
         return varName.startsWith("badge-");
@@ -75,7 +74,7 @@ const BadgeDocs = () => {
                                 {...props}
                                 {...themeConfig}
                             >
-                                {props.label || 'Badge'}
+                                {props.label || "Badge"}
                             </Badge>
                         </Div>
                     </Portion>

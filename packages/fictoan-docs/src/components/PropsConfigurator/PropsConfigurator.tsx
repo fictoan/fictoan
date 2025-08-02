@@ -47,15 +47,22 @@ interface EnhancementOption {
 }
 
 interface PropEnhancement {
-    label   ? : string;
-    control ? : string;
-    group   ? : string;
-    hidden  ? : boolean;
-    options ? : EnhancementOption[];
+    label               ? : string;
+    control             ? : string;
+    group               ? : string;
+    hidden              ? : boolean;
+    options             ? : EnhancementOption[];
+    alwaysIncludeInCode ? : boolean;
+    codeValue           ? : string;
 }
 
 interface Enhancements {
     [key : string] : PropEnhancement;
+}
+
+interface ComponentTemplate {
+    hasChildren     ? : boolean;
+    childrenContent ? : string;
 }
 
 interface PropsConfiguratorProps {
@@ -86,13 +93,19 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
     const componentMetadata : ComponentMetadata = (metadata as any)[componentName];
     const [ props, setProps ] = useState<{ [key : string] : any }>(getInitialProps(componentMetadata));
     const [ enhancements, setEnhancements ] = useState<Enhancements | null>(null);
+    const [ componentTemplate, setComponentTemplate ] = useState<ComponentTemplate | null>(null);
     const [ staleEnhancements, setStaleEnhancements ] = useState<string[]>([]);
 
     useEffect(() => {
         const importEnhancements = async () => {
             try {
-                const {enhancements : importedEnhancements} = await import(`../../app/components/${componentName.toLowerCase()}/props.enhancements.ts`);
+                const {
+                    enhancements: importedEnhancements,
+                    componentTemplate: importedTemplate
+                } = await import(`../../app/components/${componentName.toLowerCase()}/props.enhancements.ts`);
+                
                 setEnhancements(importedEnhancements);
+                setComponentTemplate(importedTemplate || null);
 
                 const metadataProps = Object.keys(componentMetadata.props);
                 const enhancementProps = Object.keys(importedEnhancements);
@@ -119,18 +132,41 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
     };
 
     const generateCodeString = () => {
-        const propsString = Object.entries(props)
+        const configuredProps = Object.entries(props)
             .map(([ key, value ]) => {
-                if (typeof value === "boolean" && value) {
+                // Only show boolean props when they're true
+                if (typeof value === "boolean" && value === true) {
                     return `    ${key}`;
                 }
+                // Only show string props when they have a value
                 if (typeof value === "string" && value) {
                     return `    ${key}="${value}"`;
                 }
                 return null;
             })
-            .filter(Boolean)
-            .join("\n");
+            .filter(Boolean);
+
+        // Add props that should always be included in code from enhancements
+        const alwaysIncludeProps = enhancements ? 
+            Object.entries(enhancements)
+                .filter(([ key, enhancement ]) => enhancement.alwaysIncludeInCode)
+                .map(([ key, enhancement ]) => {
+                    if (enhancement.codeValue) {
+                        return `    ${key}=${enhancement.codeValue}`;
+                    }
+                    return `    ${key}`;
+                })
+            : [];
+
+        const allProps = [...configuredProps, ...alwaysIncludeProps];
+        const propsString = allProps.join("\n");
+
+        // Handle children content from componentTemplate
+        if (componentTemplate?.hasChildren) {
+            const childrenContent = componentTemplate.childrenContent || "Component content";
+            const indentedChildren = `    ${childrenContent}`;
+            return `<${componentName}\n${propsString}\n>\n${indentedChildren}\n</${componentName}>`;
+        }
 
         return `<${componentName}\n${propsString}\n/>`;
     };

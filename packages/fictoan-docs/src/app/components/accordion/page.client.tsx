@@ -4,35 +4,20 @@
 import React from "react";
 
 // UI ==================================================================================================================
-import { Article, Section, Div, Heading1, Heading4, Divider, Row, Portion, Text, Accordion } from "fictoan-react";
+import { Article, Section, Div, Heading4, Heading6, Divider, Row, Portion, Text, Accordion } from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { createPropsConfigurator } from "$utils/propsConfigurator";
 import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
-import "$styles/fictoan-theme.css";
+import "../../../styles/fictoan-theme.css";
 import "./page-accordion.css";
 
 // OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 
-const AccordionDocs : React.FC = () => {
-    const {
-        propsConfigurator,
-        componentProps : propsConfig,
-    } = createPropsConfigurator(
-        "Accordion", [
-            "summary",
-            "isFullWidth",
-        ],
-        colourOptions,
-        {
-            canHaveChildren : true,
-            isSelfClosing   : false,
-            defaultChildren : null,
-        },
-    );
+const AccordionDocs = () => {
+    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
 
     const AccordionComponent = (varName : string) : boolean => {
         return varName.startsWith("accordion-");
@@ -45,7 +30,7 @@ const AccordionDocs : React.FC = () => {
     } = createThemeConfigurator("Accordion", AccordionComponent);
 
     return (
-        <Article id="page-toast">
+        <Article id="page-accordion">
             {/*  INTRO ///////////////////////////////////////////////////////////////////////////////////////////// */}
             <Section>
                 <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
@@ -54,12 +39,12 @@ const AccordionDocs : React.FC = () => {
                             Accordion
                         </Heading4>
 
-                        <Heading4
+                        <Heading6
                             id="component-description"
                             weight="400" marginBottom="small"
                         >
                             A simple click to expand/collapse block element.
-                        </Heading4>
+                        </Heading6>
                     </Portion>
 
                     <Portion>
@@ -90,12 +75,11 @@ const AccordionDocs : React.FC = () => {
                         >
                             <Accordion
                                 ref={interactiveElementRef}
-                                {...propsConfig}
+                                {...props}
                                 {...themeConfig}
                                 summary={<Text>Click me</Text>}
                             >
-                                <Text>Accordion content</Text>
-                                {propsConfig.content}
+                                {props.label || "Accordion"}
                             </Accordion>
                         </Div>
                     </Portion>
@@ -104,7 +88,7 @@ const AccordionDocs : React.FC = () => {
                 <Row horizontalPadding="small">
                     {/* PROPS CONFIGURATOR ========================================================================= */}
                     <Portion desktopSpan="half">
-                        {propsConfigurator()}
+                        <PropsConfigurator componentName="Accordion" onPropsChange={setProps} />
                     </Portion>
 
                     {/* THEME CONFIGURATOR ========================================================================= */}

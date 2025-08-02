@@ -5,10 +5,9 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading4, Divider, Portion, Row, Text, Article, Badge, Breadcrumbs, Div, Section } from "fictoan-react";
+import { Element, Heading4, Heading6, Divider, Portion, Row, Text, Article, Badge, Breadcrumbs, Div, Section } from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { createPropsConfigurator } from "$utils/propsConfigurator";
 import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
@@ -16,28 +15,11 @@ import "../../../styles/fictoan-theme.css";
 import "./page-breadcrumbs.css";
 
 // OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 
 const BreadcrumbsDocs = () => {
     const [showCurrentPageMessage, setShowCurrentPageMessage] = useState(false);
-
-    // PROPS CONFIGURATOR //////////////////////////////////////////////////////////////////////////////////////////////
-    const {
-        propsConfigurator,
-        componentProps : propsConfig,
-    } = createPropsConfigurator(
-        "Breadcrumbs",
-        ["separator", "spacing"],
-        colourOptions,
-        {
-            isSelfClosing   : false,
-            canHaveChildren : true,
-            // @ts-ignore
-            defaultChildren : `    <Link href="/">Home</Link>
-    <Link href="/components">Components</Link>
-    <Link href="/components/breadcrumbs">Breadcrumbs</Link>`,
-        },
-    );
+    const [props, setProps] = React.useState<{ [key: string]: any }>({});
 
     useEffect(() => {
         let timer: NodeJS.Timeout | undefined;
@@ -71,12 +53,12 @@ const BreadcrumbsDocs = () => {
                         Breadcrumbs
                     </Heading4>
 
-                    <Heading4
+                    <Heading6
                         id="component-description"
                         weight="400" marginBottom="small"
                     >
-                        A set of links to show the current page’s hierarchy
-                    </Heading4>
+                        A set of links to show the current page's hierarchy
+                    </Heading6>
                 </Portion>
 
                 <Portion>
@@ -102,7 +84,7 @@ const BreadcrumbsDocs = () => {
 
                             <Breadcrumbs
                                 ref={interactiveElementRef}
-                                {...propsConfig}
+                                {...props}
                                 {...themeConfig}
                             >
                                 <Link href="/">Home</Link>
@@ -121,7 +103,7 @@ const BreadcrumbsDocs = () => {
                 <Row horizontalPadding="small">
                     {/* PROPS CONFIGURATOR ========================================================================= */}
                     <Portion desktopSpan="half">
-                        {propsConfigurator()}
+                        <PropsConfigurator componentName="Breadcrumbs" onPropsChange={setProps} />
                     </Portion>
 
                     {/* THEME CONFIGURATOR ========================================================================= */}
