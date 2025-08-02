@@ -50,9 +50,9 @@ const AccordionDocs : React.FC = () => {
             <Section>
                 <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                     <Portion>
-                        <Heading1 id="component-name">
+                        <Heading4 id="component-name">
                             Accordion
-                        </Heading1>
+                        </Heading4>
 
                         <Heading4
                             id="component-description"
@@ -63,7 +63,6 @@ const AccordionDocs : React.FC = () => {
                     </Portion>
 
                     <Portion>
-                        <Heading4 marginBottom="micro">Characteristics</Heading4>
                         <ul>
                             <li>
                                 The <code>summary</code> accepts any React node as a child. Feel free to style it

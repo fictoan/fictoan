@@ -61,7 +61,7 @@ const DrawerDocs : React.FC = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <ul>
                         <li>Accepts any React node as children</li>
                         <li>

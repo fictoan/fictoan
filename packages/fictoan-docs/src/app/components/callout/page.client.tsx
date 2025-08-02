@@ -1,35 +1,23 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Div,
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Callout,
-    Section,
-} from "fictoan-react";
-
-// STYLES ==============================================================================================================
-import "./page-callout.css";
-import "../../../styles/fictoan-theme.css";
-
-// HOOKS ===============================================================================================================
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
-import { createThemeConfigurator } from "../../../utils/themeConfigurator";
+// UI ==================================================================================================================
+import { Div, Heading1, Heading4, Divider, Portion, Row, Text, Article, Callout, Section } from "fictoan-react";
 
 // UTILS ===============================================================================================================
+import { createPropsConfigurator } from "$utils/propsConfigurator";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
+
+// STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
+import "./page-callout.css";
+
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
 
 const CalloutDocs = () => {
-    // PROPS CONFIG ====================================================================================================
     const {
         propsConfigurator,
         componentProps: propsConfig,
@@ -45,8 +33,7 @@ const CalloutDocs = () => {
         }
     );
 
-    // THEME CONFIG ====================================================================================================
-    const CalloutComponent = (varName) => {
+    const CalloutComponent = (varName: string) => {
         return varName.startsWith("callout-");
     };
 
@@ -70,7 +57,7 @@ const CalloutDocs = () => {
                     </Portion>
 
                     <Portion>
-                        <Heading4 marginBottom="micro">Characteristics</Heading4>
+                        
                         <ul>
                             <li>Accepts any React node as a child</li>
                         </ul>

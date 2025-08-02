@@ -78,7 +78,7 @@ To implement this for a component page:
 
 ```jsx
 // Import the configurator creator
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
+import { createPropsConfigurator } from "$utils/propsConfigurator";
 import { colourOptions } from "../../colour/colours";
 
 // Inside your component

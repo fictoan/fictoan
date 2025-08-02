@@ -165,7 +165,7 @@ const RadioTabGroupDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <ul>
                         <li>Each option takes the width of the longest option</li>
                     </ul>

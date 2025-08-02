@@ -99,8 +99,8 @@ Here's a full implementation example from the Badge component:
 ```jsx
 import React from "react";
 import { Badge, Portion, Row } from "fictoan-react";
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
-import { createThemeConfigurator } from "../../../utils/themeConfigurator";
+import { createPropsConfigurator } from "$utils/propsConfigurator";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
 import { colourOptions } from "../../colour/colours";
 
 const BadgeDocs = () => {

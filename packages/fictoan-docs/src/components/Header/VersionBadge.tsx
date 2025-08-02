@@ -1,4 +1,7 @@
+// REACT CORE ==========================================================================================================
 import React, { useState, useEffect } from "react";
+
+// UI ==================================================================================================================
 import { Text } from "fictoan-react";
 
 export const VersionBadge = () => {
@@ -13,7 +16,6 @@ export const VersionBadge = () => {
                 setVersion(data.version);
             } catch (error) {
                 console.error("Error fetching version:", error);
-                // setVersion("v1.8.4"); // Fallback to current version
             } finally {
                 setIsLoading(false);
             }

@@ -1,48 +1,61 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
-import React, { useState, useEffect, useRef } from "react";
+// REACT CORE ==========================================================================================================
 import Link from "next/link";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import Fuse from "fuse.js";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Badge,
-    Div,
-    Header,
-    Heading5,
-    Text,
-    InputField,
-    Card,
-    CodeBlock,
-    Element,
-    Modal,
-    showModal,
-    hideModal,
-} from "fictoan-react";
-
-// STYLES ==============================================================================================================
-import "./search-bar.css";
+// UI ==================================================================================================================
+import { Badge, Div, Header, Text, InputField, Card, CodeBlock, Element, Modal, showModal, hideModal } from "fictoan-react";
 
 // ASSETS ==============================================================================================================
 import SearchIcon from "../../../assets/icons/search.svg";
 
-// DATA ================================================================================================================
+// STYLES ==============================================================================================================
+import "./search-bar.css";
+
+// OTHER ===============================================================================================================
+import Fuse from "fuse.js";
 import { generateSearchIndex, searchConfig } from "./searchIndex";
+
+interface SearchResult {
+    title         : string;
+    description ? : string;
+    type          : string;
+    path          : string;
+    icon        ? : React.ComponentType;
+    value       ? : string;
+}
+
+interface ComponentResultProps {
+    result     : SearchResult;
+    isSelected : boolean;
+    onClick    : () => void;
+}
+
+interface ThemeResultProps {
+    result     : SearchResult;
+    isSelected : boolean;
+    onClick    : () => void;
+}
+
+interface SearchResultItemProps {
+    result     : SearchResult;
+    isSelected : boolean;
+    onClick    : () => void;
+}
 
 export const SearchBar = () => {
     const router = useRouter();
 
     // SEARCH //////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const [searchTerm, setSearchTerm] = useState("");
-    const [results, setResults] = useState([]);
-    const [fuse, setFuse] = useState(null);
-    const searchInputRef = useRef(null);
-    const [selectedIndex, setSelectedIndex] = useState(-1);
-    const [copiedVariable, setCopiedVariable] = useState(null);
+    const [ searchTerm, setSearchTerm ] = useState("");
+    const [ results, setResults ] = useState<SearchResult[]>([]);
+    const [ fuse, setFuse ] = useState<any>(null);
+    const [ selectedIndex, setSelectedIndex ] = useState(-1);
+    const [ copiedVariable, setCopiedVariable ] = useState<string | null>(null);
+    const searchInputRef = useRef<HTMLInputElement>(null);
 
-    // Initialize search ===============================================================================================
     useEffect(() => {
         const initSearch = async () => {
             const searchContent = await generateSearchIndex();
@@ -54,22 +67,22 @@ export const SearchBar = () => {
     // Reset selected index when search term changes
     useEffect(() => {
         setSelectedIndex(-1);
-    }, [searchTerm]);
+    }, [ searchTerm ]);
 
-    const handleSearch = (value) => {
+    const handleSearch = (value : string) => {
         setSearchTerm(value);
         if (!value.trim() || !fuse) {
             setResults([]);
             return;
         }
         const searchResults = fuse.search(value);
-        setResults(searchResults.map(result => result.item));
+        setResults(searchResults.map((result : { item : SearchResult; }) => result.item));
     };
 
     // Create a flattened list of all results in display order
-    const orderedResults = ["component", "theme"].reduce((acc, type) => {
+    const orderedResults = [ "component", "theme" ].reduce<SearchResult[]>((acc, type) => {
         const groupResults = results.filter(result => result.type === type);
-        return [...acc, ...groupResults];
+        return [ ...acc, ...groupResults ];
     }, []);
 
     // Scroll selected item into view
@@ -77,15 +90,15 @@ export const SearchBar = () => {
         if (selectedIndex >= 0) {
             const selectedElement = document.querySelector(".search-result-item[data-selected=\"true\"]");
             if (selectedElement) {
-                selectedElement.scrollIntoView({ block : "nearest", behavior : "smooth" });
+                selectedElement.scrollIntoView({block : "nearest", behavior : "smooth"});
             }
         }
-    }, [selectedIndex]);
+    }, [ selectedIndex ]);
 
     // HANDLE KEYBOARD SHORTCUTS ///////////////////////////////////////////////////////////////////////////////////////
     // Open search modal when "/" is pressed
     useEffect(() => {
-        const handleKeyDown = (e) => {
+        const handleKeyDown = (e : KeyboardEvent) => {
             if (e.key === "/") {
                 e.preventDefault();
                 showModal("search-modal");
@@ -97,15 +110,15 @@ export const SearchBar = () => {
         return () => document.removeEventListener("keydown", handleKeyDown);
     }, []);
 
-    const handleSearchInputKeyDown = (e) => {
+    const handleSearchInputKeyDown = (e : React.KeyboardEvent<HTMLInputElement>) => {
         // Only handle keyboard events when we have results
         if (orderedResults.length === 0) return;
 
         switch (e.key) {
             case "ArrowDown":
                 e.preventDefault();
-                setSelectedIndex(prev => 
-                    prev < orderedResults.length - 1 ? prev + 1 : prev
+                setSelectedIndex(prev =>
+                    prev < orderedResults.length - 1 ? prev + 1 : prev,
                 );
                 break;
 
@@ -118,20 +131,20 @@ export const SearchBar = () => {
                 e.preventDefault();
                 if (selectedIndex >= 0) {
                     const selectedResult = orderedResults[selectedIndex];
-                    
+
                     if (selectedResult.type === "theme") {
                         // Copy theme variable to clipboard
                         const textToCopy = `${selectedResult.title}: ${selectedResult.value};`;
                         navigator.clipboard.writeText(textToCopy)
-                            .then(() => {
-                                setCopiedVariable(selectedResult.title);
-                                setTimeout(() => {
-                                    setCopiedVariable(null);
-                                }, 300000);
-                            })
-                            .catch(err => {
-                                console.error('Failed to copy text: ', err);
-                            });
+                        .then(() => {
+                            setCopiedVariable(selectedResult.title);
+                            setTimeout(() => {
+                                setCopiedVariable(null);
+                            }, 300000);
+                        })
+                        .catch(err => {
+                            console.error("Failed to copy text: ", err);
+                        });
                     } else {
                         // Handle component navigation as before
                         router.push(selectedResult.path);
@@ -150,8 +163,7 @@ export const SearchBar = () => {
     };
 
     // RESULT COMPONENTS ///////////////////////////////////////////////////////////////////////////////////////////////
-    // Component result ================================================================================================
-    const ComponentResult = ({ result, isSelected, onClick }) => (
+    const ComponentResult = ({result, isSelected, onClick} : ComponentResultProps) => (
         <Link href={result.path} onClick={onClick}>
             <Card
                 className={`result-card result-component ${isSelected ? "highlighted" : null}`}
@@ -168,8 +180,7 @@ export const SearchBar = () => {
         </Link>
     );
 
-    // Theme result ====================================================================================================
-    const ThemeResult = ({ result, isSelected, onClick }) => (
+    const ThemeResult = ({result, isSelected, onClick} : ThemeResultProps) => (
         <Card
             className={`result-card result-theme ${isSelected ? "highlighted" : null}`}
             padding="nano" shape="rounded"
@@ -186,8 +197,7 @@ export const SearchBar = () => {
         </Card>
     );
 
-    // Search result item ==============================================================================================
-    const SearchResultItem = ({ result, isSelected, onClick }) => {
+    const SearchResultItem = ({result, isSelected, onClick} : SearchResultItemProps) => {
         const ResultComponent = result.type === "component" ? ComponentResult : ThemeResult;
 
         return (
@@ -195,6 +205,7 @@ export const SearchBar = () => {
                 <ResultComponent
                     result={result}
                     isSelected={isSelected}
+                    onClick={onClick}
                 />
             </Div>
         );
@@ -217,7 +228,7 @@ export const SearchBar = () => {
                     className="search-input"
                     type="search"
                     value={searchTerm}
-                    onChange={(value) => handleSearch(value)}
+                    onChange={(value : string) => handleSearch(value)}
                     placeholder="Search components and variables"
                     onClick={() => showModal("search-modal")}
                 />
@@ -240,7 +251,7 @@ export const SearchBar = () => {
                             ref={searchInputRef}
                             value={searchTerm}
                             onKeyDown={handleSearchInputKeyDown}
-                            onChange={(value) => handleSearch(value)}
+                            onChange={(value : string) => handleSearch(value)}
                             placeholder="Search components and CSS variables"
                         />
                     </Header>
@@ -249,7 +260,7 @@ export const SearchBar = () => {
                         {results.length > 0 ? (
                             <>
                                 {/* Group results by type */}
-                                {["component", "theme"].map(type => {
+                                {[ "component", "theme" ].map(type => {
                                     const groupResults = results.filter(result => result.type === type);
                                     if (groupResults.length === 0) return null;
 

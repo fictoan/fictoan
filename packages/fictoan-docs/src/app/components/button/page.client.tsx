@@ -1,59 +1,47 @@
 "use client";
 
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useState } from "react";
 
-// FICTOAN =============================================================================================================
-import {
-    Element,
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Card,
-    Form,
-    Header,
-    Select,
-    Button,
-    Range,
-    CodeBlock,
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Element, Heading1, Heading4, Divider, Portion, Row, Text, Article, Card, Form, Header, Select, Button, Range, CodeBlock, Heading6 } from "fictoan-react";
+
+// UTILS ===============================================================================================================
+import { createPropsConfigurator } from "$utils/propsConfigurator";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
 import "./page-button.css";
 
 // OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
-import { createThemeConfigurator } from "../../../utils/themeConfigurator";
 
 const ButtonDocs = () => {
     // PROPS CONFIGURATOR ///////////////////////////////////////////////////////////////////////////////////////////////
     const {
         propsConfigurator,
-        componentProps: propsConfig,
+        componentProps : propsConfig,
     } = createPropsConfigurator(
-        "Button",
-        ["strings", "kind", "size", "shape", "shadow", "bgColour", "textColour", "borderColour", "isLoading"],
+        "Button", [
+            "strings", "kind", "size", "shape", "shadow", "bgColour", "textColour", "borderColour", "isLoading",
+        ],
         colourOptions,
         {
-            isSelfClosing: false,
-            canHaveChildren: true,
-            defaultChildren: "Button"
-        }
+            isSelfClosing   : false,
+            canHaveChildren : true,
+            // @ts-ignore
+            defaultChildren : "Button",
+        },
     );
 
     // THEME CONFIGURATOR //////////////////////////////////////////////////////////////////////////////////////////////
-    const ButtonComponent = (varName) => {
+    const ButtonComponent = (varName : string) => {
         return varName.startsWith("button-");
     };
-    
+
     const {
         interactiveElementRef,
-        componentProps: themeConfig,
+        componentProps : themeConfig,
         themeConfigurator,
     } = createThemeConfigurator("Button", ButtonComponent);
 
@@ -61,14 +49,20 @@ const ButtonDocs = () => {
         <Article id="page-component">
             <Row horizontalPadding="huge" marginTop="medium">
                 <Portion>
-                    <Heading1>Button</Heading1>
-                    <Text size="large" marginBottom="small">
+                    <Heading4 id="component-name">
+                        Button
+                    </Heading4>
+
+                    <Heading6
+                        id="component-description"
+                        weight="400" marginBottom="small"
+                    >
                         A clickable component to trigger an action or an event
-                    </Text>
+                    </Heading6>
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+
                     <ul>
                         <li>
                             The <code>kind</code> prop accepts <code>primary / secondary / tertiary</code> and
@@ -96,7 +90,6 @@ const ButtonDocs = () => {
                         data-centered-children
                     >
                         <Button
-                            id="interactive-component"
                             ref={interactiveElementRef}
                             {...propsConfig}
                             {...themeConfig}

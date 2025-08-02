@@ -1,57 +1,29 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Element,
-    Heading1,
-    Heading2,
-    Heading3,
-    Heading4,
-    Heading5,
-    Heading6,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Card,
-    Form,
-    Header,
-    RadioTabGroup,
-    Checkbox,
-    Select,
-    Table,
-CodeBlock
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Element, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Divider, Portion, Row, Text, Article, Card, Form, Header, RadioTabGroup, Checkbox, Select, Table, CodeBlock } from "fictoan-react";
 
-// COMPONENTS ==========================================================================================================
+// UTILS ===============================================================================================================
+import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-table.css";
 
-// HOOKS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-
-// UTILS ===============================================================================================================
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-
-// DATA ================================================================================================================
 import { tableProps } from "./config";
 
 const TableDocs = () => {
     const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(tableProps.variables);
 
-    // CUSTOMISE =======================================================================================================
     const [bordersFor, setBordersFor] = useState("none");
     const [isStriped, setIsStriped] = useState(false);
     const [highlightRowOnHover, setHighlightRowOnHover] = useState(false);
     const [selectedPadding, setSelectedPadding] = useState("");
     const [isFullWidth, setIsFullWidth] = useState(false);
-
-    // THEME ===========================================================================================================
 
     return (
         <Article id="page-component">
@@ -64,7 +36,7 @@ const TableDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <ul>
                         <li>The table takes the width of the longest row</li>
                     </ul>

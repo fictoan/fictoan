@@ -2,7 +2,7 @@
 import { extractComponentMetadataFromClient } from "$utils/og-utils";
 
 // OTHER ===============================================================================================================
-import UtoastDocs from "./page.client";
+import ToastDocs from "./page.client";
 
 export async function generateMetadata() {
     const {componentName, description} = await extractComponentMetadataFromClient("toast");
@@ -36,5 +36,5 @@ export async function generateMetadata() {
 }
 
 export default function Page() {
-    return <UtoastDocs />;
+    return <ToastDocs />;
 }

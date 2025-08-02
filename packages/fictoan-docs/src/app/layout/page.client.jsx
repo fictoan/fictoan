@@ -1,47 +1,16 @@
 "use client";
 
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useState } from "react";
 
-// INTERFACE ===========================================================================================================
-import {
-    Card,
-    Element,
-    Heading1,
-    Heading2,
-    Heading3,
-    Heading4,
-    Heading5,
-    Heading6,
-    Divider,
-    Portion,
-    Row,
-    Table,
-    Tabs,
-    Text,
-    Article,
-    Div,
-    Header,
-    RadioTabGroup,
-    Checkbox,
-    Button,
-    Select,
-CodeBlock
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Card, Element, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Divider, Portion, Row, Table, Tabs, Text, Article, Div, Header, RadioTabGroup, Checkbox, Button, Select, CodeBlock } from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./page-layout.css";
 
-// COMPONENTS ==========================================================================================================
-import {
-    sampleNamedPortions,
-    sampleResonsiveness,
-    sampleRowAndPortion1,
-    sampleRowAndPortion3,
-    sampleRowAndPortion4,
-    sampleTurnOffResponsiveness,
-} from "./CodeSamples";
-
+// OTHER ===============================================================================================================
+import { sampleNamedPortions, sampleResonsiveness, sampleRowAndPortion1, sampleRowAndPortion3, sampleRowAndPortion4, sampleTurnOffResponsiveness } from "./CodeSamples";
 
 const LayoutDocs = () => {
     const [ gutters, setGutters ]                     = useState("small");
@@ -100,7 +69,7 @@ const LayoutDocs = () => {
                     </Portion>
 
                     <Portion>
-                        <Heading4 marginBottom="micro">Characteristics</Heading4>
+                        
                         <ul>
                             <li>The Row is a logical block-level element to separate content on your page</li>
                             <li>A page can have unlimited Rows and each Row can have unlimited Portions as children</li>

@@ -1,51 +1,25 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Element,
-    Heading1,
-    Heading2,
-    Heading3,
-    Heading4,
-    Heading5,
-    Heading6,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Card,
-    Form,
-    Header,
-    RadioTabGroup,
-    Checkbox,
-    Select,
-    Tabs,
-CodeBlock
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Element, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Divider, Portion, Row, Text, Article, Card, Form, Header, RadioTabGroup, Checkbox, Select, Tabs, CodeBlock } from "fictoan-react";
 
-// COMPONENTS ==========================================================================================================
+// UTILS ===============================================================================================================
+import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-tabs.css";
 
-// HOOKS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-
-// UTILS ===============================================================================================================
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-
-// DATA ================================================================================================================
 import { tabsProps } from "./config";
 
 const TabsDocs = () => {
     const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(tabsProps.variables);
 
 
-    // CUSTOMISE =======================================================================================================
     const [selectedAlign, setSelectedAlign] = useState("left");
     const [isFullWidth, setIsFullWidth] = useState(false);
     const [hasAlert, setHasAlert] = useState(false);
@@ -64,8 +38,6 @@ const TabsDocs = () => {
         });
     };
 
-    // THEME ===========================================================================================================
-
     return (
         <Article id="page-component">
             <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
@@ -77,7 +49,7 @@ const TabsDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <Text>&bull; </Text>
                 </Portion>
             </Row>

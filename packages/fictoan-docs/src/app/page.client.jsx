@@ -1,48 +1,31 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
-import React from "react";
+// REACT CORE ==========================================================================================================
 import Link from "next/link";
+import React from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Div,
-    Article,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Heading4,
-    Heading5,
-    Card,
-    Section,
-    Heading2,
-    Span,
-} from "fictoan-react";
-
-// COMPONENTS ==========================================================================================================
-import { IntroCode } from "../components/IntroCode/IntroCode";
-import { ComponentGrid } from "../components/ComponentGrid/ComponentGrid";
-
-// STYLES ==============================================================================================================
-import "../styles/home.css";
+// UI ==================================================================================================================
+import { Div, Article, Divider, Portion, Row, Text, Heading4, Heading5, Card, Section, Heading2, Span } from "fictoan-react";
 
 // ASSETS ==============================================================================================================
 import ManifestoIcon from "../assets/icons/manifesto.svg";
 
+// STYLES ==============================================================================================================
+import "../styles/home.css";
+
+// OTHER ===============================================================================================================
+import { ComponentGrid } from "../components/ComponentGrid/ComponentGrid";
+import { IntroCode } from "../components/IntroCode/IntroCode";
+
 const HomePage = () => {
     return (
         <Article id="home-page">
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/* HERO */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
+            {/* HERO /////////////////////////////////////////////////////////////////////////////////////////////// */}
             <IntroCode />
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/* BULLET POINTS */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
+            {/* BULLET POINTS ////////////////////////////////////////////////////////////////////////////////////// */}
             <Section id="usp-section" verticalPadding="medium">
-                {/* GROUP 1 //////////////////////////////////////////////////////////////////////////////////////// */}
+                {/* GROUP 1 ======================================================================================== */}
                 <Row horizontalPadding="medium" gutters="large" marginBottom="tiny">
                     <Portion desktopSpan="two-third">
                         <Heading2 marginBottom="nano">
@@ -105,7 +88,7 @@ const HomePage = () => {
 
                 <Divider kind="tertiary" horizontalMargin="medium" verticalMargin="tiny" />
 
-                {/* GROUP 2 //////////////////////////////////////////////////////////////////////////////////////// */}
+                {/* GROUP 2 ======================================================================================== */}
                 <Row horizontalPadding="medium" gutters="large" marginBottom="tiny">
                     <Portion desktopSpan="two-third">
                         <Heading2 marginBottom="nano">
@@ -172,9 +155,7 @@ const HomePage = () => {
                 </video>
             </Section>
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/* MANIFESTO */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
+            {/* MANIFESTO ////////////////////////////////////////////////////////////////////////////////////////// */}
             <Section id="manifesto" verticalPadding="medium">
                 <Row horizontalPadding="medium" marginBottom="none">
                     <Portion>
@@ -205,9 +186,7 @@ const HomePage = () => {
                 <Div className="gradient-bg" />
             </Section>
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/* COMPONENT GRID */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
+            {/* COMPONENT GRID ===================================================================================== */}
             <Section id="component-grid" verticalPadding="medium">
                 <Row horizontalPadding="medium">
                     <Portion>

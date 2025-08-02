@@ -1,34 +1,24 @@
 "use client";
 
+// REACT CORE ==========================================================================================================
 import React, { useState } from "react";
 
-import {
-    Element,
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Card,
-    Form,
-    Header,
-    Checkbox,
-    Range,
-    Select,
-    CodeBlock, InputField,
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Element, Heading1, Heading4, Divider, Portion, Row, Text, Article, Card, Form, Header, Checkbox, Range, Select, CodeBlock, InputField } from "fictoan-react";
 
-import "./page-range.css";
+// UTILS ===============================================================================================================
 import { useThemeVariables } from "../../../utils/useThemeVariables";
+
+// STYLES ==============================================================================================================
+import "./page-range.css";
+
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
 import { rangeProps } from "./config";
 
 const RangeDocs = () => {
     const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(rangeProps.variables);
 
-    // CUSTOMISE =======================================================================================================
     const [rangeValue, setRangeValue] = useState(50);
     const [selectedMin, setSelectedMin] = useState(0);
     const [selectedMax, setSelectedMax] = useState(100);
@@ -49,7 +39,7 @@ const RangeDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <ul>
                         <li>Supports min and max values</li>
                         <li>Configurable step size</li>
@@ -132,7 +122,7 @@ const RangeDocs = () => {
                                         <InputField
                                             type="text"
                                             value={rangeLabel}
-                                            onChange={(value) => setRangeLabel(value)}
+                                            onChange={(value: React.SetStateAction<string>) => setRangeLabel(value)}
                                             placeholder="Enter label text"
                                         />
 
@@ -146,7 +136,7 @@ const RangeDocs = () => {
                                         type="number"
                                         label="Min value"
                                         value={selectedMin}
-                                        onChange={(value) => setSelectedMin(Number(value))}
+                                        onChange={(value: React.SetStateAction<string>) => setSelectedMin(Number(value))}
                                     />
                                 </Portion>
 
@@ -156,7 +146,7 @@ const RangeDocs = () => {
                                         type="number"
                                         label="Max value"
                                         value={selectedMax}
-                                        onChange={(value) => setSelectedMax(Number(value))}
+                                        onChange={(value: React.SetStateAction<string>) => setSelectedMax(Number(value))}
                                     />
                                 </Portion>
 
@@ -166,7 +156,7 @@ const RangeDocs = () => {
                                         type="number"
                                         label="Step size"
                                         value={selectedStep}
-                                        onChange={(value) => setSelectedStep(Number(value))}
+                                        onChange={(value: React.SetStateAction<string>) => setSelectedStep(Number(value))}
                                     />
 
                                     <Divider kind="secondary" horizontalMargin="none" verticalMargin="nano" />
@@ -178,7 +168,7 @@ const RangeDocs = () => {
                                         type="text"
                                         label="Suffix"
                                         value={selectedSuffix}
-                                        onChange={(value) => setSelectedSuffix((value))}
+                                        onChange={(value: React.SetStateAction<string>) => setSelectedSuffix((value))}
                                     />
                                 </Portion>
                             </Row>

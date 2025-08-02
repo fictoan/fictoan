@@ -1,60 +1,30 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useEffect, useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Element,
-    Heading1,
-    Heading2,
-    Heading3,
-    Heading4,
-    Heading5,
-    Heading6,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Card,
-    Form,
-    Header,
-    RadioTabGroup,
-    Select,
-    Button,
-    Range,
-    NotificationsWrapper,
-    NotificationItem,
-CodeBlock
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Element, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Divider, Portion, Row, Text, Article, Card, Form, Header, RadioTabGroup, Select, Button, Range, NotificationsWrapper, NotificationItem, CodeBlock } from "fictoan-react";
 
-// COMPONENTS ==========================================================================================================
+// UTILS ===============================================================================================================
+import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-notifications.css";
 
-// HOOKS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-
-// UTILS ===============================================================================================================
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-
-// DATA ================================================================================================================
 import { toastProps } from "./config";
 
 const NotificationsDocs = () => {
-    // SAMPLE ==========================================================================================================
     const [notifications, setNotifications] = useState([]);
 
-    // CUSTOMISE =======================================================================================================
     const [selectedPosition, setSelectedPosition] = useState("right");
     const [selectedAnchor, setSelectedAnchor] = useState("top");
     const [selectedOrder, setSelectedOrder] = useState("new-on-top");
 
     const [secondsToShowFor, setSecondsToShowFor] = useState(1000);
 
-    // THEME ===========================================================================================================
     const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(toastProps.variables);
 
     const handleShowNotification = (type) => {
@@ -82,7 +52,7 @@ const NotificationsDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <ul>
                         <li>
                             The <code>NotificationsWrapper</code> is a single parent, with any number

@@ -1,51 +1,22 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useEffect, useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Element,
-    Heading1,
-    Heading2,
-    Heading3,
-    Heading4,
-    Heading5,
-    Heading6,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Form,
-    Card,
-    Header,
-    Range,
-    Select,
-    InputField,
-    Meter,
-    Button, RadioTabGroup, SelectWithSearch, Checkbox, Div,
-CodeBlock
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Element, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Divider, Portion, Row, Text, Article, Form, Card, Header, Range, Select, InputField, Meter, Button, RadioTabGroup, SelectWithSearch, Checkbox, Div, CodeBlock } from "fictoan-react";
 
-// COMPONENTS ==========================================================================================================
+// UTILS ===============================================================================================================
+import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-meter.css";
 
-// HOOKS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-
-// UTILS ===============================================================================================================
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-
-// DATA ================================================================================================================
 import { meterProps } from "./config";
 
 const MeterDocs = () => {
-    // SAMPLE ==========================================================================================================
-
-    // CUSTOMISE =======================================================================================================
     const [min, setMin] = useState();
     const [max, setMax] = useState();
     const [low, setLow] = useState();
@@ -57,7 +28,6 @@ const MeterDocs = () => {
 
     const [showOptimumMarker, setShowOptimumMarker] = useState(false);
 
-    // THEME ===========================================================================================================
     const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(meterProps.variables);
 
 
@@ -83,7 +53,7 @@ const MeterDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <Text>&bull; Always takes up 100% width of its parent</Text>
                     <Text>
                         &bull; The range of values containing the <code>optimum</code> value gets

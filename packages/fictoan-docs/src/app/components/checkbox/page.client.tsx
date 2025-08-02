@@ -1,35 +1,15 @@
+// @ts-nocheck
 "use client";
 
-// FRAMEWORK ===========================================================================================================
-import React, { useState, useEffect, useMemo } from "react";
+// REACT CORE ==========================================================================================================
+import * as React from "react";
+import { useState, useEffect, useMemo } from "react";
 
-// FICTOAN =============================================================================================================
-import {
-    Element,
-    Heading1,
-    Heading2,
-    Heading3,
-    Heading4,
-    Heading5,
-    Heading6,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Card,
-    Form,
-    Header,
-    RadioTabGroup,
-    Select,
-    ToastItem,
-    ToastsWrapper,
-    Button,
-    Range, Checkbox, Switch,
-    CodeBlock,
-    CheckboxGroup,
-    SwitchGroup,
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Element, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Divider, Portion, Row, Text, Article, Card, Form, Header, RadioTabGroup, Select, ToastItem, ToastsWrapper, Button, Range, Checkbox, Switch, CodeBlock, CheckboxGroup, SwitchGroup } from "fictoan-react";
+
+// UTILS ===============================================================================================================
+import { useThemeVariables } from "$utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-checkbox.css";
@@ -37,20 +17,16 @@ import "./page-checkbox.css";
 // OTHER ===============================================================================================================
 import { checkboxProps } from "./config";
 import { colourOptions } from "../../colour/colours";
-import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 const CheckboxDocs = () => {
-    const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(checkboxProps.variables);
+    const {componentVariables, handleVariableChange, cssVariablesList} = useThemeVariables(checkboxProps.variables);
 
-    // SAMPLE ==========================================================================================================
-
-    // CUSTOMISE =======================================================================================================
-    const [isSwitch, setIsSwitch] = useState(false);
-    const [defaultChecked, setDefaultChecked] = useState(false);
-    const [defaultDisabled, setDefaultDisabled] = useState(false);
-    const [showGroup, setShowGroup] = useState(false);
-    const [groupValue, setGroupValue] = useState([]);
-    const [currentlyShown, setCurrentlyShown] = useState(isSwitch ? "switch" : "checkbox");
+    const [ isSwitch, setIsSwitch ] = useState(false);
+    const [ defaultChecked, setDefaultChecked ] = useState(false);
+    const [ defaultDisabled, setDefaultDisabled ] = useState(false);
+    const [ showGroup, setShowGroup ] = useState(false);
+    const [ groupValue, setGroupValue ] = useState<string[]>([]);
+    const [ currentlyShown, setCurrentlyShown ] = useState(isSwitch ? "switch" : "checkbox");
 
     // Create group options with memoization to update when dependencies change
     const groupOptions = useMemo(() => [
@@ -61,16 +37,14 @@ const CheckboxDocs = () => {
             defaultChecked : defaultChecked,
             disabled       : defaultDisabled,
         },
-        { id : "option2", value : "option2", label : "Option 2" },
-        { id : "option3", value : "option3", label : "Option 3" },
-    ], [defaultChecked, defaultDisabled]);
+        {id : "option2", value : "option2", label : "Option 2"},
+        {id : "option3", value : "option3", label : "Option 3"},
+    ], [ defaultChecked, defaultDisabled ]);
 
     // Update currentlyShown whenever isSwitch changes
     useEffect(() => {
         setCurrentlyShown(isSwitch ? "switch" : "checkbox");
-    }, [isSwitch]);
-
-    // THEME ===========================================================================================================
+    }, [ isSwitch ]);
 
 
     return (
@@ -292,7 +266,9 @@ const CheckboxDocs = () => {
                                     <Range
                                         label="Border radius"
                                         value={componentVariables["checkbox-square-border-radius"].value}
-                                        onChange={(value) => handleVariableChange("checkbox-square-border-radius", value)}
+                                        onChange={(value) => handleVariableChange(
+                                            "checkbox-square-border-radius",
+                                            value)}
                                         suffix={componentVariables["checkbox-square-border-radius"].unit}
                                         min={0} max={10} step={1}
                                     />
@@ -302,12 +278,12 @@ const CheckboxDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Tick"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
-                                        }, ...colourOptions]}
+                                        }, ...colourOptions ]}
                                         defaultValue={componentVariables["checkbox-tick"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("checkbox-tick", value)}
                                         isFullWidth
@@ -318,12 +294,12 @@ const CheckboxDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Square — default"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
-                                        }, ...colourOptions]}
+                                        }, ...colourOptions ]}
                                         defaultValue={componentVariables["checkbox-square-bg-default"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("checkbox-square-bg-default", value)}
                                         isFullWidth
@@ -334,12 +310,12 @@ const CheckboxDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Square — hover"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
-                                        }, ...colourOptions]}
+                                        }, ...colourOptions ]}
                                         defaultValue={componentVariables["checkbox-square-bg-hover"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("checkbox-square-bg-hover", value)}
                                         isFullWidth
@@ -350,12 +326,12 @@ const CheckboxDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Square — checked"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
-                                        }, ...colourOptions]}
+                                        }, ...colourOptions ]}
                                         defaultValue={componentVariables["checkbox-square-bg-checked"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("checkbox-square-bg-checked", value)}
                                         isFullWidth
@@ -366,12 +342,12 @@ const CheckboxDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Square — disabled"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
-                                        }, ...colourOptions]}
+                                        }, ...colourOptions ]}
                                         defaultValue={componentVariables["checkbox-square-bg-disabled"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("checkbox-square-bg-disabled", value)}
                                         isFullWidth
@@ -391,12 +367,12 @@ const CheckboxDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Switch — default"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
-                                        }, ...colourOptions]}
+                                        }, ...colourOptions ]}
                                         defaultValue={componentVariables["switch-bg-default"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("switch-bg-default", value)}
                                         isFullWidth
@@ -407,12 +383,12 @@ const CheckboxDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Slider — default"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
-                                        }, ...colourOptions]}
+                                        }, ...colourOptions ]}
                                         defaultValue={componentVariables["switch-slider-bg-default"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("switch-slider-bg-default", value)}
                                         isFullWidth
@@ -423,12 +399,12 @@ const CheckboxDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Switch — hover"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
-                                        }, ...colourOptions]}
+                                        }, ...colourOptions ]}
                                         defaultValue={componentVariables["switch-bg-hover"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("switch-bg-hover", value)}
                                         isFullWidth
@@ -439,12 +415,12 @@ const CheckboxDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Slider — hover"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
-                                        }, ...colourOptions]}
+                                        }, ...colourOptions ]}
                                         defaultValue={componentVariables["switch-slider-bg-hover"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("switch-slider-bg-hover", value)}
                                         isFullWidth
@@ -455,12 +431,12 @@ const CheckboxDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Switch — checked"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
-                                        }, ...colourOptions]}
+                                        }, ...colourOptions ]}
                                         defaultValue={componentVariables["switch-bg-checked"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("switch-bg-checked", value)}
                                         isFullWidth
@@ -471,12 +447,12 @@ const CheckboxDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Slider — checked"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
-                                        }, ...colourOptions]}
+                                        }, ...colourOptions ]}
                                         defaultValue={componentVariables["switch-slider-bg-checked"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("switch-slider-bg-checked", value)}
                                         isFullWidth
@@ -487,12 +463,12 @@ const CheckboxDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Switch — disabled"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
-                                        }, ...colourOptions]}
+                                        }, ...colourOptions ]}
                                         defaultValue={componentVariables["switch-bg-disabled"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("switch-bg-disabled", value)}
                                         isFullWidth
@@ -503,12 +479,12 @@ const CheckboxDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Slider — disabled"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
-                                        }, ...colourOptions]}
+                                        }, ...colourOptions ]}
                                         defaultValue={componentVariables["switch-slider-bg-disabled"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("switch-slider-bg-disabled", value)}
                                         isFullWidth

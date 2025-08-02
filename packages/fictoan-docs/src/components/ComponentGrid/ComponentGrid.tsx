@@ -1,51 +1,26 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
-import React, { useState } from "react";
+// REACT CORE ==========================================================================================================
 import Link from "next/link";
+import React, { useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Element,
-    Badge,
-    BreadcrumbItem,
-    Breadcrumbs,
-    Button,
-    Callout,
-    Card,
-    Checkbox,
-    Div,
-    InputField,
-    NotificationItem,
-    Portion,
-    ProgressBar,
-    RadioButton,
-    Row,
-    Select,
-    Switch,
-    Table,
-    Text, Heading1, Heading4,
-    NotificationsWrapper,
-    CodeBlock,
-    OptionCard, OptionCardsGroup, hideModal, Modal, showModal, PinInputField,
-} from "fictoan-react";
-
-// COMPONENTS ==========================================================================================================
+// UI ==================================================================================================================
+import { Element, Badge, Breadcrumbs, Button, Callout, Card, Checkbox, Div, InputField, NotificationItem, Portion, ProgressBar, RadioButton, Row, Select, Switch, Table, Text, Heading1, Heading4, NotificationsWrapper, CodeBlock, OptionCard, OptionCardsGroup, hideModal, Modal, showModal, PinInputField } from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./component-grid.css";
 
 export const ComponentGrid = () => {
-    const [showNotification1, setShowNotification1] = useState(false);
+    const [ showNotification1, setShowNotification1 ] = useState(false);
 
     const cardComponentSample = `const clickHere = () => {
     window.load("/components/card");
 }`;
 
     const sampleOptionCards = [
-        { id : "card-1", content : "Option 1" },
-        { id : "card-2", content : "Option 2" },
-        { id : "card-3", content : "Option 3" },
+        {id : "card-1", content : "Option 1"},
+        {id : "card-2", content : "Option 2"},
+        {id : "card-3", content : "Option 3"},
     ];
 
     return (
@@ -137,7 +112,7 @@ export const ComponentGrid = () => {
                 <Card shape="rounded" className="component-wrapper" isFullHeight>
                     <Div className="component-card">
                         <ProgressBar
-                            value="60" max="100" unit="%"
+                            value="60" max={100} suffix="%"
                             label="Loading..."
                             barBg="green-light20" barFill="green-dark90"
                             height="8px" shape="rounded"
@@ -177,8 +152,8 @@ export const ComponentGrid = () => {
                         <Select
                             options={[
                                 {
-                                    label    : "What’s your pick?",
-                                    value    : "select-an-option",
+                                    label : "What’s your pick?",
+                                    value : "select-an-option",
                                     disabled : true,
                                     selected : true,
                                 },
@@ -206,7 +181,7 @@ export const ComponentGrid = () => {
             <Div id="table-card" className="grid-item">
                 <Card shape="rounded" className="component-wrapper" isFullHeight>
                     <Div className="component-card">
-                        <Table padding="small" isStriped bordersFor="both" isfullWidth>
+                        <Table padding="small" isStriped bordersFor="both" isFullWidth>
                             <thead>
                                 <tr>
                                     <th>Yes,</th>
@@ -316,7 +291,6 @@ export const ComponentGrid = () => {
 
                         <Switch
                             id="switch-1"
-                            value="switch-1"
                             name="switch-1"
                             label="Toggle me"
                         />
@@ -423,8 +397,7 @@ export const ComponentGrid = () => {
                     <Div className="component-card">
                         <Callout kind="success">
                             <Text textColour="green-dark60">
-                                I’d also just like to call out that FICTOAN
-                                is awesome.
+                                I’d also just like to call out that FICTOAN is awesome.
                             </Text>
                         </Callout>
 

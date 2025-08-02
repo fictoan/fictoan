@@ -32,6 +32,7 @@ const BreadcrumbsDocs = () => {
         {
             isSelfClosing   : false,
             canHaveChildren : true,
+            // @ts-ignore
             defaultChildren : `    <Link href="/">Home</Link>
     <Link href="/components">Components</Link>
     <Link href="/components/breadcrumbs">Breadcrumbs</Link>`,
@@ -66,9 +67,9 @@ const BreadcrumbsDocs = () => {
         <Article id="page-breadcrumbs">
             <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                 <Portion>
-                    <Heading1 id="component-name">
+                    <Heading4 id="component-name">
                         Breadcrumbs
-                    </Heading1>
+                    </Heading4>
 
                     <Heading4
                         id="component-description"
@@ -79,7 +80,7 @@ const BreadcrumbsDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <ul>
                         <li>The BreadcrumbItem accepts React nodes</li>
                         <li>Use <code>current</code> prop to indicate active page</li>

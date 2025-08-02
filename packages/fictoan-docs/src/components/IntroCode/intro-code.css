@@ -34,12 +34,6 @@
         }
     }
 
-    #intro-code-block pre {
-        font-size : 105%;
-
-        /*.plain-text { opacity: 0.4; }*/
-    }
-
     .demo-portion {
         position : relative;
     }

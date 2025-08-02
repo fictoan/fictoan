@@ -1,54 +1,24 @@
 "use client";
 
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useState } from "react";
 
-// FICTOAN =============================================================================================================
-import {
-    Div,
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Card,
-    Form,
-    Header,
-    Select,
-    InputField,
-    Range,
-    Checkbox,
-    RadioTabGroup,
-    CodeBlock, ListBox,
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Div, Heading1, Divider, Portion, Row, Text, Article, Card, Form, Header, Select, InputField, Range, Checkbox, RadioTabGroup, CodeBlock, ListBox } from "fictoan-react";
+
+// UTILS ===============================================================================================================
+import { createPropsConfigurator } from "$utils/propsConfigurator";
+import { useThemeVariables } from "$utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-code-block.css";
 
 // OTHER ===============================================================================================================
-import {
-    sampleCodeBlock,
-    sampleBashCode,
-    sampleRustCode,
-    sampleCSSCode,
-    sampleCSharpCode,
-    sampleHTMLCode,
-    sampleJSXCode,
-    sampleKotlinCode,
-    sampleMarkdownCode,
-    sampleObjectiveCCode,
-    samplePythonCode,
-    sampleSwiftCode,
-} from "./CodeSamples";
 import { colourOptions } from "../../colour/colours";
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
+import { sampleCodeBlock, sampleBashCode, sampleRustCode, sampleCSSCode, sampleCSharpCode, sampleHTMLCode, sampleJSXCode, sampleKotlinCode, sampleMarkdownCode, sampleObjectiveCCode, samplePythonCode, sampleSwiftCode } from "./CodeSamples";
 import { toastProps } from "./config";
-import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 const CodeBlockDocs = () => {
-    // SAMPLE ==========================================================================================================
     const [selectedApproach, setSelectedApproach] = useState("import");
     const [enableCopyButton, setEnableCopyButton] = useState(false);
     const [enableLineNumbers, setEnableLineNumbers] = useState(false);
@@ -57,7 +27,7 @@ const CodeBlockDocs = () => {
 
     // Event listener for language changes from the configurator
     React.useEffect(() => {
-        const handleLanguageChange = (event) => {
+        const handleLanguageChange = (event: { detail: { language: any; }; }) => {
             const language = event.detail.language;
             setSelectedLanguage(language);
             showSelectedLanguageCode(language);
@@ -71,7 +41,6 @@ const CodeBlockDocs = () => {
     }, []);
 
 
-    // PROPS CONFIG ====================================================================================================
     const {
         propsConfigurator,
         componentProps : propsConfig,
@@ -156,9 +125,6 @@ const CodeBlockDocs = () => {
         }
     };
 
-    // CUSTOMISE =======================================================================================================
-
-    // THEME ===========================================================================================================
     const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(toastProps.variables);
 
 
@@ -173,7 +139,7 @@ const CodeBlockDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <ul>
                         <li>
                             For embedded code block usage, wrap your code in <code>{"{[]}"}</code> for it to work

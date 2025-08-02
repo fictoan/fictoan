@@ -4,7 +4,7 @@
 import React from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading1, Heading4, Divider, Portion, Row, Text, Article, Badge, Section } from "fictoan-react";
+import { Div, Heading4, Divider, Portion, Row, Article, Badge, Section, Heading6 } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createPropsConfigurator } from "$utils/propsConfigurator";
@@ -55,20 +55,19 @@ const BadgeDocs = () => {
             <Section>
                 <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                     <Portion>
-                        <Heading1 id="component-name">
+                        <Heading4 id="component-name">
                             Badge
-                        </Heading1>
+                        </Heading4>
 
-                        <Heading4
+                        <Heading6
                             id="component-description"
                             weight="400" marginBottom="small"
                         >
                             A small inline element that can be used to highlight a piece of information.
-                        </Heading4>
+                        </Heading6>
                     </Portion>
 
                     <Portion>
-                        <Heading4 marginBottom="micro">Characteristics</Heading4>
                         <ul>
                             <li>You have to manually align the Badge with its sibling</li>
                             <li>Default size is <code>medium</code></li>

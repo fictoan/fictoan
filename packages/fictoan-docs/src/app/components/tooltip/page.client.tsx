@@ -1,38 +1,25 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Div,
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Tooltip,
-    Button
-} from "fictoan-react";
-
-// STYLES ==============================================================================================================
-import "./page-tooltip.css";
-import "../../../styles/fictoan-theme.css";
-
-// HOOKS ===============================================================================================================
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
-import { createThemeConfigurator } from "../../../utils/themeConfigurator";
-
+// UI ==================================================================================================================
+import { Div, Heading1, Heading4, Divider, Portion, Row, Text, Article, Tooltip, Button } from "fictoan-react";
 
 // UTILS ===============================================================================================================
+import { createPropsConfigurator } from "$utils/propsConfigurator";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
+
+// STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
+import "./page-tooltip.css";
+
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
 
 const TooltipDocs = () => {
     const [sampleComponentId, setSampleComponentId] = React.useState("tooltip-target");
 
-    // PROPS CONFIG ====================================================================================================
     const {
         propsConfigurator,
         componentProps: propsConfig,
@@ -48,8 +35,7 @@ const TooltipDocs = () => {
         }
     );
 
-    // THEME CONFIG ====================================================================================================
-    const TooltipComponent = (varName) => {
+    const TooltipComponent = (varName: string) => {
         return varName.startsWith("tooltip-");
     };
 
@@ -72,7 +58,7 @@ const TooltipDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <ul>
                         <li>Requires an element with a specified ID to attach to. Can be any element with an ID.</li>
                         <li>Automatically positions itself to stay within viewport</li>

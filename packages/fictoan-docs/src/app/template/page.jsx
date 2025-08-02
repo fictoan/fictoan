@@ -1,40 +1,17 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useEffect, useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Element,
-    Heading1,
-    Heading2,
-    Heading3,
-    Heading4,
-    Heading5,
-    Heading6,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Card,
-    Form,
-    Header,
-CodeBlock
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Element, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Divider, Portion, Row, Text, Article, Card, Form, Header, CodeBlock } from "fictoan-react";
 
-// COMPONENTS ==========================================================================================================
-
-// STYLES ==============================================================================================================
 // import "./page-breadcrumbs.css";
 
-// HOOKS ===============================================================================================================
 // import { useThemeVariables } from "../../../utils/useThemeVariables";
 
-// UTILS ===============================================================================================================
 // import { colourOptions } from "../../../utils/colours";
 
-// DATA ================================================================================================================
 // import { breadcrumbsProps } from "./config";
 
 
@@ -62,7 +39,7 @@ const ComponentDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <Text>&bull; </Text>
                 </Portion>
             </Row>

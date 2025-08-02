@@ -1,32 +1,22 @@
 "use client";
 
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import {
-    Element,
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    ListBox,
-    Section,
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Element, Heading1, Heading4, Divider, Portion, Row, Text, Article, ListBox, Section } from "fictoan-react";
+
+// UTILS ===============================================================================================================
+import { createPropsConfigurator } from "$utils/propsConfigurator";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
 import "./page-list-box.css";
 
 // OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
-import { createThemeConfigurator } from "../../../utils/themeConfigurator";
 
 const ListBoxDocs = () => {
-    // PROPS CONFIG ====================================================================================================
     const {
         propsConfigurator,
         componentProps: propsConfig,
@@ -53,8 +43,7 @@ const ListBoxDocs = () => {
         }
     );
 
-    // THEME CONFIG ====================================================================================================
-    const ListBoxComponent = (varName) => {
+    const ListBoxComponent = (varName: string) => {
         // Remove debug log in production
         // console.log("Checking variable:", varName);
         return varName.startsWith("list-box-");
@@ -78,7 +67,7 @@ const ListBoxDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <ul>
                         <li>Supports both single and multi-select modes</li>
                         <li>Searchable options with fuzzy matching</li>

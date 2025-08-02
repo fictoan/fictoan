@@ -1,54 +1,27 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useEffect, useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Element,
-    Heading1,
-    Heading2,
-    Heading3,
-    Heading4,
-    Heading5,
-    Heading6,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Card,
-    Form,
-    Header,
-    Select,
-    Range, Checkbox, Switch, RadioButton,
-    CodeBlock, RadioGroup,
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Element, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Divider, Portion, Row, Text, Article, Card, Form, Header, Select, Range, Checkbox, Switch, RadioButton, CodeBlock, RadioGroup } from "fictoan-react";
 
-// COMPONENTS ==========================================================================================================
+// UTILS ===============================================================================================================
+import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-radio-button.css";
 
-// HOOKS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-
-// UTILS ===============================================================================================================
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-
-// DATA ================================================================================================================
 import { radioButtonProps } from "./config";
 
 const RadioButtonDocs = () => {
 
-    // SAMPLE ==========================================================================================================
-
-    // CUSTOMISE =======================================================================================================
     const [defaultChecked, setDefaultChecked] = useState("yes");
     const [userSelectedRadio, setUserSelectedRadio] = useState("");
     const [isDisabled, setIsDisabled] = useState({ yes: false, no: false, maybe: false });
 
-    // THEME ===========================================================================================================
     const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(radioButtonProps.variables);
 
     const handleDefaultCheckedChange = (checked) => {
@@ -71,8 +44,6 @@ const RadioButtonDocs = () => {
         return defaultChecked === value;
     };
 
-    // THEME ===========================================================================================================
-
 
     return (
         <Article id="page-component">
@@ -85,7 +56,7 @@ const RadioButtonDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <Text>&bull; </Text>
                 </Portion>
             </Row>

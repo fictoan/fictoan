@@ -1,57 +1,44 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Div,
-    Card,
-    Section,
-} from "fictoan-react";
-
-// STYLES ==============================================================================================================
-import "./page-card.css";
-import "../../../styles/fictoan-theme.css";
-
-// HOOKS ===============================================================================================================
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
-import { createThemeConfigurator } from "../../../utils/themeConfigurator";
+// UI ==================================================================================================================
+import { Heading1, Heading4, Divider, Portion, Row, Text, Article, Div, Card, Section } from "fictoan-react";
 
 // UTILS ===============================================================================================================
+import { createPropsConfigurator } from "$utils/propsConfigurator";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
+
+// STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
+import "./page-card.css";
+
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
 
 const CardDocs = () => {
-    // PROPS CONFIG ====================================================================================================
     const {
         propsConfigurator,
-        componentProps: propsConfig,
+        componentProps : propsConfig,
     } = createPropsConfigurator(
         "Card", [
             "padding", "shape", "bgColour", "borderColour",
         ],
         colourOptions,
         {
-            canHaveChildren: true,
-            isSelfClosing : false
-        }
-    );
+            canHaveChildren : true,
+            isSelfClosing   : false,
+            defaultChildren : null,
+        });
 
-    // THEME CONFIG ====================================================================================================
-    const CardComponent = (varName) => {
+    const CardComponent = (varName : string) => {
         return varName.startsWith("card-");
     };
 
     const {
         interactiveElementRef,
-        componentProps: themeConfig,
+        componentProps : themeConfig,
         themeConfigurator,
     } = createThemeConfigurator("Card", CardComponent);
 
@@ -60,14 +47,20 @@ const CardDocs = () => {
             <Section>
                 <Row horizontalPadding="huge" marginTop="medium" marginBottom="tiny">
                     <Portion>
-                        <Heading1 marginBottom="micro">Card</Heading1>
-                        <Text size="large" marginBottom="small">
+                        <Heading4 id="component-name">
+                            Card
+                        </Heading4>
+
+                        <Heading4
+                            id="component-description"
+                            weight="400" marginBottom="small"
+                        >
                             A box to put all sorts of content inside
-                        </Text>
+                        </Heading4>
                     </Portion>
 
                     <Portion>
-                        <Heading4 marginBottom="micro">Characteristics</Heading4>
+                        
                         <ul>
                             <li>Accepts any React node as a child</li>
                             <li>The card always takes up 100% width of its parent</li>
@@ -90,7 +83,6 @@ const CardDocs = () => {
                         data-centered-children
                     >
                         <Card
-                            id="interactive-component"
                             ref={interactiveElementRef}
                             {...propsConfig}
                             {...themeConfig}

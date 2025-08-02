@@ -277,4 +277,67 @@ export const MASTER_PROPS_CONFIG = {
             { id : "usage-opt-1", value : "inline", label : "Inline" },
         ],
     },
+
+    // INPUT FIELD PROPS ===============================================================================================
+    label : {
+        type    : "text",
+        default : {
+            label : "Label",
+            value : "",
+        },
+    },
+    placeholder : {
+        type    : "text",
+        default : {
+            label : "Placeholder",
+            value : "",
+        },
+    },
+    helpText : {
+        type    : "text",
+        default : {
+            label : "Help text",
+            value : "",
+        },
+    },
+    required : {
+        type  : "boolean",
+        label : "Make it a required field",
+    },
+    readOnly : {
+        type  : "boolean",
+        label : "Read only",
+    },
+    validateThis : {
+        type  : "boolean",
+        label : "I want to validate this input",
+    },
+    pattern : {
+        type    : "text",
+        default : {
+            label : "Validation regex pattern",
+            value : "",
+        },
+    },
+    errorText : {
+        type    : "text",
+        default : {
+            label : "Error text",
+            value : "",
+        },
+    },
+    innerTextLeft : {
+        type    : "text",
+        default : {
+            label : "Left side text",
+            value : "",
+        },
+    },
+    innerTextRight : {
+        type    : "text",
+        default : {
+            label : "Right side text",
+            value : "",
+        },
+    },
 };

@@ -1,38 +1,22 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useEffect, useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Callout,
-    Element,
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Select,
-    Text,
-    Article,
-    Button,
-    Form,
-    Card, Header, InputField, Checkbox, RadioButton, Div, CodeBlock
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Callout, Element, Heading1, Heading4, Divider, Portion, Row, Select, Text, Article, Button, Form, Card, Header, InputField, Checkbox, RadioButton, Div, CodeBlock } from "fictoan-react";
 
-// COMPONENTS ==========================================================================================================
+// UTILS ===============================================================================================================
+import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-select.css";
 
-// DATA ================================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-import { selectProps } from "./config";
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-
+import { selectProps } from "./config";
 
 const SelectDocs = () => {
-    // SAMPLE ==========================================================================================================
     const [label, setLabel] = useState("Select an option");
     const [options, setOptions] = useState([
         { label : "Option 1", value : "1" },
@@ -52,9 +36,6 @@ const SelectDocs = () => {
         setOptions(newOptions);
     };
 
-    // CUSTOMISE =======================================================================================================
-
-    // THEME ===========================================================================================================
     const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(selectProps.variables);
 
     return (
@@ -68,7 +49,7 @@ const SelectDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <ul>
                         <li>
                             It takes the width of the longest option, use <code>isFullWidth</code> to make it take the

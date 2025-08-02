@@ -1,44 +1,24 @@
 "use client";
 
+// REACT CORE ==========================================================================================================
 import React, { useState } from "react";
 
-import {
-    Element,
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Card,
-    Form,
-    Header,
-    RadioTabGroup,
-    Checkbox,
-    CodeBlock,
-    InputField,
-    Pagination,
-    Select,
-    Range
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Element, Heading1, Heading4, Divider, Portion, Row, Text, Article, Card, Form, Header, RadioTabGroup, Checkbox, CodeBlock, InputField, Pagination, Select, Range } from "fictoan-react";
+
+// UTILS ===============================================================================================================
+import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-pagination.css";
 
-// HOOKS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-
-// UTILS ===============================================================================================================
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-
-// DATA ================================================================================================================
 import { paginationProps } from "./config";
 
 const PaginationDocs = () => {
     const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(paginationProps.variables);
 
-    // CUSTOMISE =======================================================================================================
     const [totalItems, setTotalItems] = useState(100);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsToShowEachSide, setItemsToShowEachSide] = useState(1);
@@ -67,7 +47,7 @@ const PaginationDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <ul>
                         <li>
                             The <code>kind</code> prop accepts <code>plain</code>, <code>outlined</code>,

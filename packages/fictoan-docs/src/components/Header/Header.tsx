@@ -1,31 +1,29 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
-import React, { useState } from "react";
+// REACT CORE ==========================================================================================================
 import Link from "next/link";
+import React, { useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Badge,
-    Div,
-    Header,
-    Heading5, Span, Text, useTheme,
-} from "fictoan-react";
-
-// COMPONENTS ==========================================================================================================
-import { SearchBar } from "./SearchBar/SearchBar";
-import { ThemeToggle } from "./ThemeToggle/ThemeToggle";
-import { VersionBadge } from "./VersionBadge";
-
-// STYLES ==============================================================================================================
-import "./header.css";
+// UI ==================================================================================================================
+import { Badge, Div, Header, Heading5 } from "fictoan-react";
 
 // ASSETS ==============================================================================================================
 import GithubIcon from "../../assets/icons/github.svg";
 
-export const SiteHeader = ({ toggleSidebarOnMobile }) => {
-    // Handle mobile menu toggle =======================================================================================
-    const handleMenuToggleClick = (e) => {
+// STYLES ==============================================================================================================
+import "./header.css";
+
+// OTHER ===============================================================================================================
+import { SearchBar } from "./SearchBar/SearchBar";
+import { ThemeToggle } from "./ThemeToggle/ThemeToggle";
+import { VersionBadge } from "./VersionBadge";
+
+interface SiteHeaderProps {
+    toggleSidebarOnMobile: () => void;
+}
+
+export const SiteHeader = ({ toggleSidebarOnMobile }: SiteHeaderProps) => {
+    const handleMenuToggleClick = (e: { stopPropagation: () => void; }) => {
         e.stopPropagation();
         toggleSidebarOnMobile();
     };
@@ -48,7 +46,7 @@ export const SiteHeader = ({ toggleSidebarOnMobile }) => {
                     <VersionBadge />
 
                     {/* GITHUB LOGO ================================================================================ */}
-                    <Link href="https://github.com/fictoan/fictoan-react" target="_blank" rel="noopener noreferrer">
+                    <Link href="https://github.com/fictoan/fictoan" target="_blank" rel="noopener noreferrer">
                         <Div id="github-link" verticallyCentreItems>
                             <GithubIcon />
                         </Div>

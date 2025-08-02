@@ -1,59 +1,28 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Element,
-    Heading1,
-    Heading2,
-    Heading3,
-    Heading4,
-    Heading5,
-    Heading6,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Card,
-    Form,
-    Header,
-    RadioTabGroup,
-    Select,
-    ToastItem,
-    ToastsWrapper,
-    Button,
-    Range,
-CodeBlock
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Element, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Divider, Portion, Row, Text, Article, Card, Form, Header, RadioTabGroup, Select, ToastItem, ToastsWrapper, Button, Range, CodeBlock } from "fictoan-react";
 
-// COMPONENTS ==========================================================================================================
+// UTILS ===============================================================================================================
+import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-toast.css";
 
-// HOOKS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-
-// UTILS ===============================================================================================================
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-
-// DATA ================================================================================================================
 import { toastProps } from "./config";
 
 const ToastDocs = () => {
     const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(toastProps.variables);
 
-    // SAMPLE ==========================================================================================================
     const [showSampleToast, setShowSampleToast] = useState(false);
 
-    // CUSTOMISE =======================================================================================================
     const [selectedPosition, setSelectedPosition] = useState("top");
     const [secondsToShowFor, setSecondsToShowFor] = useState(100);
-
-    // THEME ===========================================================================================================
 
 
     return (

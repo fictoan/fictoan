@@ -1,49 +1,22 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useEffect, useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Element,
-    Heading1,
-    Heading2,
-    Heading3,
-    Heading4,
-    Heading5,
-    Heading6,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Form,
-    Card,
-    Header,
-    RadioTabGroup,
-    Range,
-    Select,
-    ProgressBar,
-    InputField,
-CodeBlock
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Element, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Divider, Portion, Row, Text, Article, Form, Card, Header, RadioTabGroup, Range, Select, ProgressBar, InputField, CodeBlock } from "fictoan-react";
 
-// COMPONENTS ==========================================================================================================
+// UTILS ===============================================================================================================
+import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-progress-bar.css";
 
-// HOOKS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-
-// UTILS ===============================================================================================================
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-
-// DATA ================================================================================================================
 import { progressProps } from "./config";
 
 const ProgressBarDocs = () => {
-    // SAMPLE ==========================================================================================================
     const [max, setMax] = useState("");
     const [value, setValue] = useState("");
     const [label, setLabel] = useState("");
@@ -51,9 +24,6 @@ const ProgressBarDocs = () => {
 
     const [selectedShape, setSelectedShape] = useState("");
 
-    // CUSTOMISE =======================================================================================================
-
-    // THEME ===========================================================================================================
     const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(progressProps.variables);
 
     return (
@@ -67,7 +37,7 @@ const ProgressBarDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <ul>
                         <li>Always takes up 100% width of its parent</li>
                     </ul>

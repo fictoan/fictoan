@@ -1,46 +1,24 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Element,
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Card,
-    Form,
-    Header,
-    Checkbox,
-    Select,
-    Range,
-    CodeBlock,
-    OptionCard,
-    OptionCardsGroup,
-    RadioTabGroup
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Element, Heading1, Heading4, Divider, Portion, Row, Text, Article, Card, Form, Header, Checkbox, Select, Range, CodeBlock, OptionCard, OptionCardsGroup, RadioTabGroup } from "fictoan-react";
+
+// UTILS ===============================================================================================================
+import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-option-cards.css";
 
-// HOOKS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-
-// UTILS ===============================================================================================================
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-
-// DATA ================================================================================================================
 import { optionCardProps } from "./config";
 
 const OptionCardsDocs = () => {
     const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(optionCardProps.variables);
 
-    // CUSTOMISE =======================================================================================================
     const [allowMultipleSelections, setAllowMultipleSelections] = useState(false);
     const [showTickIcon, setShowTickIcon] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
@@ -72,7 +50,7 @@ const OptionCardsDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <ul>
                         <li>Supports single and multiple selections</li>
                         <li>Optional tick icon indicator</li>
