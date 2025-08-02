@@ -1,15 +1,15 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { ChangeEvent } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
-import { Div } from "../../Element/Tags";
-import { Text } from "../../Typography/Text";
-import { InputLabel } from "../InputLabel/InputLabel";
-import { FormItem } from "../FormItem/FormItem";
+// ELEMENT =============================================================================================================
+import { Element } from "$element";
 
-// TYPES ===============================================================================================================
+// OTHER ===============================================================================================================
 import { BaseInputComponentWithIconProps } from "./constants";
+import { Div } from "$tags";
+import { FormItem } from "$/components";
+import { InputLabel } from "$/components";
+import { Text } from "$/components";
 
 export type InputElementType = HTMLInputElement | HTMLDivElement | HTMLSelectElement | HTMLTextAreaElement;
 

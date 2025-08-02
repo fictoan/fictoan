@@ -1,21 +1,21 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../../Element/constants";
 
 // STYLES ==============================================================================================================
 import "./form-item-group.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../../Element/constants";
+// OTHER ===============================================================================================================
+import { Element } from "$element";
 
 // prettier-ignore
 export interface FormItemGroupCustomProps {
-    isJoint               ? : boolean;
-    equalWidthForChildren ? : React.ReactNode;
-    retainLayout          ? : boolean;
-    legend                ? : string;
+        isJoint               ? : boolean;
+        equalWidthForChildren ? : React.ReactNode;
+        retainLayout          ? : boolean;
+        legend                ? : string;
 }
 
 export type FormItemGroupElementType = HTMLDivElement;

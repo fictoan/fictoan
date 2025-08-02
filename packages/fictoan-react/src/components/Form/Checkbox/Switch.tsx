@@ -1,26 +1,26 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useMemo } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
-import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
+// ELEMENT =============================================================================================================
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./switch.css";
 
-// TYPES ===============================================================================================================
+// OTHER ===============================================================================================================
+import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
 import { BaseInputComponentProps } from "../BaseInputComponent/constants";
 
 export interface SwitchCustomProps {
-    size ? : "small" | "medium" | "large";
+        size ? : "small" | "medium" | "large";
 }
 
 export type SwitchElementType = HTMLInputElement;
 export type SwitchProps = Omit<BaseInputComponentProps<SwitchElementType>,
     keyof SwitchCustomProps | "as" | "onChange" | "value"> & SwitchCustomProps & {
-    onChange       ? : (checked: boolean) => void;
-    checked        ? : boolean;
-    defaultChecked ? : boolean;
+        onChange       ? : (checked: boolean) => void;
+        checked        ? : boolean;
+        defaultChecked ? : boolean;
 };
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -40,30 +40,29 @@ function info() {
 }
 
 # Show total progress
-total_steps=5
+total_steps=6
 current_step=0
 
 function show_progress() {
     current_step=$((current_step + 1))
-    echo -e "${MAGENTA}[Step $current_step/$total_steps]${RESET}"
+    echo -e "${MAGENTA} —— Step $current_step of $total_steps ——${RESET}"
 }
 
 # Intro
 echo -e "\n${MAGENTA}${BOLD}🚀 FICTOAN REBUILD WIZARD 🧙${RESET}\n"
-echo -e "${YELLOW}Let's get your development environment up and running!${RESET}\n"
+echo -e "${YELLOW}Let’s get your development environment up and running!${RESET}\n"
 
 # Stop any running dev servers
 show_progress
 step "Stopping any running dev servers..."
 pkill -f 'node .*/turbo/bin' || true
-success "Cleared any running processes"
+success "Cleared any running processes\n\n"
 
 # Clean up node_modules and .next cache
 show_progress
 step "Cleaning up the environment..."
 rm -rf packages/fictoan-docs/node_modules packages/fictoan-docs/.next
-success "Removed node_modules and .next cache"
-draw_separator
+success "Removed node_modules and .next cache\n\n"
 
 # Install dependencies for docs
 show_progress
@@ -71,9 +70,8 @@ step "Installing dependencies for documentation..."
 # shellcheck disable=SC2164
 cd packages/fictoan-docs
 yarn install
-success "Dependencies installed for fictoan-docs"
+success "Dependencies installed for fictoan-docs\n\n"
 cd ../..
-draw_separator
 
 # Build fictoan-react
 show_progress
@@ -81,16 +79,16 @@ step "Building Fictoan components..."
 # shellcheck disable=SC2164
 cd packages/fictoan-react
 yarn build
-success "Fictoan React built successfully!"
+yarn build:props-metadata
+success "Props metadata generated..."
+success "Fictoan React built successfully!\n\n"
 cd ../../
-draw_separator
 
 # Copy library to docs
 show_progress
 step "Copying library to documentation..."
-node scripts/copy-lib.js
-success "Library copied to docs project"
-draw_separator
+node scripts/copy-lib.js --copy-only
+success "Library copied to docs project\n\n"
 
 # All done
 show_progress

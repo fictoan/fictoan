@@ -41,7 +41,7 @@
                 "./src/components/*"
             ],
             "$element"    : [
-                "./src/components/Element/Element"
+                "./src/components/Element/index"
             ],
             "$hooks/*"      : [
                 "./src/hooks/*"

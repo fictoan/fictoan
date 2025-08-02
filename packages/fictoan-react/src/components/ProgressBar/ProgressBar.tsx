@@ -1,15 +1,15 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
-import { Text } from "../Typography/Text";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./progress-bar.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../Element/constants";
+// OTHER ===============================================================================================================
+import { Text } from "../Typography/Text";
 
 // prettier-ignore
 export interface ProgressBarLabelCustomProps {
@@ -18,11 +18,12 @@ export interface ProgressBarLabelCustomProps {
 
 // prettier-ignore
 export interface ProgressBarCustomProps {
-    barBg    ? : string;
-    barFill  ? : string;
-    suffix   ? : string;
-    height   ? : string;
-    max      ? : number;    // Maximum value
+    barBg   ? : string;
+    barFill ? : string;
+    suffix  ? : string;
+    height  ? : string;
+    max     ? : number;
+    // Maximum value
 }
 
 export type ProgressBarElementType = HTMLProgressElement;

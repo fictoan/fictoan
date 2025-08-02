@@ -1,33 +1,46 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
-import { Div } from "../../Element/Tags";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./sidebar-item.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../../Element/constants";
+// OTHER ===============================================================================================================
+import { Div } from "$tags";
 
 // prettier-ignore
-type BaseItemProps = { hasAlert ? : boolean; }
+type BaseItemProps = {
+        hasAlert ? : boolean;
+}
 
 // prettier-ignore
 type IconProps =
-    | { hasEmptyIcon   : boolean; hasNoIcon ? : never }  // If hasEmptyIcon is set, hasNoIcon can't be set
-    | { hasEmptyIcon ? : never;  hasNoIcon    : boolean }  // If hasNoIcon is set, hasEmptyIcon can't be set
-    | { hasEmptyIcon ? : never;  hasNoIcon  ? : never }   // Neither is set
+        | {
+          hasEmptyIcon : boolean;
+          hasNoIcon? : never;
+      } // If hasEmptyIcon is set, hasNoIcon can't be set
+        | {
+          hasEmptyIcon? : never;
+          hasNoIcon : boolean;
+      } // If hasNoIcon is set, hasEmptyIcon can't be set
+        | {
+          hasEmptyIcon? : never;
+          hasNoIcon? : never;
+      } // Neither is set
 
 export type SidebarItemCustomProps = BaseItemProps & IconProps;
 
 export type SidebarItemElementType = HTMLDivElement;
 export type SidebarItemNewProps = Omit<CommonAndHTMLProps<SidebarItemElementType>, keyof SidebarItemCustomProps> &
-    SidebarItemCustomProps;
+                                  SidebarItemCustomProps;
 
 export const SidebarItem = React.forwardRef(
-    ({ hasAlert, hasEmptyIcon, hasNoIcon, children, ...props }: SidebarItemNewProps, ref: React.Ref<SidebarItemElementType>) => {
+    (
+        {hasAlert, hasEmptyIcon, hasNoIcon, children, ...props} : SidebarItemNewProps,
+        ref : React.Ref<SidebarItemElementType>) => {
         let classNames = [];
 
         if (hasAlert) {
@@ -52,5 +65,5 @@ export const SidebarItem = React.forwardRef(
                 {children}
             </Element>
         );
-    }
+    },
 );

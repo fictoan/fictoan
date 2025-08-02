@@ -1,23 +1,23 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useRef, useImperativeHandle } from "react";
-
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
-
-// STYLES ==============================================================================================================
-import "./sidebar-wrapper.css";
 
 // HOOKS ===============================================================================================================
 import { useClickOutside } from "../../../hooks/UseClickOutside";
 
-// TYPES ===============================================================================================================
+// ELEMENT =============================================================================================================
 import { CommonAndHTMLProps } from "../../Element/constants";
+
+// STYLES ==============================================================================================================
+import "./sidebar-wrapper.css";
+
+// OTHER ===============================================================================================================
+import { Element } from "$element";
 
 // prettier-ignore
 export interface SidebarWrapperCustomProps {
-    collapsed           ? : boolean;
-    closeOnClickOutside ? : () => void;
-    showMobileSidebar   ? : boolean;
+        collapsed           ? : boolean;
+        closeOnClickOutside ? : () => void;
+        showMobileSidebar   ? : boolean;
 }
 
 export type SidebarWrapperElementType = HTMLDivElement;

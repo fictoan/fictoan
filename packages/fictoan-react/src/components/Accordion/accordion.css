@@ -24,5 +24,6 @@
 
     &[open] > summary::after {
         transform : translateY(-50%) rotate(225deg);
+        top       : calc(50% - -1px);
     }
 }

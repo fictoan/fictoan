@@ -1,13 +1,26 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useCallback, useEffect, useState } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
-
-// TYPES ===============================================================================================================
+// ELEMENT =============================================================================================================
 import { CommonAndHTMLProps } from "../Element/constants";
+import { Element } from "$element";
 
-const storageKey = "fictoan-theme";
+const getStorageKey = (): string => {
+    if (typeof window !== 'undefined') {
+        const hostname = window.location.hostname;
+        const port = window.location.port;
+        
+        // Create identifier from hostname and port
+        let identifier = hostname.replace(/\./g, '-');
+        if (port) {
+            identifier += `-${port}`;
+        }
+        
+        return `${identifier}-theme`;
+    }
+    
+    return "fictoan-theme";
+};
 
 // Create a tuple type for the theme context
 type ThemeContextType = [string, React.Dispatch<React.SetStateAction<string>>];
@@ -44,7 +57,7 @@ export const ThemeProvider = React.forwardRef(
     ({ currentTheme, themeList, children, ...props }: ThemeProviderProps, ref: React.Ref<ThemeProviderElementType>) => {
         const [shouldRender, setShouldRender] = useState<boolean>(false);
         const [themeState, setThemeState] = useState<string>(() =>
-            getTheme(storageKey) || currentTheme);
+            getTheme(getStorageKey()) || currentTheme);
 
         const setTheme = useCallback(
             (value: React.SetStateAction<string>) => {
@@ -60,7 +73,7 @@ export const ThemeProvider = React.forwardRef(
                     document.documentElement.className = "";
                     document.documentElement.classList.add(fallbackTheme);
                     try {
-                        localStorage.setItem(storageKey, fallbackTheme);
+                        localStorage.setItem(getStorageKey(), fallbackTheme);
                     } catch (e) {
                         // Unsupported
                     }
@@ -74,7 +87,7 @@ export const ThemeProvider = React.forwardRef(
                     setShouldRender(true);
                 }
                 try {
-                    localStorage.setItem(storageKey, newTheme);
+                    localStorage.setItem(getStorageKey(), newTheme);
                 } catch (e) {
                     // Unsupported
                 }
@@ -83,7 +96,7 @@ export const ThemeProvider = React.forwardRef(
         );
 
         useEffect(() => {
-            const theme = getTheme(storageKey);
+            const theme = getTheme(getStorageKey());
             setTheme(theme || currentTheme);
         }, [currentTheme, setTheme]);
 

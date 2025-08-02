@@ -1,22 +1,18 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useMemo } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
+// ELEMENT =============================================================================================================
 import { Div } from "../../Element/Tags";
+
+// INPUT ===============================================================================================================
 import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
 
 // STYLES ==============================================================================================================
 import "./select.css";
 
-// TYPES ===============================================================================================================
-import {
-    OptionProps,
-    OptGroupProps,
-    SelectProps,
-    OptionElementType,
-    SelectElementType,
-} from "./constants";
+// OTHER ===============================================================================================================
+import { Element } from "$element";
+import { OptionProps, OptGroupProps, SelectProps, OptionElementType, SelectElementType } from "./constants";
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 const SelectWithOptions = ({ id, name, options, className, onChange, ...props }: SelectProps) => {

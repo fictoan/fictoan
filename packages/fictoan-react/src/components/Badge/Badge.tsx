@@ -1,23 +1,23 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
-import { Text } from "../Typography/Text";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps, ShapeTypes, SpacingTypes } from "../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./badge.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps, ShapeTypes, SpacingTypes } from "../Element/constants";
+// OTHER ===============================================================================================================
+import { Text } from "../Typography/Text";
 
 // prettier-ignore
 export interface BadgeCustomProps {
-    size       ? : SpacingTypes;
-    shape      ? : ShapeTypes;
-    withDelete ? : boolean;
-    onDelete   ? : (event: React.MouseEvent<HTMLElement>) => void;
-    label      ? : string;
+        size       ? : SpacingTypes;
+        shape      ? : ShapeTypes;
+        withDelete ? : boolean;
+        onDelete   ? : (event: React.MouseEvent<HTMLElement>) => void;
+        label      ? : string;
 }
 
 export type BadgeElementType = HTMLDivElement;

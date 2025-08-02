@@ -2,6 +2,7 @@
 :root {
     --global-border-radius : 8px;
     --global-border-width  : 1px;
+    --global-border-style  : solid;
     --global-focus-colour  : var(--blue);
 }
 
@@ -14,5 +15,3 @@
     --large  : 16vmax;
     --huge   : 24vmax;
 }
-
-/* FONTS //////////////////////////////////////////////////////////////////// */

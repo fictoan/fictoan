@@ -1,18 +1,19 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../../Element/constants";
 
 // STYLES ==============================================================================================================
 import "./content-wrapper.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../../Element/constants";
+// OTHER ===============================================================================================================
+import { Element } from "$element";
 
 export type ContentWrapperElementType = HTMLDivElement;
 interface ContentWrapperCustomProps {
-    label ? : string; // For aria-label
+    label ? : string;
+    // For aria-label
 }
 export type ContentWrapperProps = CommonAndHTMLProps<ContentWrapperElementType> & ContentWrapperCustomProps;
 

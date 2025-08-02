@@ -1,21 +1,21 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../../Element/constants";
 
 // STYLES ==============================================================================================================
 import "./notifications-wrapper.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../../Element/constants";
+// OTHER ===============================================================================================================
+import { Element } from "$element";
 
 // prettier-ignore
 export interface NotificationsWrapperCustomProps {
-    position ? : "left" | "right";
-    anchor   ? : "top" | "bottom";
-    order    ? : "new-on-top" | "new-on-bottom";
-    label    ? : string;
+        position ? : "left" | "right";
+        anchor   ? : "top" | "bottom";
+        order    ? : "new-on-top" | "new-on-bottom";
+        label    ? : string;
 }
 
 export type NotificationsWrapperElementType = HTMLDivElement;

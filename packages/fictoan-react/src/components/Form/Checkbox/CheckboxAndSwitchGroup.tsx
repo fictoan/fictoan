@@ -1,19 +1,19 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useMemo } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
+// INPUT ===============================================================================================================
 import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
-import { Checkbox } from "./Checkbox";
-import { Switch } from "./Switch";
+import { BaseInputComponentProps } from "../BaseInputComponent/constants";
 
 // STYLES ==============================================================================================================
 import "./checkbox-and-switch-group.css";
 
-// TYPES ===============================================================================================================
+// OTHER ===============================================================================================================
+import { Checkbox } from "./Checkbox";
 import { CheckboxProps } from "./Checkbox";
+import { Element } from "$element";
+import { Switch } from "./Switch";
 import { SwitchProps } from "./Switch";
-import { BaseInputComponentProps } from "../BaseInputComponent/constants";
 
 // COMMON GROUP OPTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 interface BaseGroupOptionProps {
@@ -44,7 +44,6 @@ interface GroupCustomProps<T> {
 export type InputGroupProps<T> = Omit<BaseInputComponentProps<HTMLDivElement>, "value"> & GroupCustomProps<T>;
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Generic group options component that can work with different input types ============================================
 function InputGroupOptions<T>(
     {
         id,
@@ -58,19 +57,16 @@ function InputGroupOptions<T>(
     }: InputGroupProps<T> & { InputComponent: React.ComponentType<any> }) {
     const derivedName = useMemo(() => name || id, [ name, id ]);
 
-    // Use controlled or uncontrolled value ============================================================================
     const [ selectedValues, setSelectedValues ] = React.useState<string[]>(
         value || defaultValue || [],
     );
 
-    // Update internal state when controlled value changes =============================================================
     React.useEffect(() => {
         if (value !== undefined) {
             setSelectedValues(value);
         }
     }, [ value ]);
 
-    // Handle individual input changes =================================================================================
     const handleChange = (optionValue: string, checked: boolean) => {
         let newValues: string[];
 

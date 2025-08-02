@@ -1,18 +1,17 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useState, useEffect, useRef } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
+// ELEMENT =============================================================================================================
 import { CommonAndHTMLProps } from "../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./tooltip.css";
 
-// TYPES ===============================================================================================================
 export interface TooltipCustomProps {
-    isTooltipFor: string;
-    showOn   ? : "click" | "hover";
-    position ? : "top" | "bottom" | "left" | "right";
+        isTooltipFor   : string;
+        showOn       ? : "click" | "hover";
+        position     ? : "top" | "bottom" | "left" | "right";
 }
 
 export type TooltipElementType = HTMLDivElement;
@@ -21,7 +20,6 @@ export type TooltipProps = Omit<CommonAndHTMLProps<TooltipElementType>, keyof To
 const TOOLTIP_OFFSET = 8;
 const SCREEN_PADDING = 16;
 
-// Positioning helper function =========================================================================================
 const calculatePosition = (
     tooltipElement: HTMLElement,
     targetElement: HTMLElement,

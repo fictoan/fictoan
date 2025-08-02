@@ -74,7 +74,7 @@ The MCP server is now fully operational with comprehensive tooling:
 - ✅ TypeScript component file generation extending `Element` base
 - ✅ Proper prop interface extending `CommonAndHTMLProps`
 - ✅ CSS file generation with theme variables following naming patterns
-- ✅ Automatic component export updates in `index.tsx`
+- ✅ Automatic component export updates in `PropsConfigurator.tsx`
 - ✅ Global theme integration
 - ✅ Custom props support
 - ✅ Component validation and error handling

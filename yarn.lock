@@ -2546,11 +2546,6 @@ fastq@^1.6.0:
   dependencies:
     reusify "^1.0.4"
 
-fictoan-react@1.11.11:
-  version "1.11.11"
-  resolved "https://registry.yarnpkg.com/fictoan-react/-/fictoan-react-1.11.11.tgz#127f72eaac3ff62fca1ad7225f1164130efc486e"
-  integrity sha512-TSo6zvccSbolkB+tPDttupvXZGjKtNRi3zel7MnXsCLCAC+5yOblGXZznHXlQxPGJUcLwY9VHczk44omnDtu0w==
-
 fill-range@^7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/fill-range/-/fill-range-7.1.1.tgz#44265d3cac07e3ea7dc247516380643754a05292"
@@ -3358,6 +3353,11 @@ raw-body@^3.0.0:
     http-errors "2.0.0"
     iconv-lite "0.6.3"
     unpipe "1.0.0"
+
+react-docgen-typescript@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-docgen-typescript/-/react-docgen-typescript-2.4.0.tgz#033428b4a6a639d050ac8baf2a5195c596521713"
+  integrity sha512-ZtAp5XTO5HRzQctjPU0ybY0RRCQO19X/8fxn3w7y2VVTUbGHDKULPTL4ky3vB05euSgG5NpALhEhDPvQ56wvXg==
 
 react-dom@^18.2.0:
   version "18.3.1"

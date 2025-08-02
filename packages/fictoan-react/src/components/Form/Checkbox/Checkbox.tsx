@@ -1,22 +1,22 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useMemo } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
+// INPUT ===============================================================================================================
 import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
+import { BaseInputComponentProps } from "../BaseInputComponent/constants";
 
 // STYLES ==============================================================================================================
 import "./checkbox.css";
 
-// TYPES ===============================================================================================================
-import { BaseInputComponentProps } from "../BaseInputComponent/constants";
+// OTHER ===============================================================================================================
+import { Element } from "$element";
 
 export type CheckboxElementType = HTMLInputElement;
 export type CheckboxProps = Omit<BaseInputComponentProps<CheckboxElementType>, "as" | "onChange" | "value"> & {
-    value          ? : string;
-    defaultChecked ? : boolean;
-    checked        ? : boolean;
-    onChange       ? : (checked: boolean) => void;
+        value          ? : string;
+        defaultChecked ? : boolean;
+        checked        ? : boolean;
+        onChange       ? : (checked: boolean) => void;
 };
 
 // TODO: Fix required indicator that clashes with tick because both use the same `label::after` setup.

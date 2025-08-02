@@ -1,24 +1,23 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
-import { Callout } from "../../Callout/Callout";
-
-import { FormFieldsConfig, generateFormThroughConfig } from "./FormGenerator";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps, SpacingTypes } from "../../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./form.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps, SpacingTypes } from "../../Element/constants";
+// OTHER ===============================================================================================================
+import { Callout } from "$/components";
+import { FormFieldsConfig, generateFormThroughConfig } from "./FormGenerator";
 
 // prettier-ignore
 export interface FormCustomProps {
-    spacing        ? : SpacingTypes;
-    fields         ? : FormFieldsConfig[];
-    onFieldsChange ? : (values: Record<string, any>) => void;
-    errorText      ? : string;
+        spacing        ? : SpacingTypes;
+        fields         ? : FormFieldsConfig[];
+        onFieldsChange ? : (values: Record<string, any>) => void;
+        errorText      ? : string;
 }
 
 export type FormElementType = HTMLFormElement;

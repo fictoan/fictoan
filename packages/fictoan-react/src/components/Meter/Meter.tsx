@@ -1,36 +1,36 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
-import { Text } from "../Typography/Text";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./meter.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../Element/constants";
+// OTHER ===============================================================================================================
+import { Text } from "../Typography/Text";
 
 // prettier-ignore
 export interface MeterLabelCustomProps {
-    suffix? : string;
+        suffix ? : string;
 }
 
 // prettier-ignore
 export interface MeterCustomProps extends Omit<CommonAndHTMLProps<HTMLMeterElement>, "value"> {
-    min                 : number;
-    max                 : number;
-    low                 : number;
-    high                : number;
-    value               : number;
-    optimum           ? : number;
-    showOptimumMarker ? : boolean;
-    barBg             ? : string;
-    barFill           ? : string;
-    suffix            ? : string;
-    height            ? : string;
-    ariaLabel         ? : string;
-    description       ? : string;
+        min                 : number;
+        max                 : number;
+        low                 : number;
+        high                : number;
+        value               : number;
+        optimum           ? : number;
+        showOptimumMarker ? : boolean;
+        barBg             ? : string;
+        barFill           ? : string;
+        suffix            ? : string;
+        height            ? : string;
+        ariaLabel         ? : string;
+        description       ? : string;
 }
 
 export type MeterElementType = HTMLMeterElement;
@@ -55,7 +55,6 @@ export const Meter = React.forwardRef(
         optimum,
         ...props
     } : MeterProps, ref : React.Ref<MeterElementType>) => {
-        // CALCULATE OPTIMUM MARKER POSITION ===========================================================================
         const optimumPositionPercent = optimum ? (
             (
                 optimum - min
@@ -64,7 +63,6 @@ export const Meter = React.forwardRef(
             )
         ) * 100 : 0;
 
-        // GENERATE DESCRIPTIVE STATUS STRING ==========================================================================
         const getValueDescription = () => {
             const percentage = (
                 (

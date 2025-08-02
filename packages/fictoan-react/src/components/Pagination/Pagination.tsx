@@ -1,22 +1,19 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
+// ELEMENT =============================================================================================================
 import { Div } from "../Element/Tags";
-import { Text } from "../Typography/Text";
-import { Spinner } from "../Spinner/Spinner";
-import { Button } from "../Button/Button";
-
-// HOOKS ===============================================================================================================
-import { usePagination } from "./usePagination";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./pagination.css";
 
-// TYPES ===============================================================================================================
+// OTHER ===============================================================================================================
+import { Button } from "../Button/Button";
 import { PaginationProps, PaginationElementType, RenderItemProps } from "./constants";
-
+import { Spinner } from "../Spinner/Spinner";
+import { Text } from "../Typography/Text";
+import { usePagination } from "./usePagination";
 
 const defaultRenderItem = (
     {

@@ -1,17 +1,19 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useState, useEffect, useRef, useCallback } from "react";
+
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./CodeBlock.css";
 
 // OTHER ===============================================================================================================
-import { Badge } from "../Badge/Badge";
-import { Button } from "../Button/Button";
-import { CommonAndHTMLProps } from "../Element/constants";
-import { Element } from "../Element/Element";
+import { Badge } from "$/components";
+import { Button } from "$/components";
 
 interface PrismType {
-    languages : { [key: string]: any };
+    languages : { [key : string] : any };
     highlight : (
         code     : string,
         grammar  : any,
@@ -28,50 +30,47 @@ export interface CodeBlockCustomProps {
     description            ? : string;
     withSyntaxHighlighting ? : boolean;
     makeEditable           ? : boolean;
-    onChange               ? : (content: string) => void;
+    onChange               ? : (content : string) => void;
 }
 
 export type CodeBlockElementType = HTMLPreElement;
-export type CodeBlockProps = Omit<CommonAndHTMLProps<CodeBlockElementType>, keyof CodeBlockCustomProps> &
-    CodeBlockCustomProps;
+export type CodeBlockProps = Omit<CommonAndHTMLProps<CodeBlockElementType>,
+keyof CodeBlockCustomProps> & CodeBlockCustomProps;
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const CodeBlock = React.forwardRef((
-    {
-        children,
-        source,
-        language = "json",
-        showCopyButton,
-        showLineNumbers,
-        description,
-        withSyntaxHighlighting = false,
-        makeEditable = false,
-        onChange,
-        ...props
-    }: CodeBlockProps,
-    ref: React.Ref<CodeBlockElementType>,
+{
+    children,
+    source,
+    language = "json",
+    showCopyButton,
+    showLineNumbers,
+    description,
+    withSyntaxHighlighting = false,
+    makeEditable = false,
+    onChange,
+    ...props
+} : CodeBlockProps,
+ref : React.Ref<CodeBlockElementType>,
 ) => {
-    // STATE MANAGEMENT ================================================================================================
     const [ isCodeCopied, setIsCodeCopied ] = useState(false);
-    const [ prismModule, setPrismModule ]   = useState<PrismType | null>(null);
-    const [ isLoading, setIsLoading ]       = useState(withSyntaxHighlighting);
-    const [ codeElement, setCodeElement ]   = useState<HTMLElement | null>(null);
+    const [ prismModule, setPrismModule ] = useState<PrismType | null>(null);
+    const [ isLoading, setIsLoading ] = useState(withSyntaxHighlighting);
+    const [ codeElement, setCodeElement ] = useState<HTMLElement | null>(null);
 
     const preRef = useRef<HTMLPreElement>(null);
 
-    // CONTENT HANDLER =================================================================================================
     // Determine the code content from either children or source prop
     let initialCode = typeof children === "string"
-        ? children
-        : React.Children.toArray(children).join("");
+    ? children
+    : React.Children.toArray(children).join("");
 
     if (!children) {
         initialCode = typeof source === "object"
-            ? JSON.stringify(source, null, 2)
-            : source ?? "";
+        ? JSON.stringify(source, null, 2)
+        : source ?? "";
     }
 
-    // SYNTAX HIGHLIGHTING =============================================================================================
     // Dynamically load Prism and language support when syntax highlighting is enabled
     useEffect(() => {
         if (!withSyntaxHighlighting) return;
@@ -80,7 +79,7 @@ export const CodeBlock = React.forwardRef((
             setIsLoading(true);
             try {
                 // Load both Prism core and language-specific module in parallel
-                const [prism] = await Promise.all([
+                const [ prism ] = await Promise.all([
                     import("prismjs"),
                     language !== "plain" ? import(`prismjs/components/prism-${language}`) : Promise.resolve(),
                 ]);
@@ -93,9 +92,8 @@ export const CodeBlock = React.forwardRef((
         };
 
         loadPrismWithLanguage();
-    }, [withSyntaxHighlighting, language]);
+    }, [ withSyntaxHighlighting, language ]);
 
-    // CURSOR POSITION HANDLING ========================================================================================
     // Get the current cursor position in the editable content
     const getCursorPosition = useCallback(() => {
         const selection = window.getSelection();
@@ -109,9 +107,9 @@ export const CodeBlock = React.forwardRef((
         let absoluteOffset = cursorOffset;
         if (currentNode && currentNode !== codeElement && codeElement) {
             const treeWalker = document.createTreeWalker(
-                codeElement,
-                NodeFilter.SHOW_TEXT,
-                null,
+            codeElement,
+            NodeFilter.SHOW_TEXT,
+            null,
             );
             let node;
             while ((node = treeWalker.nextNode())) {
@@ -121,11 +119,10 @@ export const CodeBlock = React.forwardRef((
         }
 
         return absoluteOffset;
-    }, [codeElement]);
+    }, [ codeElement ]);
 
-    // CODE HIGHLIGHTING ===============================================================================================
     // Apply syntax highlighting while preserving cursor position in editable mode
-    const highlightCode = useCallback((content: string) => {
+    const highlightCode = useCallback((content : string) => {
         if (!codeElement || !withSyntaxHighlighting || !prismModule) return;
 
         try {
@@ -134,9 +131,9 @@ export const CodeBlock = React.forwardRef((
 
             // Apply Prism highlighting
             const highlighted = prismModule.highlight(
-                content,
-                prismModule.languages[language] || prismModule.languages.plain,
-                language,
+            content,
+            prismModule.languages[language] || prismModule.languages.plain,
+            language,
             );
             codeElement.innerHTML = highlighted;
 
@@ -145,9 +142,9 @@ export const CodeBlock = React.forwardRef((
                 const selection = window.getSelection();
                 const newRange = document.createRange();
                 const treeWalker = document.createTreeWalker(
-                    codeElement,
-                    NodeFilter.SHOW_TEXT,
-                    null,
+                codeElement,
+                NodeFilter.SHOW_TEXT,
+                null,
                 );
 
                 // Walk through text nodes to find correct cursor position
@@ -171,11 +168,10 @@ export const CodeBlock = React.forwardRef((
                 codeElement.textContent = content;
             }
         }
-    }, [language, withSyntaxHighlighting, makeEditable, prismModule, getCursorPosition, codeElement]);
+    }, [ language, withSyntaxHighlighting, makeEditable, prismModule, getCursorPosition, codeElement ]);
 
-    // CONTENT EDITING =================================================================================================
     // Handle content changes in editable mode
-    const handleInput = useCallback((event: Event) => {
+    const handleInput = useCallback((event : Event) => {
         if (!codeElement) return;
 
         const content = codeElement.textContent || "";
@@ -185,7 +181,7 @@ export const CodeBlock = React.forwardRef((
         requestAnimationFrame(() => {
             highlightCode(content);
         });
-    }, [highlightCode, onChange, codeElement]);
+    }, [ highlightCode, onChange, codeElement ]);
 
     // Setup input handler for editable content
     useEffect(() => {
@@ -196,15 +192,14 @@ export const CodeBlock = React.forwardRef((
         return () => {
             element.removeEventListener("input", handleInput);
         };
-    }, [makeEditable, handleInput, codeElement]);
+    }, [ makeEditable, handleInput, codeElement ]);
 
     // Initial highlighting when component loads
     useEffect(() => {
         if (!codeElement || !prismModule) return;
         highlightCode(initialCode);
-    }, [highlightCode, initialCode, prismModule, codeElement]);
+    }, [ highlightCode, initialCode, prismModule, codeElement ]);
 
-    // COPY TO CLIPBOARD ===============================================================================================
     const copyToClipboard = async () => {
         try {
             const textToCopy = codeElement ? codeElement.textContent || "" : initialCode;
@@ -217,14 +212,13 @@ export const CodeBlock = React.forwardRef((
     };
 
     // Keyboard shortcuts for copy button ------------------------------------------------------------------------------
-    const handleKeyDown = async (e: React.KeyboardEvent) => {
+    const handleKeyDown = async (e : React.KeyboardEvent) => {
         if ((e.key === "Enter" || e.key === " ") && e.target === preRef.current) {
             e.preventDefault();
             await copyToClipboard();
         }
     };
 
-    // LINE NUMBERS ====================================================================================================
     let classNames = [];
 
     if (showLineNumbers) {
@@ -235,70 +229,70 @@ export const CodeBlock = React.forwardRef((
     const lines = initialCode.split(/\r\n|\r|\n/gm);
 
     return (
-        <Element<CodeBlockElementType>
-            data-code-block
-            as="div"
-            classNames={classNames}
-            role="region"
-            aria-label={description || `Code block in ${language}`}
-            {...props}
+    <Element<CodeBlockElementType>
+    data-code-block
+    as="div"
+    classNames={classNames}
+    role="region"
+    aria-label={description || `Code block in ${language}`}
+    {...props}
+    >
+        {/* Copy Button or Copied Badge */}
+        {showCopyButton ? (
+        isCodeCopied ? (
+        <Badge
+        className="code-block-copied-badge"
+        size="tiny"
+        shape="rounded"
+        aria-live="polite"
         >
-            {/* Copy Button or Copied Badge */}
-            {showCopyButton ? (
-                isCodeCopied ? (
-                    <Badge
-                        className="code-block-copied-badge"
-                        size="tiny"
-                        shape="rounded"
-                        aria-live="polite"
-                    >
-                        Copied!
-                    </Badge>
-                ) : (
-                    <Button
-                        type="button"
-                        className="code-block-copy-button"
-                        size="tiny"
-                        shape="rounded"
-                        onClick={copyToClipboard}
-                        onKeyDown={handleKeyDown}
-                        aria-label="Copy code to clipboard"
-                    >
-                        Copy
-                    </Button>
-                )
-            ) : null}
+            Copied!
+        </Badge>
+        ) : (
+        <Button
+        type="button"
+        className="code-block-copy-button"
+        size="tiny"
+        shape="rounded"
+        onClick={copyToClipboard}
+        onKeyDown={handleKeyDown}
+        aria-label="Copy code to clipboard"
+        >
+            Copy
+        </Button>
+        )
+        ) : null}
 
-            {/* MAIN CODE DISPLAY ////////////////////////////////////////////////////////////////////////////////// */}
-            <pre
-                ref={preRef}
-                className={`language-${language}`}
-                tabIndex={0}
-                aria-label={`Code in ${language}`}
-            >
+        {/* MAIN CODE DISPLAY ////////////////////////////////////////////////////////////////////////////////// */}
+        <pre
+        ref={preRef}
+        className={`language-${language}`}
+        tabIndex={0}
+        aria-label={`Code in ${language}`}
+        >
                 {/* Line Numbers */}
-                {showLineNumbers &&
-                    Array.from(Array(lines.length).keys()).map((index) => (
-                        <span
-                            key={index}
-                            className="line-numbers"
-                            aria-hidden="true"
-                        >
+            {showLineNumbers &&
+            Array.from(Array(lines.length).keys()).map((index) => (
+            <span
+            key={index}
+            className="line-numbers"
+            aria-hidden="true"
+            >
                             {index + 1}
                         </span>
-                    ))}
+            ))}
 
-                {/* Code Content */}
-                <code
-                    ref={setCodeElement}
-                    contentEditable={makeEditable}
-                    suppressContentEditableWarning={true}
-                    spellCheck="false"
-                    className={`language-${language} ${isLoading ? "is-loading" : ""}`}
-                >
+            {/* Code Content */}
+            <code
+            ref={setCodeElement}
+            contentEditable={makeEditable}
+            suppressContentEditableWarning={true}
+            spellCheck="false"
+            className={`language-${language} ${isLoading ? "is-loading" : ""}`}
+            >
                     {initialCode}
                 </code>
             </pre>
-        </Element>
+    </Element>
     );
 });

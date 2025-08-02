@@ -1,30 +1,32 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useEffect, useCallback } from "react";
+
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../Element/constants";
+import { Div } from "../Element/Tags";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./tabs.css";
 
 // OTHER ===============================================================================================================
-import { CommonAndHTMLProps } from "../Element/constants";
-import { Div } from "../Element/Tags";
 import { Divider } from "../Divider/Divider";
-import { Element } from "../Element/Element";
 import { Text } from "../Typography/Text";
 
 interface TabType {
-    key        : string;
-    label      : React.ReactNode;
-    content    : React.ReactNode;
-    hasAlert ? : boolean;
+        key        : string;
+        label      : React.ReactNode;
+        content    : React.ReactNode;
+        hasAlert ? : boolean;
 }
 
 // prettier-ignore
 export interface TabsCustomProps {
-    tabs                          : TabType[];
-    /** wrapper to render additional content inside the nav along with tab labels */
-    additionalNavContentWrapper ? : React.ReactNode;
-    defaultActiveTab            ? : React.ReactNode;
-    align                       ? : "left" | "centre" | "center" | "right";
+        tabs               : TabType[];
+        /** wrapper to render additional content inside the nav along with tab labels */
+        additionalNavContentWrapper ? : React.ReactNode;
+        defaultActiveTab ? : React.ReactNode;
+        align            ? : "left" | "centre" | "center" | "right";
 }
 
 export type TabsElementType = HTMLDivElement;

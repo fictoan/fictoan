@@ -101,13 +101,13 @@ function generateCSS() {
 
             prefixes.forEach(prefix => {
                 css += prefix === "border" ?
-                    `.${prefix}-${baseClassName} { border-color: var(--${baseClassName}); }\n` :
+                    `.${prefix}-${baseClassName} { border-color: var(--${baseClassName}); border-width: var(--global-border-width); border-style: var(--global-border-style); }\n` :
                     `.${prefix}-${baseClassName} { ${prefix === "bg" ? "background-" : ""}color: var(--${baseClassName}); }\n`;
 
                 alphaLevels.forEach(alpha => {
                     const className = `${baseClassName}-opacity${alpha}`;
                     css += prefix === "border" ?
-                        `.${prefix}-${className} { border-color: var(--${className}); }\n` :
+                        `.${prefix}-${className} { border-color: var(--${className}); border-width: var(--global-border-width); border-style: var(--global-border-style); }\n` :
                         `.${prefix}-${className} { ${prefix === "bg" ? "background-" : ""}color: var(--${className}); }\n`;
                 });
             });
@@ -116,24 +116,24 @@ function generateCSS() {
 
     prefixes.forEach(prefix => {
         css += prefix === "border" ?
-            `.${prefix}-white { border-color: var(--white); }\n` :
+            `.${prefix}-white { border-color: var(--white); border-width: var(--global-border-width); border-style: var(--global-border-style); }\n` :
             `.${prefix}-white { ${prefix === "bg" ? "background-" : ""}color: var(--white); }\n`;
 
         css += prefix === "border" ?
-            `.${prefix}-black { border-color: var(--black); }\n` :
+            `.${prefix}-black { border-color: var(--black); border-width: var(--global-border-width); border-style: var(--global-border-style); }\n` :
             `.${prefix}-black { ${prefix === "bg" ? "background-" : ""}color: var(--black); }\n`;
 
         css += prefix === "border" ?
-            `.${prefix}-transparent { border-color: var(--transparent); }\n` :
+            `.${prefix}-transparent { border-color: var(--transparent); border-width: var(--global-border-width); border-style: var(--global-border-style); }\n` :
             `.${prefix}-transparent { ${prefix === "bg" ? "background-" : ""}color: var(--transparent); }\n`;
 
         alphaLevels.forEach(alpha => {
             css += prefix === "border" ?
-                `.${prefix}-white-opacity${alpha} { border-color: var(--white-opacity${alpha}); }\n` :
+                `.${prefix}-white-opacity${alpha} { border-color: var(--white-opacity${alpha}); border-width: var(--global-border-width); border-style: var(--global-border-style); }\n` :
                 `.${prefix}-white-opacity${alpha} { ${prefix === "bg" ? "background-" : ""}color: var(--white-opacity${alpha}); }\n`;
 
             css += prefix === "border" ?
-                `.${prefix}-black-opacity${alpha} { border-color: var(--black-opacity${alpha}); }\n` :
+                `.${prefix}-black-opacity${alpha} { border-color: var(--black-opacity${alpha}); border-width: var(--global-border-width); border-style: var(--global-border-style); }\n` :
                 `.${prefix}-black-opacity${alpha} { ${prefix === "bg" ? "background-" : ""}color: var(--black-opacity${alpha}); }\n`;
         });
     });

@@ -1,20 +1,19 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { createContext, useContext } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps, ShapeTypes, SpacingTypes } from "../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./skeleton.css";
-
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps, ShapeTypes, SpacingTypes } from "../Element/constants";
 
 // Common skeleton props shared between Skeleton and SkeletonGroup
 interface CommonSkeletonProps {
     effect       ? : "pulse" | "wave" | "none";
     animate      ? : boolean;
-    loadingLabel ? : string; // Accessible label for loading state
+    loadingLabel ? : string;
+    // Accessible label for loading state
 }
 
 // Context to share common properties

@@ -1,21 +1,20 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useState, useEffect } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../../Element/constants";
 
 // STYLES ==============================================================================================================
 import "./toast-item.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../../Element/constants";
-
+// OTHER ===============================================================================================================
+import { Element } from "$element";
 
 // prettier-ignore
 export interface ToastItemCustomProps {
-    showWhen         ? : boolean;
-    secondsToShowFor ? : number;
-    closeWhen        ? : () => void;
+        showWhen         ? : boolean;
+        secondsToShowFor ? : number;
+        closeWhen        ? : () => void;
 }
 
 export type ToastItemElementType = HTMLDivElement;

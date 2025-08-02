@@ -3,7 +3,7 @@ export const displayComponentTemplate = (componentName: string, customProps: str
 import React from "react";
 
 // FICTOAN =============================================================================================
-import { Element } from "../Element/Element";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================
 import "./${componentName.toLowerCase()}.css";

@@ -1,25 +1,25 @@
-// FRAMEWORK ===========================================================================================================
-import React, {
-    useState,
-    useRef,
-    useEffect,
-    MutableRefObject,
-    KeyboardEvent,
-} from "react";
+// REACT CORE ==========================================================================================================
+import React, { useState, useRef, useEffect, MutableRefObject, KeyboardEvent } from "react";
+
+// HOOKS ===============================================================================================================
+import { useClickOutside } from "../../../hooks/UseClickOutside";
+
+// ELEMENT =============================================================================================================
+import { Div } from "../../Element/Tags";
+
+// INPUT ===============================================================================================================
+import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
 
 // STYLES ==============================================================================================================
 import "./list-box.css";
 
 // OTHER ===============================================================================================================
 import { Badge } from "../../Badge/Badge";
-import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
-import { Div } from "../../Element/Tags";
-import { Element } from "../../Element/Element";
+import { Element } from "$element";
 import { InputField } from "../InputField/InputField";
 import { ListBoxProps, OptionForListBoxProps, ListBoxElementType, ListBoxCustomProps } from "./constants";
 import { Text } from "../../Typography/Text";
 import { searchOptions } from "./listBoxUtils";
-import { useClickOutside } from "../../../hooks/UseClickOutside";
 
 const ListBoxWithOptions = (
     {
@@ -44,14 +44,12 @@ const ListBoxWithOptions = (
         ...props
     }: ListBoxCustomProps & { className?: string }) => {
 
-    // STATES ==========================================================================================================
     const [isOpen, setIsOpen]                   = useState(false);
     const [searchValue, setSearchValue]         = useState("");
     const [activeIndex, setActiveIndex]         = useState(-1);
     const [selectedOption, setSelectedOption]   = useState<OptionForListBoxProps | null>(null);
     const [selectedOptions, setSelectedOptions] = useState<OptionForListBoxProps[]>([]);
 
-    // Set initial value ===============================================================================================
     useEffect(() => {
         if (defaultValue && onChange) {
             onChange(defaultValue);
@@ -63,15 +61,12 @@ const ListBoxWithOptions = (
         return [...options];
     }, [options]);
 
-    // REFS ============================================================================================================
     const dropdownRef    = useRef() as MutableRefObject<HTMLSelectElement>;
     const searchInputRef = useRef<HTMLInputElement>(null);
 
-    // CONSTANTS =======================================================================================================
     const listboxId       = id || `listbox-${Math.random().toString(36).substring(2, 9)}`;
     const filteredOptions = searchOptions(allOptions, searchValue);
 
-    // SELECT AN OPTION ================================================================================================
     const handleSelectOption = (option: OptionForListBoxProps) => {
         if (option.disabled) return;
 
@@ -100,7 +95,6 @@ const ListBoxWithOptions = (
         setActiveIndex(-1);
     };
 
-    // SEARCH ==========================================================================================================
     const handleSearchChange = (valueOrEvent: string | React.FormEvent<HTMLInputElement>) => {
         const value = typeof valueOrEvent === "string"
             ? valueOrEvent
@@ -108,7 +102,6 @@ const ListBoxWithOptions = (
         setSearchValue(value);
     };
 
-    // CUSTOM ENTRY ====================================================================================================
     const handleCustomEntry = () => {
         if (!searchValue.trim() || !allowCustomEntries) return;
 
@@ -124,7 +117,6 @@ const ListBoxWithOptions = (
         }
     };
 
-    // REMOVE AN OPTION ================================================================================================
     const handleDeleteOption = (valueToRemove: string) => {
         if (allowMultiSelect) {
             // Filter out the option to remove
@@ -143,7 +135,6 @@ const ListBoxWithOptions = (
         }
     };
 
-    // REMOVE ALL OPTIONS ==============================================================================================
     const handleClearAll = () => {
         // Reset local state for both single and multi-select
         setSelectedOption(null);
@@ -154,7 +145,6 @@ const ListBoxWithOptions = (
     };
 
 
-    // ARROW KEYS ======================================================================================================
     const handleKeyDown = (event: KeyboardEvent) => {
         switch (event.key) {
             case "ArrowDown":
@@ -220,20 +210,17 @@ const ListBoxWithOptions = (
         }
     };
 
-    // CLICK OUTSIDE HANDLING ==========================================================================================
     useClickOutside(dropdownRef, () => {
         setIsOpen(false);
         setActiveIndex(-1);
     });
 
-    // FOCUS MANAGEMENT ================================================================================================
     useEffect(() => {
         if (isOpen && searchInputRef.current) {
             searchInputRef.current.focus();
         }
     }, [isOpen]);
 
-    // SCROLL ACTIVE OPTION INTO VIEW ==================================================================================
     useEffect(() => {
         if (activeIndex >= 0) {
             const activeOption = document.querySelector(`[data-index="${activeIndex}"]`);

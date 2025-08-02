@@ -527,8 +527,8 @@ import {
 import "./page-${kebabName}.css";
 import "../../../styles/fictoan-theme.css";
 
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
-import { createThemeConfigurator } from "../../../utils/themeConfigurator";`;
+import { createPropsConfigurator } from "$utils/propsConfigurator";
+import { createThemeConfigurator } from "$utils/themeConfigurator";`;
 
     if (doc.supportedProps.includes("bgColour") || doc.supportedProps.includes("textColour") || doc.supportedProps.includes(
         "borderColour")) {
@@ -587,7 +587,6 @@ const ${doc.name}Docs = () => {
                     </Portion>
 
                     <Portion>
-                        <Heading4 marginBottom="micro">Characteristics</Heading4>
                         <ul>`;
 
     doc.characteristics.forEach(characteristic => {

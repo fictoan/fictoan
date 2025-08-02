@@ -1,23 +1,21 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps, EmphasisTypes, ShapeTypes, SpacingTypes } from "../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./Button.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps, EmphasisTypes, ShapeTypes, SpacingTypes } from "../Element/constants";
-
 // prettier-ignore
 export interface ButtonCustomProps {
-    kind      ? : EmphasisTypes;
-    size      ? : SpacingTypes;
-    shape     ? : ShapeTypes;
-    isLoading ? : boolean;
-    hasDelete ? : boolean;
-    label     ? : string; // For aria-label
+        kind      ? : EmphasisTypes;
+        size      ? : SpacingTypes;
+        shape     ? : ShapeTypes;
+        isLoading ? : boolean;
+        hasDelete ? : boolean;
+        label     ? : string;
 }
 
 export type ButtonElementType = HTMLButtonElement;
