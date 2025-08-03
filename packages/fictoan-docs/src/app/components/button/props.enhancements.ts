@@ -1,9 +1,15 @@
 export const enhancements = {
-    withDelete: {
-        label: "Show delete button"
+    kind: {
+        group: "Appearance",
+        options: [
+            { id: "kind-custom", value: "custom", label: "custom" },
+            { id: "kind-primary", value: "primary", label: "primary" },
+            { id: "kind-secondary", value: "secondary", label: "secondary" },
+            { id: "kind-tertiary", value: "tertiary", label: "tertiary" },
+        ]
     },
     size: {
-        group: "Appearance",
+        group: "Appearance", 
         options: [
             { id: "size-none", value: "none", label: "none" },
             { id: "size-nano", value: "nano", label: "nano" },
@@ -18,19 +24,25 @@ export const enhancements = {
     shape: {
         group: "Appearance",
         options: [
+            { id: "shape-none", value: "none", label: "none" },
             { id: "shape-rounded", value: "rounded", label: "rounded" },
             { id: "shape-curved", value: "curved", label: "curved" },
         ]
     },
-    label: {
-        hidden: true
+    isLoading: {
+        label: "Show loading state",
+        group: "Behavior"
     },
-    onDelete: {
+    hasDelete: {
+        label: "Show delete icon",
+        group: "Behavior"
+    },
+    label: {
         hidden: true
     }
 };
 
 export const componentTemplate = {
     hasChildren: true,
-    childrenContent: "Badge"
+    childrenContent: "Button"
 };

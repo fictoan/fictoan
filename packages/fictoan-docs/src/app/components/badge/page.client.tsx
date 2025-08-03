@@ -74,7 +74,7 @@ const BadgeDocs = () => {
                                 {...props}
                                 {...themeConfig}
                             >
-                                {props.label || "Badge"}
+                                {props.children || "Badge"}
                             </Badge>
                         </Div>
                     </Portion>

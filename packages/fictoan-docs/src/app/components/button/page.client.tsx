@@ -1,40 +1,24 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React, { useState } from "react";
+import React from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading4, Divider, Portion, Row, Text, Article, Card, Form, Header, Select, Button, Range, CodeBlock, Heading6 } from "fictoan-react";
+import { Div, Heading4, Divider, Portion, Row, Article, Button, Section, Heading6 } from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { createPropsConfigurator } from "$utils/propsConfigurator";
 import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
 import "./page-button.css";
 
 // OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 
 const ButtonDocs = () => {
-    // PROPS CONFIGURATOR ///////////////////////////////////////////////////////////////////////////////////////////////
-    const {
-        propsConfigurator,
-        componentProps : propsConfig,
-    } = createPropsConfigurator(
-        "Button", [
-            "strings", "kind", "size", "shape", "shadow", "bgColour", "textColour", "borderColour", "isLoading",
-        ],
-        colourOptions,
-        {
-            isSelfClosing   : false,
-            canHaveChildren : true,
-            // @ts-ignore
-            defaultChildren : "Button",
-        },
-    );
+    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
 
-    // THEME CONFIGURATOR //////////////////////////////////////////////////////////////////////////////////////////////
     const ButtonComponent = (varName : string) => {
         return varName.startsWith("button-");
     };
@@ -46,69 +30,75 @@ const ButtonDocs = () => {
     } = createThemeConfigurator("Button", ButtonComponent);
 
     return (
-        <Article id="page-component">
-            <Row horizontalPadding="huge" marginTop="medium">
-                <Portion>
-                    <Heading4 id="component-name">
-                        Button
-                    </Heading4>
+        <Article id="page-button">
+            {/*  INTRO ///////////////////////////////////////////////////////////////////////////////////////////// */}
+            <Section>
+                <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
+                    <Portion>
+                        <Heading4 id="component-name">
+                            Button
+                        </Heading4>
 
-                    <Heading6
-                        id="component-description"
-                        weight="400" marginBottom="small"
-                    >
-                        A clickable component to trigger an action or an event
-                    </Heading6>
-                </Portion>
+                        <Heading6
+                            id="component-description"
+                            weight="400" marginBottom="small"
+                        >
+                            A clickable component to trigger an action or an event
+                        </Heading6>
+                    </Portion>
 
-                <Portion>
-
-                    <ul>
-                        <li>
-                            The <code>kind</code> prop accepts <code>primary / secondary / tertiary</code> and
-                            also <code>custom</code>
-                        </li>
-                        <li>
-                            For the first three &ldquo;named&rdquo; types, the background, text and border colours are
-                            defined in the theme, to ensure consistency. The <code>custom</code> value lets you add them
-                            manually.
-                        </li>
-                    </ul>
-                </Portion>
-            </Row>
+                    <Portion>
+                        <ul>
+                            <li>
+                                The <code>kind</code> prop accepts <code>primary / secondary / tertiary</code> and
+                                also <code>custom</code>
+                            </li>
+                            <li>
+                                For the first three &ldquo;named&rdquo; types, the background, text and border colours are
+                                defined in the theme, to ensure consistency. The <code>custom</code> value lets you add them
+                                manually.
+                            </li>
+                        </ul>
+                    </Portion>
+                </Row>
+            </Section>
 
             <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/*  CONFIGURATOR */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Row horizontalPadding="small" className="rendered-component">
-                {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////// */}
-                <Portion id="component-wrapper">
-                    <Element
-                        as="div" padding="small" shape="rounded" bgColour="slate-light80"
-                        data-centered-children
-                    >
-                        <Button
-                            ref={interactiveElementRef}
-                            {...propsConfig}
-                            {...themeConfig}
+            {/* INTERACTIVE COMPONENT ////////////////////////////////////////////////////////////////////////////// */}
+            <Section>
+                {/* DEMO COMPONENT ================================================================================= */}
+                <Row id="component-wrapper" horizontalPadding="small" className="rendered-component">
+                    <Portion>
+                        <Div
+                            padding="small"
+                            shape="rounded"
+                            bgColour="slate-light80"
+                            data-centered-children
                         >
-                            {propsConfig.content}
-                        </Button>
-                    </Element>
-                </Portion>
+                            <Button
+                                ref={interactiveElementRef}
+                                {...props}
+                                {...themeConfig}
+                            >
+                                {props.children || "Button"}
+                            </Button>
+                        </Div>
+                    </Portion>
+                </Row>
 
-                {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    {propsConfigurator()}
-                </Portion>
+                <Row horizontalPadding="small">
+                    {/* PROPS CONFIGURATOR ========================================================================= */}
+                    <Portion desktopSpan="half">
+                        <PropsConfigurator componentName="Button" onPropsChange={setProps} />
+                    </Portion>
 
-                {/* THEME CONFIGURATOR //////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    {themeConfigurator()}
-                </Portion>
-            </Row>
+                    {/* THEME CONFIGURATOR ========================================================================= */}
+                    <Portion desktopSpan="half">
+                        {themeConfigurator()}
+                    </Portion>
+                </Row>
+            </Section>
         </Article>
     );
 };

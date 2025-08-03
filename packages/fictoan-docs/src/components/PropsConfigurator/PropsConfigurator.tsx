@@ -92,6 +92,7 @@ const getInitialProps = (componentMetadata : ComponentMetadata) => {
 export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentName, onPropsChange}) => {
     const componentMetadata : ComponentMetadata = (metadata as any)[componentName];
     const [ props, setProps ] = useState<{ [key : string] : any }>(getInitialProps(componentMetadata));
+    const [ childrenContent, setChildrenContent ] = useState<string>("");
     const [ enhancements, setEnhancements ] = useState<Enhancements | null>(null);
     const [ componentTemplate, setComponentTemplate ] = useState<ComponentTemplate | null>(null);
     const [ staleEnhancements, setStaleEnhancements ] = useState<string[]>([]);
@@ -106,6 +107,11 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
                 
                 setEnhancements(importedEnhancements);
                 setComponentTemplate(importedTemplate || null);
+                
+                // Set initial children content if component has children
+                if (importedTemplate?.hasChildren) {
+                    setChildrenContent(importedTemplate.childrenContent || componentName);
+                }
 
                 const metadataProps = Object.keys(componentMetadata.props);
                 const enhancementProps = Object.keys(importedEnhancements);
@@ -121,14 +127,21 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
     }, [ componentName, componentMetadata.props ]);
 
     useEffect(() => {
-        onPropsChange(props);
-    }, [ props, onPropsChange ]);
+        const propsWithChildren = componentTemplate?.hasChildren 
+            ? { ...props, children: childrenContent }
+            : props;
+        onPropsChange(propsWithChildren);
+    }, [ props, childrenContent, componentTemplate, onPropsChange ]);
 
     const handlePropChange = (propName : string) => (value : string | boolean) => {
         setProps(prevProps => ({
             ...prevProps,
             [propName] : value,
         }));
+    };
+    
+    const handleChildrenChange = (value : string) => {
+        setChildrenContent(value);
     };
 
     const generateCodeString = () => {
@@ -293,6 +306,17 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
             </CodeBlock>
 
             <Div id="props-group">
+                {componentTemplate?.hasChildren && (
+                    <InputField
+                        id="children-content"
+                        name="children"
+                        label="Content"
+                        value={childrenContent}
+                        onChange={handleChildrenChange}
+                        marginBottom="micro"
+                    />
+                )}
+                
                 {propControls.map((control, index) => (
                     <React.Fragment key={index}>
                         {control}
