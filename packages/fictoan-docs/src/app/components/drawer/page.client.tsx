@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading2, Heading4, Divider, Portion, Row, Text, Article, Button, Drawer, Div, showDrawer, hideDrawer } from "fictoan-react";
+import { Element, Heading1, Heading2, Divider, Portion, Row, Text, Article, Button, Drawer, Div, showDrawer, hideDrawer } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createPropsConfigurator } from "$utils/propsConfigurator";
