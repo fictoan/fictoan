@@ -11,13 +11,11 @@ import "./badge.css";
 // OTHER ===============================================================================================================
 import { Text } from "../Typography/Text";
 
-// prettier-ignore
 export interface BadgeCustomProps {
         size       ? : SpacingTypes;
         shape      ? : ShapeTypes;
         withDelete ? : boolean;
-        onDelete   ? : (event: React.MouseEvent<HTMLElement>) => void;
-        label      ? : string;
+        onDelete   ? : (event : React.MouseEvent<HTMLElement>) => void;
 }
 
 export type BadgeElementType = HTMLDivElement;
@@ -26,14 +24,13 @@ export type BadgeProps = Omit<CommonAndHTMLProps<BadgeElementType>, keyof BadgeC
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const Badge = React.forwardRef(
     ({
-         children,
-         size = "medium",
-         shape,
-         withDelete,
-         onDelete,
-         label,
-         ...props
-    }: BadgeProps, ref: React.Ref<BadgeElementType>) => {
+        children,
+        size = "medium",
+        shape,
+        withDelete,
+        onDelete,
+        ...props
+    } : BadgeProps, ref : React.Ref<BadgeElementType>) => {
         let classNames = [];
 
         if (size) {
@@ -44,12 +41,12 @@ export const Badge = React.forwardRef(
             classNames.push(`shape-${shape}`);
         }
 
-        const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
+        const handleDelete = (e : React.MouseEvent<HTMLElement>) => {
             e.stopPropagation();
             onDelete?.(e);
         };
 
-        const handleKeyPress = (e: React.KeyboardEvent) => {
+        const handleKeyPress = (e : React.KeyboardEvent) => {
             if (withDelete && (e.key === "Enter" || e.key === " ")) {
                 e.preventDefault();
                 onDelete?.(e as unknown as React.MouseEvent<HTMLElement>);
@@ -62,7 +59,7 @@ export const Badge = React.forwardRef(
                 ref={ref}
                 classNames={classNames}
                 role="status"
-                aria-label={label || (typeof children === "string" ? children : undefined)}
+                aria-label={(typeof children === "string" ? children : undefined)}
                 {...props}
             >
                 {children}

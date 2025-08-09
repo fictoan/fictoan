@@ -75,11 +75,10 @@ const AccordionDocs = () => {
                         >
                             <Accordion
                                 ref={interactiveElementRef}
-                                {...props}
                                 {...themeConfig}
-                                summary={<Text>Click me</Text>}
+                                {...props}
                             >
-                                {props.label || "Accordion"}
+                                {props.children}
                             </Accordion>
                         </Div>
                     </Portion>

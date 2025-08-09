@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { Element, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Divider, Portion, Row, Text, Article, Card, Form, Header, Button, Drawer, RadioTabGroup, Checkbox, Range, Select, CodeBlock, InputField, Modal, showModal, hideModal } from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
+import { useThemeVariables } from "$utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-modal.css";
@@ -135,7 +135,7 @@ const ModalDocs = () => {
                                         type="text"
                                         label="Id"
                                         placeholder="Id"
-                                        onChange={(value) => setId(value)}
+                                        onChange={(value: string) => setId(value)}
                                         defaultValue={id}
                                     />
 
@@ -225,9 +225,11 @@ const ModalDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Range
                                         label="Backdrop blur"
+                                        // @ts-ignore
                                         value={componentVariables["modal-backdrop-blur"].value}
                                         onChange={(value) => handleVariableChange("modal-backdrop-blur", value)}
                                         min={0} max={50} step={1}
+                                        // @ts-ignore
                                         suffix={componentVariables["modal-backdrop-blur"].unit}
                                     />
                                 </Portion>
@@ -241,197 +243,3 @@ const ModalDocs = () => {
 };
 
 export default ModalDocs;
-              type="button"
-                                        kind="tertiary"
-                                        size="small"
-                                        onClick={removeLastOption}
-                                        disabled={options.length <= 1}
-                                    >
-                                        Remove last option
-                                    </Button>
-                                </Portion>
-                            </Row>
-                        </Card>
-                    </Form>
-                </Portion>
-
-                {/* GLOBAL THEME /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Card padding="micro" shape="rounded">
-                        <Form>
-                            <Header verticallyCentreItems pushItemsToEnds marginBottom="micro">
-                                <Text size="large" weight="700" textColour="white">
-                                    Set global theme values
-                                </Text>
-                            </Header>
-
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock
-                                        withSyntaxHighlighting
-                                        source={cssVariablesList}
-                                        language="css"
-                                        showCopyButton
-                                        marginBottom="micro"
-                                    />
-                                </Portion>
-
-                                {/* HEIGHT ============================================================================= */}
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Height"
-                                        value={componentVariables["radio-tabs-height"].value}
-                                        onChange={(value) => handleVariableChange("radio-tabs-height", value)}
-                                        min={0} max={100} step={1}
-                                        suffix={componentVariables["radio-tabs-height"].unit}
-                                    />
-                                </Portion>
-
-                                {/* VERTICAL GAP ====================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Vertical gap"
-                                        value={componentVariables["radio-tabs-vertical-gap"].value}
-                                        onChange={(value) => handleVariableChange("radio-tabs-vertical-gap", value)}
-                                        min={0} max={50} step={1}
-                                        suffix={componentVariables["radio-tabs-vertical-gap"].unit}
-                                    />
-                                </Portion>
-
-                                {/* BACKGROUND COLOUR ================================================================= */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Background colour"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["radio-tabs-bg"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("radio-tabs-bg", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* BORDER COLOUR ==================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Border colour"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["radio-tabs-border"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("radio-tabs-border", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* LABEL TEXT DEFAULT COLOUR ======================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Default label text colour"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["radio-tabs-label-text-default"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("radio-tabs-label-text-default", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* LABEL TEXT HOVER COLOUR ========================================================= */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Hover label text colour"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["radio-tabs-label-text-hover"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("radio-tabs-label-text-hover", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* LABEL BACKGROUND HOVER COLOUR =================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Hover label background"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["radio-tabs-label-bg-hover"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("radio-tabs-label-bg-hover", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* LABEL BACKGROUND ACTIVE COLOUR ================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Active label background"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["radio-tabs-label-bg-active"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("radio-tabs-label-bg-active", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* LABEL TEXT ACTIVE COLOUR ======================================================= */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Active label text colour"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["radio-tabs-label-text-active"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("radio-tabs-label-text-active", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* LABEL FOCUS BORDER COLOUR ====================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Focus border colour"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["radio-tabs-label-focus-border"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("radio-tabs-label-focus-border", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-                            </Row>
-                        </Form>
-                    </Card>
-                </Portion>
-            </Row>
-        </Article>
-    );
-};
-
-export default RadioTabGroupDocs;

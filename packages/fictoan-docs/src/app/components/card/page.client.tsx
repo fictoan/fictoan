@@ -7,7 +7,6 @@ import React from "react";
 import { Heading1, Heading4, Divider, Portion, Row, Text, Article, Div, Card, Section } from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { createPropsConfigurator } from "$utils/propsConfigurator";
 import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
@@ -15,22 +14,10 @@ import "../../../styles/fictoan-theme.css";
 import "./page-card.css";
 
 // OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 
 const CardDocs = () => {
-    const {
-        propsConfigurator,
-        componentProps : propsConfig,
-    } = createPropsConfigurator(
-        "Card", [
-            "padding", "shape", "bgColour", "borderColour",
-        ],
-        colourOptions,
-        {
-            canHaveChildren : true,
-            isSelfClosing   : false,
-            defaultChildren : null,
-        });
+    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
 
     const CardComponent = (varName : string) => {
         return varName.startsWith("card-");
@@ -84,10 +71,10 @@ const CardDocs = () => {
                     >
                         <Card
                             ref={interactiveElementRef}
-                            {...propsConfig}
+                            {...props}
                             {...themeConfig}
                         >
-                            Content shows up here
+                            {props.children || "Content shows up here"}
                         </Card>
                     </Div>
                 </Portion>
@@ -96,7 +83,7 @@ const CardDocs = () => {
             <Row horizontalPadding="small">
                 {/* PROPS CONFIGURATOR ///////////////////////////////////////////////////////////////////////////// */}
                 <Portion desktopSpan="half">
-                    {propsConfigurator()}
+                    <PropsConfigurator componentName="Card" onPropsChange={setProps} />
                 </Portion>
 
                 {/* THEME CONFIGURATOR ///////////////////////////////////////////////////////////////////////////// */}

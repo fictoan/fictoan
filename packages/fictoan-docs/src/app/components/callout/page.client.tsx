@@ -4,10 +4,9 @@
 import React, { useState } from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading1, Heading4, Divider, Portion, Row, Text, Article, Callout, Section } from "fictoan-react";
+import { Div, Heading4, Divider, Portion, Row, Article, Callout, Section, Heading6 } from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { createPropsConfigurator } from "$utils/propsConfigurator";
 import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
@@ -15,23 +14,10 @@ import "../../../styles/fictoan-theme.css";
 import "./page-callout.css";
 
 // OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 
 const CalloutDocs = () => {
-    const {
-        propsConfigurator,
-        componentProps: propsConfig,
-    } = createPropsConfigurator(
-        "Callout",
-        [
-            "kind",
-        ],
-        colourOptions,
-        {
-            canHaveChildren: true,
-            isSelfClosing : false
-        }
-    );
+    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
 
     const CalloutComponent = (varName: string) => {
         return varName.startsWith("callout-");
@@ -49,11 +35,17 @@ const CalloutDocs = () => {
             <Section>
                 <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                     <Portion>
-                        <Heading1>Callout</Heading1>
-                        <Text size="large" marginBottom="small">
+                        <Heading4 id="component-name">
+                            Callout
+                        </Heading4>
+
+                        <Heading6
+                            id="component-description"
+                            weight="400" marginBottom="small"
+                        >
                             A box that can be used to highlight important information. It comes in four
                             variants.
-                        </Text>
+                        </Heading6>
                     </Portion>
 
                     <Portion>
@@ -79,12 +71,11 @@ const CalloutDocs = () => {
                             data-centered-children
                         >
                             <Callout
-                                id="interactive-component"
                                 ref={interactiveElementRef}
-                                {...propsConfig}
+                                {...props}
                                 {...themeConfig}
                             >
-                                Content goes here
+                                {props.children || "Content goes here"}
                             </Callout>
                         </Div>
                     </Portion>
@@ -93,7 +84,7 @@ const CalloutDocs = () => {
                 <Row horizontalPadding="small">
                     {/* PROPS CONFIGURATOR ========================================================================= */}
                     <Portion desktopSpan="half">
-                        {propsConfigurator()}
+                        <PropsConfigurator componentName="Callout" onPropsChange={setProps} />
                     </Portion>
 
                     {/* THEME CONFIGURATOR ========================================================================= */}
