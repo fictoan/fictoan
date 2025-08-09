@@ -24,29 +24,29 @@ interface ComponentMetadata {
     props       : { [key : string] : PropDefinition };
 }
 
-export async function GET(request : NextRequest) {
+export const GET = async (request: NextRequest) => {
     const searchParams = request.nextUrl.searchParams;
     const componentName = searchParams.get("component");
 
     if (!componentName) {
-        return NextResponse.json({error : "Component name is required"}, {status : 400});
+        return NextResponse.json({ error: "Component name is required" }, { status: 400 });
     }
 
     try {
         const metadata = await analyzeComponent(componentName);
         if (!metadata) {
-            return NextResponse.json({error : "Component not found or not supported"}, {status : 404});
+            return NextResponse.json({ error: "Component not found or not supported" }, { status: 404 });
         }
         return NextResponse.json(metadata);
     } catch (error) {
         console.error("Error analyzing component:", error);
-        return NextResponse.json({error : "Failed to analyze component"}, {status : 500});
+        return NextResponse.json({ error: "Failed to analyze component" }, { status: 500 });
     }
-}
+};
 
-async function analyzeComponent(componentName : string) : Promise<ComponentMetadata | null> {
+const analyzeComponent = async (componentName: string): Promise<ComponentMetadata | null> => {
     // List of components we can analyze
-    const supportedComponents = [ "Accordion", "Badge", "Button", "Breadcrumbs", "Callout", "Card" ];
+    const supportedComponents = ["Accordion", "Badge", "Button", "Breadcrumbs", "Callout", "Card", "Divider", "Drawer"];
     if (!supportedComponents.includes(componentName)) {
         return null;
     }
@@ -68,14 +68,14 @@ async function analyzeComponent(componentName : string) : Promise<ComponentMetad
     const sourceCode = fs.readFileSync(componentPath, "utf-8");
 
     // Create a temporary program to parse this single file
-    const compilerOptions : ts.CompilerOptions = {
-        target                           : ts.ScriptTarget.ESNext,
-        module                           : ts.ModuleKind.ESNext,
-        jsx                              : ts.JsxEmit.React,
-        strict                           : true,
-        esModuleInterop                  : true,
-        skipLibCheck                     : true,
-        forceConsistentCasingInFileNames : true,
+    const compilerOptions: ts.CompilerOptions = {
+        target: ts.ScriptTarget.ESNext,
+        module: ts.ModuleKind.ESNext,
+        jsx: ts.JsxEmit.React,
+        strict: true,
+        esModuleInterop: true,
+        skipLibCheck: true,
+        forceConsistentCasingInFileNames: true,
     };
 
     const sourceFile = ts.createSourceFile(
@@ -85,7 +85,7 @@ async function analyzeComponent(componentName : string) : Promise<ComponentMetad
         true,
     );
 
-    const program = ts.createProgram([ componentPath ], compilerOptions);
+    const program = ts.createProgram([componentPath], compilerOptions);
     const checker = program.getTypeChecker();
 
     // Find the props interface
@@ -105,16 +105,16 @@ async function analyzeComponent(componentName : string) : Promise<ComponentMetad
     }
 
     return {
-        displayName : componentName,
-        description : extractJSDocDescription(propsInterface) || `${componentName} component`,
+        displayName: componentName,
+        description: extractJSDocDescription(propsInterface) || `${componentName} component`,
         props,
     };
-}
+};
 
-function findPropsInterface(sourceFile : ts.SourceFile, componentName : string) : ts.InterfaceDeclaration | null {
-    let propsInterface : ts.InterfaceDeclaration | null = null;
+const findPropsInterface = (sourceFile: ts.SourceFile, componentName: string): ts.InterfaceDeclaration | null => {
+    let propsInterface: ts.InterfaceDeclaration | null = null;
 
-    const visit = (node : ts.Node) => {
+    const visit = (node: ts.Node) => {
         if (ts.isInterfaceDeclaration(node)) {
             const name = node.name?.text;
             // Look for ComponentCustomProps or ComponentProps
@@ -127,14 +127,14 @@ function findPropsInterface(sourceFile : ts.SourceFile, componentName : string) 
 
     visit(sourceFile);
     return propsInterface;
-}
+};
 
-function extractPropsFromInterface(
-    interfaceNode : ts.InterfaceDeclaration,
-    checker : ts.TypeChecker,
-    sourceFile : ts.SourceFile,
-) : { [key : string] : PropDefinition } {
-    const props : { [key : string] : PropDefinition } = {};
+const extractPropsFromInterface = (
+    interfaceNode: ts.InterfaceDeclaration,
+    checker: ts.TypeChecker,
+    sourceFile: ts.SourceFile,
+): { [key: string]: PropDefinition } => {
+    const props: { [key: string]: PropDefinition } = {};
 
     interfaceNode.members.forEach(member => {
         if (ts.isPropertySignature(member) && member.name) {
@@ -147,21 +147,21 @@ function extractPropsFromInterface(
             }
 
             props[propName] = {
-                name         : propName,
-                required     : !member.questionToken,
-                type         : {
-                    name : typeName,
+                name: propName,
+                required: !member.questionToken,
+                type: {
+                    name: typeName,
                 },
-                defaultValue : null,
-                description  : extractJSDocDescription(member),
+                defaultValue: null,
+                description: extractJSDocDescription(member),
             };
         }
     });
 
     return props;
-}
+};
 
-function extractTypeText(typeNode : ts.TypeNode, sourceFile : ts.SourceFile) : string {
+const extractTypeText = (typeNode: ts.TypeNode, sourceFile: ts.SourceFile): string => {
     // Handle union types
     if (ts.isUnionTypeNode(typeNode)) {
         return typeNode.types
@@ -208,12 +208,12 @@ function extractTypeText(typeNode : ts.TypeNode, sourceFile : ts.SourceFile) : s
 
     // Default to the text representation
     return typeNode.getText(sourceFile);
-}
+};
 
-function findComponentDeclaration(sourceFile : ts.SourceFile, componentName : string) : ts.Node | null {
-    let componentNode : ts.Node | null = null;
+const findComponentDeclaration = (sourceFile: ts.SourceFile, componentName: string): ts.Node | null => {
+    let componentNode: ts.Node | null = null;
 
-    const visit = (node : ts.Node) => {
+    const visit = (node: ts.Node) => {
         // Look for: export const Component = React.forwardRef(...)
         if (ts.isVariableStatement(node)) {
             const declaration = node.declarationList.declarations[0];
@@ -237,10 +237,10 @@ function findComponentDeclaration(sourceFile : ts.SourceFile, componentName : st
 
     visit(sourceFile);
     return componentNode;
-}
+};
 
-function extractDefaultValues(componentNode : ts.Node, props : { [key : string] : PropDefinition }) : void {
-    const visit = (node : ts.Node) => {
+const extractDefaultValues = (componentNode: ts.Node, props: { [key: string]: PropDefinition }): void => {
+    const visit = (node: ts.Node) => {
         // Look for function parameters with destructuring
         if (ts.isFunctionExpression(node) || ts.isArrowFunction(node)) {
             const params = node.parameters;
@@ -257,7 +257,7 @@ function extractDefaultValues(componentNode : ts.Node, props : { [key : string] 
                                 // Extract the default value
                                 const defaultText = element.initializer.getText();
                                 props[propName].defaultValue = {
-                                    value : parseDefaultValue(defaultText),
+                                    value: parseDefaultValue(defaultText),
                                 };
                             }
                         }
@@ -270,9 +270,9 @@ function extractDefaultValues(componentNode : ts.Node, props : { [key : string] 
     };
 
     visit(componentNode);
-}
+};
 
-function parseDefaultValue(text : string) : any {
+const parseDefaultValue = (text: string): any => {
     // Remove quotes for strings
     if (text.startsWith("\"") || text.startsWith("'")) {
         return text.slice(1, -1);
@@ -284,9 +284,9 @@ function parseDefaultValue(text : string) : any {
     if (!isNaN(Number(text))) return Number(text);
     // Default
     return text;
-}
+};
 
-function extractJSDocDescription(node : ts.Node) : string | undefined {
+const extractJSDocDescription = (node: ts.Node): string | undefined => {
     const jsDocs = ts.getJSDocCommentsAndTags(node);
     if (jsDocs.length > 0) {
         const comment = jsDocs[0];
@@ -302,4 +302,4 @@ function extractJSDocDescription(node : ts.Node) : string | undefined {
         }
     }
     return undefined;
-}
+};

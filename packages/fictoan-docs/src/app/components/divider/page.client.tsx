@@ -7,7 +7,6 @@ import React from "react";
 import { Element, Heading1, Heading4, Divider, Portion, Row, Text, Article, Section, Div } from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { createPropsConfigurator } from "$utils/propsConfigurator";
 import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
@@ -15,23 +14,10 @@ import "../../../styles/fictoan-theme.css";
 import "./page-divider.css";
 
 // OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 
 const DividerDocs = () => {
-    const {
-        propsConfigurator,
-        componentProps : propsConfig,
-    } = createPropsConfigurator(
-        "Divider", [
-            "kind",
-        ],
-        colourOptions,
-        {
-            isSelfClosing   : true,
-            canHaveChildren : false,
-            defaultChildren : null,
-        },
-    );
+    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
 
     const DividerComponent = (varName : string) => {
         return varName.startsWith("divider-");
@@ -84,7 +70,7 @@ const DividerDocs = () => {
                         >
                             <Divider
                                 ref={interactiveElementRef}
-                                {...propsConfig}
+                                {...props}
                                 {...themeConfig}
                             />
                         </Div>
@@ -94,7 +80,7 @@ const DividerDocs = () => {
                 <Row horizontalPadding="small">
                     {/* PROPS CONFIGURATOR ========================================================================= */}
                     <Portion desktopSpan="half">
-                        {propsConfigurator()}
+                        <PropsConfigurator componentName="Divider" onPropsChange={setProps} />
                     </Portion>
 
                     {/* THEME CONFIGURATOR ========================================================================= */}

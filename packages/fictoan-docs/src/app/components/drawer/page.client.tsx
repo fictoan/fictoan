@@ -7,38 +7,19 @@ import React, { useState } from "react";
 import { Element, Heading1, Heading2, Divider, Portion, Row, Text, Article, Button, Drawer, Div, showDrawer, hideDrawer } from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { createPropsConfigurator } from "$utils/propsConfigurator";
 import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
 import "./page-drawer.css";
 
 // OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 
 const DrawerDocs : React.FC = () => {
-    const {
-        propsConfigurator,
-        componentProps : propsConfig,
-    } = createPropsConfigurator(
-        "Drawer",
-        [
-            "strings",
-            "position",
-            "size",
-            "padding",
-            "showOverlay",
-            "blurOverlay",
-            "isDismissible",
-            "closeOnClickOutside",
-        ],
-        colourOptions,
-        {
-            isSelfClosing   : false,
-            canHaveChildren : true,
-            defaultChildren : null,
-        },
-    );
+    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
+    
+    // Ensure consistent drawer ID across all references
+    const drawerId = props.id || "interactive-component";
 
     const DrawerComponent = (varName : string) => {
         return varName.startsWith("drawer-");
@@ -82,7 +63,7 @@ const DrawerDocs : React.FC = () => {
                         data-centered-children
                     >
                         <Button
-                            onClick={() => showDrawer("interactive-component")}
+                            onClick={() => showDrawer(drawerId)}
                             kind="primary"
                         >
                             Open the drawer
@@ -92,7 +73,7 @@ const DrawerDocs : React.FC = () => {
 
                 {/* PROPS CONFIGURATOR ============================================================================= */}
                 <Portion desktopSpan="half">
-                    {propsConfigurator()}
+                    <PropsConfigurator componentName="Drawer" onPropsChange={setProps} />
                 </Portion>
 
                 {/* THEME CONFIGURATOR ============================================================================= */}
@@ -103,30 +84,28 @@ const DrawerDocs : React.FC = () => {
 
             {/* SAMPLE DRAWER ////////////////////////////////////////////////////////////////////////////////////// */}
             <Drawer
-                id="interactive-component"
                 ref={interactiveElementRef}
-                position={propsConfig.position || "right"}
-                {...(propsConfig.size ? {size : propsConfig.size} : {})}
-                {...(propsConfig.padding ? {padding : propsConfig.padding} : {})}
-                {...(typeof propsConfig.showOverlay === "boolean" ? {showOverlay : propsConfig.showOverlay} : {})}
-                {...(typeof propsConfig.blurOverlay === "boolean" ? {blurOverlay : propsConfig.blurOverlay} : {})}
-                {...(typeof propsConfig.isDismissible === "boolean" ? {isDismissible : propsConfig.isDismissible} : {})}
-                {...(typeof propsConfig.closeOnClickOutside === "boolean" ? {closeOnClickOutside : propsConfig.closeOnClickOutside} : {})}
-                label={propsConfig.content || "Sample drawer"}
-                {...(({id, ...rest}) => rest)(themeConfig)}
+                {...props}
+                {...themeConfig}
+                id={drawerId}
+                zIndex={60000}
             >
-                <Heading2 textColour="green" marginBottom="nano">Hello</Heading2>
+                {props.children || (
+                    <>
+                        <Heading2 textColour="green" marginBottom="nano">Hello</Heading2>   
 
-                <Text marginBottom="micro">
-                    You can add all sorts of content here inside the info panel.
-                </Text>
+                        <Text marginBottom="micro">
+                            You can add all sorts of content here inside the info panel.
+                        </Text>
 
-                <Button
-                    kind="secondary"
-                    onClick={() => hideDrawer("interactive-component")}
-                >
-                    Close
-                </Button>
+                        <Button
+                            kind="secondary"
+                            onClick={() => hideDrawer(drawerId)}
+                        >
+                            Close
+                        </Button>
+                    </>
+                )}
 
                 <Div marginTop="large" marginBottom="medium">
                     <Text weight="700" marginBottom="small">

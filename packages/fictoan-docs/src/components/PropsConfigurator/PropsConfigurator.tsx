@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 
 // UI ==================================================================================================================
-import { CodeBlock, Checkbox, RadioTabGroup, InputField, Callout, Div, Text, Header, Card, Heading6, Spinner } from "fictoan-react";
+import { CodeBlock, Checkbox, RadioTabGroup, InputField, Callout, Div, Text, Header, Card, Heading6, Spinner, Range } from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./props-configurator.css";
@@ -89,6 +89,24 @@ const getInitialProps = (componentMetadata : ComponentMetadata) => {
     return initialProps;
 };
 
+// A helper function to get default children content for components
+const getDefaultChildrenContent = (componentName: string): string => {
+    switch (componentName) {
+        case "Accordion":
+            return "Accordion content goes here";
+        case "Button":
+            return "Button";
+        case "Callout":
+            return "Important information goes here";
+        case "Card":
+            return "Card content goes here";
+        case "Drawer":
+            return "Drawer content goes here";
+        default:
+            return componentName;
+    }
+};
+
 export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentName, onPropsChange}) => {
     const [ componentMetadataObj, setComponentMetadataObj ] = useState<ComponentMetadata | null>(null);
     const [ props, setProps ] = useState<{ [key : string] : any }>({});
@@ -133,21 +151,18 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
                     if (componentName === "Callout" && chosen?.props?.kind) {
                         initialProps.kind = "info";
                     }
+                    if (componentName === "Divider" && chosen?.props?.kind) {
+                        initialProps.kind = "primary";
+                    }
+                    if (componentName === "Drawer" && chosen?.props?.id) {
+                        initialProps.id = "sample-drawer";
+                    }
 
                     setProps(initialProps);
 
                     // Initialize children content if analyzer indicates children prop or for special components
-                    if (chosen?.props && ((chosen.props as any).children || componentName === "Button" || componentName === "Card")) {
-                        const defaultContent = componentName === "Accordion"
-                            ? "Accordion content goes here"
-                            : componentName === "Button"
-                                ? "Button"
-                                : componentName === "Callout"
-                                    ? "Important information goes here"
-                                    : componentName === "Card"
-                                        ? "Card content goes here"
-                                        : componentName;
-                        setChildrenContent(defaultContent);
+                    if (chosen?.props && ((chosen.props as any).children || componentName === "Button" || componentName === "Card" || componentName === "Drawer")) {
+                        setChildrenContent(getDefaultChildrenContent(componentName));
                     }
                 }
             } catch (e) {
@@ -156,7 +171,7 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
                     setComponentMetadataObj(fallback);
                     setProps(getInitialProps(fallback));
                     if (fallback?.props && (fallback.props as any).children) {
-                        setChildrenContent(componentName);
+                        setChildrenContent(getDefaultChildrenContent(componentName));
                     }
                 }
             }
@@ -200,7 +215,7 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
 
     useEffect(() => {
         const hasChildrenFromMetadata = !!componentMetadataObj?.props?.children;
-        const isSpecialChildrenComponent = componentName === "Button" || componentName === "Card"; // Components that use children for content
+        const isSpecialChildrenComponent = componentName === "Button" || componentName === "Card" || componentName === "Drawer"; // Components that use children for content
         const isChildrenTextEditable = (componentTemplate?.hasChildren || hasChildrenFromMetadata || isSpecialChildrenComponent) && componentName !== "Breadcrumbs";
         const propsWithChildren = isChildrenTextEditable
             ? {...props, children : childrenContent}
@@ -231,9 +246,8 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
                 childrenContent,
             );
 
-            // For now, just return the component JSX
-            // In future, we could show complete code with imports
-            return generator.generateComponentJSX();
+            // Show complete code with imports for better developer experience
+            return generator.generateCompleteCode();
         }
 
         // Fallback to simple generation if metadata not available
@@ -284,6 +298,16 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
             return null;
         }
 
+        // For Divider component, hide the label prop since it's only for accessibility
+        if (componentName === "Divider" && propName === "label") {
+            return null;
+        }
+
+        // For Drawer component, hide label and description props since they're accessibility-only
+        if (componentName === "Drawer" && (propName === "label" || propName === "description")) {
+            return null;
+        }
+
         const enhancement = enhancements ? enhancements[propName] : null;
 
         if (enhancement?.hidden) {
@@ -309,14 +333,34 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
         }
 
         if (propType === "boolean") {
+            // Check if this boolean prop has a default value of true
+            const hasDefaultTrue = prop.defaultValue?.value === true;
+            const displayLabel = hasDefaultTrue ? `${label} (on by default)` : label;
+            
             return (
                 <Checkbox
                     key={propName}
                     id={`prop-config-${propName}`}
                     name={propName}
-                    label={label}
-                    checked={props[propName] || false}
+                    label={displayLabel}
+                    checked={props[propName] !== undefined ? props[propName] : hasDefaultTrue}
                     onChange={handlePropChange(propName)}
+                />
+            );
+        }
+
+        // Special handling for Divider height prop - use Range input
+        if (componentName === "Divider" && propName === "height") {
+            return (
+                <Range
+                    key={propName}
+                    id={`prop-config-${propName}`}
+                    name={propName}
+                    label={`${label}`}
+                    min={1} max={20} step={1}
+                    value={parseInt(props[propName]) || 1}
+                    suffix="px"
+                    onChange={(value: number) => handlePropChange(propName)(`${value}px`)}
                 />
             );
         }
@@ -413,7 +457,7 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
             </CodeBlock>
 
             <Div id="props-group">
-                {(componentName !== "Breadcrumbs") && (componentTemplate?.hasChildren || !!componentMetadataObj?.props?.children || componentName === "Button" || componentName === "Card") && (
+                {(componentName !== "Breadcrumbs") && (componentTemplate?.hasChildren || !!componentMetadataObj?.props?.children || componentName === "Button" || componentName === "Card" || componentName === "Drawer") && (
                     <InputField
                         id="children-content"
                         name="children"

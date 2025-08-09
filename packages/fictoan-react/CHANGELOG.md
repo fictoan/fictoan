@@ -4,7 +4,8 @@
 - `ThemeProvider` now uses unique key based on hostname for local storage, instead of default `fictoan-theme`
 - Decouple border classes to use separate `borderWidth` and `borderStyle` values
 - Fix `Accordion` chevron position bug
-- Remove redundant `label` prop from `Badge`.
+- Remove redundant `label` prop from `Badge`
+- Add `zIndex` as a prop for `Drawer` for easy, dynamic positioning
 
 ## 1.11.14
 - Refactor `Drawer` to behave more like the `Modal` for open and close behaviour ⚠️ BREAKING CHANGE

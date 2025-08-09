@@ -1,324 +1,395 @@
-import { ComponentMetadata, PropDefinition } from '../type-analyzer/TypeAnalyzer';
+// OTHER ===============================================================================================================
+import { ComponentMetadata, PropDefinition } from "../type-analyzer/TypeAnalyzer";
 
 interface GeneratedCode {
-    imports: string[];
-    component: string;
-    hasState?: boolean;
-    stateDeclarations?: string[];
-    helperFunctions?: string[];
+        imports             : string[];
+        component           : string;
+        hasState          ? : boolean;
+        stateDeclarations ? : string[];
+        helperFunctions   ? : string[];
 }
 
 /**
  * Generates complete, working code examples for components
  */
-export class CodeGenerator {
-    private componentName: string;
-    private metadata: ComponentMetadata;
-    private props: { [key: string]: any };
-    private childrenContent: string;
-    
-    constructor(
-        componentName: string, 
-        metadata: ComponentMetadata, 
-        props: { [key: string]: any },
-        childrenContent: string = ''
-    ) {
-        this.componentName = componentName;
-        this.metadata = metadata;
-        this.props = props;
-        this.childrenContent = childrenContent;
-    }
-    
+const createCodeGenerator = (
+    componentName : string,
+    metadata : ComponentMetadata,
+    props : { [key : string] : any },
+    childrenContent : string = "",
+) => {
     /**
      * Generate complete code including all necessary parts
      */
-    generateCompleteCode(): string {
-        const code = this.generateCodeParts();
-        
+    const generateCompleteCode = () : string => {
+        const code = generateCodeParts();
+
         // Build the complete code
-        let completeCode = '';
-        
+        let completeCode = "";
+
         // Add imports
         if (code.imports.length > 0) {
-            completeCode += code.imports.join('\n') + '\n\n';
+            completeCode += code.imports.join("\n") + "\n\n";
         }
-        
+
         // Add function wrapper if we have state or helpers
         if (code.hasState || code.helperFunctions) {
-            completeCode += `export function ${this.componentName}Example() {\n`;
-            
+            completeCode += `export function ${componentName}Example() {\n`;
+
             // Add state declarations
             if (code.stateDeclarations && code.stateDeclarations.length > 0) {
                 code.stateDeclarations.forEach(state => {
                     completeCode += `    ${state}\n`;
                 });
-                completeCode += '\n';
+                completeCode += "\n";
             }
-            
+
             // Add helper functions
             if (code.helperFunctions && code.helperFunctions.length > 0) {
                 code.helperFunctions.forEach(helper => {
                     completeCode += `    ${helper}\n`;
                 });
-                completeCode += '\n';
+                completeCode += "\n";
             }
-            
+
             // Add return statement with component
-            completeCode += '    return (\n';
-            const indentedComponent = code.component.split('\n').map(line => `        ${line}`).join('\n');
-            completeCode += indentedComponent + '\n';
-            completeCode += '    );\n';
-            completeCode += '}';
+            completeCode += "    return (\n";
+            const indentedComponent = code.component.split("\n").map(line => `        ${line}`).join("\n");
+            completeCode += indentedComponent + "\n";
+            completeCode += "    );\n";
+            completeCode += "}";
         } else {
             // Simple component without state
             completeCode = code.component;
         }
-        
+
         return completeCode;
-    }
-    
+    };
+
     /**
      * Generate just the JSX component code (for inline display)
      */
-    generateComponentJSX(): string {
-        const parts = this.generateCodeParts();
+    const generateComponentJSX = () : string => {
+        const parts = generateCodeParts();
         return parts.component;
-    }
-    
-    private generateCodeParts(): GeneratedCode {
-        const result: GeneratedCode = {
-            imports: [`import { ${this.componentName} } from '@fictoan/fictoan-react';`],
-            component: '',
-            hasState: false,
-            stateDeclarations: [],
-            helperFunctions: []
+    };
+
+    const generateCodeParts = () : GeneratedCode => {
+        const result : GeneratedCode = {
+            imports           : [ `import { ${componentName} } from "fictoan-react";` ],
+            component         : "",
+            hasState          : false,
+            stateDeclarations : [],
+            helperFunctions   : [],
         };
-        
+
         // Check for special components that need state
-        if (this.needsState()) {
+        if (needsState()) {
             result.hasState = true;
-            result.imports.push(`import React, { useState } from 'react';`);
+            result.imports.push(`import React, { useState } from "react";`);
         }
-        
+
         // Generate props string
-        const propsString = this.generatePropsString();
-        
+        const propsString = generatePropsString();
+
         // Handle different component patterns
-        switch (this.componentName) {
-            case 'Accordion':
-                result.component = this.generateAccordionCode(propsString);
+        switch (componentName) {
+            case "Accordion":
+                result.component = generateAccordionCode(propsString);
                 break;
-            case 'Badge':
-                result.component = this.generateBadgeCode(propsString);
-                if (this.props.withDelete) {
+            case "Badge":
+                result.component = generateBadgeCode(propsString);
+                if (props.withDelete) {
                     result.hasState = true;
                     result.helperFunctions?.push(
-                        `const handleDelete = () => {\n        console.log('Badge deleted');\n    };`
+                        `const handleDelete = () => {\n        console.log('Badge deleted');\n    };`,
                     );
                 }
                 break;
-            case 'Button':
-                result.component = this.generateButtonCode(propsString);
-                if (this.props.onClick === undefined) {
+            case "Button":
+                result.component = generateButtonCode(propsString);
+                if (props.onClick === undefined) {
                     result.helperFunctions?.push(
-                        `const handleClick = () => {\n        console.log('Button clicked');\n    };`
+                        `const handleClick = () => {\n        console.log('Button clicked');\n    };`,
                     );
                 }
                 break;
-            case 'Breadcrumbs':
-                result.component = this.generateBreadcrumbsCode(propsString);
-                result.imports.push(`import { Link } from '@fictoan/fictoan-react';`);
+            case "Breadcrumbs":
+                result.component = generateBreadcrumbsCode(propsString);
+                result.imports.push(`import { Link } from "fictoan-react";`);
                 break;
-            case 'Callout':
-                result.component = this.generateCalloutCode(propsString);
+            case "Callout":
+                result.component = generateCalloutCode(propsString);
                 break;
-            case 'Card':
-                result.component = this.generateCardCode(propsString);
+            case "Card":
+                result.component = generateCardCode(propsString);
+                break;
+            case "Divider":
+                result.component = generateDividerCode(propsString);
+                break;
+            case "Drawer":
+                result.component = generateDrawerCode(propsString);
+                // Replace the main import to include Button and imperative functions
+                result.imports[0] = `import { ${componentName}, Button, showDrawer, hideDrawer } from "fictoan-react";`;
+                result.hasState = false; // Drawer uses imperative API, not React state
                 break;
             default:
-                result.component = this.generateDefaultCode(propsString);
+                result.component = generateDefaultCode(propsString);
         }
-        
+
         return result;
-    }
-    
-    private generateAccordionCode(propsString: string): string {
+    };
+
+    const generateAccordionCode = (propsString : string) : string => {
         // Get summary prop value or use default
-        const summaryContent = this.props.summary || 'Click to expand';
-        const childrenContent = this.childrenContent || 'Accordion content goes here';
-        
+        const summaryContent = props.summary || "Click to expand";
+        const childrenContentValue = childrenContent || "Accordion content goes here";
+
         // Check if summary contains JSX/components
-        const summaryProp = summaryContent.includes('<') && summaryContent.includes('>')
+        const summaryProp = summaryContent.includes("<") && summaryContent.includes(">")
             ? `summary={${summaryContent}}`
             : `summary="${summaryContent}"`;
-        
+
         // Add summary to props if not already there
         let finalPropsString = propsString;
-        if (!propsString.includes('summary')) {
+        if (!propsString.includes("summary")) {
             finalPropsString = finalPropsString ? `${finalPropsString}\n    ${summaryProp}` : `    ${summaryProp}`;
         }
-        
+
         // Generate complete Accordion with summary and children
-        return `<${this.componentName}${finalPropsString ? '\n' + finalPropsString : ''}
+        return `<${componentName}${finalPropsString ? "\n" + finalPropsString : ""}
 >
-    ${childrenContent}
-</${this.componentName}>`;
-    }
-    
-    private generateBadgeCode(propsString: string): string {
-        const content = this.childrenContent || 'Badge';
-        
+    ${childrenContentValue}
+</${componentName}>`;
+    };
+
+    const generateBadgeCode = (propsString : string) : string => {
+        const content = childrenContent || "Badge";
+
         // Add onDelete handler if withDelete is true
         let finalPropsString = propsString;
-        if (this.props.withDelete && !propsString.includes('onDelete')) {
-            finalPropsString += finalPropsString ? '\n' : '';
-            finalPropsString += '    onDelete={handleDelete}';
+        if (props.withDelete && !propsString.includes("onDelete")) {
+            finalPropsString += finalPropsString ? "\n" : "";
+            finalPropsString += "    onDelete={handleDelete}";
         }
-        
-        return `<${this.componentName}${finalPropsString ? '\n' + finalPropsString : ''}
+
+        return `<${componentName}${finalPropsString ? "\n" + finalPropsString : ""}
 >
     ${content}
-</${this.componentName}>`;
-    }
-    
-    private generateButtonCode(propsString: string): string {
+</${componentName}>`;
+    };
+
+    const generateButtonCode = (propsString : string) : string => {
         // For Button, use children for the text content, not the label prop
-        const content = this.props.children || this.childrenContent || 'Click me';
-        
+        const content = props.children || childrenContent || "Click me";
+
         // Filter out children from props string since we handle it separately
-        let finalPropsString = propsString.split('\n')
-            .filter(line => !line.includes('children='))
-            .join('\n');
-        
+        let finalPropsString = propsString.split("\n")
+            .filter(line => !line.includes("children="))
+            .join("\n");
+
         // Add onClick handler if not present
-        if (!finalPropsString.includes('onClick')) {
-            finalPropsString += finalPropsString ? '\n' : '';
-            finalPropsString += '    onClick={handleClick}';
+        if (!finalPropsString.includes("onClick")) {
+            finalPropsString += finalPropsString ? "\n" : "";
+            finalPropsString += "    onClick={handleClick}";
         }
-        
-        return `<${this.componentName}${finalPropsString ? '\n' + finalPropsString : ''}
+
+        return `<${componentName}${finalPropsString ? "\n" + finalPropsString : ""}
 >
     ${content}
-</${this.componentName}>`;
-    }
-    
-    private generateBreadcrumbsCode(propsString: string): string {
+</${componentName}>`;
+    };
+
+    const generateBreadcrumbsCode = (propsString : string) : string => {
         // Generate sample breadcrumb links
         const links = [
-            '    <Link href="/">Home</Link>',
-            '    <Link href="/components">Components</Link>',
-            '    <Link href="/components/breadcrumbs">Breadcrumbs</Link>'
-        ].join('\n');
-        
-        return `<${this.componentName}${propsString ? '\n' + propsString : ''}
+            "    <Link href=\"/\">Home</Link>",
+            "    <Link href=\"/components\">Components</Link>",
+            "    <Link href=\"/components/breadcrumbs\">Breadcrumbs</Link>",
+        ].join("\n");
+
+        return `<${componentName}${propsString ? "\n" + propsString : ""}
 >
 ${links}
-</${this.componentName}>`;
-    }
-    
-    private generateCalloutCode(propsString: string): string {
-        const content = this.props.children || this.childrenContent || 'Important information goes here';
-        
+</${componentName}>`;
+    };
+
+    const generateCalloutCode = (propsString : string) : string => {
+        const content = props.children || childrenContent || "Important information goes here";
+
         // Ensure kind prop is included (it's required)
         let finalPropsString = propsString;
-        if (!propsString.includes('kind=')) {
-            const defaultKind = this.props.kind || 'info';
+        if (!propsString.includes("kind=")) {
+            const defaultKind = props.kind || "info";
             finalPropsString = finalPropsString ? `${finalPropsString}\n    kind="${defaultKind}"` : `    kind="${defaultKind}"`;
         }
-        
-        return `<${this.componentName}${finalPropsString ? '\n' + finalPropsString : ''}
+
+        return `<${componentName}${finalPropsString ? "\n" + finalPropsString : ""}
 >
     ${content}
-</${this.componentName}>`;
-    }
-    
-    private generateCardCode(propsString: string): string {
-        const content = this.props.children || this.childrenContent || 'Card content goes here';
-        
+</${componentName}>`;
+    };
+
+    const generateCardCode = (propsString : string) : string => {
+        const content = props.children || childrenContent || "Card content goes here";
+
         // Filter out children from props string since we handle it separately
-        let finalPropsString = propsString.split('\n')
-            .filter(line => !line.includes('children='))
-            .join('\n');
-        
-        return `<${this.componentName}${finalPropsString ? '\n' + finalPropsString : ''}
+        let finalPropsString = propsString.split("\n")
+            .filter(line => !line.includes("children="))
+            .join("\n");
+
+        return `<${componentName}${finalPropsString ? "\n" + finalPropsString : ""}
 >
     ${content}
-</${this.componentName}>`;
-    }
+</${componentName}>`;
+    };
+
+    const generateDividerCode = (propsString : string) : string => {
+        // Divider is a self-closing component
+        return `<${componentName}${propsString ? "\n" + propsString : ""}${!propsString ? " " : "\n"}/>`;
+    };
+
+    const generateDrawerCode = (propsString : string) : string => {
+        const content = props.children || childrenContent || "Drawer content goes here";
+        const drawerId = props.id || "sample-drawer";
+
+        // Filter out children from props string since we handle it separately
+        let finalPropsString = propsString.split("\n")
+            .filter(line => !line.includes("children="))
+            .join("\n");
+
+        // Ensure id prop is included
+        if (!finalPropsString.includes("id=")) {
+            finalPropsString = finalPropsString ? `${finalPropsString}\n    id="${drawerId}"` : `    id="${drawerId}"`;
+        }
+
+        // Generate complete example with trigger button and drawer
+        return `<>
+    <Button onClick={() => showDrawer('${drawerId}')}>
+        Open Drawer
+    </Button>
     
-    private generateDefaultCode(propsString: string): string {
-        const hasChildren = this.metadata.props.children;
-        const content = this.childrenContent || this.componentName;
+    <${componentName}${finalPropsString ? "\n" + finalPropsString : ""}
+    >
+        ${content}
         
+        <Button 
+            onClick={() => hideDrawer('${drawerId}')}
+            kind="secondary"
+            marginTop="medium"
+        >
+            Close
+        </Button>
+    </${componentName}>
+</>`;
+    };
+
+    const generateDefaultCode = (propsString : string) : string => {
+        const hasChildren = metadata.props.children;
+        const content = childrenContent || componentName;
+
         if (hasChildren) {
-            return `<${this.componentName}${propsString ? '\n' + propsString : ''}
+            return `<${componentName}${propsString ? "\n" + propsString : ""}
 >
     ${content}
-</${this.componentName}>`;
+</${componentName}>`;
         } else {
-            return `<${this.componentName}${propsString ? '\n' + propsString : ''}
+            return `<${componentName}${propsString ? "\n" + propsString : ""}
 />`;
         }
-    }
-    
-    private generatePropsString(): string {
-        const propsArray: string[] = [];
-        
-        Object.entries(this.props).forEach(([key, value]) => {
+    };
+
+    const generatePropsString = () : string => {
+        const propsArray : string[] = [];
+
+        Object.entries(props).forEach(([ key, value ]) => {
             // Skip children as it's handled separately
-            if (key === 'children') return;
-            
+            if (key === "children") return;
+
             // Skip summary for Accordion as we'll handle it in generateAccordionCode
-            if (this.componentName === 'Accordion' && key === 'summary') return;
-            
-            // For Button and Card, skip children since we handle it as content, not a prop
-            if ((this.componentName === 'Button' || this.componentName === 'Card') && key === 'children') return;
-            
+            if (componentName === "Accordion" && key === "summary") return;
+
+            // For Button, Card, and Drawer, skip children since we handle it as content, not a prop
+            if ((componentName === "Button" || componentName === "Card" || componentName === "Drawer") && key === "children") return;
+
             // Only include non-default values
-            const propDef = this.metadata.props[key];
-            if (propDef && this.shouldIncludeProp(key, value, propDef)) {
-                const propString = this.formatPropValue(key, value);
+            const propDef = metadata.props[key];
+            if (propDef && shouldIncludeProp(key, value, propDef)) {
+                const propString = formatPropValue(key, value);
                 if (propString) {
                     propsArray.push(`    ${propString}`);
                 }
             }
         });
-        
-        return propsArray.join('\n');
-    }
-    
-    private shouldIncludeProp(key: string, value: any, propDef: PropDefinition): boolean {
+
+        return propsArray.join("\n");
+    };
+
+    const shouldIncludeProp = (key : string, value : any, propDef : PropDefinition) : boolean => {
         // Always include required props
         if (propDef.required) return true;
-        
+
         // Include if value is different from default
         if (propDef.defaultValue?.value !== undefined) {
             return value !== propDef.defaultValue.value;
         }
-        
+
         // Include if value is explicitly set
-        return value !== undefined && value !== null && value !== false && value !== '';
-    }
-    
-    private formatPropValue(key: string, value: any): string | null {
+        return value !== undefined && value !== null && value !== false && value !== "";
+    };
+
+    const formatPropValue = (key : string, value : any) : string | null => {
         if (value === true) {
             return key;
         }
-        if (typeof value === 'string' && value) {
+        if (typeof value === "string" && value) {
             return `${key}="${value}"`;
         }
-        if (typeof value === 'number') {
+        if (typeof value === "number") {
             return `${key}={${value}}`;
         }
-        if (typeof value === 'boolean' && value === false) {
+        if (typeof value === "boolean" && value === false) {
             return `${key}={false}`;
         }
         return null;
-    }
-    
-    private needsState(): boolean {
+    };
+
+    const needsState = () : boolean => {
         // Check if component typically needs state
-        const stateComponents = ['Modal', 'Drawer', 'Tooltip', 'Tabs', 'Collapse'];
-        return stateComponents.includes(this.componentName);
+        const stateComponents = [ "Modal", "Drawer", "Tooltip", "Tabs", "Collapse" ];
+        return stateComponents.includes(componentName);
+    };
+
+    return {
+        generateCompleteCode,
+        generateComponentJSX,
+    };
+};
+
+/**
+ * Legacy class-based interface for backward compatibility
+ * @deprecated Use createCodeGenerator instead
+ */
+export class CodeGenerator {
+    private generator: ReturnType<typeof createCodeGenerator>;
+
+    constructor(
+        componentName : string,
+        metadata : ComponentMetadata,
+        props : { [key : string] : any },
+        childrenContent : string = "",
+    ) {
+        this.generator = createCodeGenerator(componentName, metadata, props, childrenContent);
+    }
+
+    generateCompleteCode() : string {
+        return this.generator.generateCompleteCode();
+    }
+
+    generateComponentJSX() : string {
+        return this.generator.generateComponentJSX();
     }
 }
+
+// Export the modern functional API as the default
+export { createCodeGenerator };

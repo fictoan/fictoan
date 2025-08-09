@@ -7,7 +7,6 @@
     left             : 0;
     width            : 100vw;
     height           : 100vh;
-    z-index          : 999;
     background-color : rgba(var(--drawer-overlay-bg), var(--drawer-overlay-opacity));
     transition       : opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 
@@ -24,7 +23,6 @@
 /* DRAWER STYLES //////////////////////////////////////////////////////////// */
 [data-drawer] {
     position               : fixed;
-    z-index                : 50000;
     visibility             : hidden;
     display                : flex;
     flex-direction         : column;

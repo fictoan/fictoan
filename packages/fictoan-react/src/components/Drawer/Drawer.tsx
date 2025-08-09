@@ -1,18 +1,18 @@
 // REACT CORE ==========================================================================================================
 import React, { useEffect, useRef } from "react";
 
-// LOCAL COMPONENTS ====================================================================================================
-import { Div } from "$tags";
-import { Element } from "$element";
-
 // HOOKS ===============================================================================================================
 import { useClickOutside } from "$hooks/UseClickOutside";
+
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps, SpacingTypes } from "../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./drawer.css";
 
 // OTHER ===============================================================================================================
-import { CommonAndHTMLProps, SpacingTypes } from "../Element/constants";
+import { Div } from "$tags";
 
 export interface DrawerCustomProps {
         id                    : string;
@@ -24,6 +24,7 @@ export interface DrawerCustomProps {
         closeOnClickOutside ? : boolean;
         label               ? : string;
         description         ? : string;
+        zIndex              ? : number;
 }
 
 export type DrawerElementType = HTMLDivElement;
@@ -44,6 +45,7 @@ export const Drawer = React.forwardRef(
             showOverlay = true,
             blurOverlay = false,
             closeOnClickOutside = true,
+            zIndex,
             label,
             description,
             classNames = [],
@@ -107,6 +109,7 @@ export const Drawer = React.forwardRef(
                         data-drawer-overlay-for={id}
                         aria-hidden="true"
                         onClick={closeOnClickOutside && isDismissible ? () => hideDrawer(id) : undefined}
+                        style={{ zIndex: zIndex ?? 10000 - 1 }}
                     />
                 )}
 
@@ -123,6 +126,7 @@ export const Drawer = React.forwardRef(
                     aria-label={label || "Drawer"}
                     aria-describedby={descriptionId}
                     tabIndex={-1}
+                    style={{ zIndex: zIndex ?? 10000 }}
                     {...props}
                 >
                     {/* DISMISS BUTTON */}
