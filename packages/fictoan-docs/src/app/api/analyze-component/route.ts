@@ -46,7 +46,7 @@ export const GET = async (request: NextRequest) => {
 
 const analyzeComponent = async (componentName: string): Promise<ComponentMetadata | null> => {
     // List of components we can analyze
-    const supportedComponents = ["Accordion", "Badge", "Button", "Breadcrumbs", "Callout", "Card", "Divider", "Drawer", "ListBox", "Modal"];
+    const supportedComponents = ["Accordion", "Badge", "Button", "Breadcrumbs", "Callout", "Card", "Divider", "Drawer", "ListBox", "Modal", "OptionCard", "OptionCardsGroup"];
     if (!supportedComponents.includes(componentName)) {
         return null;
     }
@@ -60,6 +60,13 @@ const analyzeComponent = async (componentName: string): Promise<ComponentMetadat
             process.cwd(),
             "../fictoan-react/src/components/Form/ListBox",
             `${componentName}.tsx`,
+        );
+    } else if (componentName === "OptionCard" || componentName === "OptionCardsGroup") {
+        // Both OptionCard and OptionCardsGroup are in the same file
+        componentPath = path.join(
+            process.cwd(),
+            "../fictoan-react/src/components/OptionCard",
+            "OptionCard.tsx",
         );
     } else {
         componentPath = path.join(
@@ -161,6 +168,10 @@ const findPropsInterface = (sourceFile: ts.SourceFile, componentName: string): t
             if (name === `${componentName}CustomProps` || name === `${componentName}Props`) {
                 propsInterface = node;
             }
+            // Handle special case for OptionCardsGroup which uses OptionCardsProviderProps
+            else if (componentName === "OptionCardsGroup" && name === "OptionCardsProviderProps") {
+                propsInterface = node;
+            }
         }
         ts.forEachChild(node, visit);
     };
@@ -233,6 +244,9 @@ const extractTypeText = (typeNode: ts.TypeNode, sourceFile: ts.SourceFile): stri
         }
         if (typeName === "ColourPropTypes") {
             return "string"; // Simplified for now - represents theme color values
+        }
+        if (typeName === "TickPosition") {
+            return "'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'centre-left' | 'center-left' | 'centre-right' | 'center-right' | 'centre-top' | 'center-top' | 'center-bottom' | 'centre-bottom' | 'centre' | 'center'";
         }
 
         return typeName;

@@ -151,6 +151,20 @@ const createCodeGenerator = (
                 result.imports[0] = `import { ${componentName}, Button, showModal, hideModal } from "fictoan-react";`;
                 result.hasState = false; // Modal uses imperative API, not React state
                 break;
+            case "OptionCard":
+                result.component = generateOptionCardCode(propsString);
+                break;
+            case "OptionCardsGroup":
+                result.component = generateOptionCardsGroupCode(propsString);
+                result.imports[0] = `import { OptionCardsGroup, OptionCard } from "fictoan-react";`;
+                result.hasState = true;
+                result.stateDeclarations?.push(
+                    `const [selectedIds, setSelectedIds] = useState(new Set());`
+                );
+                result.helperFunctions?.push(
+                    `const handleSelectionChange = (newSelectedIds) => {\n        setSelectedIds(newSelectedIds);\n        console.log('Selected IDs:', Array.from(newSelectedIds));\n    };`
+                );
+                break;
             default:
                 result.component = generateDefaultCode(propsString);
         }
@@ -369,6 +383,48 @@ ${links}
 </>`;
     };
 
+    const generateOptionCardCode = (propsString : string) : string => {
+        const content = props.children || childrenContent || "Option content";
+        const cardId = props.id || "option-card-1";
+
+        // Filter out children and id from props string since we handle them separately
+        let filteredProps = propsString
+            .split("\n")
+            .filter(line => !line.includes("children=") && !line.includes("id="))
+            .join("\n");
+
+        return `<OptionCard 
+    id="${cardId}"${filteredProps ? "\n" + filteredProps : ""}
+>
+    ${content}
+</OptionCard>`;
+    };
+
+    const generateOptionCardsGroupCode = (propsString : string) : string => {
+        // Filter out onSelectionChange from props string since we handle it separately
+        let filteredProps = propsString
+            .split("\n")
+            .filter(line => !line.includes("onSelectionChange="))
+            .join("\n");
+
+        const finalPropsString = filteredProps + (filteredProps ? "\n" : "") + "    onSelectionChange={handleSelectionChange}";
+
+        return `<OptionCardsGroup${finalPropsString ? "\n" + finalPropsString : ""}
+>
+    <OptionCard id="card-1">
+        Option 1
+    </OptionCard>
+    
+    <OptionCard id="card-2">
+        Option 2  
+    </OptionCard>
+    
+    <OptionCard id="card-3">
+        Option 3
+    </OptionCard>
+</OptionCardsGroup>`;
+    };
+
     const generateDefaultCode = (propsString : string) : string => {
         const hasChildren = metadata.props.children;
         const content = childrenContent || componentName;
@@ -394,8 +450,11 @@ ${links}
             // Skip summary for Accordion as we'll handle it in generateAccordionCode
             if (componentName === "Accordion" && key === "summary") return;
 
-            // For Button, Card, and Drawer, skip children since we handle it as content, not a prop
-            if ((componentName === "Button" || componentName === "Card" || componentName === "Drawer") && key === "children") return;
+            // For Button, Card, Drawer, and OptionCard, skip children since we handle it as content, not a prop
+            if ((componentName === "Button" || componentName === "Card" || componentName === "Drawer" || componentName === "OptionCard") && key === "children") return;
+
+            // For OptionCardsGroup, skip onSelectionChange since we handle it separately
+            if (componentName === "OptionCardsGroup" && key === "onSelectionChange") return;
 
             // Only include non-default values
             const propDef = metadata.props[key];
