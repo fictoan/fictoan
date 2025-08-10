@@ -165,6 +165,16 @@ const createCodeGenerator = (
                     `const handleSelectionChange = (newSelectedIds) => {\n        setSelectedIds(newSelectedIds);\n        console.log('Selected IDs:', Array.from(newSelectedIds));\n    };`
                 );
                 break;
+            case "Pagination":
+                result.component = generatePaginationCode(propsString);
+                result.hasState = true;
+                result.stateDeclarations?.push(
+                    `const [currentPage, setCurrentPage] = useState(1);`
+                );
+                result.helperFunctions?.push(
+                    `const handlePageChange = (newPage) => {\n        setCurrentPage(newPage);\n        console.log('Page changed to:', newPage);\n    };`
+                );
+                break;
             default:
                 result.component = generateDefaultCode(propsString);
         }
@@ -425,6 +435,31 @@ ${links}
 </OptionCardsGroup>`;
     };
 
+    const generatePaginationCode = (propsString : string) : string => {
+        // Set default values for required props
+        const totalItems = props.totalItems || 100;
+        const itemsToShowEachSide = props.itemsToShowEachSide || 1;
+        
+        // Filter out onPageChange and currentPage from props string since we handle them separately
+        let filteredProps = propsString
+            .split("\n")
+            .filter(line => !line.includes("onPageChange=") && !line.includes("currentPage="))
+            .join("\n");
+
+        // Build the props string with required props and filtered optional props
+        const requiredProps = [
+            `    totalItems={${totalItems}}`,
+            `    currentPage={currentPage}`,
+            `    itemsToShowEachSide={${itemsToShowEachSide}}`,
+            `    onPageChange={handlePageChange}`
+        ];
+
+        const allPropsString = [...requiredProps, ...(filteredProps ? filteredProps.split("\n") : [])].join("\n");
+
+        return `<Pagination${allPropsString ? "\n" + allPropsString : ""}
+/>`;
+    };
+
     const generateDefaultCode = (propsString : string) : string => {
         const hasChildren = metadata.props.children;
         const content = childrenContent || componentName;
@@ -455,6 +490,9 @@ ${links}
 
             // For OptionCardsGroup, skip onSelectionChange since we handle it separately
             if (componentName === "OptionCardsGroup" && key === "onSelectionChange") return;
+
+            // For Pagination, skip onPageChange and currentPage since we handle them separately
+            if (componentName === "Pagination" && (key === "onPageChange" || key === "currentPage")) return;
 
             // Only include non-default values
             const propDef = metadata.props[key];

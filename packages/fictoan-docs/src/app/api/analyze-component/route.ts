@@ -46,7 +46,7 @@ export const GET = async (request: NextRequest) => {
 
 const analyzeComponent = async (componentName: string): Promise<ComponentMetadata | null> => {
     // List of components we can analyze
-    const supportedComponents = ["Accordion", "Badge", "Button", "Breadcrumbs", "Callout", "Card", "Divider", "Drawer", "ListBox", "Modal", "OptionCard", "OptionCardsGroup"];
+    const supportedComponents = ["Accordion", "Badge", "Button", "Breadcrumbs", "Callout", "Card", "Divider", "Drawer", "ListBox", "Modal", "OptionCard", "OptionCardsGroup", "Pagination"];
     if (!supportedComponents.includes(componentName)) {
         return null;
     }
@@ -67,6 +67,13 @@ const analyzeComponent = async (componentName: string): Promise<ComponentMetadat
             process.cwd(),
             "../fictoan-react/src/components/OptionCard",
             "OptionCard.tsx",
+        );
+    } else if (componentName === "Pagination") {
+        // Pagination has its props in a separate constants file
+        componentPath = path.join(
+            process.cwd(),
+            "../fictoan-react/src/components/Pagination",
+            "Pagination.tsx",
         );
     } else {
         componentPath = path.join(
@@ -106,11 +113,39 @@ const analyzeComponent = async (componentName: string): Promise<ComponentMetadat
     const program = ts.createProgram([componentPath], compilerOptions);
     const checker = program.getTypeChecker();
 
-    // For ListBox, also read the constants file where the props interface is defined
+    // For ListBox and Pagination, also read the constants file where the props interface is defined
     if (componentName === "ListBox") {
         const constantsPath = path.join(
             process.cwd(),
             "../fictoan-react/src/components/Form/ListBox/constants.ts",
+        );
+        
+        if (fs.existsSync(constantsPath)) {
+            const constantsCode = fs.readFileSync(constantsPath, "utf-8");
+            const constantsFile = ts.createSourceFile(
+                constantsPath,
+                constantsCode,
+                ts.ScriptTarget.ESNext,
+                true,
+            );
+            
+            // Try to find props interface in constants file
+            const propsInterface = findPropsInterface(constantsFile, componentName);
+            if (propsInterface) {
+                const props = extractPropsFromInterface(propsInterface, checker, constantsFile);
+                return {
+                    displayName: componentName,
+                    description: extractJSDocDescription(propsInterface) || `${componentName} component`,
+                    props,
+                };
+            }
+        }
+    }
+
+    if (componentName === "Pagination") {
+        const constantsPath = path.join(
+            process.cwd(),
+            "../fictoan-react/src/components/Pagination/constants.ts",
         );
         
         if (fs.existsSync(constantsPath)) {
@@ -170,6 +205,10 @@ const findPropsInterface = (sourceFile: ts.SourceFile, componentName: string): t
             }
             // Handle special case for OptionCardsGroup which uses OptionCardsProviderProps
             else if (componentName === "OptionCardsGroup" && name === "OptionCardsProviderProps") {
+                propsInterface = node;
+            }
+            // Handle special case for Pagination which uses PaginationCustomProps
+            else if (componentName === "Pagination" && name === "PaginationCustomProps") {
                 propsInterface = node;
             }
         }
