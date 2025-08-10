@@ -78,4 +78,11 @@
         padding   : 12px 24px;
         font-size : 1.24rem;
     }
+
+    &.size-nano .badge-dismiss-button,
+    &.size-micro .badge-dismiss-button,
+    &.size-tiny .badge-dismiss-button,
+    &.size-small .badge-dismiss-button {
+        font-size   : 0.9rem;
+    }
 }

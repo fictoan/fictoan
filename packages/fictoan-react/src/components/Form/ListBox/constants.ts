@@ -1,16 +1,18 @@
-import React, { FormEvent } from "react";
-import { ColourPropTypes, CommonAndHTMLProps } from "$components/Element/constants";
+// REACT CORE ==========================================================================================================
+import React from "react";
 
-type NonZeroNumber = Exclude<number, 0>;
-
-export type ListBoxElementType = HTMLDivElement;
-
+// LOCAL COMPONENTS ====================================================================================================
+import { CommonAndHTMLProps } from "$components/Element/constants";
 export interface OptionForListBoxProps {
     value         : string;
     label         : string;
     customLabel ? : React.ReactNode;
     disabled    ? : boolean;
 }
+
+export type ListBoxElementType = HTMLDivElement;
+
+type NonZeroNumber = Exclude<number, 0>;
 
 export interface ListBoxCustomProps {
     options            ? : OptionForListBoxProps[];
@@ -22,10 +24,6 @@ export interface ListBoxCustomProps {
     placeholder        ? : string;
     id                 ? : string;
     defaultValue       ? : string;
-    badgeBgColour      ? : ColourPropTypes;
-    badgeBgColor       ? : ColourPropTypes;
-    badgeTextColour    ? : ColourPropTypes;
-    badgeTextColor     ? : ColourPropTypes;
     selectionLimit     ? : NonZeroNumber;
     allowCustomEntries ? : boolean;
     isLoading          ? : boolean;

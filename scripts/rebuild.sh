@@ -45,7 +45,7 @@ current_step=0
 
 function show_progress() {
     current_step=$((current_step + 1))
-    echo -e "${MAGENTA} —— Step $current_step of $total_steps ——${RESET}"
+    echo -e "${MAGENTA} —— Step $current_step of $total_steps ——\n"
 }
 
 # Intro

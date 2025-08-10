@@ -1,15 +1,17 @@
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-import { Element } from "../Element";
+// LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps, SpacingTypes, WeightTypes } from "../Element/constants";
+import { Element } from "$element";
 
 // prettier-ignore
 export interface TextCustomProps {
-    fontStyle ? : "sans-serif" | "serif" | "monospace";
-    weight    ? : WeightTypes;
-    isSubtext ? : boolean;
-    size      ? : SpacingTypes;
-    align     ? : "left" | "centre" | "center" | "right";
+        fontStyle ? : "sans-serif" | "serif" | "monospace";
+        weight    ? : WeightTypes;
+        size      ? : SpacingTypes;
+        align     ? : "left" | "centre" | "center" | "right";
+        isSubtext ? : boolean;
 }
 
 export type TextElementType = HTMLParagraphElement;

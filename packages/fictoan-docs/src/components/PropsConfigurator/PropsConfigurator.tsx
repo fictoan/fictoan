@@ -2,13 +2,14 @@
 import React, { useState, useEffect } from "react";
 
 // UI ==================================================================================================================
-import { CodeBlock, Checkbox, RadioTabGroup, InputField, Callout, Div, Text, Header, Card, Heading6, Spinner, Range } from "fictoan-react";
+import { CodeBlock, Checkbox, RadioTabGroup, InputField, Callout, Div, Text, Header, Card, Heading6, Spinner, Range, ListBox } from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./props-configurator.css";
 
 // OTHER ===============================================================================================================
 import metadata from "fictoan-react/dist/props-metadata.json";
+import { colourOptions } from "$/app/colour/colours";
 
 interface PropDeclaration {
         fileName : string;
@@ -90,7 +91,7 @@ const getInitialProps = (componentMetadata : ComponentMetadata) => {
 };
 
 // A helper function to get default children content for components
-const getDefaultChildrenContent = (componentName: string): string => {
+const getDefaultChildrenContent = (componentName : string) : string => {
     switch (componentName) {
         case "Accordion":
             return "Accordion content goes here";
@@ -102,6 +103,8 @@ const getDefaultChildrenContent = (componentName: string): string => {
             return "Card content goes here";
         case "Drawer":
             return "Drawer content goes here";
+        case "ListBox":
+            return ""; // ListBox doesn't use children content
         default:
             return componentName;
     }
@@ -156,6 +159,14 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
                     }
                     if (componentName === "Drawer" && chosen?.props?.id) {
                         initialProps.id = "sample-drawer";
+                    }
+                    if (componentName === "ListBox" && chosen?.props?.options) {
+                        initialProps.options = [
+                            {value : "option1", label : "Option 1"},
+                            {value : "option2", label : "Option 2"},
+                            {value : "option3", label : "Option 3"},
+                            {value : "option4", label : "Option 4", disabled : true},
+                        ];
                     }
 
                     setProps(initialProps);
@@ -223,7 +234,7 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
         onPropsChange(propsWithChildren);
     }, [ props, childrenContent, componentTemplate, componentMetadataObj, componentName, onPropsChange ]);
 
-    const handlePropChange = (propName : string) => (value : string | boolean) => {
+    const handlePropChange = (propName : string) => (value : string | boolean | string[]) => {
         setProps(prevProps => ({
             ...prevProps,
             [propName] : value,
@@ -253,7 +264,7 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
         // Fallback to simple generation if metadata not available
         const configuredProps = Object.entries(props)
             .map(([ key, value ]) => {
-                if (typeof value === "boolean" && value === true) {
+                if (typeof value === "boolean" && value) {
                     return `    ${key}`;
                 }
                 if (typeof value === "string" && value) {
@@ -308,6 +319,16 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
             return null;
         }
 
+        // Hide US spelling variants - prefer UK spelling (badgeTextColour over badgeTextColor, etc.)
+        if (propName.endsWith("Color") && componentMetadataObj.props[propName.replace("Color", "Colour")]) {
+            return null;
+        }
+
+        // Hide callback and internal props that users don't need to configure
+        if (componentName === "ListBox" && (propName === "id" || propName === "onChange" || propName === "value" || propName === "isLoading")) {
+            return null;
+        }
+
         const enhancement = enhancements ? enhancements[propName] : null;
 
         if (enhancement?.hidden) {
@@ -336,7 +357,7 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
             // Check if this boolean prop has a default value of true
             const hasDefaultTrue = prop.defaultValue?.value === true;
             const displayLabel = hasDefaultTrue ? `${label} (on by default)` : label;
-            
+
             return (
                 <Checkbox
                     key={propName}
@@ -345,6 +366,21 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
                     label={displayLabel}
                     checked={props[propName] !== undefined ? props[propName] : hasDefaultTrue}
                     onChange={handlePropChange(propName)}
+                />
+            );
+        }
+
+        // Check if this is a color prop - use ListBox with color options
+        if (propName.toLowerCase().includes("color") || propName.toLowerCase().includes("colour")) {
+            return (
+                <ListBox
+                    key={propName}
+                    id={`prop-config-${propName}`}
+                    label={label}
+                    options={colourOptions}
+                    value={props[propName] || ""}
+                    onChange={handlePropChange(propName)}
+                    placeholder={`Select ${label.toLowerCase()}`}
                 />
             );
         }
@@ -360,7 +396,7 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
                     min={1} max={20} step={1}
                     value={parseInt(props[propName]) || 1}
                     suffix="px"
-                    onChange={(value: number) => handlePropChange(propName)(`${value}px`)}
+                    onChange={(value : number) => handlePropChange(propName)(`${value}px`)}
                 />
             );
         }
@@ -414,12 +450,43 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
         return null;
     };
 
+    // Define prop display order for components
+    const getPropOrder = (componentName : string) : string[] => {
+        switch (componentName) {
+            case "ListBox":
+                return [
+                    "options",
+                    "placeholder",
+                    "label",
+                    "helpText",
+                    "errorText",
+                    "defaultValue",
+                    "allowMultiSelect",
+                    "allowCustomEntries",
+                    "selectionLimit",
+                    "isFullWidth",
+                    "disabled",
+                ];
+            default:
+                return []; // No custom ordering - use interface order
+        }
+    };
+
     // Filter out common props and render as a simple list
-    const filteredMetadataProps = Object.entries(componentMetadataObj.props).filter(([ propName, prop ]) => {
+    let filteredMetadataProps = Object.entries(componentMetadataObj.props).filter(([ propName, prop ]) => {
         // In analyzer-first mode, parent may be undefined; guard accordingly
         return !(prop.parent && (prop.parent as any).fileName && (prop.parent as any).fileName.includes(
             "fictoan-react/src/components/Element/constants.ts"));
     });
+
+    // Apply custom ordering if defined for this component
+    const propOrder = getPropOrder(componentName);
+    if (propOrder.length > 0) {
+        const propsMap = new Map(filteredMetadataProps);
+        filteredMetadataProps = propOrder
+            .filter(propName => propsMap.has(propName)) // Only include props that exist
+            .map(propName => [ propName, propsMap.get(propName)! ]);
+    }
 
     const propControls = filteredMetadataProps.map(([ propName, prop ]) => renderPropControl(propName, prop as any))
         .filter(Boolean);
@@ -457,7 +524,13 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
             </CodeBlock>
 
             <Div id="props-group">
-                {(componentName !== "Breadcrumbs") && (componentTemplate?.hasChildren || !!componentMetadataObj?.props?.children || componentName === "Button" || componentName === "Card" || componentName === "Drawer") && (
+                {(componentName !== "Breadcrumbs") && (
+                    componentTemplate?.hasChildren
+                    || !!componentMetadataObj?.props?.children
+                    || componentName === "Button"
+                    || componentName === "Card"
+                    || componentName === "Drawer"
+                ) && (
                     <InputField
                         id="children-content"
                         name="children"

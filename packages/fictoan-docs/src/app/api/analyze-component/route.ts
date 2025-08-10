@@ -46,18 +46,29 @@ export const GET = async (request: NextRequest) => {
 
 const analyzeComponent = async (componentName: string): Promise<ComponentMetadata | null> => {
     // List of components we can analyze
-    const supportedComponents = ["Accordion", "Badge", "Button", "Breadcrumbs", "Callout", "Card", "Divider", "Drawer"];
+    const supportedComponents = ["Accordion", "Badge", "Button", "Breadcrumbs", "Callout", "Card", "Divider", "Drawer", "ListBox"];
     if (!supportedComponents.includes(componentName)) {
         return null;
     }
 
     // Find the actual component source file
-    const componentPath = path.join(
-        process.cwd(),
-        "../fictoan-react/src/components",
-        componentName,
-        `${componentName}.tsx`,
-    );
+    let componentPath: string;
+    
+    if (componentName === "ListBox") {
+        // ListBox is nested deeper in the Form folder
+        componentPath = path.join(
+            process.cwd(),
+            "../fictoan-react/src/components/Form/ListBox",
+            `${componentName}.tsx`,
+        );
+    } else {
+        componentPath = path.join(
+            process.cwd(),
+            "../fictoan-react/src/components",
+            componentName,
+            `${componentName}.tsx`,
+        );
+    }
 
     if (!fs.existsSync(componentPath)) {
         console.log(`Component file not found: ${componentPath}`);
@@ -87,6 +98,35 @@ const analyzeComponent = async (componentName: string): Promise<ComponentMetadat
 
     const program = ts.createProgram([componentPath], compilerOptions);
     const checker = program.getTypeChecker();
+
+    // For ListBox, also read the constants file where the props interface is defined
+    if (componentName === "ListBox") {
+        const constantsPath = path.join(
+            process.cwd(),
+            "../fictoan-react/src/components/Form/ListBox/constants.ts",
+        );
+        
+        if (fs.existsSync(constantsPath)) {
+            const constantsCode = fs.readFileSync(constantsPath, "utf-8");
+            const constantsFile = ts.createSourceFile(
+                constantsPath,
+                constantsCode,
+                ts.ScriptTarget.ESNext,
+                true,
+            );
+            
+            // Try to find props interface in constants file
+            const propsInterface = findPropsInterface(constantsFile, componentName);
+            if (propsInterface) {
+                const props = extractPropsFromInterface(propsInterface, checker, constantsFile);
+                return {
+                    displayName: componentName,
+                    description: extractJSDocDescription(propsInterface) || `${componentName} component`,
+                    props,
+                };
+            }
+        }
+    }
 
     // Find the props interface
     const propsInterface = findPropsInterface(sourceFile, componentName);
@@ -190,6 +230,9 @@ const extractTypeText = (typeNode: ts.TypeNode, sourceFile: ts.SourceFile): stri
         }
         if (typeName === "EmphasisTypes") {
             return "'primary' | 'secondary' | 'tertiary' | 'custom'";
+        }
+        if (typeName === "ColourPropTypes") {
+            return "string"; // Simplified for now - represents theme color values
         }
 
         return typeName;

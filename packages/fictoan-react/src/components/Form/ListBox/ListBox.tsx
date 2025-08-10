@@ -1,24 +1,26 @@
 // REACT CORE ==========================================================================================================
 import React, { useState, useRef, useEffect, MutableRefObject, KeyboardEvent } from "react";
 
-// HOOKS ===============================================================================================================
-import { useClickOutside } from "../../../hooks/UseClickOutside";
+// LOCAL COMPONENTS ====================================================================================================
+import { Div } from "$tags";
+import { Element } from "$element";
 
-// ELEMENT =============================================================================================================
-import { Div } from "../../Element/Tags";
+// HOOKS ===============================================================================================================
+import { useClickOutside } from "$hooks/UseClickOutside";
 
 // INPUT ===============================================================================================================
 import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
+
+// TYPOGRAPHY ==========================================================================================================
+import { Text } from "$typography/Text";
 
 // STYLES ==============================================================================================================
 import "./list-box.css";
 
 // OTHER ===============================================================================================================
-import { Badge } from "../../Badge/Badge";
-import { Element } from "$element";
-import { InputField } from "../InputField/InputField";
+import { Badge } from "$/components";
+import { InputField } from "$/components";
 import { ListBoxProps, OptionForListBoxProps, ListBoxElementType, ListBoxCustomProps } from "./constants";
-import { Text } from "../../Typography/Text";
 import { searchOptions } from "./listBoxUtils";
 
 const ListBoxWithOptions = (
@@ -30,10 +32,6 @@ const ListBoxWithOptions = (
         defaultValue,
         onChange,
         disabled,
-        badgeBgColour,
-        badgeBgColor,
-        badgeTextColour,
-        badgeTextColor,
         selectionLimit,
         allowMultiSelect = false,
         allowCustomEntries = false,
@@ -260,8 +258,6 @@ const ListBoxWithOptions = (
                                             onDelete={() => handleDeleteOption(option.value)}
                                             size="small"
                                             shape="rounded"
-                                            bgColour={badgeBgColour || badgeBgColor}
-                                            textColour={badgeTextColour || badgeTextColor}
                                         >
                                             <Text>{option.label}</Text>
                                         </Badge>

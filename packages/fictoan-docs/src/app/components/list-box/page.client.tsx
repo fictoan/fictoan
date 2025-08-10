@@ -1,47 +1,23 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React from "react";
+import React, { useState } from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading4, Divider, Portion, Row, Text, Article, ListBox, Section } from "fictoan-react";
+import { Element, Heading1, Heading4, Divider, Portion, Row, Text, Article, ListBox, Section, Div } from "fictoan-react";
+
+// LOCAL COMPONENTS ====================================================================================================
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 
 // UTILS ===============================================================================================================
-import { createPropsConfigurator } from "$utils/propsConfigurator";
 import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
 import "./page-list-box.css";
 
-// OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
-
 const ListBoxDocs = () => {
-    const {
-        propsConfigurator,
-        componentProps: propsConfig,
-    } = createPropsConfigurator(
-        "ListBox",
-        [
-            "strings",
-            "placeholder",
-            "allowMultiSelect",
-            "allowCustomEntries",
-            "selectionLimit",
-            "disabled",
-        ],
-        colourOptions,
-        {
-            isSelfClosing: false,
-            canHaveChildren: false,
-            defaultOptions: [
-                { value: "option1", label: "Option 1" },
-                { value: "option2", label: "Option 2" },
-                { value: "option3", label: "Option 3" },
-                { value: "option4", label: "Option 4", disabled: true },
-            ]
-        }
-    );
+    const [props, setProps] = useState({});
+    const [selectedValues, setSelectedValues] = useState<string | string[]>("");
 
     const ListBoxComponent = (varName: string) => {
         // Remove debug log in production
@@ -54,6 +30,10 @@ const ListBoxDocs = () => {
         componentProps: themeConfig,
         themeConfigurator,
     } = createThemeConfigurator("ListBox", ListBoxComponent);
+
+    const handleSelectionChange = (value: string | string[]) => {
+        setSelectedValues(value);
+    };
 
     return (
         <Article id="page-list-box">
@@ -90,25 +70,41 @@ const ListBoxDocs = () => {
                             data-centered-children
                         >
                             <ListBox
-                                id="interactive-component"
                                 ref={interactiveElementRef}
-                                {...propsConfig}
+                                {...props}
                                 {...themeConfig}
-                                options={[
-                                    { value: "option1", label: "Option 1" },
-                                    { value: "option2", label: "Option 2" },
-                                    { value: "option3", label: "Option 3" },
-                                    { value: "option4", label: "Option 4", disabled: true },
-                                ]}
+                                id="interactive-component"
+                                onChange={handleSelectionChange}
+                                value={selectedValues}
                             />
+
                         </Element>
+
+                        <Div marginTop="nano">
+                            {selectedValues && (Array.isArray(selectedValues) ? selectedValues.length > 0 : selectedValues !== "") ? (
+                                <Text fontStyle="monospace" size="small">
+                                    Selected values:&nbsp;
+                                    {Array.isArray(selectedValues)
+                                        ? `[${selectedValues.map(v => `"${v}"`).join(", ")}]`
+                                        : `"${selectedValues}"`
+                                    }
+                                </Text>
+                            ) : (
+                                <Text textColour="slate" size="small" style={{fontStyle: "italic"}}>
+                                    Make a selection from the list above.
+                                </Text>
+                            )}
+                        </Div>
                     </Portion>
                 </Row>
 
                 <Row horizontalPadding="small">
                     {/* PROPS CONFIGURATOR =========================================================================== */}
                     <Portion desktopSpan="half">
-                        {propsConfigurator()}
+                        <PropsConfigurator
+                            componentName="ListBox"
+                            onPropsChange={setProps}
+                        />
                     </Portion>
 
                     {/* THEME CONFIGURATOR =========================================================================== */}

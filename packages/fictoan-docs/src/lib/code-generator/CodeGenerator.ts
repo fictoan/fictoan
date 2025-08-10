@@ -34,7 +34,7 @@ const createCodeGenerator = (
 
         // Add function wrapper if we have state or helpers
         if (code.hasState || code.helperFunctions) {
-            completeCode += `export function ${componentName}Example() {\n`;
+            completeCode += `export const ${componentName}Example = () => {\n`;
 
             // Add state declarations
             if (code.stateDeclarations && code.stateDeclarations.length > 0) {
@@ -132,6 +132,18 @@ const createCodeGenerator = (
                 // Replace the main import to include Button and imperative functions
                 result.imports[0] = `import { ${componentName}, Button, showDrawer, hideDrawer } from "fictoan-react";`;
                 result.hasState = false; // Drawer uses imperative API, not React state
+                break;
+            case "ListBox":
+                result.component = generateListBoxCode(propsString);
+                if (props.onChange === undefined) {
+                    result.hasState = true;
+                    result.stateDeclarations?.push(
+                        `const [selectedValue, setSelectedValue] = useState(${props.allowMultiSelect ? "[]" : '""'});`,
+                    );
+                    result.helperFunctions?.push(
+                        `const handleSelectionChange = (value) => {\n        setSelectedValue(value);\n        console.log('Selected:', value);\n    };`,
+                    );
+                }
                 break;
             default:
                 result.component = generateDefaultCode(propsString);
@@ -282,6 +294,38 @@ ${links}
         </Button>
     </${componentName}>
 </>`;
+    };
+
+    const generateListBoxCode = (propsString : string) : string => {
+        // Generate sample options if not provided
+        const defaultOptions = [
+            { value: "option1", label: "Option 1" },
+            { value: "option2", label: "Option 2" },
+            { value: "option3", label: "Option 3" },
+            { value: "option4", label: "Option 4", disabled: true },
+        ];
+
+        // Ensure options prop is included
+        let finalPropsString = propsString;
+        if (!propsString.includes("options=")) {
+            const optionsString = `options={${JSON.stringify(defaultOptions, null, 8).replace(/\n/g, "\n")}}`;
+            finalPropsString = finalPropsString ? `${finalPropsString}\n    ${optionsString}` : `    ${optionsString}`;
+        }
+
+        // Add onChange handler if not present
+        if (!finalPropsString.includes("onChange=")) {
+            finalPropsString += finalPropsString ? "\n" : "";
+            finalPropsString += "    onChange={handleSelectionChange}";
+        }
+
+        // Add value prop if state is being used
+        if (props.onChange === undefined) {
+            finalPropsString += finalPropsString ? "\n" : "";
+            finalPropsString += "    value={selectedValue}";
+        }
+
+        return `<${componentName}${finalPropsString ? "\n" + finalPropsString : ""}
+/>`;
     };
 
     const generateDefaultCode = (propsString : string) : string => {
