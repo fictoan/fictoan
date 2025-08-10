@@ -46,7 +46,7 @@ export const GET = async (request: NextRequest) => {
 
 const analyzeComponent = async (componentName: string): Promise<ComponentMetadata | null> => {
     // List of components we can analyze
-    const supportedComponents = ["Accordion", "Badge", "Button", "Breadcrumbs", "Callout", "Card", "Divider", "Drawer", "ListBox"];
+    const supportedComponents = ["Accordion", "Badge", "Button", "Breadcrumbs", "Callout", "Card", "Divider", "Drawer", "ListBox", "Modal"];
     if (!supportedComponents.includes(componentName)) {
         return null;
     }

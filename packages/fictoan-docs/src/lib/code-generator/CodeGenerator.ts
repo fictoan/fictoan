@@ -145,6 +145,12 @@ const createCodeGenerator = (
                     );
                 }
                 break;
+            case "Modal":
+                result.component = generateModalCode(propsString);
+                // Replace the main import to include Button and imperative functions
+                result.imports[0] = `import { ${componentName}, Button, showModal, hideModal } from "fictoan-react";`;
+                result.hasState = false; // Modal uses imperative API, not React state
+                break;
             default:
                 result.component = generateDefaultCode(propsString);
         }
@@ -326,6 +332,41 @@ ${links}
 
         return `<${componentName}${finalPropsString ? "\n" + finalPropsString : ""}
 />`;
+    };
+
+    const generateModalCode = (propsString : string) : string => {
+        const content = props.children || childrenContent || "Modal content goes here";
+        const modalId = props.id || "sample-modal";
+
+        // Filter out children from props string since we handle it separately
+        let finalPropsString = propsString.split("\n")
+            .filter(line => !line.includes("children="))
+            .join("\n");
+
+        // Ensure id prop is included
+        if (!finalPropsString.includes("id=")) {
+            finalPropsString = finalPropsString ? `${finalPropsString}\n    id="${modalId}"` : `    id="${modalId}"`;
+        }
+
+        // Generate complete example with trigger button and modal
+        return `<>
+    <Button onClick={() => showModal('${modalId}')}>
+        Open Modal
+    </Button>
+    
+    <${componentName}${finalPropsString ? "\n" + finalPropsString : ""}
+    >
+        ${content}
+        
+        <Button 
+            onClick={() => hideModal('${modalId}')}
+            kind="secondary"
+            marginTop="medium"
+        >
+            Close Modal
+        </Button>
+    </${componentName}>
+</>`;
     };
 
     const generateDefaultCode = (propsString : string) : string => {

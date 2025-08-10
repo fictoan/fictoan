@@ -105,6 +105,8 @@ const getDefaultChildrenContent = (componentName : string) : string => {
             return "Drawer content goes here";
         case "ListBox":
             return ""; // ListBox doesn't use children content
+        case "Modal":
+            return "Modal content goes here";
         default:
             return componentName;
     }
@@ -167,6 +169,9 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
                             {value : "option3", label : "Option 3"},
                             {value : "option4", label : "Option 4", disabled : true},
                         ];
+                    }
+                    if (componentName === "Modal" && chosen?.props?.id) {
+                        initialProps.id = "sample-modal";
                     }
 
                     setProps(initialProps);
@@ -329,6 +334,11 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
             return null;
         }
 
+        // For Modal component, hide label and description props since they're accessibility-only
+        if (componentName === "Modal" && (propName === "label" || propName === "description")) {
+            return null;
+        }
+
         const enhancement = enhancements ? enhancements[propName] : null;
 
         if (enhancement?.hidden) {
@@ -466,6 +476,15 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
                     "selectionLimit",
                     "isFullWidth",
                     "disabled",
+                ];
+            case "Modal":
+                return [
+                    "id",
+                    "isDismissible",
+                    "showBackdrop",
+                    "blurBackdrop",
+                    "label",
+                    "description",
                 ];
             default:
                 return []; // No custom ordering - use interface order
