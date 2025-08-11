@@ -416,7 +416,22 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
             );
         }
 
-        if (propType.includes("|")) { // This is a simple way to detect enums
+        
+        // Special handling for ProgressBar value prop - use Range input
+        if (componentName === "ProgressBar" && propName === "value") {
+            const maxValue = parseInt(props.max) || 100;
+            return (
+                <Range
+                    key={propName}
+                    id={`prop-config-${propName}`}
+                    name={propName}
+                    label={`${label}`}
+                    min={0} max={maxValue} step={1}
+                    value={parseInt(props[propName]) || 0}
+                    onChange={(value : number) => handlePropChange(propName)(value.toString())}
+                />
+            );
+        }        if (propType.includes("|")) { // This is a simple way to detect enums
             const options = propType.split("|").map((option : string) => {
                 const value = option.trim().replace(/\'/g, "");
                 return {id : `prop-config-${propName}-${value}`, value : value, label : value};
