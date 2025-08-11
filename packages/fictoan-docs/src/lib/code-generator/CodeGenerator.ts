@@ -175,6 +175,9 @@ const createCodeGenerator = (
                     `const handlePageChange = (newPage) => {\n        setCurrentPage(newPage);\n        console.log('Page changed to:', newPage);\n    };`
                 );
                 break;
+            case "Meter":
+                result.component = generateMeterCode(propsString);
+                break;
             default:
                 result.component = generateDefaultCode(propsString);
         }
@@ -460,6 +463,27 @@ ${links}
 />`;
     };
 
+    const generateMeterCode = (propsString : string) : string => {
+        // Use sensible default values for the numeric and styling props
+        const requiredProps = [
+            `    min={0}`,
+            `    max={100}`,
+            `    low={25}`,
+            `    high={75}`,
+            `    value={50}`,
+            `    optimum={90}`,
+            `    height="24px"`,
+            `    label="Sample meter"`,
+            `    suffix="%"`
+        ];
+
+        // Combine required props with other optional props from PropsConfigurator
+        const allPropsString = [...requiredProps, ...(propsString ? propsString.split("\n") : [])].join("\n");
+
+        return `<Meter${allPropsString ? "\n" + allPropsString : ""}
+/>`;
+    };
+
     const generateDefaultCode = (propsString : string) : string => {
         const hasChildren = metadata.props.children;
         const content = childrenContent || componentName;
@@ -493,6 +517,14 @@ ${links}
 
             // For Pagination, skip onPageChange and currentPage since we handle them separately
             if (componentName === "Pagination" && (key === "onPageChange" || key === "currentPage")) return;
+
+            // For Meter, skip numeric values, color props, accessibility props, and height since we handle them separately
+            if (componentName === "Meter" && (
+                key === "min" || key === "max" || key === "low" || key === "high" || 
+                key === "value" || key === "optimum" || key === "height" ||
+                key === "dangerColor" || key === "warningColor" || key === "successColor" || 
+                key === "barBg" || key === "ariaLabel" || key === "description"
+            )) return;
 
             // Only include non-default values
             const propDef = metadata.props[key];

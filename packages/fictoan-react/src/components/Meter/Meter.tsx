@@ -1,7 +1,7 @@
 // REACT CORE ==========================================================================================================
 import React from "react";
 
-// ELEMENT =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps } from "../Element/constants";
 import { Element } from "$element";
 
@@ -11,7 +11,6 @@ import "./meter.css";
 // OTHER ===============================================================================================================
 import { Text } from "../Typography/Text";
 
-// prettier-ignore
 export interface MeterLabelCustomProps {
         suffix ? : string;
 }
@@ -25,8 +24,6 @@ export interface MeterCustomProps extends Omit<CommonAndHTMLProps<HTMLMeterEleme
         value               : number;
         optimum           ? : number;
         showOptimumMarker ? : boolean;
-        barBg             ? : string;
-        barFill           ? : string;
         suffix            ? : string;
         height            ? : string;
         ariaLabel         ? : string;
@@ -56,20 +53,12 @@ export const Meter = React.forwardRef(
         ...props
     } : MeterProps, ref : React.Ref<MeterElementType>) => {
         const optimumPositionPercent = optimum ? (
-            (
-                optimum - min
-            ) / (
-                max - min
-            )
+            (optimum - min) / (max - min)
         ) * 100 : 0;
 
         const getValueDescription = () => {
             const percentage = (
-                (
-                    value - min
-                ) / (
-                    max - min
-                )
+                (value - min) / (max - min)
             ) * 100;
             let status : string;
 
@@ -116,8 +105,8 @@ export const Meter = React.forwardRef(
                         max={max}
                         low={low}
                         high={high}
+                        optimum={optimum}
                         {...props}
-                        title={suffix}
                         style={{ height }}
                         aria-label={label || ariaLabel || "Progress meter"}
                         aria-valuemin={min}

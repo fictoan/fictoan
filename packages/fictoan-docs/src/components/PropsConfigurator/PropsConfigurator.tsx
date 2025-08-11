@@ -339,6 +339,11 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
             return null;
         }
 
+        // For Meter component, hide ariaLabel, description, and height props since we handle them separately
+        if (componentName === "Meter" && (propName === "ariaLabel" || propName === "description" || propName === "height")) {
+            return null;
+        }
+
         const enhancement = enhancements ? enhancements[propName] : null;
 
         if (enhancement?.hidden) {
