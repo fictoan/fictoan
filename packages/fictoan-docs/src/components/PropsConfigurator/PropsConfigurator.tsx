@@ -343,7 +343,11 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
         if (componentName === "Meter" && (propName === "ariaLabel" || propName === "description" || propName === "height")) {
             return null;
         }
-
+        
+        // For Table component, hide accessibility-only props
+        if (componentName === "Table" && (propName === "caption" || propName === "summary" || propName === "hasColSpan")) {
+            return null;
+        }
         const enhancement = enhancements ? enhancements[propName] : null;
 
         if (enhancement?.hidden) {
