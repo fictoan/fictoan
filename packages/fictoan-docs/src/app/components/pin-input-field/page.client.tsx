@@ -1,44 +1,18 @@
 "use client";
 
 
-// EXTERNAL DEPS =======================================================================================================
-import React, { useEffect, useState } from "react";
+// REACT CORE ==========================================================================================================
 import Link from "next/link";
+import React from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Element,
-    Row,
-    Portion,
-    Heading1,
-    Heading2,
-    Heading3,
-    Heading4,
-    Heading5,
-    Heading6,
-    Text,
-    Divider,
-    PinInputField,
-    Article,
-    CodeBlock,
-} from "fictoan-react";
-
-// COMPONENTS ==========================================================================================================
+// UI ==================================================================================================================
+import { Element, Row, Portion, Heading1, Heading4, Heading5, Text, Divider, PinInputField, Article, CodeBlock } from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./pin-input-field.css";
 
-// HOOKS ===============================================================================================================
-
-// UTILS ===============================================================================================================
-
-// DATA ================================================================================================================
-import {
-    samplePinInput,
-    sampleInputNumberOfFields,
-    samplePinInputType, samplePinInputMask, samplePinInputOTP,
-} from "./CodeSamples";
-
+// OTHER ===============================================================================================================
+import { samplePinInput, sampleInputNumberOfFields, samplePinInputType, samplePinInputMask, samplePinInputOTP } from "./CodeSamples";
 
 const PINInputFieldDocs = () => {
     return (
@@ -126,7 +100,7 @@ const PINInputFieldDocs = () => {
                         <CodeBlock withSyntaxHighlighting source={samplePinInputType} language="jsx" marginBottom="micro" />
 
                         <Text marginBottom="nano">Numeric:</Text>
-                        <PinInputField numberOfFields={4} type="numeric" />
+                        <PinInputField numberOfFields={4} type="number" />
 
                         <Text marginTop="micro" marginBottom="nano">Alphanumeric:</Text>
                         <PinInputField numberOfFields={4} type="alphanumeric" />

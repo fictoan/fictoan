@@ -27,80 +27,87 @@ export interface TabsCustomProps {
         additionalNavContentWrapper ? : React.ReactNode;
         defaultActiveTab ? : React.ReactNode;
         align            ? : "left" | "centre" | "center" | "right";
+        isFullWidth      ? : boolean;
 }
 
 export type TabsElementType = HTMLDivElement;
 export type TabsProps = Omit<CommonAndHTMLProps<TabsElementType>, keyof TabsCustomProps> & TabsCustomProps;
 
 export const Tabs = React.forwardRef(
-    ({ tabs, additionalNavContentWrapper, defaultActiveTab, align = "left", ...props }: TabsProps, ref: React.Ref<TabsElementType>) => {
+    ({ tabs, additionalNavContentWrapper, defaultActiveTab, align = "left", isFullWidth, ...props }: TabsProps, ref: React.Ref<TabsElementType>) => {
         const index = tabs.findIndex((tab) => tab.key === defaultActiveTab);
         const defaultTabIndex = index > -1 ? index : 0;
         const [activeTab, setActiveTab] = React.useState<TabType | undefined>(
             tabs.length > 0 ? tabs[defaultTabIndex] : undefined
         );
-        const [isExiting, setIsExiting] = React.useState<boolean>(false);
-
-        const handleTabChange = useCallback((tab: TabType, animate: boolean = true) => {
-            if (animate && activeTab?.key !== tab.key) {
-                // Only animate when actually switching to a different tab
-                setIsExiting(true);
-                setTimeout(() => {
-                    setIsExiting(false);
-                    setActiveTab(tab);
-                }, 120);
-            } else {
-                // No animation for content updates or initial load
-                setActiveTab(tab);
-            }
-        }, [activeTab?.key]);
 
         useEffect(() => {
             if (tabs.length > 0) {
-                const matchingTab = tabs.find((tab) => tab.key === activeTab?.key);
-                if (matchingTab) {
-                    // Update content without animation if it's the same tab
-                    setActiveTab(matchingTab);
-                } else {
-                    // Only animate if we're switching to a different tab
-                    handleTabChange(tabs[0], false);
-                }
-            } else {
-                setActiveTab(undefined);
+                setActiveTab(tabs[defaultTabIndex]);
             }
-        }, [tabs, activeTab?.key]); // Only depend on activeTab.key, not the whole object
+        }, [defaultTabIndex, tabs]);
+
+        const handleTabClick = (tab: TabType) => {
+            setActiveTab(tab);
+        };
+
+        const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+            }
+        }, []);
 
         return (
-            <Element<TabsElementType> as="div" data-tabs ref={ref} {...props}>
-                {tabs.length > 0 && activeTab ? (
-                    <>
-                        <nav className={`align-${align}`}>
-                            <ul className="tab-labels-list">
-                                {tabs.map((tab) => (
-                                    <li key={tab.key}>
-                                        <Text
-                                            className={`tab-label is-clickable ${tab.key === activeTab.key ? "is-active" : ""} ${tab.hasAlert ? "has-alert" : ""}`}
-                                            onClick={() => handleTabChange(tab, true)}
-                                            marginBottom="none"
-                                        >
-                                            {tab.label}
-                                        </Text>
-                                    </li>
-                                ))}
-                            </ul>
-                            {additionalNavContentWrapper && <>{additionalNavContentWrapper}</>}
-                        </nav>
+            <>
+                <Element<TabsElementType>
+                    as="section"
+                    data-tabs
+                    ref={ref}
+                    data-align={align}
+                    data-full-width={isFullWidth}
+                    {...props}
+                >
+                    <Div data-tabs-nav>
+                        {tabs.map((tab) => (
+                            <Element<HTMLButtonElement>
+                                as="button"
+                                key={tab.key}
+                                role="tab"
+                                tabIndex={0}
+                                aria-selected={activeTab?.key === tab.key}
+                                aria-controls={`tab-panel-${tab.key}`}
+                                id={`tab-${tab.key}`}
+                                data-tab-label
+                                data-active={activeTab?.key === tab.key}
+                                data-alert={tab.hasAlert}
+                                onClick={() => handleTabClick(tab)}
+                                onKeyDown={handleKeyDown}
+                            >
+                                <Text>{tab.label}</Text>
 
-                        <Divider kind="secondary" marginTop="none" marginBottom="micro" />
+                                {tab.hasAlert && <Div data-alert-badge />}
+                            </Element>
+                        ))}
 
-                        <Div className={`tabs-content ${isExiting ? "exiting" : ""}`}>
-                            {activeTab.content}
+                        {additionalNavContentWrapper}
+                    </Div>
+
+                    <Divider marginY="none" />
+
+                    {tabs.map((tab) => (
+                        <Div
+                            key={tab.key}
+                            role="tabpanel"
+                            id={`tab-panel-${tab.key}`}
+                            aria-labelledby={`tab-${tab.key}`}
+                            data-tab-content
+                            data-active={activeTab?.key === tab.key}
+                        >
+                            {tab.content}
                         </Div>
-                    </>
-                ) : (
-                    <></>
-                )}
-            </Element>
+                    ))}
+                </Element>
+            </>
         );
-}
+    }
 );

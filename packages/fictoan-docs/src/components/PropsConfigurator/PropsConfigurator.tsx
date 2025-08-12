@@ -83,9 +83,8 @@ const getInitialProps = (componentMetadata : ComponentMetadata) => {
 
         if (prop.defaultValue) {
             initialProps[propName] = prop.defaultValue.value;
-        } else if (prop.type.name === "boolean") {
-            initialProps[propName] = false;
-        }
+        } 
+        // Don't initialize boolean props to false - let them be undefined so they don't appear in generated code
     }
     return initialProps;
 };
@@ -173,7 +172,13 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
                     if (componentName === "Modal" && chosen?.props?.id) {
                         initialProps.id = "sample-modal";
                     }
-
+                    if (componentName === "Tabs" && chosen?.props?.tabs) {
+                        initialProps.tabs = [
+                            {key : "tab1", label : "Tab 1", content : "Content for tab 1"},
+                            {key : "tab2", label : "Tab 2", content : "Content for tab 2"},
+                            {key : "tab3", label : "Tab 3", content : "Content for tab 3"},
+                        ];
+                    }
                     setProps(initialProps);
 
                     // Initialize children content if analyzer indicates children prop or for special components
@@ -348,7 +353,11 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
         if (componentName === "Table" && (propName === "caption" || propName === "summary" || propName === "hasColSpan")) {
             return null;
         }
-        const enhancement = enhancements ? enhancements[propName] : null;
+        
+        // For Tabs component, hide complex props that users shouldnt directly configure
+        if (componentName === "Tabs" && (propName === "tabs" || propName === "additionalNavContentWrapper" || propName === "defaultActiveTab")) {
+            return null;
+        }        const enhancement = enhancements ? enhancements[propName] : null;
 
         if (enhancement?.hidden) {
             return null;

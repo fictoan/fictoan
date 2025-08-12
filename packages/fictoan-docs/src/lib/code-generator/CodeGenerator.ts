@@ -138,7 +138,7 @@ const createCodeGenerator = (
                 if (props.onChange === undefined) {
                     result.hasState = true;
                     result.stateDeclarations?.push(
-                        `const [selectedValue, setSelectedValue] = useState(${props.allowMultiSelect ? "[]" : '""'});`,
+                        `const [selectedValue, setSelectedValue] = useState(${props.allowMultiSelect ? "[]" : "\"\""});`,
                     );
                     result.helperFunctions?.push(
                         `const handleSelectionChange = (value) => {\n        setSelectedValue(value);\n        console.log('Selected:', value);\n    };`,
@@ -159,24 +159,27 @@ const createCodeGenerator = (
                 result.imports[0] = `import { OptionCardsGroup, OptionCard } from "fictoan-react";`;
                 result.hasState = true;
                 result.stateDeclarations?.push(
-                    `const [selectedIds, setSelectedIds] = useState(new Set());`
+                    `const [selectedIds, setSelectedIds] = useState(new Set());`,
                 );
                 result.helperFunctions?.push(
-                    `const handleSelectionChange = (newSelectedIds) => {\n        setSelectedIds(newSelectedIds);\n        console.log('Selected IDs:', Array.from(newSelectedIds));\n    };`
+                    `const handleSelectionChange = (newSelectedIds) => {\n        setSelectedIds(newSelectedIds);\n        console.log('Selected IDs:', Array.from(newSelectedIds));\n    };`,
                 );
                 break;
             case "Pagination":
                 result.component = generatePaginationCode(propsString);
                 result.hasState = true;
                 result.stateDeclarations?.push(
-                    `const [currentPage, setCurrentPage] = useState(1);`
+                    `const [currentPage, setCurrentPage] = useState(1);`,
                 );
                 result.helperFunctions?.push(
-                    `const handlePageChange = (newPage) => {\n        setCurrentPage(newPage);\n        console.log('Page changed to:', newPage);\n    };`
+                    `const handlePageChange = (newPage) => {\n        setCurrentPage(newPage);\n        console.log('Page changed to:', newPage);\n    };`,
                 );
                 break;
             case "Meter":
                 result.component = generateMeterCode(propsString);
+                break;
+            case "Tabs":
+                result.component = generateTabsCode(propsString);
                 break;
             default:
                 result.component = generateDefaultCode(propsString);
@@ -332,10 +335,10 @@ ${links}
     const generateListBoxCode = (propsString : string) : string => {
         // Generate sample options if not provided
         const defaultOptions = [
-            { value: "option1", label: "Option 1" },
-            { value: "option2", label: "Option 2" },
-            { value: "option3", label: "Option 3" },
-            { value: "option4", label: "Option 4", disabled: true },
+            {value : "option1", label : "Option 1"},
+            {value : "option2", label : "Option 2"},
+            {value : "option3", label : "Option 3"},
+            {value : "option4", label : "Option 4", disabled : true},
         ];
 
         // Ensure options prop is included
@@ -442,7 +445,7 @@ ${links}
         // Set default values for required props
         const totalItems = props.totalItems || 100;
         const itemsToShowEachSide = props.itemsToShowEachSide || 1;
-        
+
         // Filter out onPageChange and currentPage from props string since we handle them separately
         let filteredProps = propsString
             .split("\n")
@@ -454,10 +457,10 @@ ${links}
             `    totalItems={${totalItems}}`,
             `    currentPage={currentPage}`,
             `    itemsToShowEachSide={${itemsToShowEachSide}}`,
-            `    onPageChange={handlePageChange}`
+            `    onPageChange={handlePageChange}`,
         ];
 
-        const allPropsString = [...requiredProps, ...(filteredProps ? filteredProps.split("\n") : [])].join("\n");
+        const allPropsString = [ ...requiredProps, ...(filteredProps ? filteredProps.split("\n") : []) ].join("\n");
 
         return `<Pagination${allPropsString ? "\n" + allPropsString : ""}
 />`;
@@ -474,13 +477,32 @@ ${links}
             `    optimum={90}`,
             `    height="24px"`,
             `    label="Sample meter"`,
-            `    suffix="%"`
+            `    suffix="%"`,
         ];
 
         // Combine required props with other optional props from PropsConfigurator
-        const allPropsString = [...requiredProps, ...(propsString ? propsString.split("\n") : [])].join("\n");
+        const allPropsString = [ ...requiredProps, ...(propsString ? propsString.split("\n") : []) ].join("\n");
 
         return `<Meter${allPropsString ? "\n" + allPropsString : ""}
+/>`;
+    };
+
+    const generateTabsCode = (propsString : string) : string => {
+        // Generate sample tabs data
+        const defaultTabs = [
+            {key : "tab1", label : "Tab 1", content : "Content for tab 1"},
+            {key : "tab2", label : "Tab 2", content : "Content for tab 2"},
+            {key : "tab3", label : "Tab 3", content : "Content for tab 3"},
+        ];
+
+        // Ensure tabs prop is included
+        let finalPropsString = propsString;
+        if (!propsString.includes("tabs=")) {
+            const tabsString = `tabs={${JSON.stringify(defaultTabs, null, 4).replace(/\n/g, "\n")}}`;
+            finalPropsString = finalPropsString ? `${finalPropsString}\n    ${tabsString}` : `    ${tabsString}`;
+        }
+
+        return `<Tabs${finalPropsString ? "\n" + finalPropsString : ""}
 />`;
     };
 
@@ -520,11 +542,14 @@ ${links}
 
             // For Meter, skip numeric values, color props, accessibility props, and height since we handle them separately
             if (componentName === "Meter" && (
-                key === "min" || key === "max" || key === "low" || key === "high" || 
+                key === "min" || key === "max" || key === "low" || key === "high" ||
                 key === "value" || key === "optimum" || key === "height" ||
-                key === "dangerColor" || key === "warningColor" || key === "successColor" || 
+                key === "dangerColor" || key === "warningColor" || key === "successColor" ||
                 key === "barBg" || key === "ariaLabel" || key === "description"
             )) return;
+
+            // For Tabs, skip tabs prop since we handle it separately
+            if (componentName === "Tabs" && key === "tabs") return;
 
             // Only include non-default values
             const propDef = metadata.props[key];
@@ -585,7 +610,7 @@ ${links}
  * @deprecated Use createCodeGenerator instead
  */
 export class CodeGenerator {
-    private generator: ReturnType<typeof createCodeGenerator>;
+    private generator : ReturnType<typeof createCodeGenerator>;
 
     constructor(
         componentName : string,
