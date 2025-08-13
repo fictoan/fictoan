@@ -7,6 +7,7 @@
 - Remove redundant `label` prop from `Badge`
 - Add `zIndex` as a prop for `Drawer` for easy, dynamic positioning
 - Tweak `Badge` delete button sizes
+- Fix `Tabs` accessibility and behaviour
 
 ## 1.11.14
 - Refactor `Drawer` to behave more like the `Modal` for open and close behaviour ⚠️ BREAKING CHANGE
