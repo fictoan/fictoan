@@ -11,9 +11,6 @@ import { useClickOutside } from "$hooks/UseClickOutside";
 // INPUT ===============================================================================================================
 import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
 
-// TYPOGRAPHY ==========================================================================================================
-import { Text } from "$typography/Text";
-
 // STYLES ==============================================================================================================
 import "./list-box.css";
 
@@ -21,6 +18,7 @@ import "./list-box.css";
 import { Badge } from "$/components";
 import { InputField } from "$/components";
 import { ListBoxProps, OptionForListBoxProps, ListBoxElementType, ListBoxCustomProps } from "./constants";
+import { Text } from "../../Typography/Text";
 import { searchOptions } from "./listBoxUtils";
 
 const ListBoxWithOptions = (

@@ -56,8 +56,10 @@ const FormDocs = () => {
 
                             <Row marginBottom="none">
                                 <Portion>
-                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton
-                                               marginBottom="micro">
+                                    <CodeBlock
+                                        withSyntaxHighlighting language="jsx" showCopyButton
+                                        marginBottom="micro"
+                                    >
                                         {[
                                             `// Paste this in your content file`,
                                             `<Form${selectedSpacing && ` spacing="${selectedSpacing}"`}>`,

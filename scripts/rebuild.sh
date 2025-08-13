@@ -25,10 +25,45 @@ function draw_separator() {
     echo -e "\n${CYAN}${separator}${RESET}\n"
 }
 
+# --- NEW: Function to draw the dynamic progress bar ---
+function draw_progress_bar() {
+    local total=$1
+    local current=$2
+
+    # Symbols for the progress bar
+    local char_done="█"
+    local char_current="▓"
+    local char_todo="░"
+
+    # Build the bar string
+    local bar=""
+    for ((i = 1; i <= total; i++)); do
+        if [ $i -lt $current ]; then
+            bar+="${GREEN}${char_done}"
+        elif [ $i -eq $current ]; then
+            bar+="${YELLOW}${char_current}"
+        else
+            bar+="${CYAN}${char_todo}"
+        fi
+    done
+
+    # Calculate percentage
+    local percent=$(( (current - 1) * 100 / total ))
+    if [ $current -gt $total ]; then # Handle the final "all done" state
+      percent=100
+      bar="" # Rebuild bar for the final state
+      for ((i = 1; i <= total; i++)); do
+        bar+="${GREEN}${char_done}"
+      done
+    fi
+
+    echo -e "${MAGENTA}STEP $((current-1)) of $total — ${percent}%${RESET} ${bar}"
+}
+
 # Function for styled messages
 function step() {
     local message=$1
-    echo -e "\n${BLUE}${BOLD}⚡️ $message${RESET}"
+    echo -e "${BLUE}${BOLD}⚡️ $message${RESET}"
 }
 
 function success() {
@@ -39,13 +74,13 @@ function info() {
     echo -e "${CYAN}ℹ️  $1${RESET}"
 }
 
-# Show total progress
+# --- MODIFIED: Show total progress with the new bar ---
 total_steps=6
 current_step=0
 
 function show_progress() {
     current_step=$((current_step + 1))
-    echo -e "${MAGENTA} —— Step $current_step of $total_steps ——\n"
+    draw_progress_bar $total_steps $current_step
 }
 
 # Intro
@@ -94,4 +129,6 @@ success "Library copied to docs project\n\n"
 show_progress
 step "Rebuild complete!"
 echo -e "\n${GREEN}${BOLD}🎉 All done! Fictoan React has been rebuilt and copied to docs.${RESET}"
+# --- NEW: Show a final, 100% complete bar ---
+draw_progress_bar $total_steps $((total_steps + 1))
 echo -e "${CYAN}ℹ️  You can now run 'yarn dev' to start the development server if needed.${RESET}\n"
