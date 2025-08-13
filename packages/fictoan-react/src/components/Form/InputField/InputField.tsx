@@ -1,20 +1,18 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { FormEventHandler, useEffect, useRef } from "react";
 
-// FICTOAN =============================================================================================================
-import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
+// LOCAL COMPONENTS ====================================================================================================
 import { Div } from "../../Element/Tags";
+import { SpacingTypes } from "../../Element/constants";
+
+// INPUT ===============================================================================================================
+import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
+import { BaseInputComponentProps, InputCommonProps, InputFocusHandler, InputSideElementProps } from "../BaseInputComponent/constants";
 
 // STYLES ==============================================================================================================
 import "./input-field.css";
 
-// TYPES ===============================================================================================================
-import {
-    BaseInputComponentProps,
-    InputCommonProps,
-    InputFocusHandler,
-    InputSideElementProps,
-} from "../BaseInputComponent/constants";
+// OTHER ===============================================================================================================
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 
 // prettier-ignore
@@ -29,6 +27,7 @@ export type InputFieldProps = Omit<BaseInputComponentProps<HTMLInputElement>, "o
     pattern      ? : string;
     readOnly     ? : boolean;
     required     ? : boolean;
+    size         ? : Exclude<SpacingTypes, "nano" | "huge">;
     onFocus      ? : InputFocusHandler;
     onBlur       ? : InputFocusHandler;
     onChange     ? :
@@ -54,7 +53,6 @@ export const InputField = React.forwardRef(
         const leftElementRef = useRef<HTMLDivElement>(null);
         const rightElementRef = useRef<HTMLDivElement>(null);
 
-        // Wrap the onChange handler to ensure correct typing ==========================================================
         const handleChange = (valueOrEvent: string | React.FormEvent<HTMLInputElement>) => {
             if (!onChange) return;
 
@@ -68,8 +66,6 @@ export const InputField = React.forwardRef(
             }
         };
 
-
-        // Effect for handling side element measurements ===============================================================
         useEffect(() => {
             const updateElementWidth = (element: HTMLDivElement | null, position: "left" | "right") => {
                 if (element) {
@@ -90,7 +86,6 @@ export const InputField = React.forwardRef(
             }
         }, [innerTextLeft, innerTextRight, innerIconLeft, innerIconRight]);
 
-        // Render either icon or string ================================================================================
         const renderSideElement = (
             content: React.ReactNode | string | undefined,
             position: "left" | "right",

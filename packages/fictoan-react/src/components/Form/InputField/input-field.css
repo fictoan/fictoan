@@ -5,6 +5,45 @@
     --side-element-padding     : 4px;
 }
 
+/* FORM ITEM SIZE VARIANTS ////////////////////////////////////////////////// */
+[data-form-item] {
+    &.size-tiny input[data-input-field] {
+        font-size      : calc(var(--paragraph-font-size) * 0.72);
+
+        padding-top    : calc(var(--input-padding) * 0.4);
+        padding-right  : calc(var(--input-padding) * 0.4);
+        padding-bottom : calc(var(--input-padding) * 0.4);
+        padding-left   : calc(var(--input-padding) * 0.4);
+    }
+
+    &.size-small input[data-input-field] {
+        font-size      : calc(var(--paragraph-font-size) * 0.88);
+
+        padding-top    : calc(var(--input-padding) * 0.6);
+        padding-right  : calc(var(--input-padding) * 0.6);
+        padding-bottom : calc(var(--input-padding) * 0.6);
+        padding-left   : calc(var(--input-padding) * 0.6);
+    }
+
+    &.size-large input[data-input-field] {
+        font-size      : calc(var(--paragraph-font-size) * 1.2);
+
+        padding-top    : calc(var(--input-padding) * 1.4);
+        padding-right  : calc(var(--input-padding) * 1.4);
+        padding-bottom : calc(var(--input-padding) * 1.4);
+        padding-left   : calc(var(--input-padding) * 1.4);
+    }
+
+    /* TODO: Size-specific icon sizing */
+    &.size-tiny {
+        --input-icon-size : 12px;
+    }
+
+    &.size-small {
+        --input-icon-size : 16px;
+    }
+}
+
 /* BASE INPUT FIELD ///////////////////////////////////////////////////////// */
 input[data-input-field] {
     position         : relative;
@@ -79,7 +118,7 @@ input[data-input-field] {
 }
 
 [data-input-field].validate-this + [data-input-helper]::after {
-    content: "...";
+    content : "...";
 }
 
 /*GREEN TICK*/
@@ -89,7 +128,7 @@ input[data-input-field] {
 
 /*RED CROSS*/
 [data-input-field].validate-this:invalid:not(:focus):not(:placeholder-shown) + [data-input-helper]::after {
-    content: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+ICA8bGluZSB4MT0iNi41IiB5MT0iMTcuNSIgeDI9IjE4LjUiIHkyPSI1LjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2VmNDM0MyIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBzdHJva2Utd2lkdGg9IjIiLz4gIDxsaW5lIHgxPSI2LjUiIHkxPSI1LjUiIHgyPSIxOC41IiB5Mj0iMTcuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZWY0MzQzIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg==);
+    content : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+ICA8bGluZSB4MT0iNi41IiB5MT0iMTcuNSIgeDI9IjE4LjUiIHkyPSI1LjUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2VmNDM0MyIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBzdHJva2Utd2lkdGg9IjIiLz4gIDxsaW5lIHgxPSI2LjUiIHkxPSI1LjUiIHgyPSIxOC41IiB5Mj0iMTcuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZWY0MzQzIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg==);
 }
 
 /* ELEMENTS ON THE LEFT/RIGHT =============================================== */

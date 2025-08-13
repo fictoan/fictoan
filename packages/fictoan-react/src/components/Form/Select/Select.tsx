@@ -1,8 +1,9 @@
 // REACT CORE ==========================================================================================================
 import React, { useMemo } from "react";
 
-// ELEMENT =============================================================================================================
-import { Div } from "../../Element/Tags";
+// LOCAL COMPONENTS ====================================================================================================
+import { Div } from "$tags";
+import { Element } from "$element";
 
 // INPUT ===============================================================================================================
 import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
@@ -11,7 +12,6 @@ import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
 import "./select.css";
 
 // OTHER ===============================================================================================================
-import { Element } from "$element";
 import { OptionProps, OptGroupProps, SelectProps, OptionElementType, SelectElementType } from "./constants";
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////

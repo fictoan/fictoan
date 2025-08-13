@@ -23,6 +23,7 @@ const InputFieldDocs = () => {
     } = createPropsConfigurator(
         "InputField", [
             "label",
+            "size",
             "placeholder",
             "helpText",
             "required",

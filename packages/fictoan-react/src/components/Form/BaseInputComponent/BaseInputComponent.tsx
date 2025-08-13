@@ -1,12 +1,12 @@
 // REACT CORE ==========================================================================================================
 import React, { ChangeEvent } from "react";
 
-// ELEMENT =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
+import { Div } from "$tags";
 import { Element } from "$element";
 
 // OTHER ===============================================================================================================
 import { BaseInputComponentWithIconProps } from "./constants";
-import { Div } from "$tags";
 import { FormItem } from "$/components";
 import { InputLabel } from "$/components";
 import { Text } from "$/components";
@@ -17,7 +17,7 @@ export type InputElementType = HTMLInputElement | HTMLDivElement | HTMLSelectEle
 export const BaseInputComponent = React.forwardRef(
     <K extends InputElementType>(
         {
-            as: Component,
+            as : Component,
             className,
             label,
             customLabel,
@@ -29,32 +29,39 @@ export const BaseInputComponent = React.forwardRef(
             onChange,
             onValueChange,
             ...inputProps
-        }: BaseInputComponentWithIconProps<K>,
-        ref: React.LegacyRef<InputElementType>
+        } : BaseInputComponentWithIconProps<K>,
+        ref : React.LegacyRef<InputElementType>,
     ) => {
         // Handle both new value-based and legacy event-based onChange
-        const handleChange = (valueOrEvent: string | React.ChangeEvent<HTMLInputElement>) => {
+        const handleChange = (valueOrEvent : string | React.ChangeEvent<HTMLInputElement>) => {
             if (!onChange) return;
 
             // If it's a direct string value, use it as is
             if (typeof valueOrEvent === "string" || Array.isArray(valueOrEvent)) {
-                (onChange as (value: string | string[]) => void)(valueOrEvent);
+                (onChange as (value : string | string[]) => void)(valueOrEvent);
                 return;
             }
 
             // If it's an event, try to get the value from target
             const value = valueOrEvent?.target?.value;
             if (onChange.length === 1) {
-                (onChange as (value: string) => void)(value);
+                (onChange as (value : string) => void)(value);
             } else {
-                (onChange as (e: React.ChangeEvent<HTMLInputElement>) => void)(valueOrEvent);
+                (onChange as (e : React.ChangeEvent<HTMLInputElement>) => void)(valueOrEvent);
             }
         };
+
+        // Filter out size prop to prevent it from being applied to the input element
+        const {size, ...filteredInputProps} = inputProps as any;
+
+        // Only pass size to FormItem if it's a valid Fictoan size type (string), not HTML size (number)
+        const fictoanSize = typeof size === 'string' ? size as any : undefined;
 
         return (
             <FormItem
                 data-form-item
                 required={inputProps.required}
+                size={fictoanSize}
             >
                 {/* LABEL ////////////////////////////////////////////////////////////////////////////////////////// */}
                 {customLabel || (label && <InputLabel label={label} htmlFor={inputProps.id} />)}
@@ -68,7 +75,7 @@ export const BaseInputComponent = React.forwardRef(
                             className || "",
                             validateThis ? "validate-this" : "",
                         ].concat(classNames || [])}
-                        {...inputProps}
+                        {...filteredInputProps}
                         onChange={handleChange}
                     />
                     {children}
@@ -91,9 +98,9 @@ export const BaseInputComponent = React.forwardRef(
                 )}
             </FormItem>
         );
-    }
+    },
 ) as <K extends InputElementType>(
-    props: BaseInputComponentWithIconProps<K> & {
-        ref ? : React.LegacyRef<InputElementType>
-    }
+    props : BaseInputComponentWithIconProps<K> & {
+        ref? : React.LegacyRef<InputElementType>
+    },
 ) => React.ReactElement;

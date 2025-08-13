@@ -1,24 +1,26 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useMemo, useRef, useEffect, useState, useCallback } from "react";
 
-// FICTOAN =============================================================================================================
-import { Div } from "../../Element/Tags";
+// LOCAL COMPONENTS ====================================================================================================
+import { Div } from "$tags";
+
+// INPUT ===============================================================================================================
 import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
 
 // STYLES ==============================================================================================================
 import "./radio-tab-group.css";
 
-// TYPES ===============================================================================================================
+// OTHER ===============================================================================================================
 import { RadioTabGroupProps, RadioGroupProps, RadioButtonElementType } from "./constants";
 
 interface IndicatorPosition {
-    width     : number;
-    transform : string;
+        width     : number;
+        transform : string;
 }
 
 interface ExtendedRadioGroupProps extends Omit<RadioGroupProps, "as"> {
-    onMeasure: (needsScroll: boolean, maxScroll: number) => void;
-    optionsWrapperRef: React.RefObject<HTMLDivElement>;
+        onMeasure         : (needsScroll: boolean, maxScroll: number) => void;
+        optionsWrapperRef : React.RefObject<HTMLDivElement>;
 }
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,7 +49,6 @@ const RadioTabGroupOptions = (
 
     const labelsRef                             = useRef<(HTMLLabelElement | null)[]>([]);
 
-    // Measure and determine if scrolling is needed ====================================================================
     const measureWidths = useCallback(() => {
         if (!optionsWrapperRef.current) return;
 
@@ -65,7 +66,6 @@ const RadioTabGroupOptions = (
         }
     }, [ onMeasure ]);
 
-    // Set up resize observer to measure widths on window resize =======================================================
     useEffect(() => {
         const wrapper = optionsWrapperRef.current;
         if (!wrapper) return;
@@ -107,14 +107,12 @@ const RadioTabGroupOptions = (
         }
     }, [ value, options ]);
 
-    // HANDLE RADIO CHANGE =============================================================================================
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {
             onChange(e.target.value);
         }
     };
 
-    // SCROLL LEFT OR RIGHT ============================================================================================
     const handleScroll = useCallback((direction: "left" | "right") => {
         const optionsWrapper = optionsWrapperRef.current;
         if (!optionsWrapper) return;

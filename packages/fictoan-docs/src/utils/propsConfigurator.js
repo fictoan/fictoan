@@ -487,6 +487,7 @@ export const createPropsConfigurator = (
                                 onChange={(value) => handlePropChange("content", value)}
                                 helpText={helpText}
                                 isFullWidth
+                                size={size}
                             />
                         </Portion>
                     );

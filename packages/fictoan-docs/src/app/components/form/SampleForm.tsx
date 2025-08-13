@@ -6,7 +6,7 @@ import React, { FormEvent, useState } from "react";
 // UI ==================================================================================================================
 import { Button, Card, Checkbox, CheckboxGroup, CodeBlock, Divider, FileUpload, Footer, Form, FormItemGroup, InputField, ListBox, Portion, RadioGroup, RadioTabGroup, Range, Row, Select, Switch, SwitchGroup, Text, TextArea } from "fictoan-react";
 
-// OTHER ===============================================================================================================
+// ASSETS ==============================================================================================================
 import EyeClosedIcon from "../../../assets/icons/eye-closed.svg";
 import EyeOpenIcon from "../../../assets/icons/eye-open.svg";
 
@@ -168,6 +168,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 value={formData.firstName}
                                 onChange={handleInputChange("firstName")}
                                 placeholder="John"
+                                size="small"
                                 required
                             />
 
@@ -210,6 +211,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             value={formData.password}
                             onChange={handleInputChange("password")}
                             helpText="At least 8 characters"
+                            size="small"
                             innerIconRight={
                                 <div
                                     onClick={(e) => {
@@ -225,7 +227,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                         {/* PHONE NUMBER AND WEBSITE =============================================================== */}
                         <FormItemGroup isJoint={isJoint}>
                             <InputField
-                                label="Phone Number"
+                                label="Phone number"
                                 type="tel"
                                 name="phoneNumber"
                                 value={formData.phoneNumber}
@@ -266,6 +268,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                     { label : "Canada", value : "ca" },
                                 ]}
                                 isFullWidth
+                                size="small"
                             />
 
                             <Select
@@ -297,7 +300,9 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             ]}
                             allowMultiSelect
                             allowCustomEntries
+                            selectionLimit={2}
                             helpText="Select from the list, or add your own"
+                            size="tiny"
                         />
 
                         {/* FILE UPLOAD ============================================================================ */}
@@ -354,6 +359,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 { id : "pigeon", label : "Pigeon", value : "pigeon" },
                             ]}
                             onChange={handleRadioChange("contactPreference")}
+                            size="small"
                         />
 
                         {/* GENDER ================================================================================ */}

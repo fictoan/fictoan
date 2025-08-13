@@ -19,6 +19,7 @@
 [data-form-item] {
     position              : relative;
     width                 : 100%;
+    height                : fit-content;
     display               : grid;
     grid-template-rows    : auto auto auto;
     grid-template-columns : 1fr;
@@ -56,6 +57,18 @@
     color       : var(--input-label-default);
     font-family : var(--paragraph-font);
     width       : fit-content;
+}
+
+[data-form-item].size-tiny > label {
+    font-size : calc(var(--paragraph-font-size) * 0.6);
+}
+
+[data-form-item].size-small > label {
+    font-size : calc(var(--paragraph-font-size) * 0.8);
+}
+
+[data-form-item].size-large > label {
+    font-size : calc(var(--paragraph-font-size) * 1.2);
 }
 
 [data-form-item][required] > label::after {

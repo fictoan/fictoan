@@ -13,7 +13,7 @@
     "type"                 : "module",
     "sideEffects"          : [
         "./src/styles/*.css",
-        "./src/components/**/typography.css"
+        "./src/components/**/*.css"
     ],
     "files"                : [
         "dist",

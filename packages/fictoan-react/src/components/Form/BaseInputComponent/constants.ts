@@ -51,7 +51,7 @@ export type InputChangeEvent = React.ChangeEvent<HTMLInputElement
 
 // Base component props including common form input properties
 export type BaseInputComponentProps<K extends {}> =
-    Omit<ElementProps<K>, "onChange"> &
+    Omit<ElementProps<K>, "onChange" | "size"> &
     InputLabelCustomProps &
     InputCommonProps & {
         customLabel   ? : React.ReactNode; // For Range component
