@@ -1,7 +1,7 @@
 // REACT CORE ==========================================================================================================
 import React from "react";
 
-// ELEMENT =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps, SpacingTypes } from "../../Element/constants";
 import { Element } from "$element";
 
@@ -10,7 +10,7 @@ import "./form-item.css";
 
 export type FormItemElementType = HTMLDivElement;
 export type FormItemProps = CommonAndHTMLProps<FormItemElementType> & {
-    size?: Exclude<SpacingTypes, "nano" | "huge">;
+    size ? : Exclude<SpacingTypes, "nano" | "huge">;
 };
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////

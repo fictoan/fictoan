@@ -8,6 +8,7 @@
 - Add `zIndex` as a prop for `Drawer` for easy, dynamic positioning
 - Tweak `Badge` delete button sizes
 - Fix `Tabs` accessibility and behaviour
+- `InputField`, `Textarea`, `Select`,`ListBox`, `RadioButtonGroup` now support a `size` prop
 
 ## 1.11.14
 - Refactor `Drawer` to behave more like the `Modal` for open and close behaviour ⚠️ BREAKING CHANGE

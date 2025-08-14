@@ -3,10 +3,10 @@
     overflow : hidden;
 
     .rtg-options-container {
-        position   : relative;
-        overflow   : hidden;
-        width      : 100%;
-        height     : 100%;
+        position : relative;
+        overflow : hidden;
+        width    : 100%;
+        height   : 100%;
     }
 
     .rtg-options-wrapper {
@@ -21,19 +21,19 @@
         will-change   : transform;
 
         /* Hide radio inputs but keep them accessible */
-        & input[type="radio"] {
+        input[type="radio"] {
             position     : absolute;
             width        : 1px;
             height       : 1px;
             padding      : 0;
             margin       : -1px;
             overflow     : hidden;
-            clip        : rect(0, 0, 0, 0);
+            clip         : rect(0, 0, 0, 0);
             white-space  : nowrap;
             border-width : 0;
         }
 
-        & label {
+        label {
             display                    : flex;
             align-items                : center;
             height                     : 100%;
@@ -48,22 +48,18 @@
             z-index                    : 5;
         }
 
-        & input.size-nano + label {
-            padding : 0 4px;
-        }
-
-        & input:checked + label {
+        input:checked + label {
             color : var(--radio-tabs-label-text-active);
         }
 
-        & input:not(:checked) + label:hover {
+        input:not(:checked) + label:hover {
             background    : var(--radio-tabs-label-bg-hover);
             color         : var(--radio-tabs-label-text-hover);
             border-radius : calc(var(--global-border-radius) - var(--radio-tabs-vertical-gap));
         }
 
         /* Active indicator ///////////////////////////////////////////////////// */
-        & .indicator {
+        .indicator {
             position       : absolute;
             height         : 100%;
             pointer-events : none;
@@ -79,31 +75,31 @@
 
     /* Scroll buttons ======================================================= */
     .scroll-button {
-        position        : absolute;
-        top             : 0;
-        bottom          : 0;
-        width           : 24px;
-        z-index         : 50;
-        display         : flex;
-        align-items     : center;
-        justify-content : center;
-        cursor          : pointer;
-        background-color: var(--radio-tabs-scroll-button-default);
-        backdrop-filter: blur(8px);
+        position         : absolute;
+        top              : 0;
+        bottom           : 0;
+        width            : 24px;
+        z-index          : 50;
+        display          : flex;
+        align-items      : center;
+        justify-content  : center;
+        cursor           : pointer;
+        background-color : var(--radio-tabs-scroll-button-default);
+        backdrop-filter  : blur(8px);
 
         &:hover {
-            background-color: var(--radio-tabs-label-bg-hover);
+            background-color : var(--radio-tabs-label-bg-hover);
         }
     }
 
     .scroll-button svg {
-        width          : 16px;
-        height         : 16px;
-        fill           : none;
-        stroke         : var(--radio-tabs-scroll-arrow-default);
-        stroke-width   : 2px;
-        stroke-linecap : round;
-        stroke-linejoin: round;
+        width           : 16px;
+        height          : 16px;
+        fill            : none;
+        stroke          : var(--radio-tabs-scroll-arrow-default);
+        stroke-width    : 2px;
+        stroke-linecap  : round;
+        stroke-linejoin : round;
 
         &:hover {
             stroke : var(--radio-tabs-scroll-arrow-hover);
@@ -119,14 +115,27 @@
         right         : 0;
         border-radius : 0 var(--global-border-radius) var(--global-border-radius) 0;
     }
-
-    /* When scroll is needed, add padding for the buttons */
-    /*&:has(.scroll-button) .rtg-options-wrapper {*/
-    /*    padding-left  : 26px;*/
-    /*    padding-right : 26px;*/
-    /*}*/
 }
 
 [data-radio-tab-group] label {
-    padding: 0 12px
+    padding : 0 12px
+}
+
+[data-form-item].size-tiny [data-radio-tab-group] label {
+    font-size : calc(var(--paragraph-font-size) * 0.72);
+    padding   : 0 4px
+}
+
+[data-form-item].size-small [data-radio-tab-group] label {
+    font-size : calc(var(--paragraph-font-size) * 0.88);
+    padding   : 0 4px
+}
+
+[data-form-item].size-large {
+    --radio-tabs-height : 54px;
+
+    [data-radio-tab-group] label {
+        font-size : calc(var(--paragraph-font-size) * 1.2);
+        padding   : 8px 16px
+    }
 }

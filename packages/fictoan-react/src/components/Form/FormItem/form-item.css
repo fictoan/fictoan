@@ -173,6 +173,25 @@
     overflow : auto;
 }
 
+[data-form-item] [data-radio-tab-group] input:disabled + label {
+    filter         : grayscale(24%);
+    user-select    : none;
+    pointer-events : none;
+    cursor         : not-allowed;
+    opacity        : 0.24;
+}
+
+/* Keep the main label normal when a disabled input is inside Radio Tab Group */
+[data-form-item]:has([data-radio-tab-group] input:disabled) > label,
+[data-form-item]:has([data-radio-tab-group] input:disabled) > label::before,
+[data-form-item]:has([data-radio-tab-group] input:disabled) > label::after {
+    filter         : none;
+    user-select    : auto;
+    pointer-events : auto;
+    cursor         : auto;
+    opacity        : 1;
+}
+
 /* FOR RANGE ================================================================ */
 [data-form-item] [data-range-meta] {
     grid-area : label;

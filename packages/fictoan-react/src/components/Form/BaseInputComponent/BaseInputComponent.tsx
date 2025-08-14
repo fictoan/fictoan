@@ -5,6 +5,9 @@ import React, { ChangeEvent } from "react";
 import { Div } from "$tags";
 import { Element } from "$element";
 
+// UTILS ===============================================================================================================
+import { separateFictoanFromHTMLProps } from "$utils/propSeparation";
+
 // OTHER ===============================================================================================================
 import { BaseInputComponentWithIconProps } from "./constants";
 import { FormItem } from "$/components";
@@ -51,17 +54,14 @@ export const BaseInputComponent = React.forwardRef(
             }
         };
 
-        // Filter out size prop to prevent it from being applied to the input element
-        const {size, ...filteredInputProps} = inputProps as any;
-
-        // Only pass size to FormItem if it's a valid Fictoan size type (string), not HTML size (number)
-        const fictoanSize = typeof size === 'string' ? size as any : undefined;
+        // Separate Fictoan props from HTML props to prevent conflicts
+        const { fictoanProps, htmlProps } = separateFictoanFromHTMLProps(inputProps);
 
         return (
             <FormItem
                 data-form-item
                 required={inputProps.required}
-                size={fictoanSize}
+                size={fictoanProps.size}
             >
                 {/* LABEL ////////////////////////////////////////////////////////////////////////////////////////// */}
                 {customLabel || (label && <InputLabel label={label} htmlFor={inputProps.id} />)}
@@ -75,7 +75,7 @@ export const BaseInputComponent = React.forwardRef(
                             className || "",
                             validateThis ? "validate-this" : "",
                         ].concat(classNames || [])}
-                        {...filteredInputProps}
+                        {...htmlProps}
                         onChange={handleChange}
                     />
                     {children}

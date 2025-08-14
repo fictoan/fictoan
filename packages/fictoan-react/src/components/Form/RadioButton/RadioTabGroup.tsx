@@ -4,6 +4,9 @@ import React, { useMemo, useRef, useEffect, useState, useCallback } from "react"
 // LOCAL COMPONENTS ====================================================================================================
 import { Div } from "$tags";
 
+// UTILS ===============================================================================================================
+import { separateFictoanFromHTMLProps } from "$utils/propSeparation";
+
 // INPUT ===============================================================================================================
 import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
 
@@ -215,9 +218,12 @@ export const RadioTabGroup = React.forwardRef(
         const handleMeasure = useCallback(() => {
         }, []);
 
+        // Use the utility to properly separate props and get size for class generation
+        const { fictoanProps } = separateFictoanFromHTMLProps({ size, ...props });
+        
         let classNames = [];
-        if (size) {
-            classNames.push(`size-${size}`);
+        if (fictoanProps.size) {
+            classNames.push(`size-${fictoanProps.size}`);
         }
 
         return (
@@ -229,6 +235,7 @@ export const RadioTabGroup = React.forwardRef(
                 // @ts-expect-error
                 onMeasure={handleMeasure}
                 optionsWrapperRef={optionsWrapperRef}
+                size={size}
                 {...props}
             />
         );

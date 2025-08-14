@@ -356,7 +356,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 { id : "phone-contact", label : "Phone", value : "phone" },
                                 { id : "sms-contact", label : "SMS", value : "sms" },
                                 { id : "letters-contact", label : "Letters", value : "letters" },
-                                { id : "pigeon", label : "Pigeon", value : "pigeon" },
+                                { id : "pigeon", label : "Pigeon", value : "pigeon", disabled : true },
                             ]}
                             onChange={handleRadioChange("contactPreference")}
                             size="small"
@@ -475,6 +475,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             <Button
                                 kind="primary"
                                 type="submit"
+                                size="large"
                                 isFullWidth={isButtonFullWidth}
                             >
                                 Submit
