@@ -1,23 +1,22 @@
 // REACT CORE ==========================================================================================================
 import React, { useMemo } from "react";
 
-// ELEMENT =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { Element } from "$element";
+
+// UTILS ===============================================================================================================
+import { separateFictoanFromHTMLProps } from "$utils/propSeparation";
+
+// INPUT ===============================================================================================================
+import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
+import { BaseInputComponentProps } from "../BaseInputComponent/constants";
 
 // STYLES ==============================================================================================================
 import "./switch.css";
 
-// OTHER ===============================================================================================================
-import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
-import { BaseInputComponentProps } from "../BaseInputComponent/constants";
-
-export interface SwitchCustomProps {
-        size ? : "small" | "medium" | "large";
-}
-
 export type SwitchElementType = HTMLInputElement;
 export type SwitchProps = Omit<BaseInputComponentProps<SwitchElementType>,
-    keyof SwitchCustomProps | "as" | "onChange" | "value"> & SwitchCustomProps & {
+    "as" | "onChange" | "value"> & {
         onChange       ? : (checked: boolean) => void;
         checked        ? : boolean;
         defaultChecked ? : boolean;
@@ -32,7 +31,6 @@ export const Switch = React.forwardRef(
             onChange,
             checked,
             defaultChecked,
-            size = "medium",
             ...props
         }: SwitchProps, ref: React.Ref<SwitchElementType>) => {
         // Use ID as default for name and value if they’re not provided
@@ -46,24 +44,29 @@ export const Switch = React.forwardRef(
             onChange?.(isChecked);
         };
 
+        // Separate Fictoan props from HTML props
+        const { fictoanProps, htmlProps } = separateFictoanFromHTMLProps({ ...props });
+        const finalSize = fictoanProps.size || "medium";
+
         return (
-            <Element<SwitchElementType>
-                as="div"
-                data-switch
-                ref={ref}
-                className={`size-${size}`}
+            <BaseInputComponent<SwitchElementType>
+                as="input"
+                type="checkbox"
+                id={id}
+                name={derivedName}
+                checked={checked}
+                defaultChecked={defaultChecked}
+                onChange={handleChange}
+                size={finalSize}
+                {...htmlProps}
             >
-                <BaseInputComponent
-                    as="input"
-                    type="checkbox"
-                    id={id}
-                    name={derivedName}
-                    checked={checked}
-                    defaultChecked={defaultChecked}
-                    onChange={handleChange}
-                    {...props}
+                <Element<SwitchElementType>
+                    as="div"
+                    data-switch
+                    ref={ref}
+                    className={`size-${finalSize}`}
                 />
-            </Element>
+            </BaseInputComponent>
         );
     },
 );

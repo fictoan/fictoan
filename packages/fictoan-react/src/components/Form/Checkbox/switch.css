@@ -1,11 +1,5 @@
-[data-switch] {
-    display        : inline-flex;
-    flex-direction : row;
-    align-items    : center;
-
-    &:only-of-type {
-        margin-right : 0;
-    }
+[data-form-item]:has([data-switch]) {
+    gap : 0;
 
     input[type="checkbox"] {
         position : absolute;
@@ -62,21 +56,73 @@
     }
 }
 
+[data-switch] {
+    display        : inline-flex;
+    flex-direction : row;
+    align-items    : center;
+
+    &:only-of-type {
+        margin-right : 0;
+    }
+}
+
 /* HOVER */
-[data-switch]:has(input[type="checkbox"]:hover) > label::before {
+[data-form-item]:has([data-switch]):has(input[type="checkbox"]:hover) label::before {
     background : var(--switch-bg-hover);
 }
 
-[data-switch]:has(input[type="checkbox"]:hover) > label::after {
+[data-form-item]:has([data-switch]):has(input[type="checkbox"]:hover) label::after {
     background : var(--switch-slider-bg-hover);
 }
 
 /* CHECKED */
-[data-switch]:has(input[type="checkbox"]:checked) > label::before {
+[data-form-item]:has([data-switch]):has(input[type="checkbox"]:checked) label::before {
     background : var(--switch-bg-checked);
 }
 
-[data-switch] [data-form-item]:has(input[type="checkbox"]:checked) > label::after {
+[data-form-item]:has([data-switch]):has(input[type="checkbox"]:checked) label::after {
     transform  : translateY(-50%) translateX(18px);
     background : var(--switch-slider-bg-checked);
 }
+
+/* SIZES ==================================================================== */
+/* TINY --------------------------------------------------------------------- */
+[data-form-item].size-tiny:has([data-switch]) label {
+    padding-left : 24px;
+}
+
+[data-form-item].size-tiny:has([data-switch]) label::before {
+    width  : 16px;
+    height : 8px;
+}
+
+[data-form-item].size-tiny:has([data-switch]) label::after {
+    width  : 6px;
+    height : 6px;
+    left   : 1px;
+}
+
+[data-form-item].size-tiny:has([data-switch]):has(input[type="checkbox"]:checked) label::after {
+    transform : translateY(-50%) translateX(8px);
+}
+
+/* SMALL -------------------------------------------------------------------- */
+[data-form-item].size-small:has([data-switch]) label {
+    padding-left : 32px;
+}
+
+[data-form-item].size-small:has([data-switch]) label::before {
+    width  : 24px;
+    height : 12px;
+}
+
+[data-form-item].size-small:has([data-switch]) label::after {
+    width  : 8px;
+    height : 8px;
+    left   : 2px;
+}
+
+[data-form-item].size-small:has([data-switch]):has(input[type="checkbox"]:checked) label::after {
+    transform : translateY(-50%) translateX(12px);
+}
+

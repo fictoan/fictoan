@@ -440,7 +440,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                         />
 
                         <FormItemGroup equalWidthForChildren>
-                            {/* NOTIFICATIONS ========================================================================== */}
+                            {/* NOTIFICATIONS ====================================================================== */}
                             <Switch
                                 id="notifications"
                                 name="notifications"
@@ -449,13 +449,14 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 onChange={handleCheckboxChange("notifications")}
                             />
 
-                            {/* NEWSLETTER ============================================================================= */}
+                            {/* NEWSLETTER ========================================================================= */}
                             <Switch
                                 id="newsletter"
                                 name="newsletter"
                                 label="Subscribe to newsletter"
                                 checked={formData.newsletter}
                                 onChange={handleCheckboxChange("newsletter")}
+                                size="tiny"
                             />
                         </FormItemGroup>
 
