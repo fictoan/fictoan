@@ -73,16 +73,16 @@
 }
 
 
-/* HOVER */
+/* HOVER ==================================================================== */
 [data-form-item]:has(input[type="checkbox"]:hover) > label::before {
     background : var(--checkbox-square-bg-hover);
 }
 
-/* FOCUS */
+/* FOCUS ==================================================================== */
 [data-form-item]:has(input[type="checkbox"]:focus) > label::before {
     outline : solid 2px var(--checkbox-square-bg-disabled);
 }
 
-/* CHECKED */
+/* CHECKED ================================================================== */
 [data-form-item]:has(input[type="checkbox"]:checked) > label::before { background : var(--checkbox-square-bg-checked); }
 [data-form-item]:has(input[type="checkbox"]:checked) > label::after { opacity : 1; }

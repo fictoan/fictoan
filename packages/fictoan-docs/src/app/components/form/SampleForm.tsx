@@ -37,10 +37,10 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
         contactPreference : "sms",
 
         // Checkboxes and Switches
-        interests     : [] as string[],
-        food          : [] as string[],
-        country       : [] as string[],
-        hobbies       : [] as string[],
+        interests          : [] as string[],
+        food               : [] as string[],
+        preferredCountries : [] as string[],
+        hobbies            : [] as string[],
         notifications : false,
         newsletter    : false,
 
@@ -437,7 +437,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
 
                         <SwitchGroup
                             label="Preferred country"
-                            name="country"
+                            name="preferredCountries"
                             options={[
                                 { id : "country-indian", value : "Indian", label : "Indian" },
                                 { id : "country-italian", value : "Italian", label : "Italian" },
@@ -445,8 +445,8 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 { id : "country-greek", value : "Greek", label : "Greek" },
                                 { id : "country-thai", value : "Thai", label : "Thai" },
                             ]}
-                            value={formData.country}
-                            onChange={(values: any) => setFormData({ ...formData, country : values })}
+                            value={formData.preferredCountries}
+                            onChange={(values: any) => setFormData({ ...formData, preferredCountries : values })}
                         />
 
                         <FormItemGroup equalWidthForChildren>

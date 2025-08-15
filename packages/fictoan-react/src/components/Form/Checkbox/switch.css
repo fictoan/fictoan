@@ -66,21 +66,21 @@
     }
 }
 
-/* HOVER */
-[data-form-item]:has([data-switch]):has(input[type="checkbox"]:hover) label::before {
+/* HOVER ==================================================================== */
+[data-form-item]:has([data-switch]):has(input[type="checkbox"]:hover) > label::before {
     background : var(--switch-bg-hover);
 }
 
-[data-form-item]:has([data-switch]):has(input[type="checkbox"]:hover) label::after {
+[data-form-item]:has([data-switch]):has(input[type="checkbox"]:hover) > label::after {
     background : var(--switch-slider-bg-hover);
 }
 
-/* CHECKED */
-[data-form-item]:has([data-switch]):has(input[type="checkbox"]:checked) label::before {
+/* CHECKED ================================================================== */
+[data-form-item]:has([data-switch]):has(input[type="checkbox"]:checked) > label::before {
     background : var(--switch-bg-checked);
 }
 
-[data-form-item]:has([data-switch]):has(input[type="checkbox"]:checked) label::after {
+[data-form-item]:has([data-switch]):has(input[type="checkbox"]:checked) > label::after {
     transform  : translateY(-50%) translateX(18px);
     background : var(--switch-slider-bg-checked);
 }
