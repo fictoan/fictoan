@@ -15,3 +15,8 @@
 [data-switch-group].align-vertical {
     flex-direction : column;
 }
+
+[data-checkbox-group] [data-form-item],
+[data-switch-group] [data-form-item] {
+    width : fit-content;
+}

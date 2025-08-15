@@ -1,4 +1,4 @@
-[data-checkbox] {
+[data-form-item]:has([data-checkbox]) {
     display        : inline-flex;
     flex-direction : row;
     align-items    : center;

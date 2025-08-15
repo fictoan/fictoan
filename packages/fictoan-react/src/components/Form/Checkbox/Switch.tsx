@@ -17,28 +17,20 @@ import "./switch.css";
 export type SwitchElementType = HTMLInputElement;
 export type SwitchProps = Omit<BaseInputComponentProps<SwitchElementType>,
     "as" | "onChange" | "value"> & {
-        onChange       ? : (checked: boolean) => void;
         checked        ? : boolean;
+        onChange       ? : (checked: boolean) => void;
         defaultChecked ? : boolean;
 };
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const Switch = React.forwardRef(
-    (
-        {
-            id,
-            name,
-            onChange,
-            checked,
-            defaultChecked,
-            ...props
-        }: SwitchProps, ref: React.Ref<SwitchElementType>) => {
+    ({ id, name, onChange, checked, defaultChecked, ...props }: SwitchProps, ref: React.Ref<SwitchElementType>) => {
         // Use ID as default for name and value if they’re not provided
         const derivedName  = useMemo(() => name || id, [ name, id ]);
 
         // Handle the change event to return boolean instead of event
         const handleChange = (value: string) => {
-            // Since we're dealing with a switch, the value parameter isn't relevant
+            // Since we’re dealing with a checkbox, the value parameter isn’t relevant
             // Instead, we need to check the current checked state
             const isChecked = !checked;
             onChange?.(isChecked);

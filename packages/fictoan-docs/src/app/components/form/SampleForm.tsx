@@ -39,6 +39,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
         // Checkboxes and Switches
         interests     : [] as string[],
         food          : [] as string[],
+        country       : [] as string[],
         hobbies       : [] as string[],
         notifications : false,
         newsletter    : false,
@@ -381,7 +382,6 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             <Checkbox
                                 id="interest-tech"
                                 name="interests"
-                                value="tech"
                                 label="Technology"
                                 checked={formData.interests.includes("tech")}
                                 onChange={handleCheckboxChange("interests", "tech")}
@@ -390,7 +390,6 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             <Checkbox
                                 id="interest-books"
                                 name="interests"
-                                value="books"
                                 label="Books"
                                 checked={formData.interests.includes("books")}
                                 onChange={handleCheckboxChange("interests", "books")}
@@ -399,7 +398,6 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             <Checkbox
                                 id="interest-movies"
                                 name="interests"
-                                value="movies"
                                 label="Movies"
                                 checked={formData.interests.includes("movies")}
                                 onChange={handleCheckboxChange("interests", "movies")}
@@ -408,19 +406,17 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             <Checkbox
                                 id="interest-business"
                                 name="interests"
-                                value="business"
                                 label="Business"
                                 checked={formData.interests.includes("business")}
                                 onChange={handleCheckboxChange("interests", "business")}
                             />
 
                             <Checkbox
-                                id="interest-Travel"
+                                id="interest-travel"
                                 name="interests"
-                                value="Travel"
                                 label="Travel"
-                                checked={formData.interests.includes("Travel")}
-                                onChange={handleCheckboxChange("interests", "Travel")}
+                                checked={formData.interests.includes("travel")}
+                                onChange={handleCheckboxChange("interests", "travel")}
                             />
                         </FormItemGroup>
 
@@ -429,14 +425,28 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             label="Preferred cuisine"
                             name="food"
                             options={[
-                                { id : "indian", value : "Indian", label : "Indian" },
-                                { id : "italian", value : "Italian", label : "Italian" },
-                                { id : "French", value : "French", label : "French" },
-                                { id : "greek", value : "Greek", label : "Greek" },
-                                { id : "thai", value : "Thai", label : "Thai" },
+                                { id : "food-indian", value : "Indian", label : "Indian" },
+                                { id : "food-italian", value : "Italian", label : "Italian" },
+                                { id : "food-french", value : "French", label : "French" },
+                                { id : "food-greek", value : "Greek", label : "Greek" },
+                                { id : "food-thai", value : "Thai", label : "Thai" },
                             ]}
                             value={formData.food}
                             onChange={(values: any) => setFormData({ ...formData, food : values })}
+                        />
+
+                        <SwitchGroup
+                            label="Preferred country"
+                            name="country"
+                            options={[
+                                { id : "country-indian", value : "Indian", label : "Indian" },
+                                { id : "country-italian", value : "Italian", label : "Italian" },
+                                { id : "country-French", value : "French", label : "French" },
+                                { id : "country-greek", value : "Greek", label : "Greek" },
+                                { id : "country-thai", value : "Thai", label : "Thai" },
+                            ]}
+                            value={formData.country}
+                            onChange={(values: any) => setFormData({ ...formData, country : values })}
                         />
 
                         <FormItemGroup equalWidthForChildren>
