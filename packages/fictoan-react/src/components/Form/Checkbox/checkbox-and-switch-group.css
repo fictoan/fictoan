@@ -20,3 +20,28 @@
 [data-switch-group] [data-form-item] {
     width : fit-content;
 }
+
+[data-form-item]:has([data-checkbox-group]),
+[data-form-item]:has([data-switch-group]) {
+    flex-direction : column;
+    align-items    : flex-start;
+    gap            : 8px !important;
+}
+
+[data-form-item]:has([data-checkbox-group]) > label,
+[data-form-item]:has([data-checkbox-group]) > label,
+[data-form-item]:has([data-switch-group]) > label,
+[data-form-item]:has([data-switch-group]) > label {
+    padding-left : 0 !important;
+}
+
+[data-form-item]:has([data-checkbox-group]) > label::before,
+[data-form-item]:has([data-checkbox-group]) > label::after,
+[data-form-item]:has([data-switch-group]) > label::before,
+[data-form-item]:has([data-switch-group]) > label::after,
+[data-form-item]:has([data-checkbox-group]) > label::before,
+[data-form-item]:has([data-checkbox-group]) > label::after,
+[data-form-item]:has([data-switch-group]) > label::before,
+[data-form-item]:has([data-switch-group]) > label::after {
+    display : none !important;
+}
