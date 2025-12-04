@@ -76,7 +76,7 @@
         "agadoo"                                         : "^3.0.0",
         "autoprefixer"                                   : "^10.4.14",
         "babel-plugin-transform-react-remove-prop-types" : "^0.4.24",
-        "glob"                                           : "^10.3.10",
+        "glob"                                           : "^10.5.0",
         "html-react-parser"                              : "^5.1.15",
         "postcss"                                        : "^8.4.30",
         "postcss-nesting"                                : "^12.0.1",
