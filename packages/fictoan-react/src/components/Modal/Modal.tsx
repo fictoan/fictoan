@@ -15,6 +15,8 @@ export type ModalElementType = HTMLDivElement;
 
 export interface ModalCustomProps {
         id              : string;
+        isOpen        ? : boolean;
+        onClose       ? : () => void;
         isDismissible ? : boolean;
         showBackdrop  ? : boolean;
         blurBackdrop  ? : boolean;
@@ -31,6 +33,8 @@ export const Modal = React.forwardRef(
             id,
             children,
             classNames = [],
+            isOpen = false,
+            onClose,
             isDismissible = true,
             showBackdrop,
             blurBackdrop,
@@ -50,17 +54,41 @@ export const Modal = React.forwardRef(
             classNames.push("blur-backdrop");
         }
 
+        // Handle open/close state declaratively
+        useEffect(() => {
+            const modal = document.querySelector(`#${modalId}[data-modal]`);
+            if (!modal || !(modal instanceof HTMLElement)) return;
+
+            if (isOpen) {
+                // Show modal
+                modal.showPopover();
+
+                // Focus first focusable element
+                const focusableElements = modal.querySelectorAll(
+                    "button, [href], input, select, textarea, [tabindex]:not([tabindex=\"-1\"])",
+                );
+                if (focusableElements.length) {
+                    (focusableElements[0] as HTMLElement).focus();
+                }
+            } else {
+                // Hide modal
+                if (modal.matches(":popover-open")) {
+                    modal.hidePopover();
+                }
+            }
+        }, [isOpen, modalId]);
+
         // Handle Escape key
         useEffect(() => {
             const handleEscape = (e: KeyboardEvent) => {
-                if (e.key === "Escape" && isDismissible) {
-                    hideModal(id);
+                if (e.key === "Escape" && isDismissible && isOpen && onClose) {
+                    onClose();
                 }
             };
 
             document.addEventListener("keydown", handleEscape);
             return () => document.removeEventListener("keydown", handleEscape);
-        }, [ id, isDismissible ]);
+        }, [isDismissible, isOpen, onClose]);
 
         return (
             <Element<ModalElementType>
@@ -77,10 +105,10 @@ export const Modal = React.forwardRef(
                 aria-describedby={descriptionId}
                 {...props}
             >
-                {isDismissible && (
+                {isDismissible && onClose && (
                     <Text
                         className="dismiss-button"
-                        onClick={() => hideModal(id)}
+                        onClick={onClose}
                         aria-label="Close modal"
                         tabIndex={0}
                     >
@@ -101,35 +129,3 @@ export const Modal = React.forwardRef(
 );
 Modal.displayName = "Modal";
 
-// MODAL METHODS ///////////////////////////////////////////////////////////////////////////////////////////////////////
-export const showModal = (modalId: string) => {
-    const modal = document.querySelector(`#${modalId}[data-modal]`);
-    if (modal instanceof HTMLElement) {
-        modal.showPopover();
-        // Focus trap
-        const focusableElements = modal.querySelectorAll(
-            "button, [href], input, select, textarea, [tabindex]:not([tabindex=\"-1\"])",
-        );
-        if (focusableElements.length) {
-            (focusableElements[0] as HTMLElement).focus();
-        }
-    }
-};
-
-export const hideModal = (modalId: string) => {
-    const modal = document.querySelector(`#${modalId}[data-modal]`);
-    if (modal instanceof HTMLElement) {
-        modal.hidePopover();
-        // Return focus to trigger element if possible
-        if (document.activeElement instanceof HTMLElement) {
-            document.activeElement.blur();
-        }
-    }
-};
-
-export const toggleModal = (modalId: string) => {
-    const modal = document.querySelector(`#${modalId}[data-modal]`);
-    if (modal instanceof HTMLElement) {
-        modal.matches(":popover-open") ? hideModal(modalId) : showModal(modalId);
-    }
-};

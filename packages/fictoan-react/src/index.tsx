@@ -31,7 +31,7 @@ export { CodeBlock, type CodeBlockProps } from "./components/CodeBlock";
 
 export { Divider, type DividerProps } from "./components/Divider";
 
-export { Drawer, type DrawerProps, showDrawer, hideDrawer, toggleDrawer, isDrawerOpen } from "./components/Drawer";
+export { Drawer, type DrawerProps } from "./components/Drawer";
 
 export {
     Element,
@@ -89,7 +89,7 @@ export {
 
 export { Meter, type MeterProps, type MeterMetaProps } from "./components/Meter";
 
-export { Modal, type ModalProps, showModal, hideModal, toggleModal } from "./components/Modal";
+export { Modal, type ModalProps } from "./components/Modal";
 
 export {
     NotificationsWrapper,

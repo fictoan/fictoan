@@ -1,6 +1,26 @@
 # CHANGELOG
 
 ## 2.0.0
+
+### ⚠️ Breaking Changes
+**Modal and Drawer now use declarative API**
+
+- Replace imperative functions with declarative `isOpen` and `onClose` props
+- Removed: `showModal()`, `hideModal()`, `toggleModal()`
+- Removed: `showDrawer()`, `hideDrawer()`, `toggleDrawer()`, `closeAllDrawers()`, `isDrawerOpen()`
+
+**Migration:**
+```tsx
+// Before (v1.x)
+<Modal id="my-modal">Content</Modal>
+<Button onClick={() => showModal("my-modal")}>Open</Button>
+
+// After (v2.0)
+const [isOpen, setIsOpen] = useState(false);
+<Modal id="my-modal" isOpen={isOpen} onClose={() => setIsOpen(false)}>Content</Modal>
+<Button onClick={() => setIsOpen(true)}>Open</Button>
+```
+
 ### Build and performance improvements
 - Remove Babel transform in favour of native Vite/esbuild (75-80% faster builds)
 - Switch from terser to esbuild minifier for faster production builds

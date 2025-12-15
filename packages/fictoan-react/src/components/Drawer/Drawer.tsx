@@ -16,6 +16,8 @@ import { Div } from "$tags";
 
 export interface DrawerCustomProps {
         id                    : string;
+        isOpen              ? : boolean;
+        onClose             ? : () => void;
         position            ? : "top" | "right" | "bottom" | "left";
         size                ? : SpacingTypes;
         isDismissible       ? : boolean;
@@ -36,6 +38,8 @@ export const Drawer = React.forwardRef(
         {
             id,
             children,
+            isOpen = false,
+            onClose,
             position = "right",
             size = "medium",
             padding = "micro",
@@ -63,33 +67,68 @@ export const Drawer = React.forwardRef(
             "drawer",
             position,
             size,
+            ...(isOpen ? [ "open" ] : []),
             ...(showOverlay ? [ "with-overlay" ] : []),
             ...(blurOverlay ? [ "blur-overlay" ] : []),
             ...classNames,
         ];
 
+        // Handle open/close state declaratively
+        useEffect(() => {
+            const drawer = effectiveRef.current;
+            const overlay = document.querySelector(`[data-drawer-overlay-for="${drawerId}"]`) as HTMLElement;
+
+            if (isOpen) {
+                // Show drawer
+                drawer?.classList.add("open");
+                drawer?.classList.remove("closing");
+                drawer?.focus();
+
+                // Show overlay
+                if (overlay) {
+                    overlay.classList.add("visible");
+                }
+
+                // Prevent body scroll
+                document.body.style.overflow = "hidden";
+            } else {
+                // Hide drawer
+                if (drawer?.classList.contains("open")) {
+                    drawer.classList.add("closing");
+                    drawer.classList.remove("open");
+
+                    // Hide overlay
+                    if (overlay) {
+                        overlay.classList.remove("visible");
+                    }
+
+                    // Restore body scroll
+                    document.body.style.overflow = "";
+                }
+            }
+
+            // Cleanup on unmount
+            return () => {
+                document.body.style.overflow = "";
+            };
+        }, [isOpen, drawerId, effectiveRef]);
+
         // Handle Escape key
         useEffect(() => {
             const handleEscape = (e : KeyboardEvent) => {
-                if (e.key === "Escape" && isDismissible) {
-                    const drawer = document.querySelector(`#${id}[data-drawer]`);
-                    if (drawer?.classList.contains("open")) {
-                        hideDrawer(id);
-                    }
+                if (e.key === "Escape" && isDismissible && isOpen && onClose) {
+                    onClose();
                 }
             };
 
             document.addEventListener("keydown", handleEscape);
             return () => document.removeEventListener("keydown", handleEscape);
-        }, [ id, isDismissible ]);
+        }, [isDismissible, isOpen, onClose]);
 
         // Handle click outside
         useClickOutside(effectiveRef, () => {
-            if (closeOnClickOutside && isDismissible) {
-                const drawer = effectiveRef.current;
-                if (drawer?.classList.contains("open")) {
-                    hideDrawer(id);
-                }
+            if (closeOnClickOutside && isDismissible && isOpen && onClose) {
+                onClose();
             }
         });
 
@@ -105,10 +144,10 @@ export const Drawer = React.forwardRef(
                 {/* OVERLAY */}
                 {showOverlay && (
                     <Div
-                        className={`drawer-overlay ${blurOverlay ? "blur" : ""}`}
+                        className={`drawer-overlay ${blurOverlay ? "blur" : ""} ${isOpen ? "visible" : ""}`}
                         data-drawer-overlay-for={id}
                         aria-hidden="true"
-                        onClick={closeOnClickOutside && isDismissible ? () => hideDrawer(id) : undefined}
+                        onClick={closeOnClickOutside && isDismissible && onClose ? onClose : undefined}
                         style={{ zIndex: zIndex ?? 10000 - 1 }}
                     />
                 )}
@@ -130,10 +169,10 @@ export const Drawer = React.forwardRef(
                     {...props}
                 >
                     {/* DISMISS BUTTON */}
-                    {isDismissible && (
+                    {isDismissible && onClose && (
                         <button
                             className="drawer-dismiss-button"
-                            onClick={() => hideDrawer(id)}
+                            onClick={onClose}
                             aria-label="Close drawer"
                             tabIndex={0}
                         >
@@ -167,80 +206,3 @@ export const Drawer = React.forwardRef(
 );
 Drawer.displayName = "Drawer";
 
-// DRAWER METHODS //////////////////////////////////////////////////////////////////////////////////////////////////////
-export const showDrawer = (drawerId : string) => {
-    const drawer = document.querySelector(`#${drawerId}[data-drawer]`) as HTMLElement;
-    const overlay = document.querySelector(`[data-drawer-overlay-for="${drawerId}"]`) as HTMLElement;
-
-    if (drawer) {
-        // Remove closing class if it exists
-        drawer.classList.remove("closing");
-        drawer.classList.add("open");
-
-        // Show overlay
-        if (overlay) {
-            overlay.classList.add("visible");
-        }
-
-        // Focus management
-        drawer.focus();
-
-        // Store the element that triggered the drawer
-        const activeElement = document.activeElement as HTMLElement;
-        if (activeElement) {
-            drawer.setAttribute("data-trigger-element", activeElement.id || "");
-        }
-
-        // Prevent body scroll
-        document.body.style.overflow = "hidden";
-    }
-};
-
-export const hideDrawer = (drawerId : string) => {
-    const drawer = document.querySelector(`#${drawerId}[data-drawer]`) as HTMLElement;
-    const overlay = document.querySelector(`[data-drawer-overlay-for="${drawerId}"]`) as HTMLElement;
-
-    if (drawer && drawer.classList.contains("open")) {
-        // Add closing class for animation
-        drawer.classList.add("closing");
-        drawer.classList.remove("open");
-
-        // Hide overlay
-        if (overlay) {
-            overlay.classList.remove("visible");
-        }
-
-        // Restore body scroll
-        document.body.style.overflow = "";
-
-        // Return focus to trigger element
-        const triggerId = drawer.getAttribute("data-trigger-element");
-        if (triggerId) {
-            const triggerElement = document.getElementById(triggerId);
-            if (triggerElement) {
-                triggerElement.focus();
-            }
-        }
-    }
-};
-
-export const toggleDrawer = (drawerId : string) => {
-    const drawer = document.querySelector(`#${drawerId}[data-drawer]`);
-    if (drawer) {
-        drawer.classList.contains("open") ? hideDrawer(drawerId) : showDrawer(drawerId);
-    }
-};
-
-export const closeAllDrawers = () => {
-    const openDrawers = document.querySelectorAll("[data-drawer].open");
-    openDrawers.forEach((drawer) => {
-        if (drawer.id) {
-            hideDrawer(drawer.id);
-        }
-    });
-};
-
-export const isDrawerOpen = (drawerId : string) : boolean => {
-    const drawer = document.querySelector(`#${drawerId}[data-drawer]`);
-    return drawer ? drawer.classList.contains("open") : false;
-};
