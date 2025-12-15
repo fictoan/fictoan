@@ -83,13 +83,8 @@ export default defineConfig({
         },
     },
     build   : {
-        minify        : "terser",
-        terserOptions : {
-            format : {
-                comments             : false,
-                preserve_annotations : true,
-            },
-        },
+        minify        : "esbuild",
+        sourcemap     : true,
         lib           : {
             entry    : input,
             name     : pkg.name,
@@ -112,17 +107,7 @@ export default defineConfig({
         svgr(),
         preserveUseClient(),
         createVisualizer(),
-        react({
-            babel : {
-                presets : [
-                    ["@babel/preset-env", { modules : false }],
-                    ["@babel/preset-react"],
-                ],
-                plugins : [
-                    ["transform-react-remove-prop-types", { removeImport : true }],
-                ],
-            },
-        }),
+        react(),
         dts({
             insertTypesEntry : true,
             include          : ["src/**/*"],

@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2.0.0
+### Build and performance improvements
+- Remove Babel transform in favour of native Vite/esbuild (75-80% faster builds)
+- Switch from terser to esbuild minifier for faster production builds
+- Enable production sourcemaps for easier debugging
+- Update TypeScript target from `es2016` to `ES2022` with automatic JSX transform
+- Update core dependencies: React 18.3, Vite 6, TypeScript 5.9
+- Remove unused Babel and terser packages
+- Add `displayName` to all 52 components for better React DevTools debugging
+
 ## 1.12.0
 - `ThemeProvider` now uses unique key based on hostname for local storage, instead of default `fictoan-theme`
 - Decouple border classes to use separate `borderWidth` and `borderStyle` values
