@@ -10,6 +10,9 @@
 - Remove unused Babel and terser packages
 - Add `displayName` to all 52 components for better React DevTools debugging
 
+### Accessibility improvements
+- Add `prefers-reduced-motion` media query support for WCAG 2.1 compliance
+
 ## 1.12.0
 - `ThemeProvider` now uses unique key based on hostname for local storage, instead of default `fictoan-theme`
 - Decouple border classes to use separate `borderWidth` and `borderStyle` values
