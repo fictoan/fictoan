@@ -8,14 +8,6 @@ body {
 
 footer { flex-shrink : 0; }
 
-/* LAYOUT /////////////////////////////////////////////////////////////////// */
-.layout-flexbox {
-    display   : flex;
-    flex-wrap : wrap;
-}
-
-.layout-grid { display : grid; }
-
 /* RESPONSIVENESS /////////////////////////////////////////////////////////// */
 /* Desktop  */
 .show-only-on-mobile { display : none !important; }
@@ -81,44 +73,6 @@ footer { flex-shrink : 0; }
 }
 
 .no-border { border : none !important; }
-
-/* For when you want things bang in the centre */
-/* of both axes. Apply to parent. */
-.totally-centre-items,
-.totally-center-items {
-    display         : flex !important;
-    align-items     : center;
-    justify-content : center;
-}
-
-/* For when you want child elements vertically in  */
-/* the middle. Apply to parent */
-.vertically-centre-items,
-.vertically-center-items {
-    display : flex;
-}
-
-.vertically-centre-items > *,
-.vertically-center-items > * {
-    align-self : center;
-}
-
-/* Parent div needs to be a flex element */
-.vertically-centre-this,
-.vertically-center-this {
-    align-self : center;
-}
-
-/* Parent div needs a set width */
-.horizontally-centre-this,
-.horizontally-center-this {
-    position : relative;
-    display  : block;
-    margin   : 0 auto;
-    width    : fit-content;
-}
-
-.push-to-ends { justify-content : space-between; }
 
 .is-clickable { cursor : pointer; }
 

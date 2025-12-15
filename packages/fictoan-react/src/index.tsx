@@ -9,6 +9,7 @@ import "./styles/animations.css";
 import "./styles/colours.css";
 import "./styles/custom-colours.css";
 import "./styles/globals.css";
+import "./styles/layout.css";
 import "./styles/reset.css";
 import "./styles/theme.css";
 import "./styles/utilities.css";

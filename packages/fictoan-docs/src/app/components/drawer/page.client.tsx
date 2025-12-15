@@ -6,14 +6,14 @@ import React, { useState } from "react";
 // UI ==================================================================================================================
 import { Element, Heading1, Heading2, Divider, Portion, Row, Text, Article, Button, Drawer, Div, showDrawer, hideDrawer } from "fictoan-react";
 
+// LOCAL COMPONENTS ====================================================================================================
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
+
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
 import "./page-drawer.css";
-
-// OTHER ===============================================================================================================
-import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 
 const DrawerDocs : React.FC = () => {
     const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
@@ -42,7 +42,6 @@ const DrawerDocs : React.FC = () => {
                 </Portion>
 
                 <Portion>
-                    
                     <ul>
                         <li>Accepts any React node as children</li>
                         <li>
