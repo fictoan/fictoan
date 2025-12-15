@@ -165,6 +165,7 @@ export const Drawer = React.forwardRef(
         );
     },
 );
+Drawer.displayName = "Drawer";
 
 // DRAWER METHODS //////////////////////////////////////////////////////////////////////////////////////////////////////
 export const showDrawer = (drawerId : string) => {

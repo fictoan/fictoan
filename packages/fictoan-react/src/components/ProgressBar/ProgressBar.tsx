@@ -97,3 +97,4 @@ export const ProgressBar = React.forwardRef(
         );
     },
 );
+ProgressBar.displayName = "ProgressBar";

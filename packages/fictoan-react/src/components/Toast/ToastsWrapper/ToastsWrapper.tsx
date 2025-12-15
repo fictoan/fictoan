@@ -37,3 +37,4 @@ export const ToastsWrapper = React.forwardRef(
         );
     },
 );
+ToastsWrapper.displayName = "ToastsWrapper";

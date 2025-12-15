@@ -106,6 +106,7 @@ export const Skeleton = React.forwardRef((
         />
     );
 });
+Skeleton.displayName = "Skeleton";
 
 export const SkeletonGroup = React.forwardRef((
     {
@@ -151,3 +152,4 @@ export const SkeletonGroup = React.forwardRef((
         </SkeletonContext.Provider>
     );
 });
+SkeletonGroup.displayName = "SkeletonGroup";

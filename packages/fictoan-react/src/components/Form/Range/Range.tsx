@@ -54,3 +54,4 @@ export const Range = React.forwardRef(({ label, value, suffix, onChange, ...prop
         );
     },
 );
+Range.displayName = "Range";

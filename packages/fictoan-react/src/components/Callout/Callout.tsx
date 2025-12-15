@@ -44,3 +44,4 @@ export const Callout = React.forwardRef(
         );
     }
 );
+Callout.displayName = "Callout";

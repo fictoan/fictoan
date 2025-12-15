@@ -95,3 +95,4 @@ export const Table = React.forwardRef(
         );
     }
 );
+Table.displayName = "Table";

@@ -38,3 +38,4 @@ export const SidebarHeader = React.forwardRef(
         );
     }
 );
+SidebarHeader.displayName = "SidebarHeader";

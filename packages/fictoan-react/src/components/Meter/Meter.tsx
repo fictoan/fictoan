@@ -140,3 +140,4 @@ export const Meter = React.forwardRef(
         );
     },
 );
+Meter.displayName = "Meter";

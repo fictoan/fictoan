@@ -257,3 +257,4 @@ export const Pagination = React.forwardRef(
         );
     },
 );
+Pagination.displayName = "Pagination";

@@ -17,7 +17,7 @@
     border-width        : var(--badge-border-width);
 
     /* To make sure a badge’s children don’t style themselves like a d-bag*/
-    > * { all : unset; }
+    & > * { all : unset; }
 
     &.shape-rounded { border-radius : var(--badge-border-radius); }
     &.shape-curved { border-radius : 5000px; }

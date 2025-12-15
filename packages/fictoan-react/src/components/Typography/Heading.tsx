@@ -42,23 +42,29 @@ const Heading = React.forwardRef(
 export const Heading1 = React.forwardRef((props: HeadingProps, ref: React.Ref<HeadingElementType>) => (
     <Heading as="h1" ref={ref} {...props} />
 ));
+Heading1.displayName = "Heading1";
 
 export const Heading2 = React.forwardRef((props: HeadingProps, ref: React.Ref<HeadingElementType>) => (
     <Heading as="h2" ref={ref} {...props} />
 ));
+Heading2.displayName = "Heading2";
 
 export const Heading3 = React.forwardRef((props: HeadingProps, ref: React.Ref<HeadingElementType>) => (
     <Heading as="h3" ref={ref} {...props} />
 ));
+Heading3.displayName = "Heading3";
 
 export const Heading4 = React.forwardRef((props: HeadingProps, ref: React.Ref<HeadingElementType>) => (
     <Heading as="h4" ref={ref} {...props} />
 ));
+Heading4.displayName = "Heading4";
 
 export const Heading5 = React.forwardRef((props: HeadingProps, ref: React.Ref<HeadingElementType>) => (
     <Heading as="h5" ref={ref} {...props} />
 ));
+Heading5.displayName = "Heading5";
 
 export const Heading6 = React.forwardRef((props: HeadingProps, ref: React.Ref<HeadingElementType>) => (
     <Heading as="h6" ref={ref} {...props} />
 ));
+Heading6.displayName = "Heading6";

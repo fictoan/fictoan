@@ -241,3 +241,4 @@ export const RadioTabGroup = React.forwardRef(
         );
     },
 );
+RadioTabGroup.displayName = "RadioTabGroup";

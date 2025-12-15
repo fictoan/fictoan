@@ -37,3 +37,4 @@ export const SidebarFooter = React.forwardRef(
             />
         );
     });
+SidebarFooter.displayName = "SidebarFooter";

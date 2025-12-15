@@ -78,3 +78,4 @@ export const Portion = React.forwardRef(
         );
     }
 );
+Portion.displayName = "Portion";

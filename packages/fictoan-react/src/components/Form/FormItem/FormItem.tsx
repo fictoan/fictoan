@@ -26,3 +26,4 @@ export const FormItem = React.forwardRef(({ size, ...props }: FormItemProps, ref
         />
     );
 });
+FormItem.displayName = "FormItem";

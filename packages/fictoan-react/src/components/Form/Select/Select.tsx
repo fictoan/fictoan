@@ -72,3 +72,4 @@ export const Select = React.forwardRef((props: SelectProps, ref: React.Ref<Selec
         />
     );
 });
+Select.displayName = "Select";

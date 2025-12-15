@@ -129,3 +129,4 @@ export const NotificationItem = React.forwardRef(
         );
     },
 );
+NotificationItem.displayName = "NotificationItem";

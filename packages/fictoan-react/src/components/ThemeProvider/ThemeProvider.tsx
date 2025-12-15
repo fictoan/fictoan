@@ -109,3 +109,4 @@ export const ThemeProvider = React.forwardRef(
         );
     }
 );
+ThemeProvider.displayName = "ThemeProvider";

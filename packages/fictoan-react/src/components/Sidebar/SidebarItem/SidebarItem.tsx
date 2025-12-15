@@ -67,3 +67,4 @@ export const SidebarItem = React.forwardRef(
         );
     },
 );
+SidebarItem.displayName = "SidebarItem";

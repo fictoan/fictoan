@@ -83,3 +83,4 @@ export const RadioGroup = React.forwardRef((props: RadioGroupProps, ref: React.R
         />
     );
 });
+RadioGroup.displayName = "RadioGroup";

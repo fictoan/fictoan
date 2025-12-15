@@ -296,3 +296,4 @@ ref : React.Ref<CodeBlockElementType>,
     </Element>
     );
 });
+CodeBlock.displayName = "CodeBlock";

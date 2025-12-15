@@ -104,3 +104,4 @@ export const BaseInputComponent = React.forwardRef(
         ref? : React.LegacyRef<InputElementType>
     },
 ) => React.ReactElement;
+(BaseInputComponent as any).displayName = "BaseInputComponent";

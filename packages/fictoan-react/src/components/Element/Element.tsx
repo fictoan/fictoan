@@ -143,3 +143,4 @@ export const Element = React.forwardRef(
         );
     },
 ) as <K extends {}>(props : ElementProps<K> & { ref? : React.LegacyRef<HTMLElement> }) => React.ReactElement;
+(Element as any).displayName = "Element";

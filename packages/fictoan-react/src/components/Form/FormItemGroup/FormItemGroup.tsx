@@ -67,3 +67,4 @@ export const FormItemGroup = React.forwardRef(
         );
     }
 );
+FormItemGroup.displayName = "FormItemGroup";

@@ -65,3 +65,4 @@ export const SidebarWrapper = React.forwardRef(
         );
     },
 );
+SidebarWrapper.displayName = "SidebarWrapper";

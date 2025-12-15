@@ -226,6 +226,7 @@ export const OptionCardsGroup = React.forwardRef<OptionCardsGroupRef, OptionCard
         );
     }
 );
+OptionCardsGroup.displayName = "OptionCardsGroup";
 
 export const useOptionCard = (id: string) => {
     const context = useContext(OptionCardsContext);

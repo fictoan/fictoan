@@ -63,3 +63,4 @@ export const ToastItem = React.forwardRef(
         );
     },
 );
+ToastItem.displayName = "ToastItem";

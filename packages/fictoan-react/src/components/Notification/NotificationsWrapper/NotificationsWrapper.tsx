@@ -59,3 +59,4 @@ export const NotificationsWrapper = React.forwardRef(
         );
     }
 );
+NotificationsWrapper.displayName = "NotificationsWrapper";

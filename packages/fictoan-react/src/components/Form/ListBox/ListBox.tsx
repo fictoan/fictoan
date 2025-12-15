@@ -390,3 +390,4 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>((props
         />
     );
 });
+ListBox.displayName = "ListBox";

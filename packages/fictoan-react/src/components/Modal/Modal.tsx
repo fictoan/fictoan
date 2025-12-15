@@ -99,6 +99,7 @@ export const Modal = React.forwardRef(
         );
     },
 );
+Modal.displayName = "Modal";
 
 // MODAL METHODS ///////////////////////////////////////////////////////////////////////////////////////////////////////
 export const showModal = (modalId: string) => {

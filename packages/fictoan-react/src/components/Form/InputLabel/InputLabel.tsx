@@ -48,3 +48,4 @@ export const InputLabel = React.forwardRef(
         );
     }
 );
+InputLabel.displayName = "InputLabel";

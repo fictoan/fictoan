@@ -48,3 +48,4 @@ export const Spinner = React.forwardRef((
         );
     },
 );
+Spinner.displayName = "Spinner";

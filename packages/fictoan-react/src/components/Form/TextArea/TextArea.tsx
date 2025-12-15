@@ -138,3 +138,4 @@ export const TextArea = React.forwardRef(
         );
     }
 );
+TextArea.displayName = "TextArea";

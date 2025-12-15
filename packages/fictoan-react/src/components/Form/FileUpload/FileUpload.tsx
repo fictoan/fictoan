@@ -167,3 +167,4 @@ export const FileUpload = React.forwardRef(
         );
     }
 );
+FileUpload.displayName = "FileUpload";

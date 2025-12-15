@@ -143,6 +143,7 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, InputGroupProps<Ch
         />
     );
 });
+CheckboxGroup.displayName = "CheckboxGroup";
 
 export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps<SwitchProps>>((props, ref) => {
     let classNames = [];
@@ -165,3 +166,4 @@ export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps<Swit
         />
     );
 });
+SwitchGroup.displayName = "SwitchGroup";

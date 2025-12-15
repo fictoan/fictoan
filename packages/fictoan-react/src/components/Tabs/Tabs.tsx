@@ -160,3 +160,4 @@ export const Tabs = React.forwardRef(
         );
     },
 );
+Tabs.displayName = "Tabs";

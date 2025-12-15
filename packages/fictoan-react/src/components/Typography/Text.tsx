@@ -47,3 +47,4 @@ export const Text = React.forwardRef(
         return <Element<TextElementType> as="p" ref={ref} classNames={classNames} {...props} />;
     }
 );
+Text.displayName = "Text";

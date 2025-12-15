@@ -60,3 +60,4 @@ export const Button = React.forwardRef(
         );
     }
 );
+Button.displayName = "Button";

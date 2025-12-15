@@ -37,3 +37,4 @@ export const Card = React.forwardRef(({ shape, heading, children, ...props }: Ca
         </Element>
     );
 });
+Card.displayName = "Card";

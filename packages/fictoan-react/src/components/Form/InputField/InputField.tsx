@@ -139,3 +139,4 @@ export const InputField = React.forwardRef(
         );
     },
 );
+InputField.displayName = "InputField";
