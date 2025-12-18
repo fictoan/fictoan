@@ -3,6 +3,7 @@ import React from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps } from "$components/Element/constants";
+import { ValueChangeHandler } from "../BaseInputComponent/constants";
 export interface OptionForListBoxProps {
     value         : string;
     label         : string;
@@ -27,7 +28,7 @@ export interface ListBoxCustomProps {
     selectionLimit     ? : NonZeroNumber;
     allowCustomEntries ? : boolean;
     isLoading          ? : boolean;
-    onChange           ? : (value: string | string[]) => void;
+    onChange           ? : ValueChangeHandler<string | string[]>;
     value              ? : string | string[];
     isFullWidth        ? : boolean;
 }

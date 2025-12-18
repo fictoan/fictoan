@@ -50,7 +50,7 @@ export const Checkbox = React.forwardRef(
                     name={derivedName}
                     checked={checked}
                     defaultChecked={defaultChecked}
-                    onChange={handleChange}
+                    onValueChange={handleChange}
                     {...htmlProps}
             >
                 <Element<CheckboxElementType>

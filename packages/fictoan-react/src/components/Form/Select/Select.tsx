@@ -63,12 +63,13 @@ const SelectWithOptions = ({ id, name, options, className, onChange, ...props }:
     );
 };
 
-export const Select = React.forwardRef((props: SelectProps, ref: React.Ref<SelectElementType>) => {
+export const Select = React.forwardRef(({ onChange, ...restProps }: SelectProps, ref: React.Ref<SelectElementType>) => {
     return (
         <BaseInputComponent<SelectElementType>
             as={SelectWithOptions}
             ref={ref}
-            {...props}
+            {...restProps}
+            onValueChange={onChange}
         />
     );
 });

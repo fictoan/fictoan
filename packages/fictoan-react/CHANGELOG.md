@@ -33,6 +33,13 @@ const [isOpen, setIsOpen] = useState(false);
 ### Accessibility improvements
 - Add `prefers-reduced-motion` media query support for WCAG 2.1 compliance
 
+### Developer experience improvements
+- Standardise event handler types with explicit `InputEventHandler` and `ValueChangeHandler`
+- Remove ambiguous `FlexibleEventHandler` union types
+- Remove runtime type checking from form components
+- `onChange` prop now clearly typed as event-based handler
+- `onValueChange` prop now clearly typed as value-based handler
+
 ## 1.12.0
 - `ThemeProvider` now uses unique key based on hostname for local storage, instead of default `fictoan-theme`
 - Decouple border classes to use separate `borderWidth` and `borderStyle` values

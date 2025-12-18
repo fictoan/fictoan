@@ -371,22 +371,22 @@ const ListBoxWithOptions = (
 };
 
 // FINAL LISTBOX COMPONENT /////////////////////////////////////////////////////////////////////////////////////////////
-export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>((props, ref) => {
+export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(({ onChange, ...restProps }, ref) => {
     const handleChange = (valueOrEvent: string | string[] | React.ChangeEvent<HTMLInputElement>) => {
         // Handle both direct values and events
         const value = typeof valueOrEvent === "object" && "target" in valueOrEvent
             ? valueOrEvent.target.value
             : valueOrEvent;
 
-        props.onChange?.(value);
+        onChange?.(value);
     };
 
     return (
         <BaseInputComponent<ListBoxElementType>
             as={ListBoxWithOptions}
             ref={ref}
-            {...props}
-            onChange={handleChange}
+            {...restProps}
+            onValueChange={handleChange}
         />
     );
 });

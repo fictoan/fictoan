@@ -49,7 +49,7 @@ export const RadioButton = React.forwardRef(
                     name={derivedName}
                     value={value}
                     checked={checked}
-                    onChange={handleChange}
+                    onValueChange={handleChange}
                     {...props}
                 />
             </Element>

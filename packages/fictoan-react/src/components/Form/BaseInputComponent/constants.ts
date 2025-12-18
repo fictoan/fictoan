@@ -36,14 +36,14 @@ export type NoSideElements = {
 // Combine left and right side constraints
 export type InputSideElementProps = LeftSideProps & RightSideProps;
 
-export type InputFocusHandler =
-    | ((e: React.FocusEvent<HTMLInputElement>) => void)
-    | (() => void);
+// Explicit event handler - ALWAYS receives the event object
+export type InputEventHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
 
-// Handle values directly
-export type InputChangeHandler<T = string> =
-    | ((value: T) => void)
-    | ((event: ChangeEvent<HTMLInputElement>) => void);
+// Explicit value handler - ALWAYS receives the extracted value
+export type ValueChangeHandler<T = string> = (value: T) => void;
+
+// Explicit focus handler
+export type InputFocusHandler = (event: React.FocusEvent<HTMLInputElement>) => void;
 
 export type InputChangeEvent = React.ChangeEvent<HTMLInputElement
     | HTMLTextAreaElement
@@ -55,8 +55,8 @@ export type BaseInputComponentProps<K extends {}> =
     InputLabelCustomProps &
     InputCommonProps & {
         customLabel   ? : React.ReactNode; // For Range component
-        onChange      ? : InputChangeHandler;
-        onValueChange ? : InputChangeHandler; // For backward compatibility
+        onChange      ? : InputEventHandler;                              // Event-based handler - receives ChangeEvent
+        onValueChange ? : (value: any) => void;                           // Value-based handler - receives extracted value (typed at component level)
         value         ? : string | number | readonly string[];
         helpText      ? : string | JSX.Element | React.ReactNode; // The node is for TextArea to display colours for limits
 }   ;

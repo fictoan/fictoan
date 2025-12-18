@@ -35,22 +35,16 @@ export const BaseInputComponent = React.forwardRef(
         } : BaseInputComponentWithIconProps<K>,
         ref : React.LegacyRef<InputElementType>,
     ) => {
-        // Handle both new value-based and legacy event-based onChange
-        const handleChange = (valueOrEvent : string | React.ChangeEvent<HTMLInputElement>) => {
-            if (!onChange) return;
-
-            // If it's a direct string value, use it as is
-            if (typeof valueOrEvent === "string" || Array.isArray(valueOrEvent)) {
-                (onChange as (value : string | string[]) => void)(valueOrEvent);
-                return;
+        const handleChange = (event : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+            // Call event-based handler if provided
+            if (onChange) {
+                onChange(event);
             }
 
-            // If it's an event, try to get the value from target
-            const value = valueOrEvent?.target?.value;
-            if (onChange.length === 1) {
-                (onChange as (value : string) => void)(value);
-            } else {
-                (onChange as (e : React.ChangeEvent<HTMLInputElement>) => void)(valueOrEvent);
+            // Call value-based handler if provided
+            if (onValueChange) {
+                const value = event.target.value;
+                onValueChange(value);
             }
         };
 

@@ -12,7 +12,8 @@ import "./radio-group.css";
 import { RadioGroupProps } from "./constants";
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-export const RadioGroup = React.forwardRef((props: RadioGroupProps, ref: React.Ref<HTMLDivElement>) => {
+export const RadioGroup = React.forwardRef(({ onChange, ...restProps }: RadioGroupProps, ref: React.Ref<HTMLDivElement>) => {
+    const props = { onChange, ...restProps };
     const RadioGroupOptions = (
         {
             id,
@@ -78,7 +79,8 @@ export const RadioGroup = React.forwardRef((props: RadioGroupProps, ref: React.R
             data-radio-group
             as={RadioGroupOptions}
             ref={ref}
-            {...props}
+            {...restProps}
+            onValueChange={onChange}
             classNames={classNames}
         />
     );

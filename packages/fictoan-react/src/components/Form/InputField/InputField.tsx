@@ -7,7 +7,7 @@ import { SpacingTypes } from "../../Element/constants";
 
 // INPUT ===============================================================================================================
 import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
-import { BaseInputComponentProps, InputCommonProps, InputFocusHandler, InputSideElementProps } from "../BaseInputComponent/constants";
+import { BaseInputComponentProps, InputCommonProps, InputFocusHandler, InputSideElementProps, ValueChangeHandler } from "../BaseInputComponent/constants";
 
 // STYLES ==============================================================================================================
 import "./input-field.css";
@@ -30,10 +30,7 @@ export type InputFieldProps = Omit<BaseInputComponentProps<HTMLInputElement>, "o
     size         ? : Exclude<SpacingTypes, "nano" | "huge">;
     onFocus      ? : InputFocusHandler;
     onBlur       ? : InputFocusHandler;
-    onChange     ? :
-        | ((value: string) => void)
-        | FormEventHandler<HTMLInputElement>
-        | ((event: React.ChangeEvent<HTMLInputElement>) => void);
+    onChange     ? : ValueChangeHandler<string>;  // Value-based, explicit
 };
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,16 +50,9 @@ export const InputField = React.forwardRef(
         const leftElementRef = useRef<HTMLDivElement>(null);
         const rightElementRef = useRef<HTMLDivElement>(null);
 
-        const handleChange = (valueOrEvent: string | React.FormEvent<HTMLInputElement>) => {
-            if (!onChange) return;
-
-            // If it's a FormEvent
-            if (typeof valueOrEvent !== "string" && "target" in valueOrEvent) {
-                (onChange as FormEventHandler<HTMLInputElement>)(valueOrEvent);
-            }
-            // If it's a direct string value
-            else if (typeof valueOrEvent === "string") {
-                (onChange as (value: string) => void)(valueOrEvent);
+        const handleChange = (value: string) => {
+            if (onChange) {
+                onChange(value);
             }
         };
 
@@ -127,7 +117,7 @@ export const InputField = React.forwardRef(
                     aria-invalid={ariaInvalid || props.invalid || undefined}
                     aria-required={props.required}
                     placeholder=" "
-                    onChange={handleChange}
+                    onValueChange={handleChange}
                     {...props}
                 >
                     <Div data-input-helper aria-hidden="true">
