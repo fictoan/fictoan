@@ -41,18 +41,18 @@ function generateColors() {
             sequential : true,
             handler() {
                 console.log("Generating color system...");
-                execSync("node src/scripts/generateColourClasses.js", { stdio : "inherit" });
+                execSync("npx tsx src/scripts/generateColourClasses.ts", { stdio : "inherit" });
             },
         },
         configureServer(server) {
             console.log("Generating color system...");
-            execSync("node src/scripts/generateColourClasses.js", { stdio : "inherit" });
+            execSync("npx tsx src/scripts/generateColourClasses.ts", { stdio : "inherit" });
 
-            server.watcher.add("src/scripts/generateColourClasses.js");
-            server.watcher.on("change", (path) => {
-                if (path.endsWith("generateColourClasses.js")) {
+            server.watcher.add("src/scripts/generateColourClasses.ts");
+            server.watcher.on("change", (changedPath) => {
+                if (changedPath.endsWith("generateColourClasses.ts")) {
                     console.log("Color generation script changed, regenerating...");
-                    execSync("node scripts/generateColourClasses.js", { stdio : "inherit" });
+                    execSync("npx tsx src/scripts/generateColourClasses.ts", { stdio : "inherit" });
                 }
             });
         },

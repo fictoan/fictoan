@@ -39,7 +39,7 @@
         "build:umd": "tsc && vite build -c vite.config.umd.js",
         "tree-shake": "agadoo",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "generate-colours": "tsx scripts/generateColourClasses.ts",
+        "generate-colours": "tsx src/scripts/generateColourClasses.ts",
         "build:props-metadata": "node src/scripts/generatePropsMetadata.js"
     },
     "keywords": [
@@ -65,6 +65,8 @@
     ],
     "license": "MIT",
     "devDependencies": {
+        "@csstools/postcss-color-mix-function": "^3.0.12",
+        "@fullhuman/postcss-purgecss": "^7.0.2",
         "@types/node": "^20.11.0",
         "@types/prismjs": "^1.26.4",
         "@types/react": "^18.3.27",
