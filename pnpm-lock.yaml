@@ -31,7 +31,7 @@ importers:
         version: 3.14.2
       html-react-parser:
         specifier: ^5.1.8
-        version: 5.2.10(@types/react@18.2.46)(react@18.3.1)
+        version: 5.2.10(@types/react@18.3.27)(react@18.3.1)
       next:
         specifier: ^14.2.35
         version: 14.2.35(@babel/core@7.28.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -55,11 +55,11 @@ importers:
         specifier: 20.10.6
         version: 20.10.6
       '@types/react':
-        specifier: 18.2.46
-        version: 18.2.46
+        specifier: ^18.3.27
+        version: 18.3.27
       '@types/react-dom':
-        specifier: ^19.1.7
-        version: 19.2.3(@types/react@18.2.46)
+        specifier: ^18.3.7
+        version: 18.3.7(@types/react@18.3.27)
 
   packages/fictoan-react:
     devDependencies:
@@ -1476,19 +1476,8 @@ packages:
     peerDependencies:
       '@types/react': ^18.0.0
 
-  '@types/react-dom@19.2.3':
-    resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
-    peerDependencies:
-      '@types/react': ^19.2.0
-
-  '@types/react@18.2.46':
-    resolution: {integrity: sha512-nNCvVBcZlvX4NU1nRRNV/mFl1nNRuTuslAJglQsq+8ldXe5Xv0Wd2f7WTE3jOxhLH2BFfiZGC6GCp+kHQbgG+w==}
-
   '@types/react@18.3.27':
     resolution: {integrity: sha512-cisd7gxkzjBKU2GgdYrTdtQx1SORymWyaAFhaxQPK9bYO9ot3Y5OikQRvY0VYQtvwjeQnizCINJAenh/V7MK2w==}
-
-  '@types/scheduler@0.26.0':
-    resolution: {integrity: sha512-WFHp9YUJQ6CKshqoC37iOlHnQSmxNc795UhB26CyBBttrN9svdIrUjl/NjnNmfcwtncN0h/0PPAFWv9ovP8mLA==}
 
   '@vitejs/plugin-react@5.1.2':
     resolution: {integrity: sha512-EcA07pHJouywpzsoTUqNh5NwGayl2PPVEJKUSinGGSxFGYn+shYbqMGBg6FXDqgXum9Ou/ecb+411ssw8HImJQ==}
@@ -3893,22 +3882,10 @@ snapshots:
     dependencies:
       '@types/react': 18.3.27
 
-  '@types/react-dom@19.2.3(@types/react@18.2.46)':
-    dependencies:
-      '@types/react': 18.2.46
-
-  '@types/react@18.2.46':
-    dependencies:
-      '@types/prop-types': 15.7.15
-      '@types/scheduler': 0.26.0
-      csstype: 3.2.3
-
   '@types/react@18.3.27':
     dependencies:
       '@types/prop-types': 15.7.15
       csstype: 3.2.3
-
-  '@types/scheduler@0.26.0': {}
 
   '@vitejs/plugin-react@5.1.2(vite@6.4.1(@types/node@20.19.27)(tsx@4.21.0))':
     dependencies:
@@ -4342,16 +4319,6 @@ snapshots:
     dependencies:
       domhandler: 5.0.3
       htmlparser2: 10.0.0
-
-  html-react-parser@5.2.10(@types/react@18.2.46)(react@18.3.1):
-    dependencies:
-      domhandler: 5.0.3
-      html-dom-parser: 5.1.2
-      react: 18.3.1
-      react-property: 2.0.2
-      style-to-js: 1.1.21
-    optionalDependencies:
-      '@types/react': 18.2.46
 
   html-react-parser@5.2.10(@types/react@18.3.27)(react@18.3.1):
     dependencies:

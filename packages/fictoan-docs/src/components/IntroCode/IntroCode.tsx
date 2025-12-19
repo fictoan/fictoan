@@ -1,23 +1,11 @@
 "use client";
 
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 
-// FICTOAN =============================================================================================================
-import {
-    Button,
-    Div,
-    Heading1,
-    Heading4,
-    Heading5,
-    Portion,
-    Row,
-    Section,
-    Switch,
-    Text,
-    CodeBlock,
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Button, Div, Heading1, Heading4, Heading5, Portion, Row, Section, Switch, Text, CodeBlock, type SpacingTypes, type WeightTypes, type SpanTypes, type ColourPropTypes, type EmphasisTypes } from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./intro-code.css";
@@ -25,76 +13,101 @@ import "./intro-code.css";
 export const IntroCode = () => {
     const flipACoin = () => Math.random() >= 0.5;
 
-    const [rowProps, setRowProps] = useState({
+    const [rowProps, setRowProps] = useState<{
+        horizontalPadding: SpacingTypes;
+        marginTop: SpacingTypes;
+        marginBottom: SpacingTypes;
+    }>({
         horizontalPadding : "medium",
         marginTop         : "tiny",
         marginBottom      : "tiny",
     });
 
-    const [portion1Props, setPortion1Props] = useState({
+    const [portion1Props, setPortion1Props] = useState<{
+        desktopSpan: SpanTypes;
+    }>({
         desktopSpan : "half",
     });
 
-    const [portion2Props, setPortion2Props] = useState({
+    const [portion2Props, setPortion2Props] = useState<{
+        desktopSpan: SpanTypes;
+    }>({
         desktopSpan : "half",
     });
 
-    const [mainHeadingProps, setMainHeadingProps] = useState({
+    const [mainHeadingProps, setMainHeadingProps] = useState<{
+        textColour: ColourPropTypes;
+        marginBottom: SpacingTypes;
+        weight: WeightTypes;
+    }>({
         textColour   : "blue",
         marginBottom : "nano",
         weight       : "700",
     });
 
-    const [taglineProps, setTaglineProps] = useState({
+    const [taglineProps, setTaglineProps] = useState<{
+        textColour: ColourPropTypes;
+        marginBottom: SpacingTypes;
+        weight: WeightTypes;
+    }>({
         textColour   : "blue-light30",
         marginBottom : "micro",
         weight       : "400",
     });
 
-    const [subHeading1Props, setSubHeading1Props] = useState({
+    const [subHeading1Props, setSubHeading1Props] = useState<{
+        weight: WeightTypes;
+        marginBottom: SpacingTypes;
+    }>({
         weight       : "400",
         marginBottom : "micro",
     });
 
-    const [subHeading2Props, setSubHeading2Props] = useState({
+    const [subHeading2Props, setSubHeading2Props] = useState<{
+        weight: WeightTypes;
+        marginBottom: SpacingTypes;
+    }>({
         weight       : "400",
         marginBottom : "micro",
     });
 
-    const [buttonProps, setButtonProps] = useState({
+    const [buttonProps, setButtonProps] = useState<{
+        kind: EmphasisTypes;
+    }>({
         kind : "primary",
     });
 
-    const handleCodeChange = (newContent) => {
+    const handleCodeChange = (newContent: string) => {
         const newProps = parseCodeToProperties(newContent);
 
         // Update all component props based on parsed content
-        setRowProps(prev => ({ ...prev, ...newProps.Row }
-        ));
+        setRowProps(prev => ({ ...prev, ...newProps.Row } as typeof prev));
 
         // Update portions
-        if (newProps.Portion[0]) setPortion1Props(newProps.Portion[0]);
-        if (newProps.Portion[1]) setPortion2Props(newProps.Portion[1]);
+        if (newProps.Portion[0]) setPortion1Props(newProps.Portion[0] as typeof portion1Props);
+        if (newProps.Portion[1]) setPortion2Props(newProps.Portion[1] as typeof portion2Props);
 
         // Update headings
-        setMainHeadingProps(prev => ({ ...prev, ...newProps.Heading1 }
-        ));
-        if (newProps.Heading5[0]) setSubHeading1Props(prev => ({ ...prev, ...newProps.Heading5[0] }
-        ));
-        if (newProps.Heading5[1]) setSubHeading2Props(prev => ({ ...prev, ...newProps.Heading5[1] }
-        ));
+        setMainHeadingProps(prev => ({ ...prev, ...newProps.Heading1 } as typeof prev));
+        if (newProps.Heading5[0]) setSubHeading1Props(prev => ({ ...prev, ...newProps.Heading5[0] } as typeof prev));
+        if (newProps.Heading5[1]) setSubHeading2Props(prev => ({ ...prev, ...newProps.Heading5[1] } as typeof prev));
 
         // Update button
-        setButtonProps(prev => ({ ...prev, ...newProps.Button }
-        ));
+        setButtonProps(prev => ({ ...prev, ...newProps.Button } as typeof prev));
     };
 
-    const codeBlockRef = useRef(null);
+    const codeBlockRef = useRef<HTMLDivElement>(null);
 
-    const parseCodeToProperties = (codeContent) => {
+    const parseCodeToProperties = (codeContent: string) => {
         const propRegex = /<(Heading1|Heading5|Row|Portion|Button)\s+(.*?)>/gs;
         const propertiesRegex = /(\w+)="([^"]+)"/g;
-        const newProps = {
+        const newProps: {
+            Row: Record<string, string>;
+            Portion: Record<string, string>[];
+            Heading1: Record<string, string>;
+            Heading5: Record<string, string>[];
+            Button: Record<string, string>;
+        } = {
             Row      : {},
             Portion  : [],
             Heading1 : {},
@@ -106,9 +119,9 @@ export const IntroCode = () => {
         while ((
             tagMatch = propRegex.exec(codeContent)
         ) !== null) {
-            const tagName = tagMatch[1];
+            const tagName = tagMatch[1] as "Heading1" | "Heading5" | "Row" | "Portion" | "Button";
             const tagProperties = tagMatch[2];
-            let tagProps = {};
+            let tagProps: Record<string, string> = {};
 
             let propsMatch;
             while ((
@@ -143,7 +156,7 @@ export const IntroCode = () => {
 
     useEffect(() => {
         const checkPrism = () => {
-            if (window.Prism) {
+            if ((window as any).Prism) {
                 console.log("Prism is loaded");
                 setMountKey(prev => prev + 1);
             } else {
@@ -156,14 +169,13 @@ export const IntroCode = () => {
     }, []);
 
 
-    // FOR VIZ ROW =====================================================================================================
     const [vizMode, setVizMode] = useState(true);
     const numberOfPortions = 24;
 
     return (
-        <Section id="intro-code" verticalPadding="small">
-            <Div id="intro-section">
-                {/* ROW VISUALISATION ////////////////////////////////////////////////////////////////////////////// */}
+        <Div id="intro-code">
+            {/* ROW VISUALISATION ================================================================================== */}
+            <Div id="viz-row-wrapper">
                 {vizMode && (
                     <Row id="viz-row" horizontalPadding={rowProps.horizontalPadding} retainLayoutAlways>
                         {Array.from({ length : numberOfPortions }, (_, index) => (
@@ -174,7 +186,7 @@ export const IntroCode = () => {
                     </Row>
                 )}
 
-                {/* MAIN ROW /////////////////////////////////////////////////////////////////////////////////////// */}
+                {/* MAIN ROW =========================================================================================== */}
                 <Row {...rowProps}>
                     <Portion {...portion1Props} className={`demo-portion ${vizMode ? "border-red" : ""}`}>
                         <Heading1 {...mainHeadingProps}>
@@ -216,7 +228,7 @@ export const IntroCode = () => {
                 </Row>
             </Div>
 
-            {/* EDITABLE CODE BLOCK //////////////////////////////////////////////////////////////////////////////// */}
+            {/* EDITABLE CODE BLOCK ================================================================================ */}
             <Row horizontalPadding="medium" gutters="large" verticalMargin="small">
                 <Portion>
                     <Div verticallyCentreItems pushItemsToEnds marginBottom="nano">
@@ -243,7 +255,6 @@ export const IntroCode = () => {
                             suppressContentEditableWarning={true}
                             onChange={handleCodeChange}
                             marginBottom="micro"
-                            theme="custom"
                         >
                             {[
                                 `<Row horizontalPadding="medium" marginTop="tiny" marginBottom="small"> {/* Try "none", "small", "medium", "large" or "huge" */}`,
@@ -270,12 +281,12 @@ export const IntroCode = () => {
                             ].filter(Boolean).join("\n")}
                         </CodeBlock>
 
-                        <Heading5>
+                        <Heading5 weight="400">
                             Wasn&rsquo;t that some simple, elegant syntax?
                         </Heading5>
                     </Div>
                 </Portion>
             </Row>
-        </Section>
+        </Div>
     );
 };

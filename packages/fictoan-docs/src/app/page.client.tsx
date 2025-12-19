@@ -7,21 +7,39 @@ import React from "react";
 // UI ==================================================================================================================
 import { Div, Article, Divider, Portion, Row, Text, Heading4, Heading5, Card, Section, Heading2, Span } from "fictoan-react";
 
+// LOCAL COMPONENTS ====================================================================================================
+import { ComponentGrid } from "$components/ComponentGrid/ComponentGrid";
+import { IntroCode } from "$components/IntroCode/IntroCode";
+
 // ASSETS ==============================================================================================================
 import ManifestoIcon from "../assets/icons/manifesto.svg";
 
 // STYLES ==============================================================================================================
 import "../styles/home.css";
 
-// OTHER ===============================================================================================================
-import { ComponentGrid } from "../components/ComponentGrid/ComponentGrid";
-import { IntroCode } from "../components/IntroCode/IntroCode";
-
 const HomePage = () => {
     return (
         <Article id="home-page">
             {/* HERO /////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <IntroCode />
+            <Section id="intro-code" verticalPadding="small">
+                <IntroCode />
+            </Section>
+
+            {/* COMPONENT GRID ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Section id="component-grid" verticalPadding="medium">
+                <Row horizontalPadding="medium">
+                    <Portion>
+                        <Heading4 weight="400" marginBottom="nano">
+                            Some components
+                        </Heading4>
+                    </Portion>
+
+                    <Portion>
+                        <ComponentGrid />
+                        <Heading4 weight="400" marginTop="micro">...and many more.</Heading4>
+                    </Portion>
+                </Row>
+            </Section>
 
             {/* BULLET POINTS ////////////////////////////////////////////////////////////////////////////////////// */}
             <Section id="usp-section" verticalPadding="medium">
@@ -184,22 +202,6 @@ const HomePage = () => {
                 </Row>
 
                 <Div className="gradient-bg" />
-            </Section>
-
-            {/* COMPONENT GRID ===================================================================================== */}
-            <Section id="component-grid" verticalPadding="medium">
-                <Row horizontalPadding="medium">
-                    <Portion>
-                        <Heading4 weight="400" marginBottom="nano">
-                            Some components
-                        </Heading4>
-                    </Portion>
-
-                    <Portion>
-                        <ComponentGrid />
-                        <Heading4 weight="400" marginTop="micro">...and many more.</Heading4>
-                    </Portion>
-                </Row>
             </Section>
         </Article>
     );

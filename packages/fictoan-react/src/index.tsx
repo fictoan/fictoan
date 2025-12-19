@@ -103,7 +103,7 @@ export { useOptionCard, useOptionCardsGroup } from "./components/OptionCard";
 
 export { Pagination, type PaginationProps } from "./components/Pagination";
 
-export { Portion, type PortionProps } from "./components/Portion";
+export { Portion, type PortionProps, type SpanTypes } from "./components/Portion";
 
 export { ProgressBar, type ProgressBarProps, type ProgressBarMetaProps } from "./components/ProgressBar";
 

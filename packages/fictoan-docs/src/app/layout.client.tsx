@@ -1,34 +1,29 @@
 "use client";
 
-// FRAMEWORK ===========================================================================================================
-import React, { useRef, useState } from "react";
+// REACT CORE ==========================================================================================================
+import React, { ReactNode, useState } from "react";
 
-// FICTOAN =============================================================================================================
-import {
-    Button,
-    ContentWrapper,
-    ThemeProvider,
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { ContentWrapper, ThemeProvider } from "fictoan-react";
 
-// COMPONENTS ==========================================================================================================
-import { Sidebar } from "../components/Sidebar/Sidebar";
-import { SiteFooter } from "../components/Footer/Footer";
-import { SiteHeader } from "../components/Header/Header";
+// LOCAL COMPONENTS ====================================================================================================
+import { Sidebar } from "$components/Sidebar/Sidebar";
+import { SiteFooter } from "$components/Footer/Footer";
+import { SiteHeader } from "$components/Header/Header";
 
 // STYLES ==============================================================================================================
 import "../styles/globals.css";
 
-export const RootLayoutClient = ({ children }) => {
-    // SIDEBAR =========================================================================================================
-    const [sidebarState, setSidebarState] = useState("");
-    const [showSidebarOnMobile, setShowSidebarOnMobile] = useState(false);
+export const RootLayoutClient = ({children}: {children: ReactNode}) => {
+    const [ sidebarState, setSidebarState ] = useState("");
+    const [ showSidebarOnMobile, setShowSidebarOnMobile ] = useState(false);
 
 
     const toggleSidebarOnMobile = () => {
         setShowSidebarOnMobile(isShowing => !isShowing);
     };
 
-    const listOfThemes = ["theme-light", "theme-dark", "theme-test"];
+    const listOfThemes = [ "theme-light", "theme-dark", "theme-test" ];
 
     return (
         <html lang="en">
@@ -66,4 +61,4 @@ export const RootLayoutClient = ({ children }) => {
         </body>
         </html>
     );
-}
+};

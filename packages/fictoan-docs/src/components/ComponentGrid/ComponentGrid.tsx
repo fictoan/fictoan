@@ -5,13 +5,14 @@ import Link from "next/link";
 import React, { useState } from "react";
 
 // UI ==================================================================================================================
-import { Element, Badge, Breadcrumbs, Button, Callout, Card, Checkbox, Div, InputField, NotificationItem, Portion, ProgressBar, RadioButton, Row, Select, Switch, Table, Text, Heading1, Heading4, NotificationsWrapper, CodeBlock, OptionCard, OptionCardsGroup, hideModal, Modal, showModal, PinInputField } from "fictoan-react";
+import { Element, Badge, Breadcrumbs, Button, Callout, Card, Checkbox, Div, InputField, NotificationItem, Portion, ProgressBar, RadioButton, Row, Select, Switch, Table, Text, Heading1, Heading4, NotificationsWrapper, CodeBlock, OptionCard, OptionCardsGroup, Modal, PinInputField } from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./component-grid.css";
 
 export const ComponentGrid = () => {
     const [ showNotification1, setShowNotification1 ] = useState(false);
+    const [ isModalOpen, setIsModalOpen ] = useState(false);
 
     const cardComponentSample = `const clickHere = () => {
     window.load("/components/card");
@@ -112,9 +113,9 @@ export const ComponentGrid = () => {
                 <Card shape="rounded" className="component-wrapper" isFullHeight>
                     <Div className="component-card">
                         <ProgressBar
-                            value="60" max={100} suffix="%"
+                            value={60} max={100} suffix="%"
                             label="Loading..."
-                            barBg="green-light20" barFill="green-dark90"
+                            bgColour="green-light80" fillColour="green"
                             height="8px" shape="rounded"
                         />
 
@@ -283,7 +284,6 @@ export const ComponentGrid = () => {
                         <Div marginBottom="micro">
                             <Checkbox
                                 id="checkbox-1"
-                                value="checkbox-1"
                                 name="checkbox-1"
                                 label="Check me"
                             />
@@ -447,7 +447,7 @@ export const ComponentGrid = () => {
                     <Div className="component-card">
                         <Button
                             kind="primary"
-                            onClick={() => showModal("sample-modal")}
+                            onClick={() => setIsModalOpen(true)}
                         >
                             A wild modal appears!
                         </Button>
@@ -461,7 +461,14 @@ export const ComponentGrid = () => {
                 </Card>
             </Div>
 
-            <Modal id="sample-modal" isDismissible showBackdrop blurBackdrop>
+            <Modal
+                id="sample-modal"
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                isDismissible
+                showBackdrop
+                blurBackdrop
+            >
                 <Card padding="micro">
                     <Heading4 marginBottom="nano">I am a modal</Heading4>
                     <Text marginBottom="micro">
@@ -470,7 +477,7 @@ export const ComponentGrid = () => {
 
                     <Button
                         kind="primary" size="small"
-                        onClick={() => hideModal("sample-modal")}
+                        onClick={() => setIsModalOpen(false)}
                     >
                         Close modal
                     </Button>

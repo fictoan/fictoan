@@ -301,7 +301,7 @@ const LayoutDocs = () => {
                                             name="retain-layout"
                                             label="Retain layout always"
                                             checked={retainLayout}
-                                            onChange={(value) => setRetainLayout(e.target.checked)}
+                                            onChange={(checked) => setRetainLayout(checked)}
                                         />
                                     </Portion>
                                 </Row>

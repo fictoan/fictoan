@@ -21,13 +21,33 @@ module.exports = {
             ],
             // Safelist patterns for dynamic classes
             safelist: {
-                // Keep all colour utility classes (consumers need full palette)
+                // Keep all utility classes (consumers need full set for props)
                 standard: [
+                    // Color utilities
                     /^bg-/,
                     /^text-/,
                     /^border-/,
                     /^fill-/,
                     /^stroke-/,
+                    // Spacing utilities
+                    /^padding-/,
+                    /^margin-/,
+                    // Visual utilities
+                    /^shadow-/,
+                    /^shape-/,
+                    /^opacity-/,
+                    // Typography utilities
+                    /^weight-/,
+                    /^size-/,
+                    // Layout utilities
+                    /^layout-/,
+                    /^full-/,
+                    /^horizontally-/,
+                    /^vertically-/,
+                    /^push-to-/,
+                    // Responsive utilities
+                    /^hide-/,
+                    /^show-/,
                 ],
                 // Keep CSS variables
                 deep: [
