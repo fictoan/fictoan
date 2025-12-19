@@ -1,0 +1,22 @@
+version: 1
+applications:
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - npm install -g pnpm@10.15.1
+            - pnpm install
+        build:
+          commands:
+            - pnpm turbo run build --filter=fictoan-docs
+      artifacts:
+        baseDirectory: packages/fictoan-docs/.next
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - .next/cache/**/*
+          - node_modules/**/*
+          - .pnpm-store/**/*
+      buildPath: /
+    appRoot: packages/fictoan-docs

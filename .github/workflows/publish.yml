@@ -19,12 +19,16 @@ jobs :
                 with :
                     node-version : lts/*
                     registry-url : https://registry.npmjs.org/
-            -   name : Install Yarn
-                run  : npm install -g yarn
+            -   name : Install pnpm
+                uses : pnpm/action-setup@v4
+                with :
+                    version : 10.15.1
             -   name : Install dependencies
-                run  : yarn install
+                run  : pnpm install
             -   name : Build fictoan-react
-                run  : yarn workspace fictoan-react build
+                run  : pnpm --filter fictoan-react build
+            -   name : Build fictoan-docs (verify)
+                run  : pnpm --filter fictoan-docs build
             -   name              : Publish fictoan-react
                 working-directory : ./packages/fictoan-react
                 run               : npm publish --access public

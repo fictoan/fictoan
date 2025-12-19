@@ -15,10 +15,9 @@ Thank you for wanting to contribute to Fictoan!
    pnpm install
    ```
 
-3. The project uses Turborepo to manage the monorepo. There are three packages—
+3. The project uses Turborepo to manage the monorepo. There are two packages—
    - `packages/fictoan-react`: The core component library for React
    - `packages/fictoan-docs`: The documentation site, hosted at https://fictoan.io
-   - `packages/fictoan-mcp`: MCP server for Fictoan
 
 ## Development scripts
 
