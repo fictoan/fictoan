@@ -94,12 +94,12 @@ function copyPackageFiles() {
 // Build and copy function
 function buildAndCopy() {
     console.log("Building fictoan-react...");
-    
+
     // Build the library
     try {
-        execSync("npm run build", { 
-            cwd: fictoanReactDir, 
-            stdio: "inherit" 
+        execSync("pnpm build", {
+            cwd: fictoanReactDir,
+            stdio: "inherit"
         });
         console.log("✓ Build completed successfully");
     } catch (err) {
@@ -109,9 +109,9 @@ function buildAndCopy() {
 
     // Generate props metadata
     try {
-        execSync("npm run build:props-metadata", { 
-            cwd: fictoanReactDir, 
-            stdio: "inherit" 
+        execSync("pnpm build:props-metadata", {
+            cwd: fictoanReactDir,
+            stdio: "inherit"
         });
         console.log("✓ Props metadata generated successfully");
     } catch (err) {

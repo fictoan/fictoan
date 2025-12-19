@@ -12,18 +12,19 @@ Thank you for wanting to contribute to Fictoan!
 
 2. Install dependencies:
    ```bash
-   yarn install
+   pnpm install
    ```
 
-3. The project uses Turborepo to manage the monorepo. There are two packages—
+3. The project uses Turborepo to manage the monorepo. There are three packages—
    - `packages/fictoan-react`: The core component library for React
    - `packages/fictoan-docs`: The documentation site, hosted at https://fictoan.io
+   - `packages/fictoan-mcp`: MCP server for Fictoan
 
 ## Development scripts
 
-- `yarn dev`: Start development servers for all packages, and this will run the `fictoan-docs` package on your local
-- `yarn build`: Build all packages
-- `yarn rebuild`: This builds the `fictoan-react` package, and copies the built files to the `node_modules` folder of the `fictoan-docs` package. This way, you can see the outcome of your component changes directly in the docs, and you can update the content there, too. You run this at the root itself, and the script handles everything.
+- `pnpm dev`: Start development servers for all packages, and this will run the `fictoan-docs` package on your local
+- `pnpm build`: Build all packages
+- `pnpm rebuild`: This builds the `fictoan-react` package, and copies the built files to the `node_modules` folder of the `fictoan-docs` package. This way, you can see the outcome of your component changes directly in the docs, and you can update the content there, too. You run this at the root itself, and the script handles everything.
 
 ## Pull request process
 

@@ -50,8 +50,6 @@
 
 1. Add Fictoan to your project:
 ```bash
-yarn add fictoan-react
-# or
 pnpm add fictoan-react
 # or
 npm install fictoan-react

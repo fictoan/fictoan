@@ -50,8 +50,6 @@
 
 1. Add Fictoan to your project:
 ```bash
-yarn add fictoan-react
-# or
 pnpm add fictoan-react
 # or
 npm install fictoan-react
@@ -164,21 +162,21 @@ This monorepo is set up with a minimal, no-frills workflow for developing the Fi
 
 ### Commands
 
-- `yarn dev` - Run the documentation site on localhost
-- `yarn rebuild` - Build the component library and update it in the docs site automatically
+- `pnpm dev` - Run the documentation site on localhost
+- `pnpm rebuild` - Build the component library and update it in the docs site automatically
 
 ### Getting started
 
 1. Clone this repository
-2. Run `yarn install` at the root
-3. Run `yarn dev` to start developing
+2. Run `pnpm install` at the root
+3. Run `pnpm dev` to start developing
 
 ### Working on the component library
 
 When making changes to the component library:
 
 1. Make your changes in `packages/fictoan-react`
-2. Run `yarn rebuild` to build the library and copy the files to the docs site
+2. Run `pnpm rebuild` to build the library and copy the files to the docs site
 3. The docs site will now use your latest changes
 
 ## Repository Structure

@@ -27,14 +27,14 @@ Lists all available Fictoan components organized by category (layout, input, dis
 
 ```bash
 cd packages/fictoan-mcp
-yarn install
-yarn build
+pnpm install
+pnpm build
 ```
 
 ## Development
 
 ```bash
-yarn mcp:dev  # run in development mode with hot reload
+pnpm dev  # run in development mode with hot reload
 ```
 
 ## Usage with claude desktop

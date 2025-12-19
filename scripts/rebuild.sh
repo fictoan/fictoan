@@ -104,7 +104,7 @@ show_progress
 step "Installing dependencies for documentation..."
 # shellcheck disable=SC2164
 cd packages/fictoan-docs
-yarn install
+pnpm install
 success "Dependencies installed for fictoan-docs\n\n"
 cd ../..
 
@@ -113,8 +113,8 @@ show_progress
 step "Building Fictoan components..."
 # shellcheck disable=SC2164
 cd packages/fictoan-react
-yarn build
-yarn build:props-metadata
+pnpm build
+pnpm build:props-metadata
 success "Props metadata generated..."
 success "Fictoan React built successfully!\n\n"
 cd ../../
@@ -131,4 +131,4 @@ step "Rebuild complete!"
 echo -e "\n${GREEN}${BOLD}🎉 All done! Fictoan React has been rebuilt and copied to docs.${RESET}"
 # --- NEW: Show a final, 100% complete bar ---
 draw_progress_bar $total_steps $((total_steps + 1))
-echo -e "${CYAN}ℹ️  You can now run 'yarn dev' to start the development server if needed.${RESET}\n"
+echo -e "${CYAN}ℹ️  You can now run 'pnpm dev' to start the development server if needed.${RESET}\n"

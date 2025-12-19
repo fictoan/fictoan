@@ -172,7 +172,7 @@ The MCP server is now fully operational with comprehensive tooling:
 ### Integration points
 
 - Direct access to `fictoan-react` source
-- Ability to run `yarn rebuild` after changes
+- Ability to run `pnpm rebuild` after changes
 - Update documentation site automatically
 
 ## Code quality requirements
