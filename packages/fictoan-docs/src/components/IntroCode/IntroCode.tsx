@@ -231,7 +231,7 @@ export const IntroCode = () => {
             {/* EDITABLE CODE BLOCK ================================================================================ */}
             <Row horizontalPadding="medium" gutters="large" verticalMargin="small">
                 <Portion>
-                    <Div verticallyCentreItems pushItemsToEnds marginBottom="nano">
+                    <Div verticallyCentreItems pushItemsToEnds>
                         <Text textColour="blue" weight="700">
                             GO AHEAD, EDIT THESE PROPS AND VALUES HERE—
                         </Text>
@@ -244,7 +244,9 @@ export const IntroCode = () => {
                             onChange={() => setVizMode(!vizMode)}
                         />
                     </Div>
+                </Portion>
 
+                <Portion>
                     <Div id="intro-code-block">
                         <CodeBlock
                             key={mountKey}

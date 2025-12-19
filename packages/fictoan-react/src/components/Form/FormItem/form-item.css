@@ -15,10 +15,11 @@
     display  : flex;
 }
 
+
 /* PARENT ELEMENT /////////////////////////////////////////////////////////// */
 [data-form-item] {
     position              : relative;
-    width                 : 100%;
+    width                 : fit-content;
     height                : fit-content;
     display               : grid;
     grid-template-rows    : auto auto auto;
@@ -28,6 +29,10 @@
         "label"
         "input"
         "info";
+}
+
+form[data-form] [data-form-item] {
+    width : 100%;
 }
 
 /* Hide empty grid areas when there is no label or info section ============= */
