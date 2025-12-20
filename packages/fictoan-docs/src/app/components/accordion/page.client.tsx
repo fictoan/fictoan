@@ -4,7 +4,11 @@
 import React from "react";
 
 // UI ==================================================================================================================
-import { Article, Section, Div, Heading4, Heading6, Divider, Row, Portion, Text, Accordion } from "fictoan-react";
+import { Div, Heading6, Text, Divider, Accordion } from "fictoan-react";
+
+// LOCAL COMPONENTS ====================================================================================================
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -12,9 +16,6 @@ import { createThemeConfigurator } from "$utils/themeConfigurator";
 // STYLES ==============================================================================================================
 import "../../../styles/fictoan-theme.css";
 import "./page-accordion.css";
-
-// OTHER ===============================================================================================================
-import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 
 const AccordionDocs = () => {
     const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
@@ -30,74 +31,57 @@ const AccordionDocs = () => {
     } = createThemeConfigurator("Accordion", AccordionComponent);
 
     return (
-        <Article id="page-accordion">
-            {/*  INTRO ///////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                    <Portion>
-                        <Heading4 id="component-name">
-                            Accordion
-                        </Heading4>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading6 id="component-name">
+                    Accordion
+                </Heading6>
 
-                        <Heading6
-                            id="component-description"
-                            weight="400" marginBottom="small"
-                        >
-                            A simple click to expand/collapse block element.
-                        </Heading6>
-                    </Portion>
+                <Text
+                    id="component-description"
+                    weight="400"
+                >
+                    A simple click to expand/collapse block element.
+                </Text>
+            </Div>
 
-                    <Portion>
-                        <ul>
-                            <li>
-                                The <code>summary</code> accepts any React node as a child. Feel free to style it
-                                however
-                                you want with any element.
-                            </li>
-                            <li>The component is typically used with the <code>isFullWidth</code> prop</li>
-                        </ul>
-                    </Portion>
-                </Row>
-            </Section>
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+                <Text>
+                    The <code>summary</code> accepts any React node as a child. Feel free to style it
+                    however you want with any element.
+                </Text>
 
-            {/* INTERACTIVE COMPONENT ////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                {/* DEMO COMPONENT ================================================================================= */}
-                <Row id="component-wrapper" horizontalPadding="small" className="rendered-component">
-                    <Portion>
-                        <Div
-                            padding="small"
-                            shape="rounded"
-                            bgColour="slate-light80"
-                            data-centered-children
-                        >
-                            <Accordion
-                                ref={interactiveElementRef}
-                                {...themeConfig}
-                                {...props}
-                            >
-                                {props.children}
-                            </Accordion>
-                        </Div>
-                    </Portion>
-                </Row>
+                <Text>
+                    The component is typically used with the <code>isFullWidth</code> prop.
+                </Text>
+            </Div>
 
-                <Row horizontalPadding="small">
-                    {/* PROPS CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        <PropsConfigurator componentName="Accordion" onPropsChange={setProps} />
-                    </Portion>
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                <Accordion
+                    ref={interactiveElementRef}
+                    summary={props.summary || "Click to expand"}
+                    {...themeConfig}
+                    {...props}
+                >
+                    {props.children || "Accordion content goes here"}
+                </Accordion>
+            </Div>
 
-                    {/* THEME CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        {themeConfigurator()}
-                    </Portion>
-                </Row>
-            </Section>
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <PropsConfigurator componentName="Accordion" onPropsChange={setProps} />
+            </Div>
 
-        </Article>
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

@@ -12,7 +12,7 @@ import "./accordion.css";
 import { Text } from "../Typography/Text";
 
 export interface AccordionCustomProps {
-    open     ? : boolean;
+    isOpen   ? : boolean;
     summary    : ReactNode;
     children   : ReactNode;
 }
@@ -24,7 +24,7 @@ export type AccordionProps =
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const Accordion = React.forwardRef(
-    ({summary, children, open = false, ...props} : AccordionProps, ref : React.Ref<AccordionElementType>) => {
+    ({summary, children, isOpen = false, ...props} : AccordionProps, ref : React.Ref<AccordionElementType>) => {
 
         return (
             <Element
@@ -32,7 +32,7 @@ export const Accordion = React.forwardRef(
                 data-expandable-content
                 ref={ref}
                 {...props}
-                open={open}
+                open={isOpen}
                 role="region"
                 aria-labelledby="accordion-summary"
             >
@@ -40,7 +40,7 @@ export const Accordion = React.forwardRef(
                     role="button"
                     tabIndex={0}
                     aria-controls="accordion-content"
-                    aria-expanded={open}
+                    aria-expanded={isOpen}
                 >
                     {typeof summary === "string" ? <Text margin="none">{summary}</Text> : summary}
                 </summary>

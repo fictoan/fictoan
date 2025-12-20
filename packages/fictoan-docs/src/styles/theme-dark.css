@@ -52,7 +52,7 @@
     --divider-secondary-bg                    : var(--slate-dark60);
 
     --divider-tertiary-height                 : 1px;
-    --divider-tertiary-bg                     : var(--slate-dark80);
+    --divider-tertiary-bg                     : var(--grey-dark60);
 
     /* INPUT FIELD ////////////////////////////////////////////////////////// */
     --drawer-bg                               : var(--grey-dark70);

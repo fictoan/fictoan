@@ -545,15 +545,9 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
         .filter(Boolean);
 
     return (
-        <Card
-            id="props-configurator"
-            padding="micro" shape="rounded"
-        >
+        <Div id="props-configurator">
             <Header marginBottom="micro">
-                <Heading6 style={{marginBottom : "4px"}}>
-                    Configure props
-                </Heading6>
-                <Text size="small">
+                <Text>
                     This is for individual instances of {componentName}
                 </Text>
             </Header>
@@ -610,6 +604,6 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
                     ))
                 )}
             </Div>
-        </Card>
+        </Div>
     );
 };
