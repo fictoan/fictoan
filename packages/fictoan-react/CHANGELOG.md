@@ -6,20 +6,18 @@
 **Modal and Drawer now use declarative API**
 
 - Replace imperative functions with declarative `isOpen` and `onClose` props
-- Removed: `showModal()`, `hideModal()`, `toggleModal()`
-- Removed: `showDrawer()`, `hideDrawer()`, `toggleDrawer()`, `closeAllDrawers()`, `isDrawerOpen()`
-
-**Migration:**
-```tsx
-// Before (v1.x)
-<Modal id="my-modal">Content</Modal>
-<Button onClick={() => showModal("my-modal")}>Open</Button>
-
-// After (v2.0)
-const [isOpen, setIsOpen] = useState(false);
-<Modal id="my-modal" isOpen={isOpen} onClose={() => setIsOpen(false)}>Content</Modal>
-<Button onClick={() => setIsOpen(true)}>Open</Button>
-```
+  - Removed: `showModal()`, `hideModal()`, `toggleModal()`
+  - Removed: `showDrawer()`, `hideDrawer()`, `toggleDrawer()`, `closeAllDrawers()`, `isDrawerOpen()`
+    ```tsx
+    // Before (v1.x)
+    <Modal id="my-modal">Content</Modal>
+    <Button onClick={() => showModal("my-modal")}>Open</Button>
+    
+    // After (v2.0)
+    const [isOpen, setIsOpen] = useState(false);
+    <Modal id="my-modal" isOpen={isOpen} onClose={() => setIsOpen(false)}>Content</Modal>
+    <Button onClick={() => setIsOpen(true)}>Open</Button>
+    ```
 
 ### Build and performance improvements
 - Remove Babel transform in favour of native Vite/esbuild (75-80% faster builds)
@@ -34,11 +32,40 @@ const [isOpen, setIsOpen] = useState(false);
 - Add `prefers-reduced-motion` media query support for WCAG 2.1 compliance
 
 ### Developer experience improvements
-- Standardise event handler types with explicit `InputEventHandler` and `ValueChangeHandler`
+
+**Standardized value-based `onChange` across all form components**
+- All form components now use value-based `onChange` (modern component library standard)
+  - Removed `onValueChange` prop - use `onChange` for all value updates
+  - `onChange` now receives extracted value directly: `onChange={(value) => setValue(value)}`
+  - Affected components: `InputField`, `TextArea`, `Select`, `ListBox`, `Checkbox`, `Switch`, `RadioButton`, 
+    `RadioGroup`, `RadioTabGroup`, `Range`
+  - No more event extraction: `e.target.value` handled internally
+  - Matches modern libraries: Chakra UI, Material-UI, Radix UI
+    ```tsx
+    // Before (v1.x) - Dual API
+    <InputField
+      onChange={(e) => setValue(e.target.value)}     // Event-based
+      onValueChange={(value) => setValue(value)}     // Value-based
+    />
+    
+    // After (v2.0) - Clean, consistent API
+    <InputField
+      onChange={(value) => setValue(value)}          // Always value-based ✅
+    />
+    
+    <RadioTabGroup
+      onChange={(value) => setTab(value)}            // Always value-based ✅
+    />
+    ```
+
+
+**Additional improvements:**
 - Remove ambiguous `FlexibleEventHandler` union types
 - Remove runtime type checking from form components
-- `onChange` prop now clearly typed as event-based handler
-- `onValueChange` prop now clearly typed as value-based handler
+- Add comprehensive JSDoc documentation to `RadioTabGroup`
+- Fix `RadioTabGroup` indicator positioning on initial load (font loading timing)
+- Fix `RadioTabGroup` click interaction not updating indicator
+- Add `RadioTabGroupInternalProps` interface for better type organization
 
 ## 1.12.0
 - `ThemeProvider` now uses unique key based on hostname for local storage, instead of default `fictoan-theme`
