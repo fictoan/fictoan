@@ -30,26 +30,29 @@ export const BaseInputComponent = React.forwardRef(
             classNames,
             children,
             onChange,
-            onValueChange,
             ...inputProps
         } : BaseInputComponentWithIconProps<K>,
         ref : React.LegacyRef<InputElementType>,
     ) => {
         const handleChange = (event : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-            // Call event-based handler if provided
-            if (onChange) {
-                onChange(event);
+            // Guard against invalid event objects
+            if (!event || !event.target) {
+                console.warn('[BaseInputComponent] Received invalid event object:', event);
+                return;
             }
 
-            // Call value-based handler if provided
-            if (onValueChange) {
+            // Call value-based handler with extracted value (modern approach)
+            if (onChange) {
                 const value = event.target.value;
-                onValueChange(value);
+                onChange(value);
             }
         };
 
         // Separate Fictoan props from HTML props to prevent conflicts
         const { fictoanProps, htmlProps } = separateFictoanFromHTMLProps(inputProps);
+
+        // Determine if this is a native HTML element or a custom component
+        const isNativeElement = typeof Component === 'string';
 
         return (
             <FormItem
@@ -70,7 +73,7 @@ export const BaseInputComponent = React.forwardRef(
                             validateThis ? "validate-this" : "",
                         ].concat(classNames || [])}
                         {...htmlProps}
-                        onChange={handleChange}
+                        onChange={isNativeElement ? handleChange : onChange}
                     />
                     {children}
                 </Div>

@@ -1,40 +1,20 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useEffect, useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Element,
-    Form,
-    Card,
-    Header,
-    RadioTabGroup,
-    Select,
-    Range, InputField, Button,
-CodeBlock
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Heading1, Heading4, Divider, Portion, Row, Text, Article, Element, Form, Card, Header, RadioTabGroup, Select, Range, InputField, Button, CodeBlock } from "fictoan-react";
 
-// COMPONENTS ==========================================================================================================
+// UTILS ===============================================================================================================
+import { toKebabCase } from "../../../utils/toKebabCase";
+import { useThemeVariables } from "../../../utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-radio-tab-group.css";
 
-// HOOKS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-
-// UTILS ===============================================================================================================
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-import { toKebabCase } from "../../../utils/toKebabCase";
-
-// DATA ================================================================================================================
 import { radioTabGroupProps } from "./config";
 
 // Helper functions for localStorage

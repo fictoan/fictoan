@@ -117,7 +117,7 @@ export const InputField = React.forwardRef(
                     aria-invalid={ariaInvalid || props.invalid || undefined}
                     aria-required={props.required}
                     placeholder=" "
-                    onValueChange={handleChange}
+                    onChange={handleChange}
                     {...props}
                 >
                     <Div data-input-helper aria-hidden="true">

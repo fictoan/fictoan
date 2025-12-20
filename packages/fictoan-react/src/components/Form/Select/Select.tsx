@@ -69,7 +69,7 @@ export const Select = React.forwardRef(({ onChange, ...restProps }: SelectProps,
             as={SelectWithOptions}
             ref={ref}
             {...restProps}
-            onValueChange={onChange}
+            onChange={onChange}
         />
     );
 });

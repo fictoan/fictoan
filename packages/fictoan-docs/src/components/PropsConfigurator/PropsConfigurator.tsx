@@ -310,7 +310,8 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
         }
 
         // For Button component, hide the label prop since we use children for content
-        if (componentName === "Button" && propName === "label") {
+        // Also hide onChange since buttons use onClick, not onChange
+        if (componentName === "Button" && (propName === "label" || propName === "onChange")) {
             return null;
         }
 

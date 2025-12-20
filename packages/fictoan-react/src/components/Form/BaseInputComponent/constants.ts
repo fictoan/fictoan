@@ -54,11 +54,10 @@ export type BaseInputComponentProps<K extends {}> =
     Omit<ElementProps<K>, "onChange" | "size"> &
     InputLabelCustomProps &
     InputCommonProps & {
-        customLabel   ? : React.ReactNode; // For Range component
-        onChange      ? : InputEventHandler;                              // Event-based handler - receives ChangeEvent
-        onValueChange ? : (value: any) => void;                           // Value-based handler - receives extracted value (typed at component level)
-        value         ? : string | number | readonly string[];
-        helpText      ? : string | JSX.Element | React.ReactNode; // The node is for TextArea to display colours for limits
+        customLabel ? : React.ReactNode; // For Range component
+        onChange    ? : ValueChangeHandler; // Value-based handler - receives extracted value directly (modern approach)
+        value       ? : string | number | readonly string[];
+        helpText    ? : string | JSX.Element | React.ReactNode; // The node is for TextArea to display colours for limits
 }   ;
 
 // Extended component props including side element constraints

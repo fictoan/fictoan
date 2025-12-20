@@ -80,7 +80,7 @@ export const RadioGroup = React.forwardRef(({ onChange, ...restProps }: RadioGro
             as={RadioGroupOptions}
             ref={ref}
             {...restProps}
-            onValueChange={onChange}
+            onChange={onChange}
             classNames={classNames}
         />
     );

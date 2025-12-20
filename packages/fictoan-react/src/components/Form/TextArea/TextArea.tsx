@@ -130,7 +130,7 @@ export const TextArea = React.forwardRef(
                 data-textarea
                 ref={setRefs}
                 value={value}
-                onValueChange={handleChange}
+                onChange={handleChange}
                 // @ts-ignore
                 helpText={constructHelpText()}
                 {...props}

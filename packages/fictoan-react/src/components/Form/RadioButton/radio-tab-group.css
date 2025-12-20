@@ -1,3 +1,7 @@
+[data-form-item]:has([data-radio-tab-group]):not(:has(> label)) {
+    gap : 0;
+}
+
 [data-radio-tab-group] {
     position : relative;
     overflow : hidden;

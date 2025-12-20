@@ -386,7 +386,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(({ onC
             as={ListBoxWithOptions}
             ref={ref}
             {...restProps}
-            onValueChange={handleChange}
+            onChange={handleChange}
         />
     );
 });

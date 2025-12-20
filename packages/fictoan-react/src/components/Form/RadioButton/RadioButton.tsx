@@ -25,11 +25,14 @@ export const RadioButton = React.forwardRef(
     ) => {
         const derivedName = useMemo(() => name || id, [name, id]);
 
-        // Handle change events to return boolean instead of event
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            // If the radio is being checked, emit its value
-            if (e.target.checked && onChange) {
-                onChange(value);  // Just pass the string value as expected by the type
+        // Handle change events - BaseInputComponent will extract value from event
+        // We override with custom logic to only emit when radio is checked
+        const handleChange = (extractedValue: string) => {
+            // BaseInputComponent passes the extracted value
+            // For radio buttons, we only call onChange when this specific button is being checked
+            // The extractedValue will be this radio's value
+            if (extractedValue === value && onChange) {
+                onChange(value);
             }
         };
 
@@ -49,7 +52,7 @@ export const RadioButton = React.forwardRef(
                     name={derivedName}
                     value={value}
                     checked={checked}
-                    onValueChange={handleChange}
+                    onChange={handleChange}
                     {...props}
                 />
             </Element>

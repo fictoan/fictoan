@@ -40,7 +40,7 @@ export const Range = React.forwardRef(({ label, value, suffix, onChange, ...prop
                 type="range"
                 data-range
                 value={value?.toString()}
-                onValueChange={handleChange}
+                onChange={handleChange}
                 customLabel={label && (
                     <Div data-range-meta>
                         <InputLabel className="range-label" label={label} htmlFor={props.id} />

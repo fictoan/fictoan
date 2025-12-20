@@ -48,7 +48,7 @@ export const Switch = React.forwardRef(
                 name={derivedName}
                 checked={checked}
                 defaultChecked={defaultChecked}
-                onValueChange={handleChange}
+                onChange={handleChange}
                 size={finalSize}
                 {...htmlProps}
             >

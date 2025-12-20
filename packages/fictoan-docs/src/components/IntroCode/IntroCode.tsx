@@ -241,7 +241,7 @@ export const IntroCode = () => {
                             name="viz-switch"
                             label="Visualise the Row"
                             checked={vizMode}
-                            onChange={() => setVizMode(!vizMode)}
+                            onChange={(checked) => setVizMode(checked)}
                         />
                     </Div>
                 </Portion>

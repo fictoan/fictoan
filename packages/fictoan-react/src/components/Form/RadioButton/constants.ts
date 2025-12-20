@@ -38,4 +38,10 @@ export interface RadioTabGroupCustomProps {
     size ? : SpacingTypes;
 }
 
+// Internal props used by RadioTabGroup implementation (not exposed to users)
+export interface RadioTabGroupInternalProps {
+    onMeasure         : (needsScroll: boolean, maxScroll: number) => void;
+    optionsWrapperRef : React.RefObject<HTMLDivElement>;
+}
+
 export type RadioTabGroupProps = Omit<RadioGroupProps, keyof RadioTabGroupCustomProps> & RadioTabGroupCustomProps;
