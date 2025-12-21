@@ -474,7 +474,7 @@
     --range-label         : var(--input-label-default);
     --range-value         : var(--input-label-default);
 
-    --range-track-bg      : var(--slate-light70);
+    --range-track-bg      : var(--slate-light60);
     --range-thumb-bg      : var(--blue-light20);
     --range-thumb-border  : var(--blue-light20);
 

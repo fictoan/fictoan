@@ -99,7 +99,7 @@ const createCodeGenerator = (
                 break;
             case "Badge":
                 result.component = generateBadgeCode(propsString);
-                if (props.withDelete) {
+                if (props.hasDelete) {
                     result.hasState = true;
                     result.helperFunctions?.push(
                         `const handleDelete = () => {\n        console.log('Badge deleted');\n    };`,
@@ -214,9 +214,9 @@ const createCodeGenerator = (
     const generateBadgeCode = (propsString : string) : string => {
         const content = childrenContent || "Badge";
 
-        // Add onDelete handler if withDelete is true
+        // Add onDelete handler if hasDelete is true
         let finalPropsString = propsString;
-        if (props.withDelete && !propsString.includes("onDelete")) {
+        if (props.hasDelete && !propsString.includes("onDelete")) {
             finalPropsString += finalPropsString ? "\n" : "";
             finalPropsString += "    onDelete={handleDelete}";
         }

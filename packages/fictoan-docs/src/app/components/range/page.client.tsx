@@ -19,6 +19,7 @@ import { rangeProps } from "./config";
 const RangeDocs = () => {
     const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(rangeProps.variables);
 
+    // Single-thumb range state
     const [rangeValue, setRangeValue] = useState(50);
     const [selectedMin, setSelectedMin] = useState(0);
     const [selectedMax, setSelectedMax] = useState(100);
@@ -27,24 +28,33 @@ const RangeDocs = () => {
     const [showLabel, setShowLabel] = useState(true);
     const [rangeLabel, setRangeLabel] = useState("Label");
 
+    // Dual-thumb range state
+    const [dualRangeValue, setDualRangeValue] = useState<[number, number]>([25, 75]);
+    const [dualMin, setDualMin] = useState(0);
+    const [dualMax, setDualMax] = useState(100);
+    const [dualStep, setDualStep] = useState(5);
+    const [dualSuffix, setDualSuffix] = useState("USD");
+    const [showDualLabel, setShowDualLabel] = useState(true);
+    const [dualRangeLabel, setDualRangeLabel] = useState("Price Range");
+
     return (
         <Article id="page-range">
             <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                 <Portion>
                     <Heading1>Range</Heading1>
                     <Text size="large" marginBottom="small">
-                        The Range component is an input slider that allows users to select a value within a specified
-                        range.
+                        The Range component is an input slider that allows users to select a single value or a range of values.
                     </Text>
                 </Portion>
 
                 <Portion>
-                    
                     <ul>
-                        <li>Supports min and max values</li>
+                        <li>Single-thumb mode for selecting one value</li>
+                        <li>Dual-thumb mode for selecting a range (min/max)</li>
                         <li>Configurable step size</li>
                         <li>Optional label and suffix</li>
                         <li>Real-time value display</li>
+                        <li>Fully accessible with keyboard navigation</li>
                     </ul>
                 </Portion>
             </Row>
@@ -52,8 +62,17 @@ const RangeDocs = () => {
             <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
 
             {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/*  CONFIGURATOR */}
+            {/*  SINGLE-THUMB CONFIGURATOR */}
             {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
+            <Row horizontalPadding="huge" marginTop="medium" marginBottom="tiny">
+                <Portion>
+                    <Heading4>Single-Thumb Range</Heading4>
+                    <Text marginBottom="micro">
+                        Select a single value by passing a number to the <code>value</code> prop.
+                    </Text>
+                </Portion>
+            </Row>
+
             <Row horizontalPadding="small" className="rendered-component">
                 {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////// */}
                 <Portion id="component-wrapper">
@@ -284,6 +303,159 @@ const RangeDocs = () => {
                             </Row>
                         </Form>
                     </Card>
+                </Portion>
+            </Row>
+
+            <Divider kind="primary" horizontalMargin="huge" verticalMargin="medium" />
+
+            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
+            {/*  DUAL-THUMB CONFIGURATOR */}
+            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
+            <Row horizontalPadding="huge" marginTop="medium" marginBottom="tiny">
+                <Portion>
+                    <Heading4>Dual-Thumb Range</Heading4>
+                    <Text marginBottom="micro">
+                        Select a range of values by passing an array <code>[min, max]</code> to the <code>value</code> prop.
+                    </Text>
+                </Portion>
+            </Row>
+
+            <Row horizontalPadding="small" className="rendered-component">
+                {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////// */}
+                <Portion id="component-wrapper">
+                    <Element
+                        as="div" padding="small" shape="rounded" bgColour="slate-light80"
+                        data-centered-children
+                    >
+                        <Range
+                            id="dual-range"
+                            label={showDualLabel ? dualRangeLabel : undefined}
+                            value={dualRangeValue}
+                            onChange={(value) => setDualRangeValue(value)}
+                            min={dualMin}
+                            max={dualMax}
+                            step={dualStep}
+                            suffix={dualSuffix}
+                            minLabel="Minimum value"
+                            maxLabel="Maximum value"
+                        />
+                    </Element>
+                </Portion>
+
+                {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////// */}
+                <Portion desktopSpan="half">
+                    <Form>
+                        <Card padding="micro" shape="rounded">
+                            <Header verticallyCentreItems pushItemsToEnds marginBottom="micro">
+                                <Text size="large" weight="700" textColour="white">
+                                    Configure props
+                                </Text>
+                            </Header>
+
+                            <Row marginBottom="none">
+                                <Portion>
+                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton marginBottom="micro">
+                                        {[
+                                            `// Paste this in your content file`,
+                                            `const [value, setValue] = useState<[number, number]>([${dualRangeValue[0]}, ${dualRangeValue[1]}]);`,
+                                            ` `,
+                                            `<Range`,
+                                            `    id="dual-range"`,
+                                            showDualLabel ? `    label="${dualRangeLabel}"` : null,
+                                            `    value={value}`,
+                                            `    onChange={(value) => setValue(value)}`,
+                                            `    min={${dualMin}}`,
+                                            `    max={${dualMax}}`,
+                                            `    step={${dualStep}}`,
+                                            dualSuffix ? `    suffix="${dualSuffix}"` : null,
+                                            `    minLabel="Minimum value"`,
+                                            `    maxLabel="Maximum value"`,
+                                            `/>`,
+                                        ].filter(Boolean).join("\n")}
+                                    </CodeBlock>
+                                </Portion>
+
+                                {/* SHOW LABEL ===================================================================== */}
+                                <Portion>
+                                    <Checkbox
+                                        id="checkbox-dual-label"
+                                        value="checkbox-dual-label"
+                                        name="checkbox-dual-label"
+                                        label="Show label"
+                                        checked={showDualLabel}
+                                        onChange={() => setShowDualLabel(!showDualLabel)}
+                                    />
+
+                                    <Divider kind="secondary" horizontalMargin="none" verticalMargin="nano" />
+                                </Portion>
+
+                                {/* LABEL TEXT ==================================================================== */}
+                                {showDualLabel && (
+                                    <Portion>
+                                        <InputField
+                                            type="text"
+                                            label="Label text"
+                                            value={dualRangeLabel}
+                                            onChange={(value) => setDualRangeLabel(value)}
+                                            placeholder="Enter label text"
+                                        />
+
+                                        <Divider kind="secondary" horizontalMargin="none" verticalMargin="nano" />
+                                    </Portion>
+                                )}
+
+                                {/* MIN VALUE ===================================================================== */}
+                                <Portion desktopSpan="half">
+                                    <InputField
+                                        type="number"
+                                        label="Min value"
+                                        value={dualMin}
+                                        onChange={(value) => setDualMin(Number(value))}
+                                    />
+                                </Portion>
+
+                                {/* MAX VALUE ===================================================================== */}
+                                <Portion desktopSpan="half">
+                                    <InputField
+                                        type="number"
+                                        label="Max value"
+                                        value={dualMax}
+                                        onChange={(value) => setDualMax(Number(value))}
+                                    />
+                                </Portion>
+
+                                {/* STEP VALUE ==================================================================== */}
+                                <Portion>
+                                    <InputField
+                                        type="number"
+                                        label="Step size"
+                                        value={dualStep}
+                                        onChange={(value) => setDualStep(Number(value))}
+                                    />
+
+                                    <Divider kind="secondary" horizontalMargin="none" verticalMargin="nano" />
+                                </Portion>
+
+                                {/* SUFFIX ======================================================================== */}
+                                <Portion>
+                                    <InputField
+                                        type="text"
+                                        label="Suffix"
+                                        value={dualSuffix}
+                                        onChange={(value) => setDualSuffix(value)}
+                                    />
+                                </Portion>
+
+                                {/* CURRENT VALUES ================================================================ */}
+                                <Portion>
+                                    <Divider kind="secondary" horizontalMargin="none" verticalMargin="nano" />
+                                    <Text size="small" marginTop="nano">
+                                        <strong>Current range:</strong> {dualRangeValue[0]} – {dualRangeValue[1]}
+                                    </Text>
+                                </Portion>
+                            </Row>
+                        </Card>
+                    </Form>
                 </Portion>
             </Row>
         </Article>

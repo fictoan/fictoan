@@ -178,6 +178,7 @@
 
     /* TEXT ///////////////////////////////////////////////////////////////// */
     --font-sans-serif                         : "Inter", sans-serif;
+    --font-serif                              : "Fraunces", serif;
     --font-mono                               : "Geist Mono", monospace;
 
     --paragraph-font-size                     : 1rem;

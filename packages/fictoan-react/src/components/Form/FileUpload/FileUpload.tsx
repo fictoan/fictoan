@@ -1,35 +1,37 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useRef, useState } from "react";
 
-// FICTOAN =============================================================================================================
-import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
+// LOCAL COMPONENTS ====================================================================================================
+import { ColourPropTypes } from "$components/Element/constants";
 import { Div } from "../../Element/Tags";
-import { Text } from "../../Typography/Text";
-import { Badge } from "../../Badge/Badge";
+
+// INPUT ===============================================================================================================
+import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
+import { BaseInputComponentProps } from "../BaseInputComponent/constants";
 
 // STYLES ==============================================================================================================
 import "./file-upload.css";
 
-// TYPES ===============================================================================================================
-import { BaseInputComponentProps } from "../BaseInputComponent/constants";
+// OTHER ===============================================================================================================
+import { Badge } from "../../Badge/Badge";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
-import { ColourPropTypes } from "$components/Element/constants";
+import { Text } from "../../Typography/Text";
 
 export type FileUploadElementType = HTMLInputElement;
 export type FileUploadProps = Omit<BaseInputComponentProps<HTMLInputElement>, "onChange"> &
     InputLabelCustomProps & {
-        accept              ? : string;
-        allowMultipleFiles  ? : boolean;
-        capture             ? : "user" | "environment";
-        height              ? : string;
-        onChange            ? : (files: File[]) => void;
-        instructionMainText ? : string;
-        instructionSubText  ? : string;
-        badgeBgColour       ? : ColourPropTypes;
-        badgeBgColor        ? : ColourPropTypes;
-        badgeTextColour     ? : ColourPropTypes;
-        badgeTextColor      ? : ColourPropTypes;
-    };
+    accept              ? : string;
+    allowMultipleFiles  ? : boolean;
+    capture             ? : "user" | "environment";
+    height              ? : string;
+    onChange            ? : (files: File[]) => void;
+    instructionMainText ? : string;
+    instructionSubText  ? : string;
+    badgeBgColour       ? : ColourPropTypes;
+    badgeBgColor        ? : ColourPropTypes;
+    badgeTextColour     ? : ColourPropTypes;
+    badgeTextColor      ? : ColourPropTypes;
+};
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const FileUpload = React.forwardRef(
@@ -153,7 +155,7 @@ export const FileUpload = React.forwardRef(
                             <Badge
                                 key={`${file.name}-${index}`}
                                 size="small" shape="rounded"
-                                withDelete
+                                hasDelete
                                 onDelete={() => removeFile(index)}
                                 bgColour={props.badgeBgColour}
                                 textColour={props.badgeTextColour}

@@ -15,6 +15,23 @@
     font-style  : normal;
 }
 
+/* SERIF — FRAUNCES ========================================================= */
+@font-face {
+    font-family : "Fraunces";
+    src         : url("../assets/fonts/fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf") format("truetype");
+    font-weight : 100 900;
+    font-style  : normal;
+}
+
+@font-face {
+    font-family : "Fraunces";
+    src         : url("../assets/fonts/fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf") format("truetype");
+    font-weight : 100 900;
+    font-style  : italic;
+}
+
+.font-fraunces { font-family : "Fraunces", serif; }
+
 /* MONO — GEIST ============================================================= */
 @font-face {
     font-family : "Geist Mono";

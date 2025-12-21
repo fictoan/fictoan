@@ -4,7 +4,6 @@
     display         : flex;
     align-items     : baseline;
     justify-content : space-between;
-    margin-bottom   : 4px;
 
     .range-label {
         display : inline-flex;
@@ -20,26 +19,41 @@
     }
 }
 
+[data-range-dual],
+input[type="range"] {
+    --thumb-width  : 20px;
+    --thumb-height : 20px;
+    --track-height : 2px;
+    --track-color  : var(--range-track-bg);
+    width          : 100%;
+}
+
+input[type="range"],
+[data-range-dual] .range-track {
+    --clip-edges : 0;
+    background   : var(--range-track-bg);
+    height       : var(--track-height);
+}
+
 /* INPUT //////////////////////////////////////////////////////////////////// */
 [data-range-meta] + [data-input-wrapper] {
     input[type="range"] {
-        width          : 100%;
-        color          : var(--range-thumb-bg);
-        position       : relative;
-        background     : var(--transparent);
-        overflow       : hidden;
-        --track-color  : var(--range-track-bg);
-        --thumb-width  : 20px;
-        --thumb-height : 20px;
-        --track-height : 2px;
-        --clip-edges   : 0;
+        position   : relative;
+        width      : 100%;
+        color      : var(--range-thumb-bg);
+        background : var(--transparent);
+        overflow   : hidden;
     }
 
-    input[type="range"]:active {
+    /* Shared interaction states - both native and custom */
+    input[type="range"]:active,
+    [data-range-dual] .range-thumb:active,
+    [data-range-dual] .range-thumb[data-active="true"] {
         cursor : grabbing;
     }
 
-    input[type="range"]:disabled {
+    input[type="range"]:disabled,
+    [data-range-dual] .range-thumb:disabled {
         filter  : grayscale(1);
         opacity : 0.3;
         cursor  : not-allowed;
@@ -67,33 +81,39 @@
         --box-fill       : calc(-100vmax - var(--thumb-width, var(--thumb-height))) 0 0 100vmax currentColor;
 
         width            : var(--thumb-width, var(--thumb-height));
-        background       : linear-gradient(to right, currentColor, currentColor)
-                            no-repeat left center/ 50% calc(var(--track-height) + 1px) scroll;
+        background       : linear-gradient(to right, currentColor, currentColor) no-repeat left center/ 50% calc(var(--track-height) + 1px) scroll;
         background-color : currentColor;
         box-shadow       : var(--box-fill);
         border-radius    : var(--global-border-radius);
         border           : 4px solid var(--range-thumb-border);
         clip-path        : polygon(
                 100% -1px,
-                var(--clip-edges) -1px,
+                0 -1px,
                 0 var(--clip-top),
                 -100vmax var(--clip-top),
                 -100vmax var(--clip-bottom),
                 0 var(--clip-bottom),
-                var(--clip-edges) 100%,
+                0 100%,
                 var(--clip-further) var(--clip-further)
         );
     }
 
-    input[type="range"]:hover::-webkit-slider-thumb { cursor : grab; }
+    input[type="range"]:hover::-webkit-slider-thumb,
+    [data-range-dual] .range-thumb:hover {
+        cursor : grab;
+    }
 
-    input[type="range"]:active::-webkit-slider-thumb { cursor : grabbing; }
+    input[type="range"]:active::-webkit-slider-thumb {
+        cursor : grabbing;
+    }
 
     input[type="range"]::-webkit-slider-runnable-track {
         background : linear-gradient(var(--track-color) 0 0) scroll no-repeat center / 100% calc(var(--track-height) + 1px);
     }
 
-    input[type="range"]:disabled::-webkit-slider-thumb { cursor : not-allowed; }
+    input[type="range"]:disabled::-webkit-slider-thumb {
+        cursor : not-allowed;
+    }
 
     /* Firefox specific styles ============================================== */
     input[type="range"],
@@ -141,5 +161,65 @@
 
     input[type="range"]:disabled::-moz-range-thumb {
         cursor : not-allowed;
+    }
+}
+
+/* DUAL THUMB RANGE (Custom Implementation) ///////////////////////////////// */
+[data-range-dual] {
+    position    : relative;
+    display     : flex;
+    align-items : center;
+    width       : 100%;
+    height      : var(--thumb-height, 20px);
+}
+
+[data-range-dual] .range-track {
+    width          : 100%;
+    border-radius  : calc(var(--track-height) / 2);
+    height         : var(--track-height);
+    pointer-events : none;
+}
+
+[data-range-dual] .range-track-fill {
+    height         : var(--track-height);
+    background     : var(--range-thumb-bg);
+    border-radius  : calc(var(--track-height) / 2);
+    pointer-events : none;
+}
+
+[data-range-dual] .range-thumb {
+    position           : absolute;
+    top                : 50%;
+    margin-top         : calc(var(--thumb-height) / -2);
+    margin-left        : calc(var(--thumb-width) / -2);
+    z-index            : 2;
+    width              : var(--thumb-width);
+    height             : var(--thumb-height);
+    background         : var(--range-thumb-bg);
+    border             : 4px solid var(--range-thumb-border);
+    border-radius      : var(--global-border-radius);
+    transition         : all ease 100ms;
+    cursor             : grab;
+    padding            : 0;
+    outline            : none;
+    -webkit-appearance : none;
+    appearance         : none;
+}
+
+[data-range-dual] .range-thumb::-moz-focus-inner { border : 0; }
+
+[data-range-dual] .range-thumb[data-active="true"] { z-index : 3; }
+
+[data-range-dual].disabled .range-track-fill {
+    filter : grayscale(1); opacity : 0.3;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion : reduce) {
+    input[type="range"],
+    input[type="range"]::-webkit-slider-thumb,
+    input[type="range"]::-moz-range-thumb,
+    [data-range-dual] .range-thumb {
+        transition : none;
     }
 }

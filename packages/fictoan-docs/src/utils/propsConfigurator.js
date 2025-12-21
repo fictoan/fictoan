@@ -163,7 +163,7 @@ export const createPropsConfigurator = (
 
         // STEP 1c : CONDITIONAL ADDITIONAL PROPS ======================================================================
         // Add any component-specific conditional props (like onDelete for Badge)
-        const additionalProps = propValues.withDelete
+        const additionalProps = propValues.hasDelete
             ? `    onDelete={() => doSomething()}`
             : ``;
 

@@ -136,7 +136,7 @@ export const MASTER_PROPS_CONFIG = {
     },
 
     // BADGE PROPS -----------------------------------------------------------------------------------------------------
-    withDelete      : {
+    hasDelete       : {
         type  : "boolean",
         label : "Show a delete icon",
     },

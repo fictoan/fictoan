@@ -4,7 +4,11 @@
 import React from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading4, Divider, Portion, Row, Article, Badge, Section, Heading6 } from "fictoan-react";
+import { Div, Heading6, Text, Divider, Badge } from "fictoan-react";
+
+// LOCAL COMPONENTS ====================================================================================================
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -12,9 +16,6 @@ import { createThemeConfigurator } from "$utils/themeConfigurator";
 // STYLES ==============================================================================================================
 import "../../../styles/fictoan-theme.css";
 import "./page-badge.css";
-
-// OTHER ===============================================================================================================
-import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 
 const BadgeDocs = () => {
     const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
@@ -30,69 +31,55 @@ const BadgeDocs = () => {
     } = createThemeConfigurator("Badge", BadgeComponent);
 
     return (
-        <Article id="page-badge">
-            {/*  INTRO ///////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                    <Portion>
-                        <Heading4 id="component-name">
-                            Badge
-                        </Heading4>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading6 id="component-name">
+                    Badge
+                </Heading6>
 
-                        <Heading6
-                            id="component-description"
-                            weight="400" marginBottom="small"
-                        >
-                            A small inline element that can be used to highlight a piece of information.
-                        </Heading6>
-                    </Portion>
+                <Text
+                    id="component-description"
+                    weight="400"
+                >
+                    A small inline element that can be used to highlight a piece of information.
+                </Text>
+            </Div>
 
-                    <Portion>
-                        <ul>
-                            <li>You have to manually align the Badge with its sibling</li>
-                            <li>Default size is <code>medium</code></li>
-                        </ul>
-                    </Portion>
-                </Row>
-            </Section>
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+                <Text>
+                    You have to manually align the Badge with its sibling.
+                </Text>
 
-            {/* INTERACTIVE COMPONENT ////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                {/* DEMO COMPONENT ================================================================================= */}
-                <Row id="component-wrapper" horizontalPadding="small" className="rendered-component">
-                    <Portion>
-                        <Div
-                            padding="small"
-                            shape="rounded"
-                            bgColour="slate-light80"
-                            data-centered-children
-                        >
-                            <Badge
-                                ref={interactiveElementRef}
-                                {...props}
-                                {...themeConfig}
-                            >
-                                {props.children || "Badge"}
-                            </Badge>
-                        </Div>
-                    </Portion>
-                </Row>
+                <Text>
+                    Default size is <code>medium</code>.
+                </Text>
+            </Div>
 
-                <Row horizontalPadding="small">
-                    {/* PROPS CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        <PropsConfigurator componentName="Badge" onPropsChange={setProps} />
-                    </Portion>
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                <Badge
+                    ref={interactiveElementRef}
+                    {...props}
+                    {...themeConfig}
+                >
+                    {props.children || "Badge"}
+                </Badge>
+            </Div>
 
-                    {/* THEME CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        {themeConfigurator()}
-                    </Portion>
-                </Row>
-            </Section>
-        </Article>
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <PropsConfigurator componentName="Badge" onPropsChange={setProps} />
+            </Div>
+
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

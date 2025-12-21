@@ -1,7 +1,7 @@
 // REACT CORE ==========================================================================================================
 import React from "react";
 
-// ELEMENT =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps, ShapeTypes, SpacingTypes } from "../Element/constants";
 import { Element } from "$element";
 
@@ -9,13 +9,13 @@ import { Element } from "$element";
 import "./badge.css";
 
 // OTHER ===============================================================================================================
-import { Text } from "../Typography/Text";
+import { Text } from "$/components";
 
 export interface BadgeCustomProps {
-        size       ? : SpacingTypes;
-        shape      ? : ShapeTypes;
-        withDelete ? : boolean;
-        onDelete   ? : (event : React.MouseEvent<HTMLElement>) => void;
+    size      ? : SpacingTypes;
+    shape     ? : ShapeTypes;
+    hasDelete ? : boolean;
+    onDelete  ? : (event : React.MouseEvent<HTMLElement>) => void;
 }
 
 export type BadgeElementType = HTMLDivElement;
@@ -27,7 +27,7 @@ export const Badge = React.forwardRef(
         children,
         size = "medium",
         shape,
-        withDelete,
+        hasDelete,
         onDelete,
         ...props
     } : BadgeProps, ref : React.Ref<BadgeElementType>) => {
@@ -47,7 +47,7 @@ export const Badge = React.forwardRef(
         };
 
         const handleKeyPress = (e : React.KeyboardEvent) => {
-            if (withDelete && (e.key === "Enter" || e.key === " ")) {
+            if (hasDelete && (e.key === "Enter" || e.key === " ")) {
                 e.preventDefault();
                 onDelete?.(e as unknown as React.MouseEvent<HTMLElement>);
             }
@@ -64,7 +64,7 @@ export const Badge = React.forwardRef(
             >
                 {children}
 
-                {withDelete && (
+                {hasDelete && (
                     <Text
                         className="badge-dismiss-button"
                         onClick={handleDelete}

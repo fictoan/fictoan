@@ -352,7 +352,7 @@ export const ComponentGrid = () => {
                             <Badge
                                 bgColour="red-light70" textColour="red-dark10"
                                 shape="curved"
-                                margin="nano" withDelete
+                                margin="nano" hasDelete
                             >
                                 A
                             </Badge>
@@ -360,7 +360,7 @@ export const ComponentGrid = () => {
                             <Badge
                                 bgColour="green-light60" textColour="green-dark40"
                                 shape="curved" size="large"
-                                margin="nano" withDelete
+                                margin="nano" hasDelete
                             >
                                 BADGE
                             </Badge>
@@ -368,7 +368,7 @@ export const ComponentGrid = () => {
                             <Badge
                                 bgColour="amber-light40" textColour="orange-dark30"
                                 shape="rounded"
-                                margin="nano" withDelete
+                                margin="nano" hasDelete
                             >
                                 of
                             </Badge>
@@ -376,7 +376,7 @@ export const ComponentGrid = () => {
                             <Badge
                                 bgColour="violet" textColour="white"
                                 shape="rounded" size="medium"
-                                margin="nano" withDelete
+                                margin="nano" hasDelete
                             >
                                 HONOUR
                             </Badge>

@@ -252,7 +252,7 @@ const ListBoxWithOptions = (
                                     {selectedOptions.map(option => (
                                         <Badge
                                             key={option.value}
-                                            withDelete={allowMultiSelect}
+                                            hasDelete={allowMultiSelect}
                                             onDelete={() => handleDeleteOption(option.value)}
                                             size="small"
                                             shape="rounded"
