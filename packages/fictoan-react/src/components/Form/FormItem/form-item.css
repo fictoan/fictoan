@@ -1,6 +1,6 @@
 /*
 +-----------------------------------------+
-| Label                                   |
+| Label wrapper                           |
 +-----------------------------------------+
 | ANY INPUT ITEM                          |
 +-----------------------------------------+
@@ -14,7 +14,6 @@
     position : relative;
     display  : flex;
 }
-
 
 /* PARENT ELEMENT /////////////////////////////////////////////////////////// */
 [data-form-item] {
@@ -37,10 +36,10 @@ form[data-form] [data-form-item] {
 
 /* Hide empty grid areas when there is no label or info section ============= */
 [data-form-item]:not(:has(label)) {
+    grid-template-rows  : auto auto;
     grid-template-areas :
         "input"
         "info";
-    grid-template-rows  : auto auto;
 }
 
 [data-form-item]:not(:has(.info-section)) {
@@ -56,7 +55,7 @@ form[data-form] [data-form-item] {
 }
 
 /* LABEL //////////////////////////////////////////////////////////////////// */
-[data-form-item] > label {
+[data-form-item] > [data-label-wrapper] {
     grid-area   : label;
     position    : relative;
     color       : var(--input-label-default);
@@ -64,19 +63,39 @@ form[data-form] [data-form-item] {
     width       : fit-content;
 }
 
-[data-form-item].size-tiny > label {
+/* Only apply flex layout when validation is present */
+[data-form-item] > [data-label-wrapper][data-has-validation="true"] {
+    width           : 100%;
+    display         : flex;
+    align-items     : center;
+    justify-content : space-between;
+    gap             : 8px;
+}
+
+/* Validation icon styling */
+[data-validation-icon] {
+    flex-shrink : 0;
+    display     : block;
+}
+
+[data-form-item].size-tiny label {
     font-size : calc(var(--paragraph-font-size) * 0.6);
 }
 
-[data-form-item].size-small > label {
+[data-form-item].size-small label {
     font-size : calc(var(--paragraph-font-size) * 0.8);
 }
 
-[data-form-item].size-large > label {
+[data-form-item].size-large label {
     font-size : calc(var(--paragraph-font-size) * 1.2);
 }
 
-[data-form-item][required] > label::after {
+/* Asterisk */
+[data-form-item][required] label {
+    position : relative;
+}
+
+[data-form-item][required] label::after {
     position  : absolute;
     top       : -4px;
     bottom    : 0;
@@ -159,9 +178,9 @@ form[data-form] [data-form-item] {
 }
 
 /* DISABLED ///////////////////////////////////////////////////////////////// */
-[data-form-item]:has(input:disabled) > label,
-[data-form-item]:has(input:disabled) > label::before,
-[data-form-item]:has(input:disabled) > label::after {
+[data-form-item]:has(input:disabled) label,
+[data-form-item]:has(input:disabled) label::before,
+[data-form-item]:has(input:disabled) label::after {
     filter         : grayscale(24%);
     user-select    : none;
     pointer-events : none;
@@ -187,9 +206,9 @@ form[data-form] [data-form-item] {
 }
 
 /* Keep the main label normal when a disabled input is inside Radio Tab Group */
-[data-form-item]:has([data-radio-tab-group] input:disabled) > label,
-[data-form-item]:has([data-radio-tab-group] input:disabled) > label::before,
-[data-form-item]:has([data-radio-tab-group] input:disabled) > label::after {
+[data-form-item]:has([data-radio-tab-group] input:disabled) [data-label-wrapper] > label,
+[data-form-item]:has([data-radio-tab-group] input:disabled) [data-label-wrapper] > label::before,
+[data-form-item]:has([data-radio-tab-group] input:disabled) [data-label-wrapper] > label::after {
     filter         : none;
     user-select    : auto;
     pointer-events : auto;

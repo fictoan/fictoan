@@ -1,4 +1,4 @@
-[data-form-item]:has([data-radio-tab-group]):not(:has(> label)) {
+[data-form-item]:has([data-radio-tab-group]):not(:has([data-label-wrapper] > label)) {
     gap : 0;
 }
 

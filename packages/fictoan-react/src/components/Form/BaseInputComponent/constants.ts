@@ -5,11 +5,12 @@ import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 
 // prettier-ignore
 export interface InputCommonProps {
-    helpText     ? : string;
-    errorText    ? : string;
-    validateThis ? : boolean;
-    valid        ? : boolean;
-    invalid      ? : boolean;
+    helpText        ? : string;
+    errorText       ? : string;
+    validateThis    ? : boolean;
+    valid           ? : boolean;
+    invalid         ? : boolean;
+    validationState ? : "valid" | "invalid" | null;
 }
 
 // INPUT FIELD PROPS ///////////////////////////////////////////////////////////////////////////////////////////////////

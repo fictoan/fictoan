@@ -241,7 +241,7 @@
     --input-border-valid              : var(--green-dark30);
     --input-label-valid               : var(--shade);
 
-    --input-bg-invalid                : var(--red-dark40);
+    --input-bg-invalid                : var(--red-light70);
     --input-border-invalid            : var(--red-dark30);
     --input-label-invalid             : var(--red);
     --input-text-invalid              : var(--red);

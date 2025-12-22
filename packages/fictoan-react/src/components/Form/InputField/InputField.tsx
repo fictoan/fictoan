@@ -1,13 +1,19 @@
 // REACT CORE ==========================================================================================================
-import React, { FormEventHandler, useEffect, useRef } from "react";
+import React, { FormEventHandler, useEffect, useRef, useState } from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
-import { Div } from "../../Element/Tags";
+import { Div } from "$tags";
 import { SpacingTypes } from "../../Element/constants";
 
 // INPUT ===============================================================================================================
+import {
+    BaseInputComponentProps,
+    InputCommonProps,
+    InputFocusHandler,
+    InputSideElementProps,
+    ValueChangeHandler,
+} from "../BaseInputComponent/constants";
 import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
-import { BaseInputComponentProps, InputCommonProps, InputFocusHandler, InputSideElementProps, ValueChangeHandler } from "../BaseInputComponent/constants";
 
 // STYLES ==============================================================================================================
 import "./input-field.css";
@@ -18,7 +24,7 @@ import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 // prettier-ignore
 export type InputFieldElementType = HTMLInputElement;
 export type InputFieldProps = Omit<BaseInputComponentProps<HTMLInputElement>, "onChange"> &
-    InputLabelCustomProps & InputCommonProps & InputSideElementProps & {
+                              InputLabelCustomProps & InputCommonProps & InputSideElementProps & {
     type         ? : "text" | "password" | "email" | "number" | "tel" | "url" | "search" | "file";
     placeholder  ? : string;
     autoComplete ? : string;
@@ -30,7 +36,7 @@ export type InputFieldProps = Omit<BaseInputComponentProps<HTMLInputElement>, "o
     size         ? : Exclude<SpacingTypes, "nano" | "huge">;
     onFocus      ? : InputFocusHandler;
     onBlur       ? : InputFocusHandler;
-    onChange     ? : ValueChangeHandler<string>;  // Value-based, explicit
+    onChange     ? : ValueChangeHandler<string>;
 };
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,20 +50,81 @@ export const InputField = React.forwardRef(
             innerTextLeft,
             innerTextRight,
             onChange,
+            onBlur,
+            validateThis,
             ...props
-        }: InputFieldProps, ref: React.Ref<InputFieldElementType>
+        } : InputFieldProps, ref : React.Ref<InputFieldElementType>,
     ) => {
         const leftElementRef = useRef<HTMLDivElement>(null);
         const rightElementRef = useRef<HTMLDivElement>(null);
+        const internalInputRef = useRef<HTMLInputElement>(null);
 
-        const handleChange = (value: string) => {
+        // Validation state
+        const [touched, setTouched] = useState(false);
+        const [validationState, setValidationState] = useState<"valid" | "invalid" | null>(null);
+
+        const handleChange = (value : string) => {
             if (onChange) {
                 onChange(value);
             }
+
+            // Update validation state when value changes (if touched and validateThis is enabled)
+            if (touched && validateThis && internalInputRef.current) {
+                updateValidationState();
+            }
         };
 
+        const handleBlur = (event : React.FocusEvent<HTMLInputElement>) => {
+            setTouched(true);
+
+            // Update validation state on blur
+            if (validateThis) {
+                updateValidationState();
+            }
+
+            // Call user's onBlur if provided
+            if (onBlur) {
+                onBlur(event);
+            }
+        };
+
+        const updateValidationState = () => {
+            if (!internalInputRef.current) return;
+
+            const input = internalInputRef.current;
+            const isEmpty = input.value === "";
+
+            // Only show validation if field has content
+            if (isEmpty) {
+                setValidationState(null);
+                return;
+            }
+
+            // Read native validation state
+            if (input.validity.valid) {
+                setValidationState("valid");
+            } else {
+                setValidationState("invalid");
+            }
+        };
+
+        // Merge refs (external ref from forwardRef and internal ref)
+        const mergeRefs = React.useCallback((el : HTMLInputElement | null) => {
+            // Set internal ref
+            if (internalInputRef) {
+                (internalInputRef as React.MutableRefObject<HTMLInputElement | null>).current = el;
+            }
+
+            // Set external ref
+            if (typeof ref === "function") {
+                ref(el);
+            } else if (ref) {
+                (ref as React.MutableRefObject<HTMLInputElement | null>).current = el;
+            }
+        }, [ref]);
+
         useEffect(() => {
-            const updateElementWidth = (element: HTMLDivElement | null, position: "left" | "right") => {
+            const updateElementWidth = (element : HTMLDivElement | null, position : "left" | "right") => {
                 if (element) {
                     const width = element.getBoundingClientRect().width;
                     const propertyName = `--side-element-${position}-width`;
@@ -74,12 +141,12 @@ export const InputField = React.forwardRef(
             if (innerTextRight || innerIconRight) {
                 updateElementWidth(rightElementRef.current, "right");
             }
-        }, [innerTextLeft, innerTextRight, innerIconLeft, innerIconRight]);
+        }, [ innerTextLeft, innerTextRight, innerIconLeft, innerIconRight ]);
 
         const renderSideElement = (
-            content: React.ReactNode | string | undefined,
-            position: "left" | "right",
-            ref: React.RefObject<HTMLDivElement>
+            content : React.ReactNode | string | undefined,
+            position : "left" | "right",
+            ref : React.RefObject<HTMLDivElement>,
         ) => {
             if (!content) return null;
 
@@ -100,7 +167,7 @@ export const InputField = React.forwardRef(
             );
         };
 
-        const hasLeftElement  = Boolean(innerIconLeft || innerTextLeft);
+        const hasLeftElement = Boolean(innerIconLeft || innerTextLeft);
         const hasRightElement = Boolean(innerIconRight || innerTextRight);
 
         return (
@@ -108,7 +175,7 @@ export const InputField = React.forwardRef(
                 <BaseInputComponent<InputFieldElementType>
                     as="input"
                     data-input-field
-                    ref={ref}
+                    ref={mergeRefs}
                     className={[
                         hasLeftElement ? "with-left-element" : "",
                         hasRightElement ? "with-right-element" : "",
@@ -118,6 +185,9 @@ export const InputField = React.forwardRef(
                     aria-required={props.required}
                     placeholder=" "
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    validateThis={validateThis}
+                    validationState={validateThis ? validationState : undefined}
                     {...props}
                 >
                     <Div data-input-helper aria-hidden="true">

@@ -27,6 +27,7 @@ export const BaseInputComponent = React.forwardRef(
             helpText,
             errorText,
             validateThis,
+            validationState,
             classNames,
             children,
             onChange,
@@ -37,7 +38,7 @@ export const BaseInputComponent = React.forwardRef(
         const handleChange = (event : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
             // Guard against invalid event objects
             if (!event || !event.target) {
-                console.warn('[BaseInputComponent] Received invalid event object:', event);
+                console.warn("[BaseInputComponent] Received invalid event object:", event);
                 return;
             }
 
@@ -49,10 +50,70 @@ export const BaseInputComponent = React.forwardRef(
         };
 
         // Separate Fictoan props from HTML props to prevent conflicts
-        const { fictoanProps, htmlProps } = separateFictoanFromHTMLProps(inputProps);
+        const {fictoanProps, htmlProps} = separateFictoanFromHTMLProps(inputProps);
 
         // Determine if this is a native HTML element or a custom component
-        const isNativeElement = typeof Component === 'string';
+        const isNativeElement = typeof Component === "string";
+
+        // Render validation icon based on state
+        const renderValidationIcon = () => {
+            if (!validationState) return null;
+
+            if (validationState === "valid") {
+                return (
+                    <svg
+                        data-validation-icon="valid"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="20"
+                        height="20"
+                    >
+                        <polyline
+                            points="3.5 12.5 8.5 17.5 20.5 5.5"
+                            fill="none"
+                            stroke="#0ec05c"
+                            strokeMiterlimit="10"
+                            strokeWidth="2"
+                        />
+                    </svg>
+                );
+            }
+
+            if (validationState === "invalid") {
+                return (
+                    <svg
+                        data-validation-icon="invalid"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="20"
+                        height="20"
+                    >
+                        <line
+                            x1="6.5"
+                            y1="17.5"
+                            x2="18.5"
+                            y2="5.5"
+                            fill="none"
+                            stroke="#ef4343"
+                            strokeMiterlimit="10"
+                            strokeWidth="2"
+                        />
+                        <line
+                            x1="6.5"
+                            y1="5.5"
+                            x2="18.5"
+                            y2="17.5"
+                            fill="none"
+                            stroke="#ef4343"
+                            strokeMiterlimit="10"
+                            strokeWidth="2"
+                        />
+                    </svg>
+                );
+            }
+
+            return null;
+        };
 
         return (
             <FormItem
@@ -61,7 +122,10 @@ export const BaseInputComponent = React.forwardRef(
                 size={fictoanProps.size}
             >
                 {/* LABEL ////////////////////////////////////////////////////////////////////////////////////////// */}
-                {customLabel || (label && <InputLabel label={label} htmlFor={inputProps.id} />)}
+                <Div data-label-wrapper data-has-validation={validationState ? "true" : undefined}>
+                    {customLabel || (label && <InputLabel label={label} htmlFor={inputProps.id} />)}
+                    {renderValidationIcon()}
+                </Div>
 
                 {/* MAIN INPUT ///////////////////////////////////////////////////////////////////////////////////// */}
                 <Div data-input-wrapper>
@@ -70,7 +134,6 @@ export const BaseInputComponent = React.forwardRef(
                         ref={ref}
                         classNames={[
                             className || "",
-                            validateThis ? "validate-this" : "",
                         ].concat(classNames || [])}
                         {...htmlProps}
                         onChange={isNativeElement ? handleChange : onChange}
