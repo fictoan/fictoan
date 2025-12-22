@@ -4,10 +4,27 @@
 import React, { useState } from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading4, Divider, Portion, Row, Text, Article, Card, Form, Header, Checkbox, Range, Select, CodeBlock, InputField } from "fictoan-react";
+import {
+    Element,
+    Heading1,
+    Heading4,
+    Divider,
+    Portion,
+    Row,
+    Text,
+    Article,
+    Card,
+    Form,
+    Header,
+    Checkbox,
+    Range,
+    Select,
+    CodeBlock,
+    InputField,
+} from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
+import { useThemeVariables } from "$utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-range.css";
@@ -17,25 +34,25 @@ import { colourOptions } from "../../colour/colours";
 import { rangeProps } from "./config";
 
 const RangeDocs = () => {
-    const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(rangeProps.variables);
+    const {componentVariables, handleVariableChange, cssVariablesList} = useThemeVariables(rangeProps.variables);
 
     // Single-thumb range state
-    const [rangeValue, setRangeValue] = useState(50);
-    const [selectedMin, setSelectedMin] = useState(0);
-    const [selectedMax, setSelectedMax] = useState(100);
-    const [selectedStep, setSelectedStep] = useState(1);
-    const [selectedSuffix, setSelectedSuffix] = useState("px");
-    const [showLabel, setShowLabel] = useState(true);
-    const [rangeLabel, setRangeLabel] = useState("Label");
+    const [ rangeValue, setRangeValue ] = useState(50);
+    const [ selectedMin, setSelectedMin ] = useState(0);
+    const [ selectedMax, setSelectedMax ] = useState(100);
+    const [ selectedStep, setSelectedStep ] = useState(1);
+    const [ selectedSuffix, setSelectedSuffix ] = useState("px");
+    const [ showLabel, setShowLabel ] = useState(true);
+    const [ rangeLabel, setRangeLabel ] = useState("Label");
 
     // Dual-thumb range state
-    const [dualRangeValue, setDualRangeValue] = useState<[number, number]>([25, 75]);
-    const [dualMin, setDualMin] = useState(0);
-    const [dualMax, setDualMax] = useState(100);
-    const [dualStep, setDualStep] = useState(5);
-    const [dualSuffix, setDualSuffix] = useState("USD");
-    const [showDualLabel, setShowDualLabel] = useState(true);
-    const [dualRangeLabel, setDualRangeLabel] = useState("Price Range");
+    const [ dualRangeValue, setDualRangeValue ] = useState<[ number, number ]>([ 25, 75 ]);
+    const [ dualMin, setDualMin ] = useState(0);
+    const [ dualMax, setDualMax ] = useState(100);
+    const [ dualStep, setDualStep ] = useState(5);
+    const [ dualSuffix, setDualSuffix ] = useState("USD");
+    const [ showDualLabel, setShowDualLabel ] = useState(true);
+    const [ dualRangeLabel, setDualRangeLabel ] = useState("Price range");
 
     return (
         <Article id="page-range">
@@ -43,18 +60,25 @@ const RangeDocs = () => {
                 <Portion>
                     <Heading1>Range</Heading1>
                     <Text size="large" marginBottom="small">
-                        The Range component is an input slider that allows users to select a single value or a range of values.
+                        A fully custom slider component that allows users to select a single value or a range of values.
+                        Built with the same architecture as modern frameworks like Material-UI, shadcn/ui, and Radix UI.
                     </Text>
                 </Portion>
 
                 <Portion>
+                    <Heading4 marginTop="micro">Features</Heading4>
                     <ul>
-                        <li>Single-thumb mode for selecting one value</li>
-                        <li>Dual-thumb mode for selecting a range (min/max)</li>
-                        <li>Configurable step size</li>
-                        <li>Optional label and suffix</li>
-                        <li>Real-time value display</li>
-                        <li>Fully accessible with keyboard navigation</li>
+                        <li><strong>Single-thumb mode</strong> – Select one value (pass a number)</li>
+                        <li><strong>Dual-thumb mode</strong> – Select a range (pass an array <code>[min, max]</code>)
+                        </li>
+                        <li><strong>Custom implementation</strong> – Full styling control, no browser inconsistencies
+                        </li>
+                        <li><strong>Fully accessible</strong> – Keyboard navigation (Arrow keys, Home/End, PageUp/Down)
+                        </li>
+                        <li><strong>Touch-friendly</strong> – Mouse, touch, and pointer events</li>
+                        <li><strong>ARIA compliant</strong> – Proper roles and labels for screen readers</li>
+                        <li><strong>Collision prevention</strong> – Dual-thumb handles can't pass each other</li>
+                        <li><strong>Step snapping</strong> – Values snap to defined increments</li>
                     </ul>
                 </Portion>
             </Row>
@@ -69,6 +93,7 @@ const RangeDocs = () => {
                     <Heading4>Single-Thumb Range</Heading4>
                     <Text marginBottom="micro">
                         Select a single value by passing a number to the <code>value</code> prop.
+                        The <code>onChange</code> handler receives the value directly (not an event).
                     </Text>
                 </Portion>
             </Row>
@@ -83,7 +108,7 @@ const RangeDocs = () => {
                         <Range
                             label={showLabel ? rangeLabel : undefined}
                             value={rangeValue}
-                            onChange={(value) => setRangeValue(Number(value))}
+                            onChange={(value : React.SetStateAction<number>) => setRangeValue(value)}
                             min={selectedMin}
                             max={selectedMax}
                             step={selectedStep}
@@ -104,14 +129,16 @@ const RangeDocs = () => {
 
                             <Row marginBottom="none">
                                 <Portion>
-                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton marginBottom="micro">
+                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton
+                                               marginBottom="micro">
                                         {[
                                             `// Paste this in your content file`,
                                             `const [value, setValue] = useState(${rangeValue});`,
                                             ` `,
                                             `<Range`,
                                             showLabel ? `    label="${rangeLabel}"` : null,
-                                            `    value={${rangeValue}}`,
+                                            `    value={value}`,
+                                            `    onChange={(value) => setValue(value)}`,
                                             `    min={${selectedMin}}`,
                                             `    max={${selectedMax}}`,
                                             `    step={${selectedStep}}`,
@@ -125,7 +152,6 @@ const RangeDocs = () => {
                                 <Portion>
                                     <Checkbox
                                         id="checkbox-label"
-                                        value="checkbox-label"
                                         name="checkbox-label"
                                         label="Show label"
                                         checked={showLabel}
@@ -141,7 +167,7 @@ const RangeDocs = () => {
                                         <InputField
                                             type="text"
                                             value={rangeLabel}
-                                            onChange={(value: React.SetStateAction<string>) => setRangeLabel(value)}
+                                            onChange={(value : React.SetStateAction<string>) => setRangeLabel(value)}
                                             placeholder="Enter label text"
                                         />
 
@@ -155,7 +181,7 @@ const RangeDocs = () => {
                                         type="number"
                                         label="Min value"
                                         value={selectedMin}
-                                        onChange={(value: React.SetStateAction<string>) => setSelectedMin(Number(value))}
+                                        onChange={(value : React.SetStateAction<string>) => setSelectedMin(Number(value))}
                                     />
                                 </Portion>
 
@@ -165,7 +191,7 @@ const RangeDocs = () => {
                                         type="number"
                                         label="Max value"
                                         value={selectedMax}
-                                        onChange={(value: React.SetStateAction<string>) => setSelectedMax(Number(value))}
+                                        onChange={(value : React.SetStateAction<string>) => setSelectedMax(Number(value))}
                                     />
                                 </Portion>
 
@@ -175,7 +201,7 @@ const RangeDocs = () => {
                                         type="number"
                                         label="Step size"
                                         value={selectedStep}
-                                        onChange={(value: React.SetStateAction<string>) => setSelectedStep(Number(value))}
+                                        onChange={(value : React.SetStateAction<string>) => setSelectedStep(Number(value))}
                                     />
 
                                     <Divider kind="secondary" horizontalMargin="none" verticalMargin="nano" />
@@ -187,7 +213,7 @@ const RangeDocs = () => {
                                         type="text"
                                         label="Suffix"
                                         value={selectedSuffix}
-                                        onChange={(value: React.SetStateAction<string>) => setSelectedSuffix((value))}
+                                        onChange={(value : React.SetStateAction<string>) => setSelectedSuffix((value))}
                                     />
                                 </Portion>
                             </Row>
@@ -220,13 +246,13 @@ const RangeDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Track background"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
                                         },
-                                            ...colourOptions]}
+                                            ...colourOptions ]}
                                         defaultValue={componentVariables["range-track-bg"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("range-track-bg", value)}
                                         isFullWidth
@@ -237,13 +263,13 @@ const RangeDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Thumb background"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
                                         },
-                                            ...colourOptions]}
+                                            ...colourOptions ]}
                                         defaultValue={componentVariables["range-thumb-bg"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("range-thumb-bg", value)}
                                         isFullWidth
@@ -254,13 +280,13 @@ const RangeDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Thumb border"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
                                         },
-                                            ...colourOptions]}
+                                            ...colourOptions ]}
                                         defaultValue={componentVariables["range-thumb-border"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("range-thumb-border", value)}
                                         isFullWidth
@@ -271,13 +297,13 @@ const RangeDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Focus border"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
                                         },
-                                            ...colourOptions]}
+                                            ...colourOptions ]}
                                         defaultValue={componentVariables["range-border-focus"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("range-border-focus", value)}
                                         isFullWidth
@@ -288,13 +314,13 @@ const RangeDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Select
                                         label="Focus outline"
-                                        options={[{
+                                        options={[ {
                                             label    : "Select a colour",
                                             value    : "select-a-colour",
                                             disabled : true,
                                             selected : true,
                                         },
-                                            ...colourOptions]}
+                                            ...colourOptions ]}
                                         defaultValue={componentVariables["range-outline-focus"].defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("range-outline-focus", value)}
                                         isFullWidth
@@ -315,7 +341,9 @@ const RangeDocs = () => {
                 <Portion>
                     <Heading4>Dual-Thumb Range</Heading4>
                     <Text marginBottom="micro">
-                        Select a range of values by passing an array <code>[min, max]</code> to the <code>value</code> prop.
+                        Select a range of values by passing an array <code>[min, max]</code> to
+                        the <code>value</code> prop.
+                        The <code>onChange</code> handler receives the updated array with both values.
                     </Text>
                 </Portion>
             </Row>
@@ -331,7 +359,7 @@ const RangeDocs = () => {
                             id="dual-range"
                             label={showDualLabel ? dualRangeLabel : undefined}
                             value={dualRangeValue}
-                            onChange={(value) => setDualRangeValue(value)}
+                            onChange={(value: React.SetStateAction<[number, number]>) => setDualRangeValue(value)}
                             min={dualMin}
                             max={dualMax}
                             step={dualStep}
@@ -354,7 +382,8 @@ const RangeDocs = () => {
 
                             <Row marginBottom="none">
                                 <Portion>
-                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton marginBottom="micro">
+                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton
+                                               marginBottom="micro">
                                         {[
                                             `// Paste this in your content file`,
                                             `const [value, setValue] = useState<[number, number]>([${dualRangeValue[0]}, ${dualRangeValue[1]}]);`,
@@ -379,7 +408,6 @@ const RangeDocs = () => {
                                 <Portion>
                                     <Checkbox
                                         id="checkbox-dual-label"
-                                        value="checkbox-dual-label"
                                         name="checkbox-dual-label"
                                         label="Show label"
                                         checked={showDualLabel}

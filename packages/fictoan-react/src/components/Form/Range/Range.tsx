@@ -72,33 +72,211 @@ interface SingleThumbRangeInternalProps extends SingleRangeProps {
     forwardedRef ? : React.Ref<RangeElementType>;
 }
 
-const SingleThumbRange = React.forwardRef<RangeElementType, SingleThumbRangeInternalProps>(
-    ({label, value, suffix, onChange, forwardedRef, ...props}, _ref) => {
-        const handleChange = useCallback((value : string) => {
-            onChange?.(parseFloat(value));
-        }, [ onChange ]);
+const SingleThumbRange : React.FC<SingleThumbRangeInternalProps> = ({
+    label,
+    value = 0,
+    suffix,
+    onChange,
+    min = 0,
+    max = 100,
+    step = 1,
+    id,
+    disabled,
+    ...props
+}) => {
+    const thumbRef = useRef<HTMLButtonElement>(null);
+    const trackRef = useRef<HTMLDivElement>(null);
+    const [ isDragging, setIsDragging ] = useState(false);
+    const [ isActive, setIsActive ] = useState(false);
 
-        return (
-            <BaseInputComponent<RangeElementType>
-                as="input"
-                type="range"
-                data-range
-                value={value?.toString()}
-                onChange={handleChange}
-                customLabel={label && (
-                    <Div data-range-meta>
-                        <InputLabel className="range-label" label={label} htmlFor={props.id} />
-                        <Text className="range-value">
-                            {value} {suffix && suffix}
-                        </Text>
-                    </Div>
-                )}
-                ref={forwardedRef}
-                {...props}
-            />
-        );
-    },
-);
+    // Convert value to percentage position
+    const getPercent = useCallback((val : number) => {
+        return ((val - min) / (max - min)) * 100;
+    }, [ min, max ]);
+
+    // Convert mouse/touch position to value
+    const getValueFromPosition = useCallback((clientX : number) => {
+        if (!trackRef.current) return min;
+
+        const rect = trackRef.current.getBoundingClientRect();
+        const percent = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+        const rawValue = min + percent * (max - min);
+
+        // Snap to step
+        const steppedValue = Math.round(rawValue / step) * step;
+        return Math.max(min, Math.min(max, steppedValue));
+    }, [ min, max, step ]);
+
+    // Handle drag
+    const handleDrag = useCallback((clientX : number) => {
+        const newValue = getValueFromPosition(clientX);
+        onChange?.(newValue);
+    }, [ getValueFromPosition, onChange ]);
+
+    // Mouse events
+    const handleMouseDown = useCallback((e : React.MouseEvent) => {
+        if (disabled) return;
+        e.preventDefault();
+        setIsDragging(true);
+        setIsActive(true);
+        handleDrag(e.clientX);
+    }, [ disabled, handleDrag ]);
+
+    useEffect(() => {
+        if (!isDragging) return;
+
+        const handleMouseMove = (e : MouseEvent) => {
+            handleDrag(e.clientX);
+        };
+
+        const handleMouseUp = () => {
+            setIsDragging(false);
+        };
+
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseup", handleMouseUp);
+
+        return () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+        };
+    }, [ isDragging, handleDrag ]);
+
+    // Touch events
+    const handleTouchStart = useCallback((e : React.TouchEvent) => {
+        if (disabled) return;
+        setIsDragging(true);
+        setIsActive(true);
+        handleDrag(e.touches[0].clientX);
+    }, [ disabled, handleDrag ]);
+
+    useEffect(() => {
+        if (!isDragging) return;
+
+        const handleTouchMove = (e : TouchEvent) => {
+            e.preventDefault();
+            handleDrag(e.touches[0].clientX);
+        };
+
+        const handleTouchEnd = () => {
+            setIsDragging(false);
+        };
+
+        document.addEventListener("touchmove", handleTouchMove, {passive : false});
+        document.addEventListener("touchend", handleTouchEnd);
+
+        return () => {
+            document.removeEventListener("touchmove", handleTouchMove);
+            document.removeEventListener("touchend", handleTouchEnd);
+        };
+    }, [ isDragging, handleDrag ]);
+
+    // Keyboard navigation
+    const handleKeyDown = useCallback((e : React.KeyboardEvent) => {
+        if (disabled) return;
+
+        let newValue = value;
+
+        switch (e.key) {
+            case "ArrowRight":
+            case "ArrowUp":
+                e.preventDefault();
+                newValue = Math.min(value + step, max);
+                break;
+            case "ArrowLeft":
+            case "ArrowDown":
+                e.preventDefault();
+                newValue = Math.max(value - step, min);
+                break;
+            case "Home":
+                e.preventDefault();
+                newValue = min;
+                break;
+            case "End":
+                e.preventDefault();
+                newValue = max;
+                break;
+            case "PageUp":
+                e.preventDefault();
+                newValue = Math.min(value + step * 10, max);
+                break;
+            case "PageDown":
+                e.preventDefault();
+                newValue = Math.max(value - step * 10, min);
+                break;
+            default:
+                return;
+        }
+
+        onChange?.(newValue);
+    }, [ disabled, value, min, max, step, onChange ]);
+
+    const percent = getPercent(value);
+
+    return (
+        <BaseInputComponent
+            as="div"
+            data-range
+            customLabel={label && (
+                <Div data-range-meta>
+                    <InputLabel
+                        className="range-label"
+                        label={label}
+                        htmlFor={id}
+                    />
+                    <Text className="range-value">
+                        {value}{suffix && suffix}
+                    </Text>
+                </Div>
+            )}
+            id={id}
+            {...props}
+        >
+            <Div
+                ref={trackRef}
+                data-range-single
+                className={disabled ? "disabled" : ""}
+                role="group"
+                aria-labelledby={label ? `${id}-label` : undefined}
+            >
+                {/* Track background */}
+                <Div className="range-track" aria-hidden="true" />
+
+                {/* Filled track from start to thumb */}
+                <Div
+                    className="range-track-fill"
+                    style={{
+                        left  : "0%",
+                        right : `${100 - percent}%`,
+                    }}
+                    aria-hidden="true"
+                />
+
+                {/* Thumb */}
+                <button
+                    ref={thumbRef}
+                    id={id}
+                    type="button"
+                    className="range-thumb"
+                    style={{left : `${percent}%`}}
+                    disabled={disabled}
+                    onMouseDown={handleMouseDown}
+                    onTouchStart={handleTouchStart}
+                    onKeyDown={handleKeyDown}
+                    onFocus={() => setIsActive(true)}
+                    onBlur={() => setIsActive(false)}
+                    data-active={isActive || isDragging}
+                    role="slider"
+                    aria-valuemin={min}
+                    aria-valuemax={max}
+                    aria-valuenow={value}
+                    aria-valuetext={`${value}${suffix ? ` ${suffix}` : ""}`}
+                    aria-orientation="horizontal"
+                />
+            </Div>
+        </BaseInputComponent>
+    );
+};
 
 SingleThumbRange.displayName = "SingleThumbRange";
 
@@ -279,7 +457,7 @@ const DualThumbRange : React.FC<DualThumbRangeInternalProps> = ({
                         htmlFor={id}
                     />
                     <Text className="range-value">
-                        {minValue} – {maxValue} {suffix && suffix}
+                        {minValue}&ndash;{maxValue}{suffix && suffix}
                     </Text>
                 </Div>
             )}
