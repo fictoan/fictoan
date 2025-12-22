@@ -5,7 +5,24 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 
 // UI ==================================================================================================================
-import { Button, Div, Heading1, Heading4, Heading5, Portion, Row, Section, Switch, Text, CodeBlock, type SpacingTypes, type WeightTypes, type SpanTypes, type ColourPropTypes, type EmphasisTypes } from "fictoan-react";
+import {
+    Button,
+    Div,
+    Heading1,
+    Heading4,
+    Heading5,
+    Portion,
+    Row,
+    Section,
+    Switch,
+    Text,
+    CodeBlock,
+    type SpacingTypes,
+    type WeightTypes,
+    type SpanTypes,
+    type ColourPropTypes,
+    type EmphasisTypes,
+} from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./intro-code.css";
@@ -189,7 +206,7 @@ export const IntroCode = () => {
                 {/* MAIN ROW =========================================================================================== */}
                 <Row {...rowProps}>
                     <Portion {...portion1Props} className={`demo-portion ${vizMode ? "border-red" : ""}`}>
-                        <Heading1 {...mainHeadingProps}>
+                        <Heading1 {...mainHeadingProps} fontStyle="serif">
                             Ship UI {flipACoin() ? "in half the time" : "twice as fast"}
                         </Heading1>
 

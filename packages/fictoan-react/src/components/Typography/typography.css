@@ -101,6 +101,10 @@ p {
     /*max-width: 70ch;  !* For better readability *!*/
 }
 
+.font-serif { font-family : var(--font-serif), serif; }
+.font-monospace { font-family : var(--font-monospace), monospace; }
+.font-sans { font-family : var(--font-sans-serif), sans-serif; }
+
 .sub-text {
     font-size: calc(var(--paragraph-font-size) * 0.88);
     color: var(--paragraph-subtext-colour);
@@ -111,6 +115,7 @@ a,
 li,
 span { line-height : var(--paragraph-line-height); }
 
+/* LINKS ==================================================================== */
 a {
     cursor      : pointer;
     font-family : var(--link-font);
@@ -126,20 +131,20 @@ a:active { opacity : 0.72; }
 
 li { color : var(--paragraph-text-colour); }
 
-/* TEXT ALIGNMENT =================================================== */
+/* TEXT ALIGNMENT =========================================================== */
 .text-left { text-align: left; }
 .text-right { text-align: right; }
 .text-centre,
 .text-center { text-align: center; }
 .text-justify { text-align: justify; }
 
-/* SELECTION ======================================================= */
+/* SELECTION ================================================================ */
 ::selection {
     color: var(--text-selected);
     background-color: var(--text-bg-selected);
 }
 
-/* WEIGHTS ========================================================= */
+/* WEIGHTS ================================================================== */
 .weight-100 { font-weight: 100; }
 .weight-200 { font-weight: 200; }
 .weight-300 { font-weight: 300; }
@@ -150,7 +155,7 @@ li { color : var(--paragraph-text-colour); }
 .weight-800 { font-weight: 800; }
 .weight-900 { font-weight: 900; }
 
-/* TEXT SIZES ====================================================== */
+/* TEXT SIZES =============================================================== */
 /* These are utility classes for one-off size adjustments */
 .text-nano { font-size: calc(var(--paragraph-font-size) * 0.56); }
 .text-micro { font-size: calc(var(--paragraph-font-size) * 0.64); }
@@ -167,7 +172,7 @@ li { color : var(--paragraph-text-colour); }
 /* CODE ///////////////////////////////////////////////////////////////////// */
 code { font-family : var(--code-font), monospace; }
 
-/* Inline code ============================================================= */
+/* Inline code ============================================================== */
 :not(pre) > code {
     margin           : 8px 0;
     border-radius    : var(--code-inline-border-radius);

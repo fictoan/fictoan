@@ -1,9 +1,6 @@
 const postcssNesting = require("postcss-nesting");
 const autoprefixer = require("autoprefixer");
-const purgecss = require("@fullhuman/postcss-purgecss").default;
 const colorMixFunction = require("@csstools/postcss-color-mix-function");
-
-const isProduction = process.env.NODE_ENV === "production";
 
 module.exports = {
     plugins: [
@@ -11,62 +8,5 @@ module.exports = {
         autoprefixer,
         // Polyfill color-mix() for older browsers (static values only)
         colorMixFunction,
-        // PurgeCSS - only in production builds
-        // Note: For component libraries, we safelist colour utilities
-        // since consumers may use any combination
-        isProduction && purgecss({
-            content: [
-                "./src/**/*.tsx",
-                "./src/**/*.ts",
-            ],
-            // Safelist patterns for dynamic classes
-            safelist: {
-                // Keep all utility classes (consumers need full set for props)
-                standard: [
-                    // Color utilities
-                    /^bg-/,
-                    /^text-/,
-                    /^border-/,
-                    /^fill-/,
-                    /^stroke-/,
-                    // Spacing utilities
-                    /^padding-/,
-                    /^margin-/,
-                    // Visual utilities
-                    /^shadow-/,
-                    /^shape-/,
-                    /^opacity-/,
-                    // Typography utilities
-                    /^weight-/,
-                    /^size-/,
-                    // Layout utilities
-                    /^layout-/,
-                    /^full-/,
-                    /^horizontally-/,
-                    /^vertically-/,
-                    /^push-to-/,
-                    // Responsive utilities
-                    /^hide-/,
-                    /^show-/,
-                ],
-                // Keep CSS variables
-                deep: [
-                    /^:root$/,
-                ],
-                // Keep data attributes used by components
-                greedy: [
-                    /^\[data-/,
-                    /^data-/,
-                ],
-            },
-            // Don't purge CSS variables
-            variables: false,
-            // Extract class names from these file types
-            defaultExtractor: content => {
-                // Match class names, including those with colons (for pseudo-classes)
-                const matches = content.match(/[\w-/:]+(?<!:)/g) || [];
-                return matches;
-            },
-        }),
-    ].filter(Boolean),
+    ],
 };

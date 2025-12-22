@@ -147,7 +147,6 @@
         --skeleton-highlight : var(--slate-light60);
     }
 
-
     /* SWITCH /////////////////////////////////////////////////////////////// */
     --switch-bg-default                       : var(--slate-dark40);
     --switch-bg-hover                         : var(--slate-dark20);
@@ -179,7 +178,7 @@
     /* TEXT ///////////////////////////////////////////////////////////////// */
     --font-sans-serif                         : "Inter", sans-serif;
     --font-serif                              : "Fraunces", serif;
-    --font-mono                               : "Geist Mono", monospace;
+    --font-monospace                          : "Geist Mono", monospace;
 
     --paragraph-font-size                     : 1rem;
     --paragraph-line-height                   : 1.6;
@@ -188,6 +187,8 @@
     --heading-text-colour                     : var(--white);
     --heading-size-multiplier                 : 1.2;
     --heading-line-height                     : 1.2;
+
+    --code-font                               : var(--font-monospace);
 
     /* ////////////////////////////////////////////////////////////////////// */
     /* CUSTOM COMPONENTS */

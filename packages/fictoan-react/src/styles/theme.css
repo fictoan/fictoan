@@ -615,7 +615,7 @@
     /* GENERICS ============================================================= */
     --font-sans-serif                : sans-serif;
     --font-serif                     : serif;
-    --font-mono                      : monospace;
+    --font-monospace                 : monospace;
 
     /* PARAGRAPHS =========================================================== */
     --paragraph-font                 : var(--font-sans-serif);
@@ -643,7 +643,7 @@
     --text-bg-selected               : var(--hue);
 
     /* CODE ================================================================= */
-    --code-font                      : var(--font-mono);
+    --code-font                      : var(--font-monospace);
     --code-inline-font-size          : 0.8rem;
     --code-inline-bg                 : var(--blue-light80);
     --code-inline-text               : var(--blue-dark40);
@@ -666,7 +666,7 @@
     --code-block-copied-badge-border : var(--green-dark20);
 
     /* KBD ================================================================== */
-    --kbd-font                       : var(--font-mono);
+    --kbd-font                       : var(--font-monospace);
     --kbd-bg                         : var(--grey-light10);
     --kbd-text                       : var(--grey);
     --kbd-text-outline               : var(--transparent);

@@ -165,7 +165,8 @@
 
     /* TEXT ///////////////////////////////////////////////////////////////// */
     --font-sans-serif                         : "Inter", sans-serif;
-    --font-mono                               : "Geist Mono", monospace;
+    --font-serif                              : "Fraunces", serif;
+    --font-monospace                          : "Geist Mono", monospace;
 
     --paragraph-font-size                     : 1rem;
     --paragraph-line-height                   : 1.6;
@@ -175,6 +176,7 @@
     --heading-size-multiplier                 : 1.2;
     --heading-line-height                     : 1.2;
 
+    --code-font                               : var(--font-monospace);
     --token-imports                           : var(--sky-dark40);
     --token-string                            : var(--black);
 
@@ -213,5 +215,5 @@
     --search-result-item-bg-hover             : var(--blue-dark80);
     --search-result-item-border-hover         : var(--blue-dark60);
 
-    --scale-ratio-max  : 1.16;
+    --scale-ratio-max                         : 1.16;
 }

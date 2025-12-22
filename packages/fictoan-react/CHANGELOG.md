@@ -32,7 +32,6 @@
 - Add `prefers-reduced-motion` media query support for WCAG 2.1 compliance
 
 ### Developer experience improvements
-
 **Standardized value-based `onChange` across all form components**
 - All form components now use value-based `onChange` (modern component library standard)
   - Removed `onValueChange` prop - use `onChange` for all value updates
@@ -58,7 +57,6 @@
     />
     ```
 
-
 **Additional improvements:**
 - Remove ambiguous `FlexibleEventHandler` union types
 - Remove runtime type checking from form components
@@ -66,6 +64,7 @@
 - Fix `RadioTabGroup` indicator positioning on initial load (font loading timing)
 - Fix `RadioTabGroup` click interaction not updating indicator
 - Add `RadioTabGroupInternalProps` interface for better type organization
+- Add dual-thumb support for `RangeSlider`
 
 ## 1.12.0
 - `ThemeProvider` now uses unique key based on hostname for local storage, instead of default `fictoan-theme`
