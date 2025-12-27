@@ -4,7 +4,12 @@
 import React from "react";
 
 // UI ==================================================================================================================
-import { Heading1, Heading4, Divider, Portion, Row, Text, Article, Div, Card, Section } from "fictoan-react";
+import { Div, Heading6, Text, Divider, Card } from "fictoan-react";
+
+// LOCAL COMPONENTS ====================================================================================================
+import { PropsConfiguratorNew } from "$components/PropsConfigurator/PropsConfiguratorNew";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
+import { cardRegistry } from "./props.registry";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -12,9 +17,6 @@ import { createThemeConfigurator } from "$utils/themeConfigurator";
 // STYLES ==============================================================================================================
 import "../../../styles/fictoan-theme.css";
 import "./page-card.css";
-
-// OTHER ===============================================================================================================
-import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 
 const CardDocs = () => {
     const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
@@ -30,68 +32,59 @@ const CardDocs = () => {
     } = createThemeConfigurator("Card", CardComponent);
 
     return (
-        <Article id="page-card">
-            <Section>
-                <Row horizontalPadding="huge" marginTop="medium" marginBottom="tiny">
-                    <Portion>
-                        <Heading4 id="component-name">
-                            Card
-                        </Heading4>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading6 id="component-name">
+                    Card
+                </Heading6>
 
-                        <Heading4
-                            id="component-description"
-                            weight="400" marginBottom="small"
-                        >
-                            A box to put all sorts of content inside
-                        </Heading4>
-                    </Portion>
+                <Text
+                    id="component-description"
+                    weight="400"
+                >
+                    A box to put all sorts of content inside
+                </Text>
+            </Div>
 
-                    <Portion>
-                        
-                        <ul>
-                            <li>Accepts any React node as a child</li>
-                            <li>The card always takes up 100% width of its parent</li>
-                            <li>It grows to take the height of its content</li>
-                            <li>Border-radius values work only when <code>shape="rounded"</code> is present</li>
-                        </ul>
-                    </Portion>
-                </Row>
-            </Section>
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+                <Text>
+                    Accepts any React node as a child.
+                </Text>
+
+                <Text>
+                    The card always takes up 100% width of its parent and grows to the height of its content.
+                </Text>
+
+                <Text>
+                    Border-radius values work only when <code>shape="rounded"</code> is present.
+                </Text>
+            </Div>
 
             {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
-            <Row horizontalPadding="small" className="rendered-component">
-                <Portion id="component-wrapper">
-                    <Div
-                        padding="small"
-                        shape="rounded"
-                        bgColour="slate-light80"
-                        data-centered-children
-                    >
-                        <Card
-                            ref={interactiveElementRef}
-                            {...props}
-                            {...themeConfig}
-                        >
-                            {props.children || "Content shows up here"}
-                        </Card>
-                    </Div>
-                </Portion>
-            </Row>
+            <Div id="demo-component">
+                <Card
+                    ref={interactiveElementRef}
+                    {...props}
+                    {...themeConfig}
+                >
+                    {props.children || "Content shows up here"}
+                </Card>
+            </Div>
 
-            <Row horizontalPadding="small">
-                {/* PROPS CONFIGURATOR ///////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <PropsConfigurator componentName="Card" onPropsChange={setProps} />
-                </Portion>
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <PropsConfiguratorNew registry={cardRegistry} onPropsChange={setProps} />
+            </Div>
 
-                {/* THEME CONFIGURATOR ///////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    {themeConfigurator()}
-                </Portion>
-            </Row>
-        </Article>
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

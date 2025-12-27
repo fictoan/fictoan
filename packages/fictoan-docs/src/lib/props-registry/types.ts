@@ -19,62 +19,38 @@ export type ControlType =
 export interface PropOption {
     value  : string;
     label  : string;
-    icon ? : React.ReactNode;
 }
 
 export interface PropConfig {
     // Display
     label       ? : string;        // Override the prop name display
-    description ? : string;        // Help text shown below the control
 
     // Control
     control     ? : ControlType;   // Which control to render
-    options     ? : PropOption[] | string[];  // For select/radio controls
+    options     ? : PropOption[] | string[];  // For ListBox/RadioTabGroup
 
-    // Range control specific
-    min         ? : number;
-    max         ? : number;
-    step        ? : number;
-    unit        ? : string;        // e.g., "px", "rem", "%"
+    // Value
+    defaultValue? : any;           // Initial value
 
     // Behavior
     hidden      ? : boolean;       // Don't show this prop in configurator
-    disabled    ? : boolean;       // Show but disable interaction
-    defaultValue? : any;           // Initial value for the demo
 
-    // Code generation
-    excludeFromCode   ? : boolean; // Don't include in generated code
-    codeTransform     ? : (value: any) => string; // Custom code output
-}
-
-// DEMO CONFIGURATION ==================================================================================================
-export interface DemoConfig {
-    hasChildren      ? : boolean;
-    childrenContent  ? : string | React.ReactNode;
-    defaultProps     ? : Record<string, any>;
-    wrapperProps     ? : Record<string, any>;  // Props for the demo wrapper
+    // Pass-through props to the input component (helpText, placeholder, etc.)
+    inputProps  ? : Record<string, any>;
 }
 
 // MAIN REGISTRY INTERFACE =============================================================================================
 export interface PropsRegistryConfig {
-    // Component identification
+    // Component name
     component : string;
 
-    // Prop ordering - props appear in this order
-    // Props not listed here appear after, in alphabetical order
-    propOrder ? : string[];
-
-    // Per-prop configuration overrides
-    props ? : {
+    // Props configuration - order of keys determines display order
+    props : {
         [propName: string]: PropConfig;
     };
 
-    // Demo component configuration
-    demo ? : DemoConfig;
-
     // Inherited props to hide (from Element, CommonProps, etc.)
-    hideInheritedProps ? : boolean;  // Hide all inherited props
-    showInheritedProps ? : string[]; // Explicitly show these inherited props
+    hideInheritedProps ? : boolean;
 }
 
 // RESOLVED PROP =======================================================================================================
@@ -82,16 +58,10 @@ export interface PropsRegistryConfig {
 export interface ResolvedProp {
     name         : string;
     label        : string;
-    description  : string;
     control      : ControlType;
     options     ?: PropOption[];
-    min         ?: number;
-    max         ?: number;
-    step        ?: number;
-    unit        ?: string;
-    required     : boolean;
     defaultValue : any;
     currentValue : any;
     hidden       : boolean;
-    disabled     : boolean;
+    inputProps  ?: Record<string, any>;
 }

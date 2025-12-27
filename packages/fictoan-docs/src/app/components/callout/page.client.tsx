@@ -1,10 +1,15 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React, { useState } from "react";
+import React from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading4, Divider, Portion, Row, Article, Callout, Section, Heading6 } from "fictoan-react";
+import { Div, Heading6, Text, Divider, Callout } from "fictoan-react";
+
+// LOCAL COMPONENTS ====================================================================================================
+import { PropsConfiguratorNew } from "$components/PropsConfigurator/PropsConfiguratorNew";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
+import { calloutRegistry } from "./props.registry";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -13,88 +18,69 @@ import { createThemeConfigurator } from "$utils/themeConfigurator";
 import "../../../styles/fictoan-theme.css";
 import "./page-callout.css";
 
-// OTHER ===============================================================================================================
-import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
-
 const CalloutDocs = () => {
     const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
 
-    const CalloutComponent = (varName: string) => {
+    const CalloutComponent = (varName : string) => {
         return varName.startsWith("callout-");
     };
 
     const {
         interactiveElementRef,
-        componentProps: themeConfig,
+        componentProps : themeConfig,
         themeConfigurator,
     } = createThemeConfigurator("Callout", CalloutComponent);
 
     return (
-        <Article id="page-callout">
-            {/*  INTRO ///////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                    <Portion>
-                        <Heading4 id="component-name">
-                            Callout
-                        </Heading4>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading6 id="component-name">
+                    Callout
+                </Heading6>
 
-                        <Heading6
-                            id="component-description"
-                            weight="400" marginBottom="small"
-                        >
-                            A box that can be used to highlight important information. It comes in four
-                            variants.
-                        </Heading6>
-                    </Portion>
+                <Text
+                    id="component-description"
+                    weight="400"
+                >
+                    A box that can be used to highlight important information. It comes in four variants.
+                </Text>
+            </Div>
 
-                    <Portion>
-                        
-                        <ul>
-                            <li>Accepts any React node as a child</li>
-                        </ul>
-                    </Portion>
-                </Row>
-            </Section>
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+                <Text>
+                    Accepts any React node as a child.
+                </Text>
 
-            {/* INTERACTIVE COMPONENT ////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                {/* DEMO COMPONENT ================================================================================= */}
-                <Row id="component-wrapper" horizontalPadding="small" className="rendered-component">
-                    <Portion>
-                        <Div
-                            padding="small"
-                            shape="rounded"
-                            bgColour="slate-light80"
-                            data-centered-children
-                        >
-                            <Callout
-                                ref={interactiveElementRef}
-                                kind="info"
-                                {...props}
-                                {...themeConfig}
-                            >
-                                {props.children || "Content goes here"}
-                            </Callout>
-                        </Div>
-                    </Portion>
-                </Row>
+                <Text>
+                    Use the <code>kind</code> prop to set the variant: info, success, warning, or error.
+                </Text>
+            </Div>
 
-                <Row horizontalPadding="small">
-                    {/* PROPS CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        <PropsConfigurator componentName="Callout" onPropsChange={setProps} />
-                    </Portion>
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                <Callout
+                    ref={interactiveElementRef}
+                    {...props}
+                    {...themeConfig}
+                >
+                    {props.children || "Content goes here"}
+                </Callout>
+            </Div>
 
-                    {/* THEME CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        {themeConfigurator()}
-                    </Portion>
-                </Row>
-            </Section>
-        </Article>
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <PropsConfiguratorNew registry={calloutRegistry} onPropsChange={setProps} />
+            </Div>
+
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

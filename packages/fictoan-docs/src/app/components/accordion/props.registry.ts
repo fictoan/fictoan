@@ -6,40 +6,28 @@ import { createPropsRegistry } from "$/lib/props-registry/createPropsRegistry";
 export const accordionRegistry = createPropsRegistry({
     component : "Accordion",
 
-    // Props appear in this order
-    propOrder : [
-        "summary",
-        "isOpen",
-    ],
-
-    // Per-prop configuration
+    // Props in display order
     props : {
-        summary  : {
+        summary : {
             label        : "Summary",
-            description  : "The clickable header text or element",
-            control      : "InputField",
+            control      : "TextArea",
             defaultValue : "Click to expand",
+            inputProps   : {
+                helpText : "Accepts React nodes as well for more complex content",
+            },
         },
-        isOpen   : {
-            label        : "Open by default",
-            description  : "Whether the accordion starts expanded",
+        children : {
+            label        : "Inner content",
+            control      : "TextArea",
+            defaultValue : "Accordion content goes here.",
+            inputProps   : {
+                helpText : "Accepts React nodes as well for more complex content",
+            },
+        },
+        isOpen : {
+            label        : "isOpen",
             control      : "Checkbox",
             defaultValue : false,
         },
-        children : {
-            hidden : true,  // Handled separately as content editor
-        },
     },
-
-    // Demo configuration
-    demo : {
-        hasChildren     : true,
-        childrenContent : "Accordion content goes here. You can put any content inside.",
-        defaultProps    : {
-            summary : "Click to expand",
-        },
-    },
-
-    // Hide inherited Element props
-    hideInheritedProps : true,
 });

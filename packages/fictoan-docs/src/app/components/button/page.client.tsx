@@ -7,8 +7,9 @@ import React from "react";
 import { Button, Heading6, Div, Text, Divider } from "fictoan-react";
 
 // LOCAL COMPONENTS ====================================================================================================
-import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
+import { PropsConfiguratorNew } from "$components/PropsConfigurator/PropsConfiguratorNew";
 import { ComponentDocsLayout } from "../ComponentDocsLayout";
+import { buttonRegistry } from "./props.registry";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -70,7 +71,7 @@ const ButtonDocs = () => {
 
             {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="props-config">
-                <PropsConfigurator componentName="Button" onPropsChange={setProps} />
+                <PropsConfiguratorNew registry={buttonRegistry} onPropsChange={setProps} />
             </Div>
 
             {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}

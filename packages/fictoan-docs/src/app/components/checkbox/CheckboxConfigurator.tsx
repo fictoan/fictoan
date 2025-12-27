@@ -1,18 +1,18 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { CodeBlock, Div, Text, Header, Form } from "fictoan-react";
+import { CodeBlock, Div, Text, Header, Form, Button, Divider } from "fictoan-react";
 
 // LIB =================================================================================================================
-import { PropsRegistryConfig, ResolvedProp, PropOption, ControlType } from "$/lib/props-registry/types";
+import { PropsRegistryConfig, ResolvedProp, ControlType } from "$/lib/props-registry/types";
 import { getControlComponent, inferControlType } from "$/lib/props-registry/controls";
 import { getOrderedPropNames } from "$/lib/props-registry/createPropsRegistry";
 
 // STYLES ==============================================================================================================
-import "./props-configurator.css";
+import "../../../components/PropsConfigurator/props-configurator.css";
 
 // OTHER ===============================================================================================================
 import metadata from "fictoan-react/dist/props-metadata.json";
@@ -32,18 +32,19 @@ interface ComponentMetadata {
     props       : Record<string, PropMetadata>;
 }
 
-interface PropsConfiguratorNewProps {
+interface CheckboxConfiguratorProps {
     registry      : PropsRegistryConfig;
     onPropsChange : (props : Record<string, any>) => void;
+    onGroupToggle : (isGroup : boolean) => void;
 }
 
 // Parse enum type string into options
-function parseEnumType(typeString : string) : PropOption[] {
+function parseEnumType(typeString : string) {
     return typeString
         .split("|")
         .map((v) => v.trim().replace(/['"]/g, ""))
         .filter((v) => v && v !== "undefined")
-        .map((value) => ({value, label : value}));
+        .map((value) => ({ value, label : value }));
 }
 
 // Resolve a prop from registry config + optional metadata
@@ -58,16 +59,12 @@ function resolveProp(
 ) : ResolvedProp {
     const typeString = propMeta?.type?.name || "string";
 
-    // Determine options
-    let options : PropOption[] | undefined = config.options as PropOption[] | undefined;
+    let options = config.options;
     if (!options && typeString.includes("|")) {
         options = parseEnumType(typeString);
     }
 
-    // Determine control type
     const control : ControlType = config.control || inferControlType(propName, typeString, options);
-
-    // Determine default value
     const defaultValue = config.defaultValue ?? propMeta?.defaultValue?.value ?? undefined;
 
     return {
@@ -82,19 +79,20 @@ function resolveProp(
     };
 }
 
-export const PropsConfiguratorNew : React.FC<PropsConfiguratorNewProps> = ({
+export const CheckboxConfigurator : React.FC<CheckboxConfiguratorProps> = ({
     registry,
     onPropsChange,
+    onGroupToggle,
 }) => {
     const [ props, setProps ] = useState<Record<string, any>>({});
     const [ componentMeta, setComponentMeta ] = useState<ComponentMetadata | null>(null);
+    const [ showGroup, setShowGroup ] = useState(false);
 
     // Load component metadata and initialize props with defaults
     useEffect(() => {
         const meta = (metadata as unknown as Record<string, ComponentMetadata>)[registry.component];
         setComponentMeta(meta || null);
 
-        // Initialize props with defaults from registry
         const initialProps : Record<string, any> = {};
         for (const [ propName, config ] of Object.entries(registry.props)) {
             if (config.defaultValue !== undefined) {
@@ -109,6 +107,11 @@ export const PropsConfiguratorNew : React.FC<PropsConfiguratorNewProps> = ({
         onPropsChange(props);
     }, [ props, onPropsChange ]);
 
+    // Notify parent of group toggle
+    useEffect(() => {
+        onGroupToggle(showGroup);
+    }, [ showGroup, onGroupToggle ]);
+
     // Handle prop value change
     const handlePropChange = useCallback((propName : string) => (value : any) => {
         setProps((prev) => ({
@@ -120,10 +123,49 @@ export const PropsConfiguratorNew : React.FC<PropsConfiguratorNewProps> = ({
     // Generate code string
     const generateCodeString = useCallback(() => {
         const componentName = registry.component;
-        const childrenValue = props.children;
+
+        if (showGroup) {
+            const groupName = `${componentName.toLowerCase()}-group`;
+            const propsToShow = Object.entries(props).filter(([ key, value ]) => {
+                if (key === "id" || key === "label") return false;
+                if (value === undefined || value === null || value === "") return false;
+                if (value === false) return false;
+                return true;
+            });
+
+            const optionProps = propsToShow
+                .map(([ key, value ]) => {
+                    if (typeof value === "boolean" && value) {
+                        return `            ${key}`;
+                    }
+                    return null;
+                })
+                .filter(Boolean);
+
+            // Determine initial value based on defaultChecked
+            const initialValue = props.defaultChecked ? `["option1"]` : `[]`;
+
+            return [
+                `<${componentName}Group`,
+                `    name="${groupName}"`,
+                `    options={[`,
+                `        {`,
+                `            id: "option1",`,
+                `            value: "option1",`,
+                `            label: "Option 1",`,
+                ...optionProps.map(p => `${p},`),
+                `        },`,
+                `        { id: "option2", value: "option2", label: "Option 2" },`,
+                `        { id: "option3", value: "option3", label: "Option 3" },`,
+                `    ]}`,
+                `    value={${initialValue}}`,
+                `    onChange={(values) => console.log(values)}`,
+                `/>`,
+            ].join("\n");
+        }
 
         const propsEntries = Object.entries(props).filter(([ key, value ]) => {
-            if (key === "children") return false;
+            if (key === "label") return false; // Label shown separately
             if (value === undefined || value === null || value === "") return false;
             if (value === false) return false;
             return true;
@@ -144,18 +186,14 @@ export const PropsConfiguratorNew : React.FC<PropsConfiguratorNewProps> = ({
             })
             .join("\n");
 
-        if (childrenValue) {
-            if (propsString) {
-                return `<${componentName}\n${propsString}\n>\n    ${childrenValue}\n</${componentName}>`;
-            }
-            return `<${componentName}>\n    ${childrenValue}\n</${componentName}>`;
-        }
+        const labelValue = props.label || "Check me";
+        const labelProp = `    label="${labelValue}"`;
 
         if (propsString) {
-            return `<${componentName}\n${propsString}\n/>`;
+            return `<${componentName}\n${propsString}\n${labelProp}\n/>`;
         }
-        return `<${componentName} />`;
-    }, [ registry.component, props ]);
+        return `<${componentName}\n${labelProp}\n/>`;
+    }, [ registry.component, props, showGroup ]);
 
     // Get prop names in registry order
     const orderedPropNames = getOrderedPropNames(registry);
@@ -200,6 +238,18 @@ export const PropsConfiguratorNew : React.FC<PropsConfiguratorNewProps> = ({
             <Div id="props-list">
                 <Form spacing="medium">
                     {resolvedProps.map(renderPropControl)}
+
+                    <Divider kind="secondary" horizontalMargin="none" marginTop="micro" />
+
+                    {/* Group Toggle Button */}
+                    <Button
+                        type="button"
+                        size="small"
+                        kind="secondary"
+                        onClick={() => setShowGroup(!showGroup)}
+                    >
+                        {showGroup ? `Show single ${registry.component.toLowerCase()}` : `Create ${registry.component.toLowerCase()} group`}
+                    </Button>
                 </Form>
             </Div>
         </Div>

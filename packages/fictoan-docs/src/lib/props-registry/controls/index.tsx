@@ -18,53 +18,49 @@ export interface ControlProps {
 }
 
 // Text Input Control
-const TextControl : React.FC<ControlProps> = ({prop, value, onChange}) => (
+const TextControl : React.FC<ControlProps> = ({ prop, value, onChange }) => (
     <InputField
         label={prop.label}
         value={value || ""}
         onChange={onChange}
-        helpText={prop.description}
-        disabled={prop.disabled}
+        {...prop.inputProps}
     />
 );
 
 // Textarea Control
-const TextareaControl : React.FC<ControlProps> = ({prop, value, onChange}) => (
+const TextareaControl : React.FC<ControlProps> = ({ prop, value, onChange }) => (
     <TextArea
         label={prop.label}
         value={value || ""}
-        onChange={(val : string) => onChange(val)}
-        helpText={prop.description}
-        disabled={prop.disabled}
+        onChange={onChange}
+        {...prop.inputProps}
     />
 );
 
 // Number Control
-const NumberControl : React.FC<ControlProps> = ({prop, value, onChange}) => (
+const NumberControl : React.FC<ControlProps> = ({ prop, value, onChange }) => (
     <InputField
         type="number"
         label={prop.label}
         value={value?.toString() || ""}
         onChange={(val : string) => onChange(val ? Number(val) : undefined)}
-        helpText={prop.description}
-        disabled={prop.disabled}
+        {...prop.inputProps}
     />
 );
 
 // Checkbox Control
-const CheckboxControl : React.FC<ControlProps> = ({prop, value, onChange}) => (
+const CheckboxControl : React.FC<ControlProps> = ({ prop, value, onChange }) => (
     <Checkbox
         id={`prop-${prop.name}`}
         label={prop.label}
         checked={value ?? prop.defaultValue ?? false}
         onChange={onChange}
-        helpText={prop.description}
-        disabled={prop.disabled}
+        {...prop.inputProps}
     />
 );
 
 // Select Control (using ListBox)
-const SelectControl : React.FC<ControlProps> = ({prop, value, onChange}) => {
+const SelectControl : React.FC<ControlProps> = ({ prop, value, onChange }) => {
     const options = (prop.options || []).map((opt : PropOption) => ({
         value : opt.value,
         label : opt.label,
@@ -76,14 +72,13 @@ const SelectControl : React.FC<ControlProps> = ({prop, value, onChange}) => {
             options={options}
             value={value || ""}
             onChange={onChange}
-            helpText={prop.description}
-            disabled={prop.disabled}
+            {...prop.inputProps}
         />
     );
 };
 
 // Radio Control
-const RadioControl : React.FC<ControlProps> = ({prop, value, onChange}) => {
+const RadioControl : React.FC<ControlProps> = ({ prop, value, onChange }) => {
     const options = (prop.options || []).map((opt : PropOption) => ({
         id    : `prop-${prop.name}-${opt.value}`,
         value : opt.value,
@@ -98,27 +93,23 @@ const RadioControl : React.FC<ControlProps> = ({prop, value, onChange}) => {
             options={options}
             value={value}
             onChange={onChange}
+            {...prop.inputProps}
         />
     );
 };
 
 // Range Control
-const RangeControl : React.FC<ControlProps> = ({prop, value, onChange}) => (
+const RangeControl : React.FC<ControlProps> = ({ prop, value, onChange }) => (
     <Range
         label={prop.label}
-        min={prop.min ?? 0}
-        max={prop.max ?? 100}
-        step={prop.step ?? 1}
-        value={value ?? prop.defaultValue ?? prop.min ?? 0}
+        value={value ?? prop.defaultValue ?? 0}
         onChange={onChange}
-        suffix={prop.unit}
-        disabled={prop.disabled}
+        {...prop.inputProps}
     />
 );
 
 // Color Control (using ListBox with color options)
-const ColorControl : React.FC<ControlProps> = ({prop, value, onChange}) => {
-    // Import color options if available, otherwise use basic options
+const ColorControl : React.FC<ControlProps> = ({ prop, value, onChange }) => {
     const options = (prop.options || []).map((opt : PropOption) => ({
         value : opt.value,
         label : opt.label,
@@ -130,24 +121,23 @@ const ColorControl : React.FC<ControlProps> = ({prop, value, onChange}) => {
             options={options}
             value={value || ""}
             onChange={onChange}
-            helpText={prop.description}
-            disabled={prop.disabled}
             placeholder="Select colour"
+            {...prop.inputProps}
         />
     );
 };
 
 // Spacing Control
-const SpacingControl : React.FC<ControlProps> = ({prop, value, onChange}) => {
+const SpacingControl : React.FC<ControlProps> = ({ prop, value, onChange }) => {
     const spacingOptions = [
-        {id : `prop-${prop.name}-none`, value : "none", label : "none"},
-        {id : `prop-${prop.name}-nano`, value : "nano", label : "nano"},
-        {id : `prop-${prop.name}-micro`, value : "micro", label : "micro"},
-        {id : `prop-${prop.name}-tiny`, value : "tiny", label : "tiny"},
-        {id : `prop-${prop.name}-small`, value : "small", label : "small"},
-        {id : `prop-${prop.name}-medium`, value : "medium", label : "medium"},
-        {id : `prop-${prop.name}-large`, value : "large", label : "large"},
-        {id : `prop-${prop.name}-huge`, value : "huge", label : "huge"},
+        { id : `prop-${prop.name}-none`, value : "none", label : "none" },
+        { id : `prop-${prop.name}-nano`, value : "nano", label : "nano" },
+        { id : `prop-${prop.name}-micro`, value : "micro", label : "micro" },
+        { id : `prop-${prop.name}-tiny`, value : "tiny", label : "tiny" },
+        { id : `prop-${prop.name}-small`, value : "small", label : "small" },
+        { id : `prop-${prop.name}-medium`, value : "medium", label : "medium" },
+        { id : `prop-${prop.name}-large`, value : "large", label : "large" },
+        { id : `prop-${prop.name}-huge`, value : "huge", label : "huge" },
     ];
 
     return (
@@ -158,12 +148,13 @@ const SpacingControl : React.FC<ControlProps> = ({prop, value, onChange}) => {
             options={spacingOptions}
             value={value}
             onChange={onChange}
+            {...prop.inputProps}
         />
     );
 };
 
 // Code Control (for complex values displayed as code)
-const CodeControl : React.FC<ControlProps> = ({prop, value, onChange}) => (
+const CodeControl : React.FC<ControlProps> = ({ prop, value, onChange }) => (
     <TextArea
         label={prop.label}
         value={typeof value === "string" ? value : JSON.stringify(value, null, 2)}
@@ -174,8 +165,7 @@ const CodeControl : React.FC<ControlProps> = ({prop, value, onChange}) => (
                 onChange(val);
             }
         }}
-        helpText={prop.description}
-        disabled={prop.disabled}
+        {...prop.inputProps}
     />
 );
 

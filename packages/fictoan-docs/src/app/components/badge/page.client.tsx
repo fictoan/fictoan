@@ -7,8 +7,9 @@ import React from "react";
 import { Div, Heading6, Text, Divider, Badge } from "fictoan-react";
 
 // LOCAL COMPONENTS ====================================================================================================
-import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
+import { PropsConfiguratorNew } from "$components/PropsConfigurator/PropsConfiguratorNew";
 import { ComponentDocsLayout } from "../ComponentDocsLayout";
+import { badgeRegistry } from "./props.registry";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -72,7 +73,7 @@ const BadgeDocs = () => {
 
             {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="props-config">
-                <PropsConfigurator componentName="Badge" onPropsChange={setProps} />
+                <PropsConfiguratorNew registry={badgeRegistry} onPropsChange={setProps} />
             </Div>
 
             {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}

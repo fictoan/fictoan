@@ -30,76 +30,23 @@ function normalizePropConfig(propName: string, config: PropConfig): PropConfig {
 
 // Create the registry with validation
 export function createPropsRegistry(config: PropsRegistryConfig): PropsRegistryConfig {
-    // Validate required fields
     if (!config.component) {
         throw new Error("PropsRegistry: component name is required");
     }
 
     // Normalize prop configs
     const normalizedProps: Record<string, PropConfig> = {};
-    if (config.props) {
-        for (const [propName, propConfig] of Object.entries(config.props)) {
-            normalizedProps[propName] = normalizePropConfig(propName, propConfig);
-        }
+    for (const [propName, propConfig] of Object.entries(config.props)) {
+        normalizedProps[propName] = normalizePropConfig(propName, propConfig);
     }
 
-    // Build the normalized registry
-    const registry: PropsRegistryConfig = {
+    return {
         ...config,
         props: normalizedProps,
-        demo: {
-            hasChildren: false,
-            ...config.demo,
-        },
     };
-
-    return registry;
 }
 
-// Helper to check if a prop should be visible
-export function isPropVisible(
-    propName: string,
-    registry: PropsRegistryConfig,
-    inheritedPropNames: string[] = []
-): boolean {
-    // Check if explicitly hidden
-    if (registry.props?.[propName]?.hidden) {
-        return false;
-    }
-
-    // Check inherited prop visibility
-    const isInherited = inheritedPropNames.includes(propName);
-    if (isInherited) {
-        if (registry.hideInheritedProps) {
-            // Hidden unless explicitly shown
-            return registry.showInheritedProps?.includes(propName) ?? false;
-        }
-    }
-
-    return true;
-}
-
-// Get ordered list of prop names
-export function getOrderedPropNames(
-    allPropNames: string[],
-    registry: PropsRegistryConfig
-): string[] {
-    const orderedProps: string[] = [];
-    const remainingProps = new Set(allPropNames);
-
-    // First, add props in the specified order
-    if (registry.propOrder) {
-        for (const propName of registry.propOrder) {
-            if (remainingProps.has(propName)) {
-                orderedProps.push(propName);
-                remainingProps.delete(propName);
-            }
-        }
-    }
-
-    // Then, add remaining props alphabetically
-    const sortedRemaining = Array.from(remainingProps).sort();
-    orderedProps.push(...sortedRemaining);
-
-    return orderedProps;
+// Get prop names in the order they appear in the registry
+export function getOrderedPropNames(registry: PropsRegistryConfig): string[] {
+    return Object.keys(registry.props);
 }
