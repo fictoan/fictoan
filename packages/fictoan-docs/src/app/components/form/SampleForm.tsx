@@ -121,10 +121,14 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
     };
 
     const handleRangeChange = (name: string) => (value: number) => {
-        setFormData(prev => ({
-            ...prev,
-            [name] : value.toString(),
-        }));
+        setFormData(prev => {
+            const updates: Record<string, string> = { [name]: value.toString() };
+            // If experience drops below manager experience, clamp it
+            if (name === "experienceLevel" && value < Number(prev.experienceAsManager)) {
+                updates.experienceAsManager = value.toString();
+            }
+            return { ...prev, ...updates };
+        });
     };
 
     const handleFileChange = (name: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -329,7 +333,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 name="experienceLevel"
                                 min={1} max={20}
                                 suffix=" years"
-                                value={formData.experienceLevel}
+                                value={Number(formData.experienceLevel)}
                                 onChange={handleRangeChange("experienceLevel")}
                             />
 
@@ -338,10 +342,9 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 label="Exp as manager"
                                 name="experienceAsManager"
                                 min={1}
-                                // @ts-expect-error
-                                max={formData.experienceLevel}
+                                max={Number(formData.experienceLevel)}
                                 suffix={` years`}
-                                value={formData.experienceAsManager}
+                                value={Number(formData.experienceAsManager)}
                                 onChange={handleRangeChange("experienceAsManager")}
                             />
                         </FormItemGroup>

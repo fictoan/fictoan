@@ -1,34 +1,50 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useRef } from "react";
 
-// FICTOAN =============================================================================================================
-import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
+// LOCAL COMPONENTS ====================================================================================================
+import { Element } from "$element";
+import { FormItem } from "../FormItem/FormItem";
 
 // STYLES ==============================================================================================================
 import "./textarea.css";
 
 // TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../../Element/constants";
-import { InputCommonProps } from "../BaseInputComponent/constants";
-import { InputLabelProps } from "../InputLabel/InputLabel";
+import { CommonAndHTMLProps, SpacingTypes } from "../../Element/constants";
+import { InputLabelCustomProps } from "../InputLabel/InputLabel";
+
+// Common input types
+export interface InputCommonProps {
+    label?: string;
+    helpText?: string | React.ReactNode;
+    errorText?: string;
+    validateThis?: boolean;
+    valid?: boolean;
+    invalid?: boolean;
+    required?: boolean;
+    disabled?: boolean;
+}
 
 export type TextareaElementType = HTMLTextAreaElement;
 export type TextareaProps =
-    Omit<CommonAndHTMLProps<TextareaElementType>, "onChange"> &
-    Omit<InputLabelProps, "onChange"> &
-    InputCommonProps & {
-        onChange       ? : (value: string) => void;
-        value          ? : string;
-        rows           ? : number;
-        cols           ? : number;
-        minLength      ? : number;
-        maxLength      ? : number;
-        placeholder    ? : string;
-        readOnly       ? : boolean;
-        required       ? : boolean;
-        autoComplete   ? : string;
-        characterLimit ? : number;
-        wordLimit      ? : number;
+    Omit<CommonAndHTMLProps<TextareaElementType>, "onChange" | "size"> &
+    InputLabelCustomProps &
+    Omit<InputCommonProps, "validationState"> & {
+        id?: string;
+        name?: string;
+        onChange?: (value: string) => void;
+        value?: string;
+        rows?: number;
+        cols?: number;
+        minLength?: number;
+        maxLength?: number;
+        placeholder?: string;
+        readOnly?: boolean;
+        required?: boolean;
+        disabled?: boolean;
+        autoComplete?: string;
+        characterLimit?: number;
+        wordLimit?: number;
+        size?: Exclude<SpacingTypes, "nano" | "huge">;
     };
 
 // Helper functions to determine limit states
@@ -46,22 +62,44 @@ const pluralise = (count: number, singular: string, plural: string): string => {
 export const TextArea = React.forwardRef(
     (
         {
+            // FormItem props
+            label,
+            hideLabel,
+            helpText,
+            errorText,
+            size,
+            required,
+            // TextArea-specific
             onChange,
             value = "",
             characterLimit,
             wordLimit,
-            helpText,
+            // Input props
+            id,
+            name,
+            rows,
+            cols,
+            minLength,
+            maxLength,
+            placeholder,
+            readOnly,
+            disabled,
+            autoComplete,
+            // Validation (unused but destructured to not pass to DOM)
+            validateThis,
+            valid,
+            invalid,
             ...props
         }: TextareaProps,
         ref: React.Ref<TextareaElementType>
     ) => {
         const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-        const handleChange = (newValue: string) => {
-            onChange?.(newValue);
+        const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+            onChange?.(e.target.value);
         };
 
-        const constructHelpText = () => {
+        const constructHelpText = (): React.ReactNode => {
             const limitsMessages: React.ReactNode[] = [];
 
             if (characterLimit) {
@@ -71,14 +109,10 @@ export const TextArea = React.forwardRef(
                 const remaining = characterLimit - currentChars;
 
                 limitsMessages.push(
-                    <span
-                        key="char-limit"
-                        className={`limit-${limitState}`}
-                    >
+                    <span key="char-limit" className={`limit-${limitState}`}>
                         {excessChars > 0
                             ? `${excessChars} ${pluralise(excessChars, "char", "chars")} over limit`
-                            : `${remaining} ${pluralise(remaining, "char", "chars")} left`
-                        }
+                            : `${remaining} ${pluralise(remaining, "char", "chars")} left`}
                     </span>
                 );
             }
@@ -90,19 +124,15 @@ export const TextArea = React.forwardRef(
                 const remaining = wordLimit - currentWords;
 
                 limitsMessages.push(
-                    <span
-                        key="word-limit"
-                        className={`limit-${limitState}`}
-                    >
+                    <span key="word-limit" className={`limit-${limitState}`}>
                         {excessWords > 0
                             ? `${excessWords} ${pluralise(excessWords, "word", "words")} over limit`
-                            : `${remaining} ${pluralise(remaining, "word", "words")} left`
-                        }
+                            : `${remaining} ${pluralise(remaining, "word", "words")} left`}
                     </span>
                 );
             }
 
-            if (!limitsMessages.length && !helpText) return "";
+            if (!limitsMessages.length && !helpText) return undefined;
 
             return (
                 <>
@@ -118,7 +148,7 @@ export const TextArea = React.forwardRef(
             );
         };
 
-        const setRefs = (element: HTMLTextAreaElement) => {
+        const setRefs = (element: HTMLTextAreaElement | null) => {
             textareaRef.current = element;
             if (typeof ref === "function") {
                 ref(element);
@@ -128,16 +158,34 @@ export const TextArea = React.forwardRef(
         };
 
         return (
-            <BaseInputComponent<TextareaElementType>
-                as="textarea"
-                data-textarea
-                ref={setRefs}
-                value={value}
-                onChange={handleChange}
-                // @ts-ignore
+            <FormItem
+                label={label}
+                htmlFor={id}
                 helpText={constructHelpText()}
-                {...props}
-            />
+                errorText={errorText}
+                required={required}
+                size={size}
+            >
+                <Element<TextareaElementType>
+                    as="textarea"
+                    ref={setRefs}
+                    data-textarea
+                    id={id}
+                    name={name}
+                    value={value}
+                    rows={rows}
+                    cols={cols}
+                    minLength={minLength}
+                    maxLength={maxLength}
+                    placeholder={placeholder}
+                    readOnly={readOnly}
+                    disabled={disabled}
+                    required={required}
+                    autoComplete={autoComplete}
+                    onChange={handleChange}
+                    {...props}
+                />
+            </FormItem>
         );
     }
 );

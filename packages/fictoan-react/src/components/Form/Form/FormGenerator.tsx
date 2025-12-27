@@ -5,7 +5,14 @@ import React, { ElementType, ReactNode } from "react";
 import { ElementProps, SpacingTypes } from "../../Element/constants";
 
 // INPUT ===============================================================================================================
-import { InputCommonProps } from "../BaseInputComponent/constants";
+// Common props shared by form inputs
+export interface InputCommonProps {
+    label?: string;
+    helpText?: string;
+    errorText?: string;
+    required?: boolean;
+    disabled?: boolean;
+}
 
 // OTHER ===============================================================================================================
 import { Checkbox } from "../Checkbox/Checkbox";

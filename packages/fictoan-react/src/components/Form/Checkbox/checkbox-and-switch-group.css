@@ -28,20 +28,14 @@
     gap            : 8px !important;
 }
 
-[data-form-item]:has([data-checkbox-group]) [data-label-wrapper] > label,
-[data-form-item]:has([data-checkbox-group]) [data-label-wrapper] > label,
-[data-form-item]:has([data-switch-group]) [data-label-wrapper] > label,
-[data-form-item]:has([data-switch-group]) [data-label-wrapper] > label {
+[data-form-item]:has([data-checkbox-group]) > [data-label-wrapper] > label,
+[data-form-item]:has([data-switch-group]) > [data-label-wrapper] > label {
     padding-left : 0 !important;
 }
 
-[data-form-item]:has([data-checkbox-group]) [data-label-wrapper] > label::before,
-[data-form-item]:has([data-checkbox-group]) [data-label-wrapper] > label::after,
-[data-form-item]:has([data-switch-group]) [data-label-wrapper] > label::before,
-[data-form-item]:has([data-switch-group]) [data-label-wrapper] > label::after,
-[data-form-item]:has([data-checkbox-group]) [data-label-wrapper] > label::before,
-[data-form-item]:has([data-checkbox-group]) [data-label-wrapper] > label::after,
-[data-form-item]:has([data-switch-group]) [data-label-wrapper] > label::before,
-[data-form-item]:has([data-switch-group]) [data-label-wrapper] > label::after {
+[data-form-item]:has([data-checkbox-group]) > [data-label-wrapper] > label::before,
+[data-form-item]:has([data-checkbox-group]) > [data-label-wrapper] > label::after,
+[data-form-item]:has([data-switch-group]) > [data-label-wrapper] > label::before,
+[data-form-item]:has([data-switch-group]) > [data-label-wrapper] > label::after {
     display : none !important;
 }

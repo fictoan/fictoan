@@ -4,390 +4,377 @@ import React, { useState, useRef, useEffect, MutableRefObject, KeyboardEvent } f
 // LOCAL COMPONENTS ====================================================================================================
 import { Div } from "$tags";
 import { Element } from "$element";
+import { FormItem } from "../FormItem/FormItem";
+import { Badge } from "../../Badge/Badge";
+import { InputField } from "../InputField/InputField";
+import { Text } from "../../Typography/Text";
 
 // HOOKS ===============================================================================================================
 import { useClickOutside } from "$hooks/UseClickOutside";
-
-// INPUT ===============================================================================================================
-import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
 
 // STYLES ==============================================================================================================
 import "./list-box.css";
 
 // OTHER ===============================================================================================================
-import { Badge } from "$/components";
-import { InputField } from "$/components";
 import { ListBoxProps, OptionForListBoxProps, ListBoxElementType, ListBoxCustomProps } from "./constants";
-import { Text } from "../../Typography/Text";
 import { searchOptions } from "./listBoxUtils";
 
-const ListBoxWithOptions = (
-    {
-        options = [],
-        label,
-        placeholder = "Select an option",
-        id,
-        defaultValue,
-        onChange,
-        disabled,
-        selectionLimit,
-        allowMultiSelect = false,
-        allowCustomEntries = false,
-        isLoading,
-        value,
-        isFullWidth,
-        className,
-        ...props
-    }: ListBoxCustomProps & { className?: string }) => {
+// COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
+    (
+        {
+            options = [],
+            label,
+            helpText,
+            errorText,
+            placeholder = "Select an option",
+            id,
+            defaultValue,
+            onChange,
+            disabled,
+            selectionLimit,
+            allowMultiSelect = false,
+            allowCustomEntries = false,
+            isLoading,
+            value,
+            isFullWidth,
+            className,
+            required,
+            ...props
+        },
+        ref
+    ) => {
+        const [isOpen, setIsOpen] = useState(false);
+        const [searchValue, setSearchValue] = useState("");
+        const [activeIndex, setActiveIndex] = useState(-1);
+        const [selectedOption, setSelectedOption] = useState<OptionForListBoxProps | null>(null);
+        const [selectedOptions, setSelectedOptions] = useState<OptionForListBoxProps[]>([]);
 
-    const [isOpen, setIsOpen]                   = useState(false);
-    const [searchValue, setSearchValue]         = useState("");
-    const [activeIndex, setActiveIndex]         = useState(-1);
-    const [selectedOption, setSelectedOption]   = useState<OptionForListBoxProps | null>(null);
-    const [selectedOptions, setSelectedOptions] = useState<OptionForListBoxProps[]>([]);
-
-    useEffect(() => {
-        if (defaultValue && onChange) {
-            onChange(defaultValue);
-        }
-    }, []);
-
-    // Create a memoized version of the combined options
-    const allOptions = React.useMemo(() => {
-        return [...options];
-    }, [options]);
-
-    const dropdownRef    = useRef() as MutableRefObject<HTMLSelectElement>;
-    const searchInputRef = useRef<HTMLInputElement>(null);
-
-    const listboxId       = id || `listbox-${Math.random().toString(36).substring(2, 9)}`;
-    const filteredOptions = searchOptions(allOptions, searchValue);
-
-    const handleSelectOption = (option: OptionForListBoxProps) => {
-        if (option.disabled) return;
-
-        let newSelectedOptions: OptionForListBoxProps[];
-        if (allowMultiSelect) {
-            const isSelected = selectedOptions.some(opt => opt.value === option.value);
-            if (isSelected) {
-                newSelectedOptions = selectedOptions.filter(opt => opt.value !== option.value);
-            } else {
-                if (selectionLimit && selectedOptions.length >= selectionLimit) {
-                    return;
-                }
-                newSelectedOptions = [...selectedOptions, option];
+        useEffect(() => {
+            if (defaultValue && onChange) {
+                onChange(defaultValue);
             }
-            setSelectedOptions(newSelectedOptions);
-            onChange?.(newSelectedOptions.map(opt => opt.value));
-        } else {
-            newSelectedOptions = [option];
-            setSelectedOption(option);
-            setSelectedOptions(newSelectedOptions);
-            onChange?.(option.value);
-            setIsOpen(false);
-        }
+        }, []);
 
-        setSearchValue("");
-        setActiveIndex(-1);
-    };
+        // Create a memoized version of the combined options
+        const allOptions = React.useMemo(() => {
+            return [...options];
+        }, [options]);
 
-    const handleSearchChange = (valueOrEvent: string | React.FormEvent<HTMLInputElement>) => {
-        const value = typeof valueOrEvent === "string"
-            ? valueOrEvent
-            : (valueOrEvent.target as HTMLInputElement).value;
-        setSearchValue(value);
-    };
+        const dropdownRef = useRef() as MutableRefObject<HTMLSelectElement>;
+        const searchInputRef = useRef<HTMLInputElement>(null);
 
-    const handleCustomEntry = () => {
-        if (!searchValue.trim() || !allowCustomEntries) return;
+        const listboxId = id || `listbox-${Math.random().toString(36).substring(2, 9)}`;
+        const filteredOptions = searchOptions(allOptions, searchValue);
 
-        const customValue = searchValue.trim();
-        const customOption: OptionForListBoxProps = {
-            value: customValue,
-            label: customValue,
+        const handleSelectOption = (option: OptionForListBoxProps) => {
+            if (option.disabled) return;
+
+            let newSelectedOptions: OptionForListBoxProps[];
+            if (allowMultiSelect) {
+                const isSelected = selectedOptions.some(opt => opt.value === option.value);
+                if (isSelected) {
+                    newSelectedOptions = selectedOptions.filter(opt => opt.value !== option.value);
+                } else {
+                    if (selectionLimit && selectedOptions.length >= selectionLimit) {
+                        return;
+                    }
+                    newSelectedOptions = [...selectedOptions, option];
+                }
+                setSelectedOptions(newSelectedOptions);
+                onChange?.(newSelectedOptions.map(opt => opt.value));
+            } else {
+                newSelectedOptions = [option];
+                setSelectedOption(option);
+                setSelectedOptions(newSelectedOptions);
+                onChange?.(option.value);
+                setIsOpen(false);
+            }
+
+            setSearchValue("");
+            setActiveIndex(-1);
         };
 
-        // If this option doesn't exist yet
-        if (!allOptions.some(opt => opt.value === customValue)) {
-            handleSelectOption(customOption);
-        }
-    };
+        const handleSearchChange = (value: string) => {
+            setSearchValue(value);
+        };
 
-    const handleDeleteOption = (valueToRemove: string) => {
-        if (allowMultiSelect) {
-            // Filter out the option to remove
-            const newSelectedOptions = selectedOptions.filter(opt => opt.value !== valueToRemove);
+        const handleCustomEntry = () => {
+            if (!searchValue.trim() || !allowCustomEntries) return;
 
-            // Update local state
-            setSelectedOptions(newSelectedOptions);
+            const customValue = searchValue.trim();
+            const customOption: OptionForListBoxProps = {
+                value: customValue,
+                label: customValue,
+            };
 
-            // Notify parent
-            onChange?.(newSelectedOptions.map(opt => opt.value));
-        } else {
-            // For single-select mode, just clear everything
+            // If this option doesn't exist yet
+            if (!allOptions.some(opt => opt.value === customValue)) {
+                handleSelectOption(customOption);
+            }
+        };
+
+        const handleDeleteOption = (valueToRemove: string) => {
+            if (allowMultiSelect) {
+                // Filter out the option to remove
+                const newSelectedOptions = selectedOptions.filter(opt => opt.value !== valueToRemove);
+
+                // Update local state
+                setSelectedOptions(newSelectedOptions);
+
+                // Notify parent
+                onChange?.(newSelectedOptions.map(opt => opt.value));
+            } else {
+                // For single-select mode, just clear everything
+                setSelectedOption(null);
+                setSelectedOptions([]);
+                onChange?.("");
+            }
+        };
+
+        const handleClearAll = () => {
+            // Reset local state for both single and multi-select
             setSelectedOption(null);
             setSelectedOptions([]);
-            onChange?.("");
-        }
-    };
 
-    const handleClearAll = () => {
-        // Reset local state for both single and multi-select
-        setSelectedOption(null);
-        setSelectedOptions([]);
+            // Notify parent with empty data
+            onChange?.(allowMultiSelect ? [] : "");
+        };
 
-        // Notify parent with empty data
-        onChange?.(allowMultiSelect ? [] : "");
-    };
-
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-        switch (event.key) {
-            case "ArrowDown":
-                event.preventDefault();
-                if (!isOpen) {
-                    setIsOpen(true);
-                    setActiveIndex(0);
-                } else {
-                    setActiveIndex(prev =>
-                        prev < filteredOptions.length - 1 ? prev + 1 : prev,
-                    );
-                }
-                break;
-
-            case "ArrowUp":
-                event.preventDefault();
-                setActiveIndex(prev => prev > 0 ? prev - 1 : prev);
-                break;
-
-            case "Enter":
-                event.preventDefault();
-                if (allowCustomEntries && searchValue.trim()) {
-                    const exactMatch = filteredOptions.find(opt =>
-                        opt.label.toLowerCase() === searchValue.trim().toLowerCase(),
-                    );
-                    if (exactMatch) {
-                        handleSelectOption(exactMatch);
+        const handleKeyDown = (event: KeyboardEvent) => {
+            switch (event.key) {
+                case "ArrowDown":
+                    event.preventDefault();
+                    if (!isOpen) {
+                        setIsOpen(true);
+                        setActiveIndex(0);
                     } else {
-                        handleCustomEntry();
+                        setActiveIndex(prev =>
+                            prev < filteredOptions.length - 1 ? prev + 1 : prev
+                        );
                     }
-                } else if (activeIndex >= 0 && filteredOptions[activeIndex]) {
-                    handleSelectOption(filteredOptions[activeIndex]);
-                }
-                break;
+                    break;
 
-            case "Escape":
-                event.preventDefault();
-                setIsOpen(false);
-                setActiveIndex(-1);
-                break;
-
-            case " ": // Space key
-                if (!isOpen) {
+                case "ArrowUp":
                     event.preventDefault();
-                    setIsOpen(true);
-                    setActiveIndex(0);
-                }
-                break;
+                    setActiveIndex(prev => prev > 0 ? prev - 1 : prev);
+                    break;
 
-            case "Home":
-                if (isOpen) {
+                case "Enter":
                     event.preventDefault();
-                    setActiveIndex(0);
-                }
-                break;
+                    if (allowCustomEntries && searchValue.trim()) {
+                        const exactMatch = filteredOptions.find(opt =>
+                            opt.label.toLowerCase() === searchValue.trim().toLowerCase()
+                        );
+                        if (exactMatch) {
+                            handleSelectOption(exactMatch);
+                        } else {
+                            handleCustomEntry();
+                        }
+                    } else if (activeIndex >= 0 && filteredOptions[activeIndex]) {
+                        handleSelectOption(filteredOptions[activeIndex]);
+                    }
+                    break;
 
-            case "End":
-                if (isOpen) {
+                case "Escape":
                     event.preventDefault();
-                    setActiveIndex(filteredOptions.length - 1);
-                }
-                break;
-        }
-    };
+                    setIsOpen(false);
+                    setActiveIndex(-1);
+                    break;
 
-    useClickOutside(dropdownRef, () => {
-        setIsOpen(false);
-        setActiveIndex(-1);
-    });
+                case " ": // Space key
+                    if (!isOpen) {
+                        event.preventDefault();
+                        setIsOpen(true);
+                        setActiveIndex(0);
+                    }
+                    break;
 
-    useEffect(() => {
-        if (isOpen && searchInputRef.current) {
-            searchInputRef.current.focus();
-        }
-    }, [isOpen]);
+                case "Home":
+                    if (isOpen) {
+                        event.preventDefault();
+                        setActiveIndex(0);
+                    }
+                    break;
 
-    useEffect(() => {
-        if (activeIndex >= 0) {
-            const activeOption = document.querySelector(`[data-index="${activeIndex}"]`);
-            activeOption?.scrollIntoView({block : "nearest"});
-        }
-    }, [activeIndex]);
+                case "End":
+                    if (isOpen) {
+                        event.preventDefault();
+                        setActiveIndex(filteredOptions.length - 1);
+                    }
+                    break;
+            }
+        };
 
-    return (
-        // TODO: margin props should work at the parent level, not input box level
-        // PARENT //////////////////////////////////////////////////////////////////////////////////////////////////////
-        <Element
-            as="div"
-            data-list-box
-            classNames={["list-box-wrapper", disabled ? "disabled" : "", className || ""]}
-            ref={dropdownRef}
-            {...props}
-        >
-            <Div
-                className="list-box-input-wrapper"
-                onClick={() => !disabled && setIsOpen(!isOpen)}
-                role="combobox"
-                aria-haspopup="listbox"
-                aria-expanded={isOpen}
-                aria-controls={`${listboxId}-listbox`}
-                aria-owns={`${listboxId}-listbox`}
-                tabIndex={disabled ? -1 : 0}
+        useClickOutside(dropdownRef, () => {
+            setIsOpen(false);
+            setActiveIndex(-1);
+        });
+
+        useEffect(() => {
+            if (isOpen && searchInputRef.current) {
+                searchInputRef.current.focus();
+            }
+        }, [isOpen]);
+
+        useEffect(() => {
+            if (activeIndex >= 0) {
+                const activeOption = document.querySelector(`[data-index="${activeIndex}"]`);
+                activeOption?.scrollIntoView({ block: "nearest" });
+            }
+        }, [activeIndex]);
+
+        return (
+            <FormItem
+                label={label}
+                htmlFor={id}
+                helpText={helpText}
+                errorText={errorText}
+                required={required}
             >
-                {allowMultiSelect ? (
-                    <>
-                        {selectedOptions.length > 0 ? (
-                            <Div className="options-wrapper">
-                                <Div className="options-list">
-                                    {selectedOptions.map(option => (
-                                        <Badge
-                                            key={option.value}
-                                            hasDelete={allowMultiSelect}
-                                            onDelete={() => handleDeleteOption(option.value)}
-                                            size="small"
-                                            shape="rounded"
-                                        >
-                                            <Text>{option.label}</Text>
-                                        </Badge>
-                                    ))}
-                                </Div>
-                                {selectionLimit && selectedOptions.length >= selectionLimit && (
-                                    <Text className="options-limit-warning" textColour="red" size="small">
-                                        You can choose only {selectionLimit} option{selectionLimit === 1 ? "" : "s"}
-                                    </Text>
+                {/* PARENT */}
+                <Element
+                    as="div"
+                    data-list-box
+                    classNames={["list-box-wrapper", disabled ? "disabled" : "", className || ""]}
+                    ref={dropdownRef}
+                    {...props}
+                >
+                    <Div
+                        className="list-box-input-wrapper"
+                        onClick={() => !disabled && setIsOpen(!isOpen)}
+                        role="combobox"
+                        aria-haspopup="listbox"
+                        aria-expanded={isOpen}
+                        aria-controls={`${listboxId}-listbox`}
+                        aria-owns={`${listboxId}-listbox`}
+                        tabIndex={disabled ? -1 : 0}
+                    >
+                        {allowMultiSelect ? (
+                            <>
+                                {selectedOptions.length > 0 ? (
+                                    <Div className="options-wrapper">
+                                        <Div className="options-list">
+                                            {selectedOptions.map(option => (
+                                                <Badge
+                                                    key={option.value}
+                                                    hasDelete={allowMultiSelect}
+                                                    onDelete={() => handleDeleteOption(option.value)}
+                                                    size="small"
+                                                    shape="rounded"
+                                                >
+                                                    <Text>{option.label}</Text>
+                                                </Badge>
+                                            ))}
+                                        </Div>
+                                        {selectionLimit && selectedOptions.length >= selectionLimit && (
+                                            <Text className="options-limit-warning" textColour="red" size="small">
+                                                You can choose only {selectionLimit} option{selectionLimit === 1 ? "" : "s"}
+                                            </Text>
+                                        )}
+                                    </Div>
+                                ) : (
+                                    <span className="placeholder">{placeholder}</span>
                                 )}
-                            </Div>
+
+                                {/* Clear button for multi-select */}
+                                {selectedOptions.length > 0 && (
+                                    <Div
+                                        className="icon-wrapper clear-all"
+                                        title="Clear all options"
+                                        onClick={() => handleClearAll()}
+                                    >
+                                        <svg viewBox="0 0 24 24">
+                                            <line x1="5" y1="5" x2="19" y2="19" />
+                                            <line x1="5" y1="19" x2="19" y2="5" />
+                                        </svg>
+                                    </Div>
+                                )}
+                            </>
                         ) : (
-                            <span className="placeholder">{placeholder}</span>
+                            selectedOptions[0]
+                                ? <Text className="selected-option">{selectedOptions[0].label}</Text>
+                                : <span className="placeholder">{placeholder}</span>
                         )}
 
-                        {/* Clear button for multi-select */}
-                        {selectedOptions.length > 0 && (
-                            <Div
-                                className="icon-wrapper clear-all"
-                                title="Clear all options"
-                                onClick={() => handleClearAll()}
-                            >
-                                <svg viewBox="0 0 24 24">
-                                    <line x1="5" y1="5" x2="19" y2="19" />
-                                    <line x1="5" y1="19" x2="19" y2="5" />
-                                </svg>
-                            </Div>
-                        )}
-                    </>
-                ) : (
-                    selectedOptions[0]
-                        ? <Text className="selected-option">{selectedOptions[0].label}</Text>
-                        : <span className="placeholder">{placeholder}</span>
-                )}
-
-                <Div className="icon-wrapper chevrons">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <polyline points="6 9 12 4 18 9"></polyline>
-                        <polyline points="6 15 12 20 18 15"></polyline>
-                    </svg>
-                </Div>
-            </Div>
-
-            {/* DROPDOWN /////////////////////////////////////////////////////////////////////////////////////////// */}
-            {isOpen && !disabled && (
-                <Div className="list-box-dropdown">
-                    <Div className="list-box-search-wrapper">
-                        <InputField
-                            type="text"
-                            ref={searchInputRef}
-                            className="list-box-search"
-                            placeholder={allowCustomEntries ? "Type to search or add new" : "Search"}
-                            value={searchValue}
-                            onChange={handleSearchChange}
-                            onKeyDown={handleKeyDown}
-                            aria-controls={`${listboxId}-listbox`}
-                            aria-label="Search options"
-                        />
-                        {allowCustomEntries && searchValue.trim() && !selectedOptions.some(opt =>
-                            opt.label.toLowerCase() === searchValue.trim().toLowerCase()) && (
-                            <kbd
-                                className="list-box-enter-key"
-                                aria-label="Press Enter to add custom option"
-                            >
-                                ↵
-                            </kbd>
-                        )}
+                        <Div className="icon-wrapper chevrons">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <polyline points="6 9 12 4 18 9"></polyline>
+                                <polyline points="6 15 12 20 18 15"></polyline>
+                            </svg>
+                        </Div>
                     </Div>
 
-                    {/* OPTIONS //////////////////////////////////////////////////////////////////////////////////// */}
-                    <Element
-                        as="ul"
-                        id={`${listboxId}-listbox`}
-                        className="list-box-options"
-                        role="listbox"
-                        aria-multiselectable={allowMultiSelect}
-                        aria-busy={isLoading}
-                        tabIndex={-1}
-                    >
-                        {filteredOptions.length > 0 ? (
-                            filteredOptions.map((option, index) => (
-                                <li
-                                    key={option.value}
-                                    id={`${listboxId}-option-${option.value}`}
-                                    className={`list-box-option ${option.disabled ? "disabled" : ""} ${activeIndex === index ? "active" : ""}`}
-                                    role="option"
-                                    aria-selected={selectedOptions.some(opt => opt.value === option.value)}
-                                    aria-disabled={option.disabled}
-                                    onClick={() => handleSelectOption(option)}
-                                    data-index={index}
-                                    tabIndex={-1}
-                                >
-                                    {option.customLabel || option.label}
-                                </li>
-                            ))
-                        ) : (
-                            <li
-                                className="list-box-option disabled"
-                                role="alert"
-                                aria-live="polite"
+                    {/* DROPDOWN */}
+                    {isOpen && !disabled && (
+                        <Div className="list-box-dropdown">
+                            <Div className="list-box-search-wrapper">
+                                <InputField
+                                    type="text"
+                                    ref={searchInputRef}
+                                    className="list-box-search"
+                                    placeholder={allowCustomEntries ? "Type to search or add new" : "Search"}
+                                    value={searchValue}
+                                    onChange={handleSearchChange}
+                                    onKeyDown={handleKeyDown}
+                                    aria-controls={`${listboxId}-listbox`}
+                                    aria-label="Search options"
+                                />
+                                {allowCustomEntries && searchValue.trim() && !selectedOptions.some(opt =>
+                                    opt.label.toLowerCase() === searchValue.trim().toLowerCase()) && (
+                                    <kbd
+                                        className="list-box-enter-key"
+                                        aria-label="Press Enter to add custom option"
+                                    >
+                                        ↵
+                                    </kbd>
+                                )}
+                            </Div>
+
+                            {/* OPTIONS */}
+                            <Element
+                                as="ul"
+                                id={`${listboxId}-listbox`}
+                                className="list-box-options"
+                                role="listbox"
+                                aria-multiselectable={allowMultiSelect}
+                                aria-busy={isLoading}
+                                tabIndex={-1}
                             >
-                                {allowCustomEntries
-                                    ? "Type and press Enter to add new option"
-                                    : "No matches found"
-                                }
-                            </li>
-                        )}
-                    </Element>
-                </Div>
-            )}
-        </Element>
-    );
-};
-
-// FINAL LISTBOX COMPONENT /////////////////////////////////////////////////////////////////////////////////////////////
-export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(({ onChange, ...restProps }, ref) => {
-    const handleChange = (valueOrEvent: string | string[] | React.ChangeEvent<HTMLInputElement>) => {
-        // Handle both direct values and events
-        const value = typeof valueOrEvent === "object" && "target" in valueOrEvent
-            ? valueOrEvent.target.value
-            : valueOrEvent;
-
-        onChange?.(value);
-    };
-
-    return (
-        <BaseInputComponent<ListBoxElementType>
-            as={ListBoxWithOptions}
-            ref={ref}
-            {...restProps}
-            onChange={handleChange}
-        />
-    );
-});
+                                {filteredOptions.length > 0 ? (
+                                    filteredOptions.map((option, index) => (
+                                        <li
+                                            key={option.value}
+                                            id={`${listboxId}-option-${option.value}`}
+                                            className={`list-box-option ${option.disabled ? "disabled" : ""} ${activeIndex === index ? "active" : ""}`}
+                                            role="option"
+                                            aria-selected={selectedOptions.some(opt => opt.value === option.value)}
+                                            aria-disabled={option.disabled}
+                                            onClick={() => handleSelectOption(option)}
+                                            data-index={index}
+                                            tabIndex={-1}
+                                        >
+                                            {option.customLabel || option.label}
+                                        </li>
+                                    ))
+                                ) : (
+                                    <li
+                                        className="list-box-option disabled"
+                                        role="alert"
+                                        aria-live="polite"
+                                    >
+                                        {allowCustomEntries
+                                            ? "Type and press Enter to add new option"
+                                            : "No matches found"
+                                        }
+                                    </li>
+                                )}
+                            </Element>
+                        </Div>
+                    )}
+                </Element>
+            </FormItem>
+        );
+    }
+);
 ListBox.displayName = "ListBox";

@@ -3,63 +3,84 @@ import React, { useMemo } from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { Element } from "$element";
-
-// UTILS ===============================================================================================================
-import { separateFictoanFromHTMLProps } from "$utils/propSeparation";
-
-// INPUT ===============================================================================================================
-import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
-import { BaseInputComponentProps } from "../BaseInputComponent/constants";
+import { FormItem } from "../FormItem/FormItem";
+import { SpacingTypes } from "../../Element/constants";
 
 // STYLES ==============================================================================================================
 import "./switch.css";
 
+// TYPES ===============================================================================================================
+import { InputLabelCustomProps } from "../InputLabel/InputLabel";
+
 export type SwitchElementType = HTMLInputElement;
-export type SwitchProps = Omit<BaseInputComponentProps<SwitchElementType>,
-    "as" | "onChange" | "value"> & {
-        checked        ? : boolean;
-        onChange       ? : (checked: boolean) => void;
-        defaultChecked ? : boolean;
+export type SwitchProps = InputLabelCustomProps & {
+    id?: string;
+    name?: string;
+    checked?: boolean;
+    defaultChecked?: boolean;
+    disabled?: boolean;
+    required?: boolean;
+    onChange?: (checked: boolean) => void;
+    size?: Exclude<SpacingTypes, "nano" | "huge">;
+    helpText?: string;
+    errorText?: string;
 };
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const Switch = React.forwardRef(
-    ({ id, name, onChange, checked, defaultChecked, ...props }: SwitchProps, ref: React.Ref<SwitchElementType>) => {
-        // Use ID as default for name and value if they’re not provided
-        const derivedName  = useMemo(() => name || id, [ name, id ]);
+    (
+        {
+            id,
+            name,
+            label,
+            hideLabel,
+            helpText,
+            errorText,
+            onChange,
+            checked,
+            defaultChecked,
+            disabled,
+            required,
+            size = "medium",
+            ...props
+        }: SwitchProps,
+        ref: React.Ref<SwitchElementType>
+    ) => {
+        const derivedName = useMemo(() => name || id, [name, id]);
 
-        // Handle the change event to return boolean instead of event
-        const handleChange = (value: string) => {
-            // Since we’re dealing with a checkbox, the value parameter isn’t relevant
-            // Instead, we need to check the current checked state
-            const isChecked = !checked;
-            onChange?.(isChecked);
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            onChange?.(e.target.checked);
         };
 
-        // Separate Fictoan props from HTML props
-        const { fictoanProps, htmlProps } = separateFictoanFromHTMLProps({ ...props });
-        const finalSize = fictoanProps.size || "medium";
-
         return (
-            <BaseInputComponent<SwitchElementType>
-                as="input"
-                type="checkbox"
-                id={id}
-                name={derivedName}
-                checked={checked}
-                defaultChecked={defaultChecked}
-                onChange={handleChange}
-                size={finalSize}
-                {...htmlProps}
+            <FormItem
+                label={label}
+                htmlFor={id}
+                helpText={helpText}
+                errorText={errorText}
+                required={required}
+                size={size}
             >
                 <Element<SwitchElementType>
+                    as="input"
+                    type="checkbox"
+                    ref={ref}
+                    id={id}
+                    name={derivedName}
+                    checked={checked}
+                    defaultChecked={defaultChecked}
+                    disabled={disabled}
+                    required={required}
+                    onChange={handleChange}
+                    {...props}
+                />
+                <Element
                     as="div"
                     data-switch
-                    ref={ref}
-                    className={`size-${finalSize}`}
+                    className={`size-${size}`}
                 />
-            </BaseInputComponent>
+            </FormItem>
         );
-    },
+    }
 );
 Switch.displayName = "Switch";

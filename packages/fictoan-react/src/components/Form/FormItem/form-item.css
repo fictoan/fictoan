@@ -10,9 +10,10 @@
 
 /* SUPER PARENT ///////////////////////////////////////////////////////////// */
 /* Need this as a common parent to align the left/right icons */
-[data-input-wrapper] {
-    position : relative;
-    display  : flex;
+[data-form-item] > [data-input-wrapper] {
+    grid-area : input;
+    position  : relative;
+    display   : flex;
 }
 
 /* PARENT ELEMENT /////////////////////////////////////////////////////////// */
@@ -108,9 +109,9 @@ form[data-form] [data-form-item] {
 
 /* INPUT //////////////////////////////////////////////////////////////////// */
 [data-form-item] [data-input-field],
-[data-form-item] [data-text-area],
-[data-form-item] [data-select-wrapper],
-[data-form-item] [data-listbox-wrapper] {
+[data-form-item] [data-textarea],
+[data-form-item] [data-select],
+[data-form-item] [data-list-box] {
     grid-area : input;
 }
 
@@ -141,8 +142,8 @@ form[data-form] [data-form-item] {
 }
 
 [data-form-item] [data-input-field],
-[data-form-item] [data-text-area],
-[data-form-item] [data-select-wrapper] {
+[data-form-item] [data-textarea],
+[data-form-item] [data-select] {
     &:read-only {
         background-color : var(--input-bg-read-only);
         color            : var(--input-text-read-only);
@@ -178,9 +179,10 @@ form[data-form] [data-form-item] {
 }
 
 /* DISABLED ///////////////////////////////////////////////////////////////// */
-[data-form-item]:has(input:disabled) label,
-[data-form-item]:has(input:disabled) label::before,
-[data-form-item]:has(input:disabled) label::after {
+/* Only apply to form-items with a single disabled input, not groups with mixed states */
+[data-form-item]:has(input:disabled):not(:has([data-radio-tab-group])):not(:has([data-radio-group])):not(:has([data-checkbox-group])):not(:has([data-switch-group])) label,
+[data-form-item]:has(input:disabled):not(:has([data-radio-tab-group])):not(:has([data-radio-group])):not(:has([data-checkbox-group])):not(:has([data-switch-group])) label::before,
+[data-form-item]:has(input:disabled):not(:has([data-radio-tab-group])):not(:has([data-radio-group])):not(:has([data-checkbox-group])):not(:has([data-switch-group])) label::after {
     filter         : grayscale(24%);
     user-select    : none;
     pointer-events : none;

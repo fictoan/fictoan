@@ -1,163 +1,190 @@
 // REACT CORE ==========================================================================================================
-import React, { FormEventHandler, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { Div } from "$tags";
+import { Element } from "$element";
 import { SpacingTypes } from "../../Element/constants";
+import { FormItem } from "../FormItem/FormItem";
 
-// INPUT ===============================================================================================================
-import {
-    BaseInputComponentProps,
-    InputCommonProps,
-    InputFocusHandler,
-    InputSideElementProps,
-    ValueChangeHandler,
-} from "../BaseInputComponent/constants";
-import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
+// TYPES ===============================================================================================================
+import { InputLabelCustomProps } from "../InputLabel/InputLabel";
+
+// Common input types
+export type ValueChangeHandler<T = string> = (value: T) => void;
+export type InputFocusHandler = (e: React.FocusEvent<HTMLInputElement>) => void;
+
+export interface InputCommonProps {
+    label?: string;
+    helpText?: string | React.ReactNode;
+    errorText?: string;
+    validateThis?: boolean;
+    valid?: boolean;
+    invalid?: boolean;
+    validationState?: "valid" | "invalid" | null;
+    required?: boolean;
+    disabled?: boolean;
+}
+
+export interface InputSideElementProps {
+    innerIconLeft?: React.ReactNode;
+    innerIconRight?: React.ReactNode;
+    innerTextLeft?: string;
+    innerTextRight?: string;
+}
 
 // STYLES ==============================================================================================================
 import "./input-field.css";
 
-// OTHER ===============================================================================================================
-import { InputLabelCustomProps } from "../InputLabel/InputLabel";
-
 // prettier-ignore
 export type InputFieldElementType = HTMLInputElement;
-export type InputFieldProps = Omit<BaseInputComponentProps<HTMLInputElement>, "onChange"> &
-                              InputLabelCustomProps & InputCommonProps & InputSideElementProps & {
-    type         ? : "text" | "password" | "email" | "number" | "tel" | "url" | "search" | "file";
-    placeholder  ? : string;
-    autoComplete ? : string;
-    maxLength    ? : number;
-    minLength    ? : number;
-    pattern      ? : string;
-    readOnly     ? : boolean;
-    required     ? : boolean;
-    size         ? : Exclude<SpacingTypes, "nano" | "huge">;
-    onFocus      ? : InputFocusHandler;
-    onBlur       ? : InputFocusHandler;
-    onChange     ? : ValueChangeHandler<string>;
-};
+export type InputFieldProps =
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "onBlur" | "onFocus" | "size"> &
+    InputLabelCustomProps &
+    InputCommonProps &
+    InputSideElementProps & {
+        type?: "text" | "password" | "email" | "number" | "tel" | "url" | "search" | "file";
+        size?: Exclude<SpacingTypes, "nano" | "huge">;
+        onFocus?: InputFocusHandler;
+        onBlur?: InputFocusHandler;
+        onChange?: ValueChangeHandler<string>;
+    };
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const InputField = React.forwardRef(
     (
         {
-            "aria-label"   : ariaLabel,
-            "aria-invalid" : ariaInvalid,
+            // FormItem props
+            label,
+            hideLabel,
+            helpText,
+            errorText,
+            size,
+            required,
+            // Side elements
             innerIconLeft,
             innerIconRight,
             innerTextLeft,
             innerTextRight,
+            // Validation
+            validateThis,
+            valid,
+            invalid,
+            validationState: externalValidationState,
+            // Handlers
             onChange,
             onBlur,
-            validateThis,
+            onFocus,
+            // Aria
+            "aria-label": ariaLabel,
+            "aria-invalid": ariaInvalid,
+            // Input props
+            id,
+            name,
+            value,
+            defaultValue,
+            type = "text",
+            placeholder,
+            autoComplete,
+            maxLength,
+            minLength,
+            pattern,
+            readOnly,
+            disabled,
+            className,
             ...props
-        } : InputFieldProps, ref : React.Ref<InputFieldElementType>,
+        }: InputFieldProps,
+        ref: React.Ref<InputFieldElementType>
     ) => {
         const leftElementRef = useRef<HTMLDivElement>(null);
         const rightElementRef = useRef<HTMLDivElement>(null);
         const internalInputRef = useRef<HTMLInputElement>(null);
 
-        // Validation state
         const [touched, setTouched] = useState(false);
-        const [validationState, setValidationState] = useState<"valid" | "invalid" | null>(null);
+        const [internalValidationState, setInternalValidationState] = useState<"valid" | "invalid" | null>(null);
 
-        const handleChange = (value : string) => {
-            if (onChange) {
-                onChange(value);
+        // Use external validation state if provided, otherwise use internal
+        const validationState = externalValidationState ?? (validateThis ? internalValidationState : null);
+
+        // Merge refs
+        const mergeRefs = React.useCallback(
+            (el: HTMLInputElement | null) => {
+                (internalInputRef as React.MutableRefObject<HTMLInputElement | null>).current = el;
+                if (typeof ref === "function") {
+                    ref(el);
+                } else if (ref) {
+                    (ref as React.MutableRefObject<HTMLInputElement | null>).current = el;
+                }
+            },
+            [ref]
+        );
+
+        const updateValidationState = () => {
+            const input = internalInputRef.current;
+            if (!input || input.value === "") {
+                setInternalValidationState(null);
+                return;
             }
+            setInternalValidationState(input.validity.valid ? "valid" : "invalid");
+        };
 
-            // Update validation state when value changes (if touched and validateThis is enabled)
-            if (touched && validateThis && internalInputRef.current) {
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            onChange?.(e.target.value);
+            if (touched && validateThis) {
                 updateValidationState();
             }
         };
 
-        const handleBlur = (event : React.FocusEvent<HTMLInputElement>) => {
+        const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
             setTouched(true);
-
-            // Update validation state on blur
             if (validateThis) {
                 updateValidationState();
             }
-
-            // Call user's onBlur if provided
-            if (onBlur) {
-                onBlur(event);
-            }
+            onBlur?.(e);
         };
 
-        const updateValidationState = () => {
-            if (!internalInputRef.current) return;
-
-            const input = internalInputRef.current;
-            const isEmpty = input.value === "";
-
-            // Only show validation if field has content
-            if (isEmpty) {
-                setValidationState(null);
-                return;
-            }
-
-            // Read native validation state
-            if (input.validity.valid) {
-                setValidationState("valid");
-            } else {
-                setValidationState("invalid");
-            }
+        const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+            onFocus?.(e);
         };
 
-        // Merge refs (external ref from forwardRef and internal ref)
-        const mergeRefs = React.useCallback((el : HTMLInputElement | null) => {
-            // Set internal ref
-            if (internalInputRef) {
-                (internalInputRef as React.MutableRefObject<HTMLInputElement | null>).current = el;
-            }
-
-            // Set external ref
-            if (typeof ref === "function") {
-                ref(el);
-            } else if (ref) {
-                (ref as React.MutableRefObject<HTMLInputElement | null>).current = el;
-            }
-        }, [ref]);
-
+        // Side element width calculation
         useEffect(() => {
-            const updateElementWidth = (element : HTMLDivElement | null, position : "left" | "right") => {
-                if (element) {
-                    const width = element.getBoundingClientRect().width;
-                    const propertyName = `--side-element-${position}-width`;
-                    const formItem = element.closest("[data-form-item]") as HTMLElement;
-                    if (formItem) {
-                        formItem.style.setProperty(propertyName, `${width}px`);
-                    }
-                }
+            const updateWidth = (el: HTMLDivElement | null, pos: "left" | "right") => {
+                if (!el) return;
+                const formItem = el.closest("[data-form-item]") as HTMLElement;
+                formItem?.style.setProperty(
+                    `--side-element-${pos}-width`,
+                    `${el.getBoundingClientRect().width}px`
+                );
             };
 
             if (innerTextLeft || innerIconLeft) {
-                updateElementWidth(leftElementRef.current, "left");
+                updateWidth(leftElementRef.current, "left");
             }
             if (innerTextRight || innerIconRight) {
-                updateElementWidth(rightElementRef.current, "right");
+                updateWidth(rightElementRef.current, "right");
             }
-        }, [ innerTextLeft, innerTextRight, innerIconLeft, innerIconRight ]);
+        }, [innerTextLeft, innerTextRight, innerIconLeft, innerIconRight]);
 
         const renderSideElement = (
-            content : React.ReactNode | string | undefined,
-            position : "left" | "right",
-            ref : React.RefObject<HTMLDivElement>,
+            content: React.ReactNode,
+            position: "left" | "right",
+            elRef: React.RefObject<HTMLDivElement>
         ) => {
             if (!content) return null;
 
             const isText = typeof content === "string";
-            const isInteractive = !isText && React.isValidElement(content) &&
-                (content.props.onClick || content.props.onKeyDown ||
-                    content.type === "button" || content.type === "a");
+            const isInteractive =
+                !isText &&
+                React.isValidElement(content) &&
+                (content.props.onClick ||
+                    content.props.onKeyDown ||
+                    content.type === "button" ||
+                    content.type === "a");
 
             return (
                 <Div
-                    ref={ref}
+                    ref={elRef}
                     data-input-side-element
                     className={`${position} ${isText ? "is-text" : "is-icon"} ${isInteractive ? "is-interactive" : ""}`}
                     aria-hidden="true"
@@ -171,32 +198,55 @@ export const InputField = React.forwardRef(
         const hasRightElement = Boolean(innerIconRight || innerTextRight);
 
         return (
-            <>
-                <BaseInputComponent<InputFieldElementType>
+            <FormItem
+                label={label}
+                htmlFor={id}
+                helpText={helpText}
+                errorText={errorText}
+                validationState={validationState}
+                required={required}
+                size={size}
+            >
+                <Element<InputFieldElementType>
                     as="input"
-                    data-input-field
                     ref={mergeRefs}
+                    data-input-field
+                    id={id}
+                    name={name}
+                    type={type}
+                    value={value}
+                    defaultValue={defaultValue}
+                    placeholder={placeholder || " "}
+                    autoComplete={autoComplete}
+                    maxLength={maxLength}
+                    minLength={minLength}
+                    pattern={pattern}
+                    readOnly={readOnly}
+                    disabled={disabled}
+                    required={required}
                     className={[
-                        hasLeftElement ? "with-left-element" : "",
-                        hasRightElement ? "with-right-element" : "",
-                    ].filter(Boolean).join(" ")}
-                    aria-label={ariaLabel || props.label}
-                    aria-invalid={ariaInvalid || props.invalid || undefined}
-                    aria-required={props.required}
-                    placeholder=" "
+                        className,
+                        hasLeftElement && "with-left-element",
+                        hasRightElement && "with-right-element",
+                    ]
+                        .filter(Boolean)
+                        .join(" ")}
+                    aria-label={ariaLabel || label}
+                    aria-invalid={ariaInvalid || invalid}
+                    aria-required={required}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    validateThis={validateThis}
-                    validationState={validateThis ? validationState : undefined}
+                    onFocus={handleFocus}
                     {...props}
-                >
+                />
+                {(hasLeftElement || hasRightElement) && (
                     <Div data-input-helper aria-hidden="true">
                         {renderSideElement(innerIconLeft || innerTextLeft, "left", leftElementRef)}
                         {renderSideElement(innerIconRight || innerTextRight, "right", rightElementRef)}
                     </Div>
-                </BaseInputComponent>
-            </>
+                )}
+            </FormItem>
         );
-    },
+    }
 );
 InputField.displayName = "InputField";

@@ -3,7 +3,9 @@ import React from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps } from "$components/Element/constants";
-import { ValueChangeHandler } from "../BaseInputComponent/constants";
+
+// Value handler type
+export type ValueChangeHandler<T = string> = (value: T) => void;
 export interface OptionForListBoxProps {
     value         : string;
     label         : string;

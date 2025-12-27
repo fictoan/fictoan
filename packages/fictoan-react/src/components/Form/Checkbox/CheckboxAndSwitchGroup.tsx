@@ -1,169 +1,255 @@
 // REACT CORE ==========================================================================================================
 import React, { useMemo } from "react";
 
-// INPUT ===============================================================================================================
-import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
-import { BaseInputComponentProps } from "../BaseInputComponent/constants";
+// LOCAL COMPONENTS ====================================================================================================
+import { Element } from "$element";
+import { FormItem } from "../FormItem/FormItem";
+import { Checkbox, CheckboxProps } from "./Checkbox";
+import { Switch, SwitchProps } from "./Switch";
+import { SpacingTypes } from "../../Element/constants";
 
 // STYLES ==============================================================================================================
 import "./checkbox-and-switch-group.css";
 
-// OTHER ===============================================================================================================
-import { Checkbox } from "./Checkbox";
-import { CheckboxProps } from "./Checkbox";
-import { Element } from "$element";
-import { Switch } from "./Switch";
-import { SwitchProps } from "./Switch";
+// TYPES ===============================================================================================================
+import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 
 // COMMON GROUP OPTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 interface BaseGroupOptionProps {
-    id    : string;
-    label : string;
-    value : string;
+    id: string;
+    label: string;
+    value: string;
+    disabled?: boolean;
 }
 
-// Define what props we want to exclude from the input component props when creating option props
-type ExcludedInputProps = "onChange" | "checked" | "name";
-
-// Generic type for creating option props from any input component props
-type InputGroupOptionProps<T> = BaseGroupOptionProps & Omit<T, ExcludedInputProps>;
-
 // Props specific to the group functionality
-interface GroupCustomProps<T> {
-    name            : string;
-    options         : InputGroupOptionProps<T>[];
-    value         ? : string[];
-    defaultValue  ? : string[];
-    onChange      ? : (values: string[]) => void;
-    align         ? : "horizontal" | "vertical";
-    equaliseWidth ? : boolean;
-    equalizeWidth ? : boolean;
+interface GroupCustomProps {
+    id?: string;
+    name: string;
+    options: BaseGroupOptionProps[];
+    value?: string[];
+    defaultValue?: string[];
+    onChange?: (values: string[]) => void;
+    align?: "horizontal" | "vertical";
+    equaliseWidth?: boolean;
+    equalizeWidth?: boolean;
+    size?: Exclude<SpacingTypes, "nano" | "huge">;
 }
 
 // Combined props for the group component
-export type InputGroupProps<T> = Omit<BaseInputComponentProps<HTMLDivElement>, "value"> & GroupCustomProps<T>;
+export type InputGroupProps = InputLabelCustomProps & GroupCustomProps & {
+    helpText?: string;
+    errorText?: string;
+    required?: boolean;
+    disabled?: boolean;
+};
 
-// COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-function InputGroupOptions<T>(
-    {
-        id,
-        name,
-        options,
-        value,
-        defaultValue,
-        onChange,
-        InputComponent,
-        ...groupProps
-    }: InputGroupProps<T> & { InputComponent: React.ComponentType<any> }) {
-    const derivedName = useMemo(() => name || id, [ name, id ]);
+// CHECKBOX GROUP //////////////////////////////////////////////////////////////////////////////////////////////////////
+export const CheckboxGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
+    (
+        {
+            id,
+            name,
+            label,
+            helpText,
+            errorText,
+            options,
+            value,
+            defaultValue,
+            onChange,
+            align,
+            equaliseWidth,
+            equalizeWidth,
+            required,
+            disabled,
+            size,
+            ...props
+        },
+        ref
+    ) => {
+        const derivedName = useMemo(() => name || id, [name, id]);
 
-    const [ selectedValues, setSelectedValues ] = React.useState<string[]>(
-        value || defaultValue || [],
-    );
+        const [selectedValues, setSelectedValues] = React.useState<string[]>(
+            value || defaultValue || []
+        );
 
-    React.useEffect(() => {
-        if (value !== undefined) {
-            setSelectedValues(value);
+        React.useEffect(() => {
+            if (value !== undefined) {
+                setSelectedValues(value);
+            }
+        }, [value]);
+
+        const handleChange = (optionValue: string, checked: boolean) => {
+            let newValues: string[];
+
+            if (checked) {
+                newValues = [...selectedValues, optionValue];
+            } else {
+                newValues = selectedValues.filter(v => v !== optionValue);
+            }
+
+            // Update internal state if uncontrolled
+            if (value === undefined) {
+                setSelectedValues(newValues);
+            }
+
+            onChange?.(newValues);
+        };
+
+        let classNames: string[] = [];
+
+        if (align) {
+            classNames.push(`align-${align}`);
         }
-    }, [ value ]);
 
-    const handleChange = (optionValue: string, checked: boolean) => {
-        let newValues: string[];
-
-        if (checked) {
-            newValues = [ ...selectedValues, optionValue ];
-        } else {
-            newValues = selectedValues.filter(v => v !== optionValue);
+        if (equaliseWidth || equalizeWidth) {
+            classNames.push(`equalise-width`);
         }
 
-        // Update internal state if uncontrolled
-        if (value === undefined) {
-            setSelectedValues(newValues);
-        }
+        return (
+            <FormItem
+                label={label}
+                htmlFor={id}
+                helpText={helpText}
+                errorText={errorText}
+                required={required}
+            >
+                <Element
+                    as="div"
+                    data-checkbox-group
+                    ref={ref}
+                    classNames={classNames}
+                    role="group"
+                    aria-label={label}
+                    {...props}
+                >
+                    {options.map((option, index) => {
+                        const { id: optionId, value: optionValue, label: optionLabel, ...optionProps } = option;
+                        const finalId = optionId || `${id}-option-${index}`;
+                        const isChecked = selectedValues.includes(optionValue);
 
-        // Notify parent using standard onChange
-        onChange?.(newValues);
-    };
-
-    return (
-        <Element
-            as="div"
-            role="group"
-            aria-label={derivedName}
-            {...groupProps}
-        >
-            {options.map((option, index) => {
-                const {
-                    id    : optionId,
-                    value : optionValue,
-                    label,
-                    ...optionProps
-                } = option;
-
-                const finalId   = optionId || `${id}-option-${index}`;
-                const isChecked = selectedValues.includes(optionValue);
-
-                return (
-                    <React.Fragment key={finalId}>
-                        <InputComponent
-                            {...optionProps}
-                            id={finalId}
-                            name={derivedName}
-                            value={optionValue}
-                            label={label}
-                            checked={isChecked}
-                            onChange={(checked: boolean) => handleChange(optionValue, checked)}
-                        />
-                    </React.Fragment>
-                );
-            })}
-        </Element>
-    );
-}
-
-// SPECIALISED GROUP COMPONENTS FOR CHECKBOX AND SWITCH ////////////////////////////////////////////////////////////////
-export const CheckboxGroup = React.forwardRef<HTMLDivElement, InputGroupProps<CheckboxProps>>((props, ref) => {
-    let classNames = [];
-
-    if (props.align) {
-        classNames.push(`align-${props.align}`);
+                        return (
+                            <Checkbox
+                                key={finalId}
+                                id={finalId}
+                                name={derivedName}
+                                label={optionLabel}
+                                checked={isChecked}
+                                disabled={disabled || option.disabled}
+                                size={size}
+                                onChange={(checked: boolean) => handleChange(optionValue, checked)}
+                                {...optionProps}
+                            />
+                        );
+                    })}
+                </Element>
+            </FormItem>
+        );
     }
-
-    if (props.equaliseWidth || props.equalizeWidth) {
-        classNames.push(`equalise-width`);
-    }
-
-    return (
-        <BaseInputComponent<HTMLDivElement>
-            data-checkbox-group
-            as={(componentProps) => <InputGroupOptions {...componentProps} InputComponent={Checkbox} />}
-            classNames={classNames}
-            ref={ref}
-            {...props}
-        />
-    );
-});
+);
 CheckboxGroup.displayName = "CheckboxGroup";
 
-export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps<SwitchProps>>((props, ref) => {
-    let classNames = [];
+// SWITCH GROUP ////////////////////////////////////////////////////////////////////////////////////////////////////////
+export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
+    (
+        {
+            id,
+            name,
+            label,
+            helpText,
+            errorText,
+            options,
+            value,
+            defaultValue,
+            onChange,
+            align,
+            equaliseWidth,
+            equalizeWidth,
+            required,
+            disabled,
+            size,
+            ...props
+        },
+        ref
+    ) => {
+        const derivedName = useMemo(() => name || id, [name, id]);
 
-    if (props.align) {
-        classNames.push(`align-${props.align}`);
+        const [selectedValues, setSelectedValues] = React.useState<string[]>(
+            value || defaultValue || []
+        );
+
+        React.useEffect(() => {
+            if (value !== undefined) {
+                setSelectedValues(value);
+            }
+        }, [value]);
+
+        const handleChange = (optionValue: string, checked: boolean) => {
+            let newValues: string[];
+
+            if (checked) {
+                newValues = [...selectedValues, optionValue];
+            } else {
+                newValues = selectedValues.filter(v => v !== optionValue);
+            }
+
+            // Update internal state if uncontrolled
+            if (value === undefined) {
+                setSelectedValues(newValues);
+            }
+
+            onChange?.(newValues);
+        };
+
+        let classNames: string[] = [];
+
+        if (align) {
+            classNames.push(`align-${align}`);
+        }
+
+        if (equaliseWidth || equalizeWidth) {
+            classNames.push(`equalise-width`);
+        }
+
+        return (
+            <FormItem
+                label={label}
+                htmlFor={id}
+                helpText={helpText}
+                errorText={errorText}
+                required={required}
+            >
+                <Element
+                    as="div"
+                    data-switch-group
+                    ref={ref}
+                    classNames={classNames}
+                    role="group"
+                    aria-label={label}
+                    {...props}
+                >
+                    {options.map((option, index) => {
+                        const { id: optionId, value: optionValue, label: optionLabel, ...optionProps } = option;
+                        const finalId = optionId || `${id}-option-${index}`;
+                        const isChecked = selectedValues.includes(optionValue);
+
+                        return (
+                            <Switch
+                                key={finalId}
+                                id={finalId}
+                                name={derivedName}
+                                label={optionLabel}
+                                checked={isChecked}
+                                disabled={disabled || option.disabled}
+                                size={size}
+                                onChange={(checked: boolean) => handleChange(optionValue, checked)}
+                                {...optionProps}
+                            />
+                        );
+                    })}
+                </Element>
+            </FormItem>
+        );
     }
-
-    if (props.equaliseWidth || props.equalizeWidth) {
-        classNames.push(`equalise-width`);
-    }
-
-    return (
-        <BaseInputComponent<HTMLDivElement>
-            data-switch-group
-            as={(componentProps) => <InputGroupOptions {...componentProps} InputComponent={Switch} />}
-            classNames={classNames}
-            ref={ref}
-            {...props}
-        />
-    );
-});
+);
 SwitchGroup.displayName = "SwitchGroup";
