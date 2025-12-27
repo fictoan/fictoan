@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading2, Divider, Portion, Row, Text, Article, Button, Drawer, Div, showDrawer, hideDrawer } from "fictoan-react";
+import { Element, Heading1, Heading2, Divider, Portion, Row, Text, Article, Button, Drawer, Div } from "fictoan-react";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
@@ -15,19 +15,20 @@ import { createThemeConfigurator } from "$utils/themeConfigurator";
 // STYLES ==============================================================================================================
 import "./page-drawer.css";
 
-const DrawerDocs : React.FC = () => {
-    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
-    
+const DrawerDocs: React.FC = () => {
+    const [props, setProps] = React.useState<{ [key: string]: any }>({});
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
     // Ensure consistent drawer ID across all references
     const drawerId = props.id || "interactive-component";
 
-    const DrawerComponent = (varName : string) => {
+    const DrawerComponent = (varName: string) => {
         return varName.startsWith("drawer-");
     };
 
     const {
         interactiveElementRef,
-        componentProps : themeConfig,
+        componentProps: themeConfig,
         themeConfigurator,
     } = createThemeConfigurator("Drawer", DrawerComponent);
 
@@ -48,6 +49,9 @@ const DrawerDocs : React.FC = () => {
                             You can add as many Drawers you want on a page, as long as you match the IDs to the right
                             triggers
                         </li>
+                        <li>
+                            Use the <code>isOpen</code> and <code>onClose</code> props to control the drawer state.
+                        </li>
                     </ul>
                 </Portion>
             </Row>
@@ -62,7 +66,7 @@ const DrawerDocs : React.FC = () => {
                         data-centered-children
                     >
                         <Button
-                            onClick={() => showDrawer(drawerId)}
+                            onClick={() => setIsDrawerOpen(true)}
                             kind="primary"
                         >
                             Open the drawer
@@ -87,11 +91,13 @@ const DrawerDocs : React.FC = () => {
                 {...props}
                 {...themeConfig}
                 id={drawerId}
+                isOpen={isDrawerOpen}
+                onClose={() => setIsDrawerOpen(false)}
                 zIndex={60000}
             >
                 {props.children || (
                     <>
-                        <Heading2 textColour="green" marginBottom="nano">Hello</Heading2>   
+                        <Heading2 textColour="green" marginBottom="nano">Hello</Heading2>
 
                         <Text marginBottom="micro">
                             You can add all sorts of content here inside the info panel.
@@ -99,7 +105,7 @@ const DrawerDocs : React.FC = () => {
 
                         <Button
                             kind="secondary"
-                            onClick={() => hideDrawer(drawerId)}
+                            onClick={() => setIsDrawerOpen(false)}
                         >
                             Close
                         </Button>

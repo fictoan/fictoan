@@ -6,7 +6,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 // UI ==================================================================================================================
-import { Badge, Div, Header, Text, InputField, Card, CodeBlock, Element, Modal, showModal, hideModal } from "fictoan-react";
+import { Badge, Div, Header, Text, InputField, Card, CodeBlock, Element, Modal } from "fictoan-react";
 
 // ASSETS ==============================================================================================================
 import SearchIcon from "../../../assets/icons/search.svg";
@@ -48,6 +48,9 @@ interface SearchResultItemProps {
 export const SearchBar = () => {
     const router = useRouter();
 
+    // MODAL STATE /////////////////////////////////////////////////////////////////////////////////////////////////////
+    const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+
     // SEARCH //////////////////////////////////////////////////////////////////////////////////////////////////////////
     const [ searchTerm, setSearchTerm ] = useState("");
     const [ results, setResults ] = useState<SearchResult[]>([]);
@@ -68,6 +71,16 @@ export const SearchBar = () => {
     useEffect(() => {
         setSelectedIndex(-1);
     }, [ searchTerm ]);
+
+    // Focus input when modal opens
+    useEffect(() => {
+        if (isSearchModalOpen) {
+            // Small delay to ensure modal is rendered
+            setTimeout(() => {
+                searchInputRef.current?.focus();
+            }, 100);
+        }
+    }, [isSearchModalOpen]);
 
     const handleSearch = (value : string) => {
         setSearchTerm(value);
@@ -101,8 +114,7 @@ export const SearchBar = () => {
         const handleKeyDown = (e : KeyboardEvent) => {
             if (e.key === "/") {
                 e.preventDefault();
-                showModal("search-modal");
-                searchInputRef.current?.focus();
+                setIsSearchModalOpen(true);
             }
         };
 
@@ -148,13 +160,13 @@ export const SearchBar = () => {
                     } else {
                         // Handle component navigation as before
                         router.push(selectedResult.path);
-                        hideModal("search-modal");
+                        setIsSearchModalOpen(false);
                     }
                 }
                 break;
 
             case "Escape":
-                hideModal("search-modal");
+                setIsSearchModalOpen(false);
                 break;
 
             default:
@@ -211,12 +223,18 @@ export const SearchBar = () => {
         );
     };
 
+    const closeModal = () => {
+        setIsSearchModalOpen(false);
+        setSearchTerm("");
+        setResults([]);
+    };
+
     return (
         <>
             {/* HEADER SEARCH INPUT ================================================================================ */}
             <Div
                 showOnlyOnMobile showOnlyOnTabletPortrait
-                onClick={() => showModal("search-modal")}
+                onClick={() => setIsSearchModalOpen(true)}
                 role="button"
             >
                 <SearchIcon id="header-search-icon" />
@@ -230,7 +248,7 @@ export const SearchBar = () => {
                     value={searchTerm}
                     onChange={(value : string) => handleSearch(value)}
                     placeholder="Search components and variables"
-                    onClick={() => showModal("search-modal")}
+                    onClick={() => setIsSearchModalOpen(true)}
                 />
 
                 <kbd>/</kbd>
@@ -239,6 +257,8 @@ export const SearchBar = () => {
             {/* SEARCH MODAL ======================================================================================= */}
             <Modal
                 id="search-modal"
+                isOpen={isSearchModalOpen}
+                onClose={closeModal}
                 shape="rounded"
                 showBackdrop
                 blurBackdrop
@@ -284,11 +304,7 @@ export const SearchBar = () => {
                                                         key={result.title}
                                                         result={result}
                                                         isSelected={isSelected}
-                                                        onClick={() => {
-                                                            hideModal("search-modal");
-                                                            setSearchTerm("");
-                                                            setResults([]);
-                                                        }}
+                                                        onClick={closeModal}
                                                     />
                                                 );
                                             })}

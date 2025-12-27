@@ -1,7 +1,7 @@
 // REACT CORE ==========================================================================================================
 import React, { useState, useEffect, useRef } from "react";
 
-// ELEMENT =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps } from "../Element/constants";
 import { Element } from "$element";
 
@@ -9,9 +9,9 @@ import { Element } from "$element";
 import "./tooltip.css";
 
 export interface TooltipCustomProps {
-        isTooltipFor   : string;
-        showOn       ? : "click" | "hover";
-        position     ? : "top" | "bottom" | "left" | "right";
+    isTooltipFor   : string;
+    showOn       ? : "click" | "hover";
+    position     ? : "top" | "bottom" | "left" | "right";
 }
 
 export type TooltipElementType = HTMLDivElement;
@@ -31,6 +31,8 @@ const calculatePosition = (
     const viewportWidth  = window.innerWidth;
 
     let top, left;
+
+    // TODO: Rewrite hydration logic to avoid ID pollution
 
     switch (position) {
         case "top":

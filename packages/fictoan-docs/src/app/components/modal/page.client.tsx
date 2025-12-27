@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Divider, Portion, Row, Text, Article, Card, Form, Header, Button, Drawer, RadioTabGroup, Checkbox, Range, Select, CodeBlock, InputField, Modal, showModal, hideModal, Section } from "fictoan-react";
+import { Element, Heading1, Heading4, Divider, Portion, Row, Text, Article, Card, Button, Modal, Section } from "fictoan-react";
 
 // COMPONENTS ==========================================================================================================
 import { PropsConfigurator } from "../../../components/PropsConfigurator/PropsConfigurator";
@@ -17,6 +17,7 @@ import "./page-modal.css";
 
 const ModalDocs = () => {
     const [componentProps, setComponentProps] = useState({});
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const ModalComponent = (varName: string) => {
         return varName.startsWith("modal-");
@@ -39,17 +40,15 @@ const ModalDocs = () => {
                 </Portion>
 
                 <Portion>
-                    
+
                     <ul>
-                        <li>Uses the new Popover API, and browser support isn’t great yet, but it’s improving</li>
+                        <li>Uses the new Popover API, and browser support isn't great yet, but it's improving</li>
                         <li>
-                            Accept any React node as children. By itself the modal has nothing inside, you’ll need to
+                            Accept any React node as children. By itself the modal has nothing inside, you'll need to
                             add a Card or so inside.
                         </li>
                         <li>
-                            There are three
-                            methods—<code>showModal</code>, <code>hideModal</code>, and <code>toggleModal</code>. Their
-                            values should be the same as the <code>id</code> of the modal you want to trigger.
+                            Use the <code>isOpen</code> and <code>onClose</code> props to control the modal state.
                         </li>
                         <li>
                             The <code>isDismissible</code> prop displays a &times; at the top right corner, and can be
@@ -74,7 +73,7 @@ const ModalDocs = () => {
                             data-centered-children
                         >
                             <Button
-                                onClick={() => showModal("interactive-component")}
+                                onClick={() => setIsModalOpen(true)}
                             >
                                 Open Modal
                             </Button>
@@ -85,6 +84,8 @@ const ModalDocs = () => {
                 <Modal
                     id="interactive-component"
                     ref={interactiveElementRef}
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
                     {...componentProps}
                     {...themeConfig}
                 >
@@ -94,7 +95,7 @@ const ModalDocs = () => {
                             You can add anything inside here, and it's always centered on the screen.
                         </Text>
                         <Button
-                            onClick={() => hideModal("interactive-component")}
+                            onClick={() => setIsModalOpen(false)}
                             kind="secondary"
                         >
                             Close Modal

@@ -1,13 +1,30 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading1, Divider, Portion, Row, Text, Article, Card, Form, Header, Select, InputField, Range, Checkbox, RadioTabGroup, CodeBlock, ListBox } from "fictoan-react";
+import {
+    Div,
+    Heading1,
+    Divider,
+    Portion,
+    Row,
+    Text,
+    Article,
+    Card,
+    Form,
+    Header,
+    Select,
+    InputField,
+    Range,
+    CodeBlock,
+} from "fictoan-react";
+
+// LOCAL COMPONENTS ====================================================================================================
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 
 // UTILS ===============================================================================================================
-import { createPropsConfigurator } from "$utils/propsConfigurator";
 import { useThemeVariables } from "$utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
@@ -15,77 +32,35 @@ import "./page-code-block.css";
 
 // OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-import { sampleCodeBlock, sampleBashCode, sampleRustCode, sampleCSSCode, sampleCSharpCode, sampleHTMLCode, sampleJSXCode, sampleKotlinCode, sampleMarkdownCode, sampleObjectiveCCode, samplePythonCode, sampleSwiftCode } from "./CodeSamples";
+import {
+    sampleBashCode,
+    sampleRustCode,
+    sampleCSSCode,
+    sampleCSharpCode,
+    sampleHTMLCode,
+    sampleJSXCode,
+    sampleKotlinCode,
+    sampleMarkdownCode,
+    sampleObjectiveCCode,
+    samplePythonCode,
+    sampleSwiftCode,
+} from "./CodeSamples";
 import { toastProps } from "./config";
 
 const CodeBlockDocs = () => {
-    const [selectedApproach, setSelectedApproach] = useState("import");
-    const [enableCopyButton, setEnableCopyButton] = useState(false);
-    const [enableLineNumbers, setEnableLineNumbers] = useState(false);
+    const [props, setProps] = useState<{ [key: string]: any }>({});
     const [selectedLanguage, setSelectedLanguage] = useState("jsx");
     const [selectedSampleCode, setSelectedSampleCode] = useState(sampleJSXCode);
 
-    // Event listener for language changes from the configurator
-    React.useEffect(() => {
-        const handleLanguageChange = (event: { detail: { language: any; }; }) => {
-            const language = event.detail.language;
-            setSelectedLanguage(language);
-            showSelectedLanguageCode(language);
-        };
-
-        window.addEventListener("codeblock-language-changed", handleLanguageChange);
-
-        return () => {
-            window.removeEventListener("codeblock-language-changed", handleLanguageChange);
-        };
-    }, []);
-
-
-    const {
-        propsConfigurator,
-        componentProps : propsConfig,
-        propValues,
-        setPropValues,
-    } = createPropsConfigurator(
-        "CodeBlock",
-        [
-            "usage", // Add usage type to handle import/embed approach
-            "source",
-            "language", // Custom type that will be handled in propsConfigurator
-            "showCopyButton",
-            "showLineNumbers",
-            "description",
-            "withSyntaxHighlighting",
-            "makeEditable",
-        ],
-        colourOptions,
-        {
-            canHaveChildren : true,
-            isSelfClosing   : false,
-        },
-    );
-
-    // Track usage value changes
-    const [currentUsage, setCurrentUsage] = useState("import");
-    
-    // Listen for changes to the usage prop from the RadioTabGroup
-    React.useEffect(() => {
-        if (propValues && propValues.source !== undefined) {
-            console.log("Current source/usage value:", propValues.source);
-            setCurrentUsage(propValues.source);
+    // Update sample code when language changes from props
+    useEffect(() => {
+        if (props.language && props.language !== selectedLanguage) {
+            setSelectedLanguage(props.language);
+            showSelectedLanguageCode(props.language);
         }
-    }, [propValues]);
-    
-    // Update the source property when selectedSampleCode changes
-    React.useEffect(() => {
-        if (setPropValues && selectedSampleCode) {
-            setPropValues(prev => {
-                return { ...prev, source : selectedSampleCode };
-            });
-        }
-    }, [selectedSampleCode, setPropValues]);
+    }, [props.language]);
 
-    const showSelectedLanguageCode = (language) => {
+    const showSelectedLanguageCode = (language: string) => {
         switch (language) {
             case "bash":
                 setSelectedSampleCode(sampleBashCode);
@@ -121,12 +96,15 @@ const CodeBlockDocs = () => {
                 setSelectedSampleCode(sampleMarkdownCode);
                 break;
             default:
-                setSelectedSampleCode(sampleBashCode);
+                setSelectedSampleCode(sampleJSXCode);
         }
     };
 
-    const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(toastProps.variables);
-
+    const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(toastProps.variables) as {
+        componentVariables: Record<string, { defaultValue?: string; value?: number; unit?: string }>;
+        handleVariableChange: (varName: string, value: string | number) => void;
+        cssVariablesList: string;
+    };
 
     return (
         <Article id="page-code-block">
@@ -139,7 +117,6 @@ const CodeBlockDocs = () => {
                 </Portion>
 
                 <Portion>
-                    
                     <ul>
                         <li>
                             For embedded code block usage, wrap your code in <code>{"{[]}"}</code> for it to work
@@ -160,58 +137,34 @@ const CodeBlockDocs = () => {
 
             <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/*  CONFIGURATOR */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
+            {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////////// */}
             <Row horizontalPadding="small" className="rendered-component">
                 {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////// */}
                 <Portion id="component-wrapper">
-                    <Div padding="micro" shape="rounded" bgColour="slate-light80"
-                         data-centered-children
+                    <Div
+                        padding="micro"
+                        shape="rounded"
+                        bgColour="slate-light80"
+                        data-centered-children
                     >
-                        {currentUsage === "import" ? (
-                            <CodeBlock
-                                id="interactive-component"
-                                source={selectedSampleCode}
-                                language={propValues.language || "jsx"}
-                                showCopyButton={propValues.showCopyButton}
-                                showLineNumbers={propValues.showLineNumbers}
-                                withSyntaxHighlighting={propValues.withSyntaxHighlighting}
-                                makeEditable={propValues.makeEditable}
-                            />
-                        ) : (
-                            <CodeBlock
-                                id="interactive-component"
-                                language={propValues.language || "jsx"}
-                                showCopyButton={propValues.showCopyButton}
-                                showLineNumbers={propValues.showLineNumbers}
-                                withSyntaxHighlighting={propValues.withSyntaxHighlighting}
-                                makeEditable={propValues.makeEditable}
-                            >
-                                {[
-                                    `import React from "react";`,
-                                    `import { CodeBlock } from "fictoan-react";`,
-                                    `import { sampleCode } from "./sampleCode";`,
-                                    ``,
-                                    `<CodeBlock`,
-                                    `    language="jsx"`,
-                                    `    withSyntaxHighlighting`,
-                                    `    showCopyButton`,
-                                    `    showLineNumbers`,
-                                    `    source={sampleCode}`,
-                                    `/>`
-                                ].join("\n")}
-                            </CodeBlock>
-                        )}
+                        <CodeBlock
+                            id="interactive-component"
+                            source={selectedSampleCode}
+                            language={props.language || "jsx"}
+                            showCopyButton={props.showCopyButton}
+                            showLineNumbers={props.showLineNumbers}
+                            withSyntaxHighlighting={props.withSyntaxHighlighting}
+                            makeEditable={props.makeEditable}
+                        />
                     </Div>
                 </Portion>
 
-                {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////// */}
+                {/* PROPS CONFIGURATOR ///////////////////////////////////////////////////////////////////////////// */}
                 <Portion desktopSpan="half">
-                    {propsConfigurator()}
+                    <PropsConfigurator componentName="CodeBlock" onPropsChange={setProps} />
                 </Portion>
 
-                {/* GLOBAL THEME /////////////////////////////////////////////////////////////////////////////////// */}
+                {/* THEME CONFIGURATOR ///////////////////////////////////////////////////////////////////////////// */}
                 <Portion desktopSpan="half">
                     <Card padding="micro" shape="rounded">
                         <Form>
@@ -239,11 +192,11 @@ const CodeBlockDocs = () => {
                                     <Text weight="700" size="large">Common</Text>
                                 </Portion>
 
-                                {/* BG COLOUR ====================================================================== */}
+                                {/* FONT =========================================================================== */}
                                 <Portion desktopSpan="half">
                                     <InputField
                                         label="Font"
-                                        defaultValue={componentVariables["code-font"].defaultValue}
+                                        defaultValue={componentVariables["code-font"]?.defaultValue}
                                         onChange={(value) => handleVariableChange("code-font", value)}
                                         isFullWidth
                                     />
@@ -268,7 +221,7 @@ const CodeBlockDocs = () => {
                                             disabled : true,
                                             selected : true,
                                         }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-inline-bg"].defaultValue || "select-a-colour"}
+                                        defaultValue={componentVariables["code-inline-bg"]?.defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("code-inline-bg", value)}
                                         isFullWidth
                                     />
@@ -284,7 +237,7 @@ const CodeBlockDocs = () => {
                                             disabled : true,
                                             selected : true,
                                         }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-inline-text"].defaultValue || "select-a-colour"}
+                                        defaultValue={componentVariables["code-inline-text"]?.defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("code-inline-text", value)}
                                         isFullWidth
                                     />
@@ -294,9 +247,9 @@ const CodeBlockDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Range
                                         label="Font size"
-                                        value={componentVariables["code-inline-font-size"].value}
-                                        onChange={(value) => handleVariableChange("code-inline-font-size", value)}
-                                        suffix={componentVariables["code-inline-font-size"].unit}
+                                        value={componentVariables["code-inline-font-size"]?.value}
+                                        onChange={(value: number) => handleVariableChange("code-inline-font-size", value)}
+                                        suffix={componentVariables["code-inline-font-size"]?.unit}
                                         min={0} max={20} step={0.1}
                                     />
                                 </Portion>
@@ -305,9 +258,9 @@ const CodeBlockDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Range
                                         label="Border radius"
-                                        value={componentVariables["code-inline-border-radius"].value}
-                                        onChange={(value) => handleVariableChange("code-inline-border-radius", value)}
-                                        suffix={componentVariables["code-inline-border-radius"].unit}
+                                        value={componentVariables["code-inline-border-radius"]?.value}
+                                        onChange={(value: number) => handleVariableChange("code-inline-border-radius", value)}
+                                        suffix={componentVariables["code-inline-border-radius"]?.unit}
                                         min={0} max={20} step={0.1}
                                     />
                                 </Portion>
@@ -331,7 +284,7 @@ const CodeBlockDocs = () => {
                                             disabled : true,
                                             selected : true,
                                         }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-bg"].defaultValue || "select-a-colour"}
+                                        defaultValue={componentVariables["code-block-bg"]?.defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("code-block-bg", value)}
                                         isFullWidth
                                     />
@@ -347,7 +300,7 @@ const CodeBlockDocs = () => {
                                             disabled : true,
                                             selected : true,
                                         }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-text"].defaultValue || "select-a-colour"}
+                                        defaultValue={componentVariables["code-block-text"]?.defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("code-block-text", value)}
                                         isFullWidth
                                     />
@@ -357,9 +310,9 @@ const CodeBlockDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Range
                                         label="Font size"
-                                        value={componentVariables["code-block-font-size"].value}
-                                        onChange={(value) => handleVariableChange("code-block-font-size", value)}
-                                        suffix={componentVariables["code-block-font-size"].unit}
+                                        value={componentVariables["code-block-font-size"]?.value}
+                                        onChange={(value: number) => handleVariableChange("code-block-font-size", value)}
+                                        suffix={componentVariables["code-block-font-size"]?.unit}
                                         min={0} max={20} step={0.1}
                                     />
                                 </Portion>
@@ -368,8 +321,8 @@ const CodeBlockDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Range
                                         label="Line height"
-                                        value={componentVariables["code-block-line-height"].value}
-                                        onChange={(value) => handleVariableChange("code-block-line-height", value)}
+                                        value={componentVariables["code-block-line-height"]?.value}
+                                        onChange={(value: number) => handleVariableChange("code-block-line-height", value)}
                                         min={1} max={3} step={0.1}
                                     />
                                 </Portion>
@@ -378,9 +331,9 @@ const CodeBlockDocs = () => {
                                 <Portion desktopSpan="half">
                                     <Range
                                         label="Border radius"
-                                        value={componentVariables["code-block-border-radius"].value}
-                                        onChange={(value) => handleVariableChange("code-block-border-radius", value)}
-                                        suffix={componentVariables["code-block-border-radius"].unit}
+                                        value={componentVariables["code-block-border-radius"]?.value}
+                                        onChange={(value: number) => handleVariableChange("code-block-border-radius", value)}
+                                        suffix={componentVariables["code-block-border-radius"]?.unit}
                                         min={0} max={20} step={0.1}
                                     />
                                 </Portion>
@@ -395,7 +348,7 @@ const CodeBlockDocs = () => {
                                             disabled : true,
                                             selected : true,
                                         }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-line-numbers"].defaultValue || "select-a-colour"}
+                                        defaultValue={componentVariables["code-block-line-numbers"]?.defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("code-block-line-numbers", value)}
                                         isFullWidth
                                     />
@@ -420,7 +373,7 @@ const CodeBlockDocs = () => {
                                             disabled : true,
                                             selected : true,
                                         }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-copy-button-bg"].defaultValue || "select-a-colour"}
+                                        defaultValue={componentVariables["code-block-copy-button-bg"]?.defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("code-block-copy-button-bg", value)}
                                         isFullWidth
                                     />
@@ -436,7 +389,7 @@ const CodeBlockDocs = () => {
                                             disabled : true,
                                             selected : true,
                                         }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-copy-button-text"].defaultValue || "select-a-colour"}
+                                        defaultValue={componentVariables["code-block-copy-button-text"]?.defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("code-block-copy-button-text", value)}
                                         isFullWidth
                                     />
@@ -452,7 +405,7 @@ const CodeBlockDocs = () => {
                                             disabled : true,
                                             selected : true,
                                         }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-copy-button-border"].defaultValue || "select-a-colour"}
+                                        defaultValue={componentVariables["code-block-copy-button-border"]?.defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("code-block-copy-button-border", value)}
                                         isFullWidth
                                     />
@@ -470,7 +423,7 @@ const CodeBlockDocs = () => {
                                             disabled : true,
                                             selected : true,
                                         }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-copied-badge-bg"].defaultValue || "select-a-colour"}
+                                        defaultValue={componentVariables["code-block-copied-badge-bg"]?.defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("code-block-copied-badge-bg", value)}
                                         isFullWidth
                                     />
@@ -486,7 +439,7 @@ const CodeBlockDocs = () => {
                                             disabled : true,
                                             selected : true,
                                         }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-copied-badge-text"].defaultValue || "select-a-colour"}
+                                        defaultValue={componentVariables["code-block-copied-badge-text"]?.defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("code-block-copied-badge-text", value)}
                                         isFullWidth
                                     />
@@ -502,7 +455,7 @@ const CodeBlockDocs = () => {
                                             disabled : true,
                                             selected : true,
                                         }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-copied-badge-border"].defaultValue || "select-a-colour"}
+                                        defaultValue={componentVariables["code-block-copied-badge-border"]?.defaultValue || "select-a-colour"}
                                         onChange={(value) => handleVariableChange("code-block-copied-badge-border", value)}
                                         isFullWidth
                                     />
@@ -511,7 +464,7 @@ const CodeBlockDocs = () => {
 
                             <Divider kind="secondary" verticalMargin="micro" />
 
-                            {/* COPY BUTTON //////////////////////////////////////////////////////////////////////// */}
+                            {/* TOKENS ///////////////////////////////////////////////////////////////////////////// */}
                             <Row marginBottom="none">
                                 <Portion>
                                     <Text weight="700" size="large">Tokens</Text>

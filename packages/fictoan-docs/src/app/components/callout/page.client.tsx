@@ -72,6 +72,7 @@ const CalloutDocs = () => {
                         >
                             <Callout
                                 ref={interactiveElementRef}
+                                kind="info"
                                 {...props}
                                 {...themeConfig}
                             >

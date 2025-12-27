@@ -4,116 +4,77 @@
 import React from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading4, Divider, Portion, Row, Article, InputField, Section, Heading6 } from "fictoan-react";
+import { Div, Heading6, Text, Divider, InputField } from "fictoan-react";
+
+// LOCAL COMPONENTS ====================================================================================================
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
 // UTILS ===============================================================================================================
-import { createPropsConfigurator } from "$utils/propsConfigurator";
 import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
 import "./input-field.css";
 
-// OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
-
 const InputFieldDocs = () => {
-    const {
-        propsConfigurator,
-        componentProps : propsConfig,
-    } = createPropsConfigurator(
-        "InputField", [
-            "label",
-            "size",
-            "placeholder",
-            "helpText",
-            "required",
-            "disabled",
-            "readOnly",
-            "validateThis",
-            "pattern",
-            "errorText",
-            "innerTextLeft",
-            "innerTextRight",
-        ],
-        colourOptions,
-        {
-            isSelfClosing   : true,
-            canHaveChildren : false,
-            defaultChildren : null,
-        },
-    );
+    const [props, setProps] = React.useState<{ [key: string]: any }>({});
 
-    const InputFieldComponent = (varName : string) => {
+    const InputFieldComponent = (varName: string) => {
         return varName.startsWith("input-");
     };
 
     const {
         interactiveElementRef,
-        componentProps : themeConfig,
+        componentProps: themeConfig,
         themeConfigurator,
     } = createThemeConfigurator("InputField", InputFieldComponent);
 
     return (
-        <Article id="page-input-field">
-            {/*  INTRO ///////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                    <Portion>
-                        <Heading4 id="component-name">
-                            Input field
-                        </Heading4>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading6 id="component-name">
+                    Input field
+                </Heading6>
 
-                        <Heading6
-                            id="component-description"
-                            weight="400" marginBottom="small"
-                        >
-                            A text box to enter information
-                        </Heading6>
-                    </Portion>
+                <Text
+                    id="component-description"
+                    weight="400"
+                >
+                    A text box to enter information
+                </Text>
+            </Div>
 
-                    <Portion>
-                        <ul>
-                            <li>The input field also forms the styling base for Select, Textarea etc.</li>
-                        </ul>
-                    </Portion>
-                </Row>
-            </Section>
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+                <Text>
+                    The input field also forms the styling base for Select, Textarea etc.
+                </Text>
+            </Div>
 
-            {/* INTERACTIVE COMPONENT ////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                {/* DEMO COMPONENT ================================================================================= */}
-                <Row id="component-wrapper" horizontalPadding="small" className="rendered-component">
-                    <Portion>
-                        <Div
-                            padding="small"
-                            shape="rounded"
-                            bgColour="slate-light80"
-                            data-centered-children
-                        >
-                            <InputField
-                                ref={interactiveElementRef}
-                                {...propsConfig}
-                                {...themeConfig}
-                            />
-                        </Div>
-                    </Portion>
-                </Row>
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                <InputField
+                    ref={interactiveElementRef}
+                    label={props.label || "Label"}
+                    {...themeConfig}
+                    {...props}
+                />
+            </Div>
 
-                <Row horizontalPadding="small">
-                    {/* PROPS CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        {propsConfigurator()}
-                    </Portion>
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <PropsConfigurator componentName="InputField" onPropsChange={setProps} />
+            </Div>
 
-                    {/* THEME CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        {themeConfigurator()}
-                    </Portion>
-                </Row>
-            </Section>
-        </Article>
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

@@ -13,20 +13,23 @@ import { InputCommonProps } from "../BaseInputComponent/constants";
 import { InputLabelProps } from "../InputLabel/InputLabel";
 
 export type TextareaElementType = HTMLTextAreaElement;
-export type TextareaProps = CommonAndHTMLProps<TextareaElementType> & InputLabelProps & InputCommonProps & {
-    onChange       ? : (value: string) => void;
-    value          ? : string;
-    rows           ? : number;
-    cols           ? : number;
-    minLength      ? : number;
-    maxLength      ? : number;
-    placeholder    ? : string;
-    readOnly       ? : boolean;
-    required       ? : boolean;
-    autoComplete   ? : string;
-    characterLimit ? : number;
-    wordLimit      ? : number;
-};
+export type TextareaProps =
+    Omit<CommonAndHTMLProps<TextareaElementType>, "onChange"> &
+    Omit<InputLabelProps, "onChange"> &
+    InputCommonProps & {
+        onChange       ? : (value: string) => void;
+        value          ? : string;
+        rows           ? : number;
+        cols           ? : number;
+        minLength      ? : number;
+        maxLength      ? : number;
+        placeholder    ? : string;
+        readOnly       ? : boolean;
+        required       ? : boolean;
+        autoComplete   ? : string;
+        characterLimit ? : number;
+        wordLimit      ? : number;
+    };
 
 // Helper functions to determine limit states
 const getLimitState = (current: number, limit: number): "normal" | "warning" | "exceeded" => {

@@ -7,8 +7,9 @@ import React from "react";
 import { Div, Heading6, Text, Divider, Accordion } from "fictoan-react";
 
 // LOCAL COMPONENTS ====================================================================================================
-import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
+import { PropsConfiguratorNew } from "$components/PropsConfigurator/PropsConfiguratorNew";
 import { ComponentDocsLayout } from "../ComponentDocsLayout";
+import { accordionRegistry } from "./props.registry";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -74,7 +75,7 @@ const AccordionDocs = () => {
 
             {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="props-config">
-                <PropsConfigurator componentName="Accordion" onPropsChange={setProps} />
+                <PropsConfiguratorNew registry={accordionRegistry} onPropsChange={setProps} />
             </Div>
 
             {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
