@@ -194,7 +194,9 @@
     /* CUSTOM COMPONENTS */
     /* ////////////////////////////////////////////////////////////////////// */
     /* COMPONENT GRID /////////////////////////////////////////////////////// */
-    --component-card-bg                       : var(--slate-dark90);
+
+    --component-card-bg                       : var(--slate-dark80-opacity80);
+    --component-card-border                   : var(--slate-dark90);
     --component-card-footer-border            : var(--slate-dark60);
 
     /* SITE HEADER ////////////////////////////////////////////////////////// */
@@ -204,19 +206,8 @@
     /* USP CARDS //////////////////////////////////////////////////////////// */
     /*--usp-section-bg                          : var(--grey-dark90);*/
 
-    --usp-card-gradient-top                   : var(--grey-dark80-opacity40);
+    --usp-card-gradient-top                   : var(--green-dark80-opacity40);
     --usp-card-gradient-bottom                : var(--grey-dark80-opacity40);
-
-    --usp-card-1-bg                           : var(--blue-dark70);
-    --usp-card-1-border                       : var(--blue-dark30);
-    --usp-card-2-bg                           : var(--green-dark70);
-    --usp-card-2-border                       : var(--green-dark50);
-    --usp-card-3-bg                           : var(--salmon-dark70);
-    --usp-card-3-border                       : var(--salmon-dark50);
-    --usp-card-4-bg                           : var(--violet-dark70);
-    --usp-card-4-border                       : var(--violet-dark50);
-    --usp-card-5-bg                           : var(--teal-dark70);
-    --usp-card-5-border                       : var(--teal-dark50);
 
     /* SEARCH /////////////////////////////////////////////////////////////// */
     --search-input-bg                         : var(--slate-dark80);

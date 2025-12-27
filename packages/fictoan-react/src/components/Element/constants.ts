@@ -78,14 +78,16 @@ export interface CommonProps {
 
     // LAYOUT ==================================================================
     // Flexbox -----------------------------------------------------------------
-    layoutAsFlexbox ? : boolean;
+    layoutAsFlexbox   ? : boolean;
+    stackVertically   ? : boolean;
+    stackHorizontally ? : boolean;
 
     // Grid --------------------------------------------------------------------
     layoutAsGrid    ? : boolean;
     columns         ? : string;
 
     // Common ------------------------------------------------------------------
-    gap             ? : string;
+    gap             ? : SpacingTypes;
 
     // SPACING =================================================================
     // Margin ------------------------------------------------------------------

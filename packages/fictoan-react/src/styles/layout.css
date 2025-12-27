@@ -1,6 +1,9 @@
 /* FLEXBOX ////////////////////////////////////////////////////////////////// */
 .layout-flexbox { display : flex; }
 
+.stack-vertically { flex-direction : column; }
+.stack-horizontally { flex-direction : row; }
+
 /* Flexbox layout directions ------------------------------------------------ */
 .horizontal-layout { flex-direction : row; }
 .reverse-horizontal-layout { flex-direction : row-reverse; }
@@ -44,6 +47,15 @@
 
 .push-to-ends { justify-content : space-between; }
 
+/* GAP ////////////////////////////////////////////////////////////////////// */
+.gap-none   { gap : 0; }
+.gap-nano   { gap : var(--nano); }
+.gap-micro  { gap : var(--micro); }
+.gap-tiny   { gap : var(--tiny); }
+.gap-small  { gap : var(--small); }
+.gap-medium { gap : var(--medium); }
+.gap-large  { gap : var(--large); }
+.gap-huge   { gap : var(--huge); }
 
 /* GRID ///////////////////////////////////////////////////////////////////// */
 .layout-grid { display : grid; }

@@ -106,7 +106,9 @@
     /* CARD COMMON CLASSES ================================================== */
     .component-wrapper {
         background-color : var(--component-card-bg);
+        border           : 1px solid var(--component-card-border);
         overflow         : hidden;
+        backdrop-filter  : blur(8px) saturate(180%);
     }
 
     .component-card {

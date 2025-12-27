@@ -185,7 +185,6 @@ export const IntroCode = () => {
         checkPrism();
     }, []);
 
-
     const [vizMode, setVizMode] = useState(true);
     const numberOfPortions = 24;
 
@@ -273,7 +272,7 @@ export const IntroCode = () => {
                             makeEditable
                             suppressContentEditableWarning={true}
                             onChange={handleCodeChange}
-                            marginBottom="micro"
+                            marginBottom="micro" shadow="soft"
                         >
                             {[
                                 `<Row horizontalPadding="medium" marginTop="tiny" marginBottom="small"> {/* Try "none", "small", "medium", "large" or "huge" */}`,

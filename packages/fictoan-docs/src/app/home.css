@@ -1,6 +1,10 @@
 #home-page {
     scroll-behavior : smooth;
 
+    #intro-code-section {
+        background-color : var(--purple-dark80-opacity50);
+    }
+
     #intro-headline {
         /*background              : -webkit-linear-gradient(270deg, #adb2ff 0%, #264be1 100%);*/
         /*-webkit-background-clip : text;*/
@@ -25,6 +29,23 @@
         z-index    : -1;
     }
 
+    /* USP SECTION ////////////////////////////////////////////////////////// */
+    #component-grid {
+        position : relative;
+    }
+
+    #component-grid-bg {
+        z-index         : -1;
+        background      : linear-gradient(135deg, var(--amber-dark40), var(--blue-dark60), var(--purple-dark60), var(--orange));
+        background-size : 400% 400%;
+        animation       : gradient 15s ease infinite;
+        height          : 100%;
+        display         : block;
+        position        : absolute;
+        top             : 0;
+        left            : 0;
+        width           : 100%;
+    }
 
     /* USP SECTION ////////////////////////////////////////////////////////// */
     #usp-section {
@@ -37,13 +58,12 @@
     }
 
     .usp-card {
-        min-height      : 240px;
+        min-height      : 320px;
         display         : flex;
         flex-direction  : column;
         justify-content : space-between;
         background      : linear-gradient(135deg, var(--usp-card-gradient-top) 24%, var(--usp-card-gradient-bottom) 80%);
-        border          : 1px solid hsla(0, 0%, 80%, .08);
-        backdrop-filter : blur(24px);
+        border          : 1px solid var(--green-dark80);
     }
 
     #fictoan-bg {
@@ -65,9 +85,23 @@
         }
     }
 
-    /* MANIFESTO-CARD ======================================================= */
+    /* MANIFESTO-CARD /////////////////////////////////////////////////////// */
     #manifesto {
         position : relative;
+        overflow : hidden;
+    }
+
+    #manifesto-section-bg {
+        z-index          : -1;
+        background-image : url("../assets/images/manifesto-bg.jpg");
+        background-size  : cover;
+        position         : absolute;
+        top              : 50%;
+        left             : 50%;
+        width            : 400%;
+        height           : 400%;
+        animation        : slow-rotate 60s linear infinite;
+        will-change      : transform;
     }
 
     .manifesto-card {
@@ -128,19 +162,9 @@
         animation        : border-glow -.64s linear 4s infinite;
         will-change      : transform
     }
+}
 
-    .gradient-bg {
-        z-index         : -1;
-        background      : linear-gradient(
-                135deg, var(--amber), var(--green), var(--white), var(--purple), var(--red), var(--black)
-        );
-        background-size : 400% 400%;
-        animation       : gradient 15s ease infinite;
-        height          : 100%;
-        display         : block;
-        position        : absolute;
-        top             : 0;
-        left            : 0;
-        width           : 100%;
-    }
+@keyframes slow-rotate {
+    from { transform : translate(-50%, -50%) rotate(0deg); }
+    to   { transform : translate(-50%, -50%) rotate(360deg); }
 }
