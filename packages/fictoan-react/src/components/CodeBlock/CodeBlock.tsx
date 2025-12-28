@@ -78,14 +78,34 @@ ref : React.Ref<CodeBlockElementType>,
         const loadPrismWithLanguage = async () => {
             setIsLoading(true);
             try {
-                // Load both Prism core and language-specific module in parallel
-                const [ prism ] = await Promise.all([
-                    import("prismjs"),
-                    language !== "plain" ? import(`prismjs/components/prism-${language}`) : Promise.resolve(),
-                ]);
-                setPrismModule(prism.default);
-            } catch (error) {
-                console.warn(`Failed to load syntax highlighting for ${language}:`, error);
+                // Load Prism core FIRST and ensure it's globally available
+                const prism = await import("prismjs");
+                const Prism = prism.default;
+
+                // Ensure Prism is available globally for language plugins
+                if (typeof window !== "undefined" && !(window as any).Prism) {
+                    (window as any).Prism = Prism;
+                }
+
+                // NOW load the language module - it needs Prism to be global
+                if (language !== "plain" && !Prism.languages[language]) {
+                    try {
+                        await import(`prismjs/components/prism-${language}`);
+                    } catch (langError) {
+                        console.warn(`Language "${language}" not available, falling back to plain text`);
+                    }
+                }
+
+                setPrismModule(Prism);
+            } catch (error: any) {
+                // Check if it's a "module not found" error (prismjs not installed)
+                if (error?.code === "ERR_MODULE_NOT_FOUND" || error?.message?.includes("Cannot find module")) {
+                    console.warn(
+                        "PrismJS is not installed. To enable syntax highlighting, run: npm install prismjs"
+                    );
+                } else {
+                    console.warn(`Failed to load syntax highlighting for ${language}:`, error);
+                }
             } finally {
                 setIsLoading(false);
             }

@@ -2,7 +2,7 @@
 
 // REACT CORE ==========================================================================================================
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 
 // UI ==================================================================================================================
 import {
@@ -13,7 +13,6 @@ import {
     Heading5,
     Portion,
     Row,
-    Section,
     Switch,
     Text,
     CodeBlock,
@@ -113,8 +112,6 @@ export const IntroCode = () => {
         setButtonProps(prev => ({ ...prev, ...newProps.Button } as typeof prev));
     };
 
-    const codeBlockRef = useRef<HTMLDivElement>(null);
-
     const parseCodeToProperties = (codeContent: string) => {
         const propRegex = /<(Heading1|Heading5|Row|Portion|Button)\s+(.*?)>/gs;
         const propertiesRegex = /(\w+)="([^"]+)"/g;
@@ -159,31 +156,6 @@ export const IntroCode = () => {
         return newProps;
     };
 
-    const [mountKey, setMountKey] = useState(0);
-
-    // Use this effect to trigger a remount after the initial load
-    useEffect(() => {
-        // We'll wait for everything to settle
-        const remountTimer = setTimeout(() => {
-            setMountKey(prev => prev + 1);
-        }, 100);
-
-        return () => clearTimeout(remountTimer);
-    }, []); // Only run once on initial mount
-
-    useEffect(() => {
-        const checkPrism = () => {
-            if ((window as any).Prism) {
-                console.log("Prism is loaded");
-                setMountKey(prev => prev + 1);
-            } else {
-                console.log("Prism not loaded yet, retrying...");
-                setTimeout(checkPrism, 100);
-            }
-        };
-
-        checkPrism();
-    }, []);
 
     const [vizMode, setVizMode] = useState(true);
     const numberOfPortions = 24;
@@ -265,7 +237,6 @@ export const IntroCode = () => {
                 <Portion>
                     <Div id="intro-code-block">
                         <CodeBlock
-                            key={mountKey}
                             withSyntaxHighlighting
                             language="jsx"
                             showCopyButton
