@@ -65,6 +65,10 @@
 - Fix `RadioTabGroup` click interaction not updating indicator
 - Add `RadioTabGroupInternalProps` interface for better type organization
 - Add dual-thumb support for `RangeSlider`
+- Add `ButtonGroup` component for grouping related buttons
+- Fix PrismJS race condition causing syntax highlighting to fail on first load
+- Fix sidebar text colour styles
+- Remove `hasDelete` prop from `Button` (use `Badge` with `withDelete` instead)
 
 ## 1.12.0
 - `ThemeProvider` now uses unique key based on hostname for local storage, instead of default `fictoan-theme`
