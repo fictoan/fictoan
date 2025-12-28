@@ -18,9 +18,11 @@ import {
     Section,
     Heading2,
     Header,
+    Badge,
 } from "fictoan-react";
 
 // LOCAL COMPONENTS ====================================================================================================
+import { CodeComparison } from "$components/CodeComparison/CodeComparison";
 import { ComponentGrid } from "$components/ComponentGrid/ComponentGrid";
 import { IntroCode } from "$components/IntroCode/IntroCode";
 
@@ -31,33 +33,123 @@ import ManifestoIcon from "../assets/icons/manifesto.svg";
 import "./home.css";
 
 // OTHER ===============================================================================================================
-import { PenLine, Zap, Palette, Gauge, Layers, Minimize2 } from "lucide-react";
+import { PenLine, Zap, Palette, Gauge, Layers, Minimize2, FileCode, Feather, Package, RefreshCw } from "lucide-react";
 
 const HomePage = () => {
     return (
         <Article id="home-page">
             {/* HERO /////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Section id="intro-code-section" verticalPadding="small">
+            <Section id="hero-section" verticalPadding="medium">
+                <Row horizontalPadding="medium" marginBottom="none">
+                    <Portion desktopSpan="two-third">
+                        <Heading2 fontStyle="serif" weight="400" marginBottom="nano">
+                            React UI in plain English
+                        </Heading2>
+
+                        <Heading4 weight="400" opacity="80" marginBottom="micro">
+                            Components so obvious, anyone can ship them
+                        </Heading4>
+
+                        <Text size="large" marginBottom="small">
+                            Props that read like prose. Pure CSS, zero runtime. The UI library your designers will
+                            actually use.
+                        </Text>
+                    </Portion>
+
+                    <Portion desktopSpan="one-third" />
+                </Row>
+
+                <Div id="intro-code-section-bg" />
+            </Section>
+
+            {/* INTRO CODE ///////////////////////////////////////////////////////////////////////////////////////// */}
+            <Section id="intro-code-section">
                 <IntroCode />
             </Section>
 
-            {/* COMPONENT GRID ///////////////////////////////////////////////////////////////////////////////////// */}
-            <Section id="component-grid" verticalPadding="medium">
-                <Row horizontalPadding="medium">
-                    <Portion>
-                        <Heading4 fontStyle="serif" weight="400" marginBottom="nano">
-                            Some components
-                        </Heading4>
+            {/* DIFFERENTIATORS //////////////////////////////////////////////////////////////////////////////////// */}
+            <Section id="differentiators-section" verticalPadding="small">
+                <Row horizontalPadding="medium" gutters="large" marginBottom="none">
+                    <Portion desktopSpan="two-third">
+                        <Heading2 fontStyle="serif" weight="400" marginBottom="nano">
+                            What makes Fictoan different
+                        </Heading2>
                     </Portion>
 
-                    <Portion>
-                        <ComponentGrid />
-                        <Heading4 fontStyle="serif" weight="400" marginTop="micro">...and many more.</Heading4>
+                    <Portion desktopSpan="one-third" />
+
+                    <Portion desktopSpan="half">
+                        <Card className="differentiator-card" padding="micro" shape="rounded" shadow="soft">
+                            <Header>
+                                <FileCode size={24} strokeWidth={2} stroke="var(--pistachio)" />
+
+                                <Heading6 weight="400" opacity="80" marginBottom="micro" marginTop="nano">
+                                    No cryptic class names
+                                </Heading6>
+                            </Header>
+
+                            <Text>
+                                Semantic props like <code>bgColour</code> and <code>marginBottom</code>, not abbreviated
+                                utility classes to memorise.
+                            </Text>
+                        </Card>
+                    </Portion>
+
+                    <Portion desktopSpan="half">
+                        <Card className="differentiator-card" padding="micro" shape="rounded" shadow="soft">
+                            <Header>
+                                <Feather size={24} strokeWidth={2} stroke="var(--pistachio)" />
+
+                                <Heading6 weight="400" opacity="80" marginBottom="micro" marginTop="nano">
+                                    No runtime CSS
+                                </Heading6>
+                            </Header>
+
+                            <Text>
+                                Pure CSS variables. No style injection, no hydration mismatch, no flash of unstyled
+                                content.
+                            </Text>
+                        </Card>
+                    </Portion>
+
+                    <Portion desktopSpan="half">
+                        <Card className="differentiator-card" padding="micro" shape="rounded" shadow="soft">
+                            <Header>
+                                <Package size={24} strokeWidth={2} stroke="var(--pistachio)" />
+
+                                <Heading6 weight="400" opacity="80" marginBottom="micro" marginTop="nano">
+                                    No assembly required
+                                </Heading6>
+                            </Header>
+
+                            <Text>
+                                Components are styled and ready to use. No building your own design system from
+                                primitives.
+                            </Text>
+                        </Card>
+                    </Portion>
+
+                    <Portion desktopSpan="half">
+                        <Card className="differentiator-card" padding="micro" shape="rounded" shadow="soft">
+                            <Header>
+                                <RefreshCw size={24} strokeWidth={2} stroke="var(--pistachio)" />
+
+                                <Heading6 weight="400" opacity="80" marginBottom="micro" marginTop="nano">
+                                    No copy-paste to maintain
+                                </Heading6>
+                            </Header>
+
+                            <Text>
+                                An actual library with updates. You don't own (and maintain) hundreds of component
+                                files.
+                            </Text>
+                        </Card>
                     </Portion>
                 </Row>
-
-                {/* <Div id="component-grid-bg" /> */}
             </Section>
+
+            {/* COMPARISON ///////////////////////////////////////////////////////////////////////////////////////// */}
+            <CodeComparison />
 
             {/* BULLET POINTS ////////////////////////////////////////////////////////////////////////////////////// */}
             <Section id="usp-section" verticalPadding="medium">
@@ -68,7 +160,7 @@ const HomePage = () => {
                 >
                     <Portion desktopSpan="two-third">
                         <Heading2 fontStyle="serif" weight="400" marginBottom="nano">
-                            As simple as it gets.
+                            Ship faster
                         </Heading2>
                     </Portion>
 
@@ -142,7 +234,7 @@ const HomePage = () => {
                 >
                     <Portion desktopSpan="two-third">
                         <Heading2 fontStyle="serif" weight="400" marginBottom="nano">
-                            But wait, there’s more!
+                            Ship lighter
                         </Heading2>
                     </Portion>
 
@@ -210,6 +302,24 @@ const HomePage = () => {
                 </Row>
             </Section>
 
+            {/* COMPONENT GRID ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Section id="component-grid" verticalPadding="medium">
+                <Row horizontalPadding="medium">
+                    <Portion>
+                        <Heading4 fontStyle="serif" weight="400" marginBottom="nano">
+                            Some components
+                        </Heading4>
+                    </Portion>
+
+                    <Portion>
+                        <ComponentGrid />
+                        <Heading4 fontStyle="serif" weight="400" marginTop="micro">...and many more.</Heading4>
+                    </Portion>
+                </Row>
+
+                {/* <Div id="component-grid-bg" /> */}
+            </Section>
+
             {/* MANIFESTO ////////////////////////////////////////////////////////////////////////////////////////// */}
             <Section id="manifesto" verticalPadding="medium">
                 <Row horizontalPadding="medium" marginBottom="none">
@@ -219,12 +329,18 @@ const HomePage = () => {
                                 <Row marginBottom="none" isFullHeight>
                                     <Portion desktopSpan="half">
                                         <Div layoutAsFlexbox isFullHeight stackVertically pushItemsToEnds>
-                                            <Heading4
-                                                fontStyle="serif" weight="400" textColour="blue-light30"
-                                                marginBottom="micro"
-                                            >
-                                                We want to blur the lines between designers and developers.
-                                            </Heading4>
+                                            <Header>
+                                                <Heading4
+                                                    fontStyle="serif" weight="400" textColour="blue-light30"
+                                                    marginBottom="nano"
+                                                >
+                                                    UI frameworks got complicated. We went the other way.
+                                                </Heading4>
+
+                                                <Text textColour="blue-light50" marginBottom="micro">
+                                                    When designers can read code, everyone ships faster.
+                                                </Text>
+                                            </Header>
 
                                             <Link href="/manifesto">
                                                 <Text size="large" textColour="amber">

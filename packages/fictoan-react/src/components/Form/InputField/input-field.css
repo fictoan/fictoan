@@ -120,8 +120,11 @@ input[data-input-field] {
 
 /* ELEMENTS ON THE LEFT/RIGHT =============================================== */
 [data-input-side-element] {
-    line-height : 1;
-    white-space : nowrap;
+    line-height     : 1;
+    white-space     : nowrap;
+    display         : grid;
+    align-items     : center;
+    justify-content : center;
 
     &.left { grid-area : leftElement; }
     &.right { grid-area : rightElement; }

@@ -206,11 +206,11 @@ export const IntroCode = () => {
                 <Row {...rowProps}>
                     <Portion {...portion1Props} className={`demo-portion ${vizMode ? "border-red" : ""}`}>
                         <Heading1 {...mainHeadingProps} fontStyle="serif">
-                            Ship UI {flipACoin() ? "in half the time" : "twice as fast"}
+                            As simple as describing it
                         </Heading1>
 
                         <Heading4 {...taglineProps}>
-                            Empower designers to contribute in code
+                            Props that make sense at first glance
                         </Heading4>
 
                         <Link href="/getting-started">
@@ -228,11 +228,11 @@ export const IntroCode = () => {
 
                     <Portion {...portion2Props} className={`demo-portion ${vizMode ? "border-red" : ""}`}>
                         <Heading5 {...subHeading1Props}>
-                            Create ready-to-integrate UI in minutes with designer-friendly, plain-English syntax.
+                            No abbreviations to decode. No documentation to dig through. Just readable syntax.
                         </Heading5>
 
                         <Heading5 {...subHeading2Props}>
-                            Why not hand-off responsive, performant React code, rather than just static artboards?
+                            Go ahead—edit the code below.
                         </Heading5>
 
                         {vizMode && (
@@ -278,10 +278,10 @@ export const IntroCode = () => {
                                 `<Row horizontalPadding="medium" marginTop="tiny" marginBottom="small"> {/* Try "none", "small", "medium", "large" or "huge" */}`,
                                 `    <Portion desktopSpan="half"> {/* Try "one-third", or whole numbers between 1–24 */}`,
                                 `        <Heading1 textColour="blue-light20" marginBottom="nano" weight="700">`,
-                                `            Ship UI in half the time.`,
+                                `            As simple as describing it.`,
                                 `        </Heading1> \n`,
                                 `        <Heading4 marginBottom="micro">`,
-                                `            Empower designers to edit code`,
+                                `            Props that make sense at first glance`,
                                 `        </Heading4> \n`,
                                 `        <Button kind="primary"> {/* "secondary", or kind="custom" with bgColour="amber" textColour="black" */}`,
                                 `            Get started &rarr;`,
@@ -289,10 +289,10 @@ export const IntroCode = () => {
                                 `    </Portion> \n`,
                                 `    <Portion desktopSpan="half"> {/* Try adding mobileSpan="half" */}`,
                                 `        <Heading5 weight="400" marginBottom="micro">`,
-                                `            Create ready-to-integrate UI in minutes with designer-friendly, plain-English syntax.`,
+                                `            No abbreviations to decode. No documentation to dig through. Just readable syntax.`,
                                 `        </Heading5>\n`,
                                 `        <Heading5 weight="400" marginBottom="micro">`,
-                                `            Hand-off responsive, performant React code to your dev team.`,
+                                `            Go ahead—try editing this code.`,
                                 `        </Heading5>`,
                                 `    </Portion>`,
                                 `</Row>`,

@@ -1,0 +1,6 @@
+/* Sticky code blocks - shorter one stays in view */
+.code-portion {
+    position: sticky;
+    top: 100px;
+    align-self: flex-start;
+}

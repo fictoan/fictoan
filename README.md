@@ -4,8 +4,8 @@
 
 <h1 align="center">Fictoan</h1>
 <p align="center" style="font-size: 1rem;">
-    React version of the Fictoan framework<br>
-    Fictoan is an intuitive React framework for designers looking to code and rapidly iterate on UI.
+    React UI in plain English<br>
+    Components so obvious, anyone can ship them.
 </p>
 
 <p align="center">
@@ -22,31 +22,48 @@
 
 ---
 
-## Yet another component library? No, sir! 🎨
-### What if a designer wrote static UI code, allowing the developer to focus more on integration, performance, deployments etc? Wouldn’t that be a massive time saver?
+## What makes Fictoan different
 
-### We want to blur the lines between a designer and a developer. Read our [Manifesto](https://fictoan.io/manifesto) 🌞
-
----
-
-## Key features ✨
-
-### For designers
-- **Familiar like Figma**: Props mirror properties in your favourite design tool—`bgColour`, `shadow`, `shape`, `marginBottom`, `weight` and so on.
-- **Theme to your heart’s content**: Intricate control over every aspect of the UI
-- **Iterate like crazy**: Change properties as easily as you would in a design tool
-- **For one and all**: Accessible components and elements
-
-### For developers
-- **Just your type**: Fully typed, and a clean consistent component API
-- **Light as a feather**: ~14kb [gzipped bundle size](https://bundlephobia.com/package/fictoan-react@1.10.4) with no dependencies
-- **Bare metal**: Plain CSS styling, no JS bloat
-- **Flexible**: Easily extend and customise components
-- **Modern Stack**: Built with React 18+ and modern best practices
+- **No cryptic class names** — Semantic props like `bgColour` and `marginBottom`, not abbreviated utility classes to memorise.
+- **No runtime CSS** — Pure CSS variables. No style injection, no hydration mismatch, no flash of unstyled content.
+- **No assembly required** — Components are styled and ready to use. No building your own design system from primitives.
+- **No copy-paste to maintain** — An actual library with updates. You don't own (and maintain) hundreds of component files.
 
 ---
 
-## Getting started 🚀
+## See the difference
+
+A simple card — same output, different syntax:
+
+```jsx
+// Utility classes
+<div className="bg-white rounded-lg shadow-md p-4 mb-4 border border-slate-200">
+    <h4 className="text-xl font-semibold text-slate-800 mb-2">
+        Card title
+    </h4>
+    <p className="text-slate-600">
+        Card content goes here
+    </p>
+</div>
+
+// Fictoan
+<Card
+    shape="rounded" shadow="soft" padding="small"
+    bgColour="white" borderColour="slate-light20"
+    marginBottom="small"
+>
+    <Heading4 textColour="slate" weight="600" marginBottom="nano">
+        Card title
+    </Heading4>
+    <Text textColour="slate-light40">
+        Card content goes here
+    </Text>
+</Card>
+```
+
+---
+
+## Getting started
 
 1. Add Fictoan to your project:
 ```bash
@@ -57,22 +74,17 @@ npm install fictoan-react
 
 2. Import and use components:
 ```jsx
-import { Card, Badge, Text } from "fictoan-react";
+import { Card, Text, Heading4 } from "fictoan-react";
 
 export const MyComponent = () => {
     return (
-        <Card
-            shape="rounded" padding="medium"
-            bgColour="white" borderColor="slate-20"
-            shadow="soft"
-        >
-            <Text size="large" weight="600">
-                Simple, intuitive and obvious
+        <Card shape="rounded" padding="medium" bgColour="white" shadow="soft">
+            <Heading4 weight="600" marginBottom="nano">
+                Simple, intuitive syntax
+            </Heading4>
+            <Text textColour="slate-light40">
+                Props that make sense at first glance
             </Text>
-            
-            <Badge bgColor="blue-light40" textColour="blue">
-                A complete no-brainer
-            </Badge>
         </Card>
     );
 }
@@ -80,68 +92,44 @@ export const MyComponent = () => {
 
 ---
 
-## Write UI code the way you’d speak 🧠
-Doesn’t get simpler than this—
-```jsx
-// Responsive layout
-<Row gutters="large" horizontalPadding="small">
-    <Portion desktopSpan="one-third" mobileSpan="14">
-        <MyComponent />
-    </Portion>
-</Row>
+## Ship faster
 
-// A form input
-<InputField
-    label="Email"
-    placeholder="Enter your work email"
-    helpText="Must be your primary ID"
-    errorText="No such employee"
-/>
+- **Props that make sense** — `bgColour`, `shadow`, `shape`, `marginBottom`, `weight` — no documentation diving required.
+- **Rapid iteration** — Change properties as easily as you would in a design tool.
+- **Accessible by default** — Components ship with proper ARIA attributes and keyboard navigation.
 
-// A primary button
-<Button kind="primary" isFullWidth>
-    Click me
-</Button>
-```
-...and so much more.
+## Ship lighter
+
+- **~14kb gzipped** — [Check the bundle size](https://bundlephobia.com/package/fictoan-react) with zero dependencies.
+- **Pure CSS** — No runtime overhead, no JS-based styling.
+- **One theme file** — ~500 CSS variables to control every aspect of the UI.
 
 ---
 
-## Core principles 🎯
-- **Intuitive props**: Properties that make sense at first glance
-- **Consistent patterns**: Similar components share similar prop patterns
-- **Design-Developer bridge**: Make hand-off painless as possible
-- **Minimal friction**: Get from design to implementation faster
+## Documentation
+
+Read our [documentation](https://fictoan.io) to explore:
+- Component library and props
+- Theming and customisation with ~500 CSS variables
+- Guides and examples
 
 ---
 
-## Documentation 📚
-Read our [documentation](https://fictoan.io) to:
-- Explore the guides, boilerplate and component library
-- Check out the extensive theming and customisation ability with ~500 theme variables
-- See examples and use cases
+## Community and support
 
----
-
-## Theming 🎨
-Fictoan uses CSS variables for theming, with nearly 500 different variables that you can customise. [Check it out](https://github.com/fictoan/fictoan-react/blob/main/src/styles/theme.css)!
-
----
-
-## Community and support 💬
 - [GitHub Issues](https://github.com/fictoan/fictoan-react/issues) for bugs and feature requests
 - [Discussions](https://github.com/fictoan/fictoan-react/discussions) for questions and community interaction
-- [Twitter](https://twitter.com/fictoan) (Coming soon!) for updates and news
 
 ---
 
 ## License
-Uses a simple [MIT License](LICENSE). Have at it.
+
+[MIT License](LICENSE)
 
 ---
 
 <h4 align="center">
-Built with ♥️ for designers who code and developers who value design.
+Good tools don't gatekeep. They invite everyone in.
 </h4>
 
 
@@ -151,7 +139,7 @@ Built with ♥️ for designers who code and developers who value design.
 
 A simple monorepo setup for Fictoan React component library and documentation site.
 
-## What’s included
+## What's included
 
 - `packages/fictoan-react`: The Fictoan React component library
 - `packages/fictoan-docs`: The documentation site for Fictoan

@@ -5,50 +5,50 @@ import React, { useEffect, useRef, useState } from "react";
 import { Div } from "$tags";
 import { Element } from "$element";
 import { SpacingTypes } from "../../Element/constants";
-import { FormItem } from "../FormItem/FormItem";
-
-// TYPES ===============================================================================================================
-import { InputLabelCustomProps } from "../InputLabel/InputLabel";
-
-// Common input types
-export type ValueChangeHandler<T = string> = (value: T) => void;
-export type InputFocusHandler = (e: React.FocusEvent<HTMLInputElement>) => void;
-
-export interface InputCommonProps {
-    label?: string;
-    helpText?: string | React.ReactNode;
-    errorText?: string;
-    validateThis?: boolean;
-    valid?: boolean;
-    invalid?: boolean;
-    validationState?: "valid" | "invalid" | null;
-    required?: boolean;
-    disabled?: boolean;
-}
-
-export interface InputSideElementProps {
-    innerIconLeft?: React.ReactNode;
-    innerIconRight?: React.ReactNode;
-    innerTextLeft?: string;
-    innerTextRight?: string;
-}
 
 // STYLES ==============================================================================================================
 import "./input-field.css";
 
-// prettier-ignore
+// OTHER ===============================================================================================================
+import { FormItem } from "../FormItem/FormItem";
+import { InputLabelCustomProps } from "../InputLabel/InputLabel";
+
+// TODO: Add full-width support for standalone input fields
+
+export type ValueChangeHandler<T = string> = (value: T) => void;
+export type InputFocusHandler = (e: React.FocusEvent<HTMLInputElement>) => void;
+export interface InputCommonProps {
+    label           ? : string;
+    helpText        ? : string | React.ReactNode;
+    errorText       ? : string;
+    validateThis    ? : boolean;
+    valid           ? : boolean;
+    invalid         ? : boolean;
+    validationState ? : "valid" | "invalid" | null;
+    required        ? : boolean;
+    disabled        ? : boolean;
+}
+
+export interface InputSideElementProps {
+    innerIconLeft  ? : React.ReactNode;
+    innerIconRight ? : React.ReactNode;
+    innerTextLeft  ? : string;
+    innerTextRight ? : string;
+}
+
 export type InputFieldElementType = HTMLInputElement;
+
 export type InputFieldProps =
     Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "onBlur" | "onFocus" | "size"> &
     InputLabelCustomProps &
     InputCommonProps &
     InputSideElementProps & {
-        type?: "text" | "password" | "email" | "number" | "tel" | "url" | "search" | "file";
-        size?: Exclude<SpacingTypes, "nano" | "huge">;
-        onFocus?: InputFocusHandler;
-        onBlur?: InputFocusHandler;
-        onChange?: ValueChangeHandler<string>;
-    };
+    type     ? : "text" | "password" | "email" | "number" | "tel" | "url" | "search" | "file";
+    size     ? : Exclude<SpacingTypes, "nano" | "huge">;
+    onFocus  ? : InputFocusHandler;
+    onBlur   ? : InputFocusHandler;
+    onChange ? : ValueChangeHandler<string>;
+};
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const InputField = React.forwardRef(
