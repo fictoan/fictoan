@@ -121,13 +121,26 @@ export const PropsConfiguratorNew : React.FC<PropsConfiguratorNewProps> = ({
     const generateCodeString = useCallback(() => {
         const componentName = registry.component;
         const childrenValue = props.children;
+        const alwaysShowProps = registry.alwaysShowProps || [];
 
         const propsEntries = Object.entries(props).filter(([ key, value ]) => {
             if (key === "children") return false;
+            // Always include props marked in alwaysShowProps
+            if (alwaysShowProps.includes(key)) return true;
             if (value === undefined || value === null || value === "") return false;
             if (value === false) return false;
             return true;
         });
+
+        // Add alwaysShowProps that aren't in props yet (use their default values from registry)
+        for (const propName of alwaysShowProps) {
+            if (!propsEntries.find(([key]) => key === propName)) {
+                const propConfig = registry.props[propName];
+                if (propConfig?.defaultValue !== undefined) {
+                    propsEntries.push([propName, propConfig.defaultValue]);
+                }
+            }
+        }
 
         const propsString = propsEntries
             .map(([ key, value ]) => {
@@ -144,18 +157,25 @@ export const PropsConfiguratorNew : React.FC<PropsConfiguratorNewProps> = ({
             })
             .join("\n");
 
+        let componentCode: string;
         if (childrenValue) {
             if (propsString) {
-                return `<${componentName}\n${propsString}\n>\n    ${childrenValue}\n</${componentName}>`;
+                componentCode = `<${componentName}\n${propsString}\n>\n    ${childrenValue}\n</${componentName}>`;
+            } else {
+                componentCode = `<${componentName}>\n    ${childrenValue}\n</${componentName}>`;
             }
-            return `<${componentName}>\n    ${childrenValue}\n</${componentName}>`;
+        } else if (propsString) {
+            componentCode = `<${componentName}\n${propsString}\n/>`;
+        } else {
+            componentCode = `<${componentName} />`;
         }
 
-        if (propsString) {
-            return `<${componentName}\n${propsString}\n/>`;
-        }
-        return `<${componentName} />`;
-    }, [ registry.component, props ]);
+        // Add prefix and suffix if provided
+        const prefix = registry.codePrefix ? `${registry.codePrefix}\n\n` : "";
+        const suffix = registry.codeSuffix ? `\n\n${registry.codeSuffix}` : "";
+
+        return `${prefix}${componentCode}${suffix}`;
+    }, [ registry, props ]);
 
     // Get prop names in registry order
     const orderedPropNames = getOrderedPropNames(registry);

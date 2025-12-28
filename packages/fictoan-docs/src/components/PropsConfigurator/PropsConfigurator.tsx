@@ -447,7 +447,7 @@ export const PropsConfigurator : React.FC<PropsConfiguratorProps> = ({componentN
             );
         }        if (propType.includes("|")) { // This is a simple way to detect enums
             const options = propType.split("|").map((option : string) => {
-                const value = option.trim().replace(/\'/g, "");
+                const value = option.trim().replace(/['"]/g, "");
                 return {id : `prop-config-${propName}-${value}`, value : value, label : value};
             });
 

@@ -69,6 +69,10 @@
 - Fix PrismJS race condition causing syntax highlighting to fail on first load
 - Fix sidebar text colour styles
 - Remove `hasDelete` prop from `Button` (use `Badge` with `withDelete` instead)
+- Refactor `Tooltip` to use singleton pattern for improved performance
+  - Only one tooltip DOM element exists regardless of how many `<Tooltip>` components are used
+  - Uses event delegation instead of per-element listeners
+  - Eliminates DOM pollution from multiple hidden tooltip elements
 
 ## 1.12.0
 - `ThemeProvider` now uses unique key based on hostname for local storage, instead of default `fictoan-theme`

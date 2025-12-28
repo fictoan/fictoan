@@ -7,11 +7,9 @@ import React from "react";
 import { Div, Heading6, Text, Divider, Tooltip } from "fictoan-react";
 
 // LOCAL COMPONENTS ====================================================================================================
-import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
+import { PropsConfiguratorNew } from "$components/PropsConfigurator/PropsConfiguratorNew";
 import { ComponentDocsLayout } from "../ComponentDocsLayout";
-
-// UTILS ===============================================================================================================
-import { createThemeConfigurator } from "$utils/themeConfigurator";
+import { tooltipRegistry } from "./props.registry";
 
 // STYLES ==============================================================================================================
 import "../../../styles/fictoan-theme.css";
@@ -19,19 +17,6 @@ import "./page-tooltip.css";
 
 const TooltipDocs = () => {
     const [props, setProps] = React.useState<{ [key: string]: any }>({});
-
-    const TooltipComponent = (varName: string) => {
-        return varName.startsWith("tooltip-");
-    };
-
-    const {
-        interactiveElementRef,
-        componentProps: themeConfig,
-        themeConfigurator,
-    } = createThemeConfigurator("Tooltip", TooltipComponent);
-
-    // Get the tooltip target ID from props or use default
-    const tooltipTargetId = props.isTooltipFor || "tooltip-target";
 
     return (
         <ComponentDocsLayout>
@@ -55,33 +40,31 @@ const TooltipDocs = () => {
 
                 <ul>
                     <li>Requires an element with a specified ID to attach to. Can be any element with an ID.</li>
-                    <li>Automatically positions itself to stay within viewport</li>
-                    <li>Tooltip can have any React node as children</li>
+                    <li>Automatically positions itself to stay within viewport.</li>
+                    <li>Tooltip can have any React node as children.</li>
+                    <li>
+                        Uses a singleton pattern internally—only one tooltip DOM element exists regardless
+                        of how many <code>&lt;Tooltip&gt;</code> components you use, making it highly performant.
+                    </li>
                 </ul>
             </Div>
 
             {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="demo-component">
-                <Div id={tooltipTargetId}>Tooltip target</Div>
+                <Div id="tooltip-target">Tooltip target</Div>
 
                 <Tooltip
-                    ref={interactiveElementRef}
-                    isTooltipFor={tooltipTargetId}
-                    {...props}
-                    {...themeConfig}
+                    isTooltipFor="tooltip-target"
+                    position={props.position}
+                    showOn={props.showOn}
                 >
-                    {props.children || "This is a tooltip, you can add any content here"}
+                    {props.children || "This is a tooltip"}
                 </Tooltip>
             </Div>
 
             {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="props-config">
-                <PropsConfigurator componentName="Tooltip" onPropsChange={setProps} />
-            </Div>
-
-            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
-            <Div id="theme-config">
-                {themeConfigurator()}
+                <PropsConfiguratorNew registry={tooltipRegistry} onPropsChange={setProps} />
             </Div>
         </ComponentDocsLayout>
     );

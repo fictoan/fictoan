@@ -51,6 +51,13 @@ export interface PropsRegistryConfig {
 
     // Inherited props to hide (from Element, CommonProps, etc.)
     hideInheritedProps ? : boolean;
+
+    // Code generation customization
+    codePrefix ? : string;  // Code to show before the component
+    codeSuffix ? : string;  // Code to show after the component
+
+    // Props that should always appear in generated code (even if using default)
+    alwaysShowProps ? : string[];
 }
 
 // RESOLVED PROP =======================================================================================================

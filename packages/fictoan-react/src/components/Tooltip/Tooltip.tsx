@@ -1,38 +1,53 @@
 // REACT CORE ==========================================================================================================
-import React, { useState, useEffect, useRef } from "react";
-
-// LOCAL COMPONENTS ====================================================================================================
-import { CommonAndHTMLProps } from "../Element/constants";
-import { Element } from "$element";
+import React, { useEffect, useRef, ReactNode } from "react";
+import { createRoot, Root } from "react-dom/client";
 
 // STYLES ==============================================================================================================
 import "./tooltip.css";
 
-export interface TooltipCustomProps {
-    isTooltipFor   : string;
-    showOn       ? : "click" | "hover";
-    position     ? : "top" | "bottom" | "left" | "right";
+// TYPES ===============================================================================================================
+type Position = "top" | "bottom" | "left" | "right";
+type ShowOn = "click" | "hover";
+
+interface TooltipConfig {
+    content  : ReactNode;
+    position : Position;
+    showOn   : ShowOn;
 }
 
-export type TooltipElementType = HTMLDivElement;
-export type TooltipProps = Omit<CommonAndHTMLProps<TooltipElementType>, keyof TooltipCustomProps> & TooltipCustomProps;
+export interface TooltipProps {
+    children     : ReactNode;
+    isTooltipFor : string;
+    showOn     ? : ShowOn;
+    position   ? : Position;
+}
 
+// CONSTANTS ===========================================================================================================
 const TOOLTIP_OFFSET = 8;
 const SCREEN_PADDING = 16;
 
+// MODULE-LEVEL SINGLETON ==============================================================================================
+let singletonContainer : HTMLDivElement | null = null;
+let singletonRoot      : Root | null = null;
+let isInitialized      = false;
+let activeTargetId     : string | null = null;
+let activeTarget       : HTMLElement | null = null;
+
+const registry = new Map<string, TooltipConfig>();
+
+// POSITIONING =========================================================================================================
 const calculatePosition = (
     tooltipElement: HTMLElement,
     targetElement: HTMLElement,
-    position: "top" | "bottom" | "left" | "right",
+    position: Position,
 ) => {
     const tooltipRect    = tooltipElement.getBoundingClientRect();
     const targetRect     = targetElement.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
     const viewportWidth  = window.innerWidth;
 
-    let top, left;
-
-    // TODO: Rewrite hydration logic to avoid ID pollution
+    let top: number;
+    let left: number;
 
     switch (position) {
         case "top":
@@ -68,7 +83,7 @@ const calculatePosition = (
             left = targetRect.left + (targetRect.width - tooltipRect.width) / 2;
     }
 
-    // Ensure tooltip stays within bounds
+    // Ensure tooltip stays within viewport bounds
     if (left < SCREEN_PADDING) {
         left = SCREEN_PADDING;
     } else if (left + tooltipRect.width > viewportWidth - SCREEN_PADDING) {
@@ -84,104 +99,203 @@ const calculatePosition = (
     return { top, left };
 };
 
-// COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-export const Tooltip = React.forwardRef(
-    (
-        {
-            children,
-            isTooltipFor,
-            showOn = "hover",
-            position = "top",
-            className,
-            ...props
-        }: TooltipProps,
-        ref: React.Ref<TooltipElementType>,
-    ) => {
-        const [ isVisible, setIsVisible ]             = useState(false);
-        const [ tooltipPosition, setTooltipPosition ] = useState({ top : -9999, left : -9999 });
-        const tooltipRef                              = useRef<HTMLDivElement>(null);
-        const effectiveRef                            = (ref || tooltipRef) as React.RefObject<HTMLDivElement>;
+// TOOLTIP CONTENT COMPONENT ===========================================================================================
+interface TooltipContentProps {
+    content   : ReactNode;
+    isVisible : boolean;
+    position  : { top: number; left: number };
+}
 
-        const updatePosition = () => {
-            if (!isVisible || !effectiveRef.current) return;
-
-            const targetElement = document.getElementById(isTooltipFor);
-            if (!targetElement) return;
-
-            const { top, left } = calculatePosition(effectiveRef.current, targetElement, position);
-            setTooltipPosition({ top, left });
-        };
-
-        // Update position when visibility or position prop changes
-        useEffect(() => {
-            if (isVisible) {
-                updatePosition();
-            }
-        }, [ isVisible, position ]);
-
-        useEffect(() => {
-            const targetElement = document.getElementById(isTooltipFor);
-            if (!targetElement) {
-                console.warn(`Tooltip target element with id "${isTooltipFor}" not found`);
-                return;
-            }
-
-            const showTooltip = () => {
-                setIsVisible(true);
-            };
-
-            const hideTooltip = () => {
-                setIsVisible(false);
-            };
-
-            if (showOn === "hover") {
-                targetElement.addEventListener("mouseenter", showTooltip);
-                targetElement.addEventListener("mouseleave", hideTooltip);
-            } else if (showOn === "click") {
-                targetElement.addEventListener("click", () => setIsVisible(prev => !prev));
-                document.addEventListener("click", (e) => {
-                    if (
-                        !targetElement.contains(e.target as Node) &&
-                        effectiveRef.current &&
-                        !effectiveRef.current.contains(e.target as Node)
-                    ) {
-                        hideTooltip();
-                    }
-                });
-            }
-
-            // Handle repositioning on scroll and resize
-            window.addEventListener("scroll", updatePosition);
-            window.addEventListener("resize", updatePosition);
-
-            return () => {
-                if (showOn === "hover") {
-                    targetElement.removeEventListener("mouseenter", showTooltip);
-                    targetElement.removeEventListener("mouseleave", hideTooltip);
-                }
-                window.removeEventListener("scroll", updatePosition);
-                window.removeEventListener("resize", updatePosition);
-            };
-        }, [ isTooltipFor, showOn, position ]);
-
-        return (
-            <Element<TooltipElementType>
-                as="div"
-                data-tooltip
-                ref={effectiveRef}
-                className={`${isVisible ? "visible" : ""}`}
-                role="tooltip"
-                style={{
-                    position : "fixed",
-                    zIndex   : 1000,
-                    top      : `${tooltipPosition.top}px`,
-                    left     : `${tooltipPosition.left}px`,
-                }}
-                {...props}
-            >
-                {children}
-            </Element>
-        );
-    },
+const TooltipContent = ({ content, isVisible, position }: TooltipContentProps) => (
+    <div
+        data-tooltip
+        className={isVisible ? "visible" : ""}
+        role="tooltip"
+        style={{
+            position : "fixed",
+            zIndex   : 1000,
+            top      : `${position.top}px`,
+            left     : `${position.left}px`,
+        }}
+    >
+        {content}
+    </div>
 );
-Tooltip.displayName = "Tooltip";
+
+// RENDER FUNCTIONS ====================================================================================================
+const renderTooltip = (config: TooltipConfig | null, target: HTMLElement | null) => {
+    if (!singletonRoot || !singletonContainer) return;
+
+    if (!config || !target) {
+        singletonRoot.render(
+            <TooltipContent content={null} isVisible={false} position={{ top: -9999, left: -9999 }} />
+        );
+        return;
+    }
+
+    // First render hidden to measure
+    singletonRoot.render(
+        <TooltipContent content={config.content} isVisible={false} position={{ top: -9999, left: -9999 }} />
+    );
+
+    // Calculate position after render
+    requestAnimationFrame(() => {
+        if (!singletonContainer || !target) return;
+        const tooltipEl = singletonContainer.firstElementChild as HTMLElement;
+        if (!tooltipEl) return;
+
+        const { top, left } = calculatePosition(tooltipEl, target, config.position);
+        singletonRoot?.render(
+            <TooltipContent content={config.content} isVisible={true} position={{ top, left }} />
+        );
+    });
+};
+
+const updatePosition = () => {
+    if (!activeTargetId || !activeTarget) return;
+    const config = registry.get(activeTargetId);
+    if (config) {
+        renderTooltip(config, activeTarget);
+    }
+};
+
+const showTooltip = (targetId: string, target: HTMLElement) => {
+    const config = registry.get(targetId);
+    if (!config) return;
+
+    activeTargetId = targetId;
+    activeTarget = target;
+    renderTooltip(config, target);
+};
+
+const hideTooltip = (targetId?: string) => {
+    if (targetId && activeTargetId !== targetId) return;
+    activeTargetId = null;
+    activeTarget = null;
+    renderTooltip(null, null);
+};
+
+// EVENT HANDLERS ======================================================================================================
+const handleMouseOver = (e: MouseEvent) => {
+    const target = (e.target as HTMLElement).closest("[id]") as HTMLElement;
+    if (!target?.id) return;
+
+    const config = registry.get(target.id);
+    if (config?.showOn === "hover") {
+        showTooltip(target.id, target);
+    }
+};
+
+const handleMouseOut = (e: MouseEvent) => {
+    const target = (e.target as HTMLElement).closest("[id]") as HTMLElement;
+    if (!target?.id) return;
+
+    const config = registry.get(target.id);
+    if (config?.showOn === "hover") {
+        hideTooltip(target.id);
+    }
+};
+
+const handleClick = (e: MouseEvent) => {
+    // Check if click is inside the tooltip itself
+    if (singletonContainer?.contains(e.target as Node)) {
+        return;
+    }
+
+    const target = (e.target as HTMLElement).closest("[id]") as HTMLElement;
+
+    // Check if click is on a registered click-trigger element
+    if (target?.id) {
+        const config = registry.get(target.id);
+        if (config?.showOn === "click") {
+            if (activeTargetId === target.id) {
+                hideTooltip();
+            } else {
+                showTooltip(target.id, target);
+            }
+            return;
+        }
+    }
+
+    // Click outside - hide any active click tooltip
+    if (activeTargetId) {
+        const activeConfig = registry.get(activeTargetId);
+        if (activeConfig?.showOn === "click") {
+            hideTooltip();
+        }
+    }
+};
+
+// INITIALIZATION ======================================================================================================
+const initializeSingleton = () => {
+    if (isInitialized || typeof document === "undefined") return;
+
+    // Create container
+    singletonContainer = document.createElement("div");
+    singletonContainer.id = "fictoan-tooltip-singleton";
+    document.body.appendChild(singletonContainer);
+
+    // Create React root
+    singletonRoot = createRoot(singletonContainer);
+
+    // Initial render (hidden)
+    singletonRoot.render(
+        <TooltipContent content={null} isVisible={false} position={{ top: -9999, left: -9999 }} />
+    );
+
+    // Set up event delegation
+    document.addEventListener("mouseover", handleMouseOver);
+    document.addEventListener("mouseout", handleMouseOut);
+    document.addEventListener("click", handleClick);
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+
+    isInitialized = true;
+};
+
+// COMPONENT ===========================================================================================================
+export const Tooltip = ({
+    children,
+    isTooltipFor,
+    showOn = "hover",
+    position = "top",
+}: TooltipProps) => {
+    const configRef = useRef<TooltipConfig>({ content: children, position, showOn });
+
+    // Update ref when props change
+    configRef.current = { content: children, position, showOn };
+
+    useEffect(() => {
+        // Initialize singleton on first mount
+        initializeSingleton();
+
+        // Register this tooltip
+        registry.set(isTooltipFor, configRef.current);
+
+        // If this tooltip is currently active, update its content
+        if (activeTargetId === isTooltipFor && activeTarget) {
+            renderTooltip(configRef.current, activeTarget);
+        }
+
+        return () => {
+            registry.delete(isTooltipFor);
+            // Hide if this was the active tooltip
+            if (activeTargetId === isTooltipFor) {
+                hideTooltip();
+            }
+        };
+    }, [isTooltipFor]);
+
+    // Update registry when content/position/showOn changes
+    useEffect(() => {
+        registry.set(isTooltipFor, configRef.current);
+
+        // If this tooltip is currently active, update it
+        if (activeTargetId === isTooltipFor && activeTarget) {
+            renderTooltip(configRef.current, activeTarget);
+        }
+    }, [children, position, showOn, isTooltipFor]);
+
+    // Renders nothing - the singleton renders the actual tooltip
+    return null;
+};
