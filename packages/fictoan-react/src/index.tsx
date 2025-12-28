@@ -23,6 +23,8 @@ export { Breadcrumbs, type BreadcrumbsProps } from "./components/Breadcrumbs";
 
 export { Button, type ButtonProps } from "./components/Button";
 
+export { ButtonGroup, type ButtonGroupProps } from "./components/ButtonGroup";
+
 export { Callout, type CalloutProps } from "./components/Callout";
 
 export { Card, type CardProps } from "./components/Card";

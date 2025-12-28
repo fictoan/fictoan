@@ -67,20 +67,20 @@
 }
 
 /* HOVER ==================================================================== */
-[data-form-item]:has([data-switch]):has(input[type="checkbox"]:hover) label::before {
+[data-form-item]:has([data-switch]):has(> [data-input-wrapper] > input[type="checkbox"]:hover) > [data-label-wrapper] > label::before {
     background : var(--switch-bg-hover);
 }
 
-[data-form-item]:has([data-switch]):has(input[type="checkbox"]:hover) label::after {
+[data-form-item]:has([data-switch]):has(> [data-input-wrapper] > input[type="checkbox"]:hover) > [data-label-wrapper] > label::after {
     background : var(--switch-slider-bg-hover);
 }
 
 /* CHECKED ================================================================== */
-[data-form-item]:has([data-switch]):has(input[type="checkbox"]:checked) label::before {
+[data-form-item]:has([data-switch]):has(> [data-input-wrapper] > input[type="checkbox"]:checked) > [data-label-wrapper] > label::before {
     background : var(--switch-bg-checked);
 }
 
-[data-form-item]:has([data-switch]):has(input[type="checkbox"]:checked) label::after {
+[data-form-item]:has([data-switch]):has(> [data-input-wrapper] > input[type="checkbox"]:checked) > [data-label-wrapper] > label::after {
     transform  : translateY(-50%) translateX(18px);
     background : var(--switch-slider-bg-checked);
 }
@@ -102,7 +102,7 @@
     left   : 1px;
 }
 
-[data-form-item].size-tiny:has([data-switch]):has(input[type="checkbox"]:checked) label::after {
+[data-form-item].size-tiny:has([data-switch]):has(> [data-input-wrapper] > input[type="checkbox"]:checked) > [data-label-wrapper] > label::after {
     transform : translateY(-50%) translateX(8px);
 }
 
@@ -122,7 +122,7 @@
     left   : 2px;
 }
 
-[data-form-item].size-small:has([data-switch]):has(input[type="checkbox"]:checked) label::after {
+[data-form-item].size-small:has([data-switch]):has(> [data-input-wrapper] > input[type="checkbox"]:checked) > [data-label-wrapper] > label::after {
     transform : translateY(-50%) translateX(12px);
 }
 

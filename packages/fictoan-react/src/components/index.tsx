@@ -10,6 +10,9 @@ export { Drawer, type DrawerProps } from "./Drawer";
 // BUTTON ==============================================================================================================
 export { Button, type ButtonProps } from "./Button";
 
+// BUTTON GROUP ========================================================================================================
+export { ButtonGroup, type ButtonGroupProps } from "./ButtonGroup";
+
 // BREADCRUMBS =========================================================================================================
 export { Breadcrumbs, type BreadcrumbsProps } from "./Breadcrumbs";
 

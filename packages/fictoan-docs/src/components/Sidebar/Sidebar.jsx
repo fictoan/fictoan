@@ -224,6 +224,14 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
                 </SidebarItem>
             </Link>
 
+            {/* BUTTON GROUP ======================================================================================= */}
+            <Link href="/components/button-group" className={`${pathname === "/components/button-group" ? "active" : ""}`}>
+                <SidebarItem onClick={closeMobileSidebar}>
+                    <ButtonIcon />
+                    <Text weight="400">Button group</Text>
+                </SidebarItem>
+            </Link>
+
             {/* CALLOUT ============================================================================================ */}
             <Link href="/components/callout" className={`${pathname === "/components/callout" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>

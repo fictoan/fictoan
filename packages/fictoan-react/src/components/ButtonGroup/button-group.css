@@ -1,0 +1,105 @@
+[data-button-group] {
+    display   : flex;
+    flex-wrap : nowrap;
+
+    button { text-wrap : nowrap; }
+
+    &:not(.equal-width) button {
+        width : fit-content;
+    }
+
+    /* SPACING ////////////////////////////////////////////////////////////// */
+    &.spacing-none { gap : 0; }
+    &.spacing-nano { gap : var(--nano); }
+    &.spacing-micro { gap : var(--micro); }
+    &.spacing-tiny { gap : calc(var(--nano) * 4); }
+    &.spacing-small { gap : calc(var(--nano) * 4); }
+    &.spacing-medium { gap : calc(var(--nano) * 5); }
+    &.spacing-large { gap : calc(var(--nano) * 6); }
+    &.spacing-huge { gap : calc(var(--nano) * 7); }
+
+    /* EQUAL WIDTH ////////////////////////////////////////////////////////// */
+    &.equal-width {
+        display           : grid;
+        grid-auto-flow    : column;
+        grid-auto-columns : 1fr;
+        width             : fit-content;
+    }
+
+    &.equal-width.stack-vertically {
+        grid-auto-flow        : row;
+        grid-auto-columns     : unset;
+        grid-template-columns : 1fr;
+    }
+
+    /* JOINT BUTTONS - HORIZONTAL /////////////////////////////////////////// */
+    &.is-joint {
+        gap : 0;
+    }
+
+    /* Collapse left border on all but first button */
+    &.is-joint:not(.stack-vertically) > [data-button]:not(:first-child) {
+        border-left-width : 0;
+    }
+
+    /* First button - keep left radius, remove right radius */
+    &.is-joint:not(.stack-vertically) > [data-button]:first-child {
+        border-top-right-radius    : 0;
+        border-bottom-right-radius : 0;
+    }
+
+    /* Middle buttons - no radius */
+    &.is-joint:not(.stack-vertically) > [data-button]:not(:first-child):not(:last-child) {
+        border-radius : 0;
+    }
+
+    /* Last button - keep right radius, remove left radius */
+    &.is-joint:not(.stack-vertically) > [data-button]:last-child {
+        border-top-left-radius    : 0;
+        border-bottom-left-radius : 0;
+    }
+
+    /* Single button - keep all radii */
+    &.is-joint:not(.stack-vertically) > [data-button]:only-child {
+        border-top-right-radius    : revert;
+        border-bottom-right-radius : revert;
+        border-top-left-radius     : revert;
+        border-bottom-left-radius  : revert;
+    }
+
+    /* JOINT BUTTONS - VERTICAL ///////////////////////////////////////////// */
+    &.stack-vertically {
+
+    }
+
+    /* Collapse top border on all but first button */
+    &.is-joint.stack-vertically > [data-button]:not(:first-child) {
+        border-top-width : 0;
+    }
+
+    /* First button - keep top radius, remove bottom radius */
+    &.is-joint.stack-vertically > [data-button]:first-child {
+        border-bottom-left-radius  : 0;
+        border-bottom-right-radius : 0;
+    }
+
+    /* Middle buttons - no radius */
+    &.is-joint.stack-vertically > [data-button]:not(:first-child):not(:last-child) {
+        border-radius : 0;
+    }
+
+    /* Last button - keep bottom radius, remove top radius */
+    &.is-joint.stack-vertically > [data-button]:last-child {
+        border-top-left-radius  : 0;
+        border-top-right-radius : 0;
+    }
+
+    /* Single button - keep all radii */
+    &.is-joint.stack-vertically > [data-button]:only-child {
+        border-top-left-radius     : revert;
+        border-top-right-radius    : revert;
+        border-bottom-left-radius  : revert;
+        border-bottom-right-radius : revert;
+    }
+}
+

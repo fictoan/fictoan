@@ -47,7 +47,7 @@
 
 .push-to-ends { justify-content : space-between; }
 
-/* GAP ////////////////////////////////////////////////////////////////////// */
+/* GAP ====================================================================== */
 .gap-none   { gap : 0; }
 .gap-nano   { gap : var(--nano); }
 .gap-micro  { gap : var(--micro); }
