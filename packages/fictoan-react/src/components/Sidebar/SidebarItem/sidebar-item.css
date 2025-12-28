@@ -1,3 +1,7 @@
+a:has([data-sidebar-item]) {
+    width : 100%;
+}
+
 [data-sidebar-item] {
     display               : grid;
     align-items           : center;
@@ -5,15 +9,45 @@
     grid-template-rows    : 40px;
     line-height           : 1;
 
-    & > a { width : unset; }
+    & > a {
+        width : unset;
+        color : var(--sidebar-item-default-link-text);
+    }
+
+    & p {
+        color       : var(--sidebar-item-text-colour-default);
+        font-size   : var(--sidebar-item-text-scale);
+        font-weight : var(--sidebar-item-text-weight);
+    }
+
+    & a p:hover { color : var(--sidebar-item-text-hover); }
+
+    & a.active {
+        position         : relative;
+        display          : block;
+        background-color : var(--sidebar-item-bg-active);
+
+        &::before {
+            display                    : block;
+            position                   : absolute;
+            width                      : 4px;
+            height                     : 100%;
+            top                        : 0;
+            left                       : 0;
+            content                    : "";
+            border-top-right-radius    : 4px;
+            border-bottom-right-radius : 4px;
+            background-color           : var(--sidebar-item-border-active);
+        }
+
+        p { color : var(--sidebar-item-text-active); }
+    }
 
     &:hover {
         color            : var(--sidebar-item-text-hover);
         background-color : var(--sidebar-item-bg-hover);
-    }
 
-    &:hover a [data-sidebar-item-text] {
-        color : var(--sidebar-item-text-hover);
+        & p { color : var(--sidebar-item-text-hover); }
     }
 
     /* ICON MANAGEMENT ====================================================== */

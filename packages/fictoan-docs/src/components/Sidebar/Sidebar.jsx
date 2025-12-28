@@ -1,9 +1,9 @@
-// EXTERNAL DEPS ///////////////////////////////////////////////////////////////////////////////////////////////////////
+// REACT CORE ==========================================================================================================
+import Link from "next/link";
 import React, { useRef } from "react";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
 
-// INTERNAL DEPS ///////////////////////////////////////////////////////////////////////////////////////////////////////
+// UI ==================================================================================================================
 import {
     SidebarWrapper,
     SidebarHeader,
@@ -15,19 +15,12 @@ import {
     Text,
 } from "fictoan-react";
 
-// COMPONENTS //////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// STYLES //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-import "./sidebar.css";
-
-// ASSETS //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-import FictoanIcon from "../../assets/images/fictoan-icon.svg";
-import FictoanLogo from "../../assets/images/fictoan-logo.svg";
-
+// ASSETS ==============================================================================================================
 import AccordionIcon from "../../assets/icons/accordion.svg";
 import BadgeIcon from "../../assets/icons/badge.svg";
 import BaseElementIcon from "../../assets/icons/building-block.svg";
 import BreadcrumbsIcon from "../../assets/icons/breadcrumbs.svg";
+import ButtonGroupIcon from "../../assets/icons/button-group.svg";
 import ButtonIcon from "../../assets/icons/button.svg";
 import CalloutIcon from "../../assets/icons/callout.svg";
 import CardIcon from "../../assets/icons/card.svg";
@@ -35,33 +28,37 @@ import CheckboxIcon from "../../assets/icons/checkbox.svg";
 import CodeIcon from "../../assets/icons/braces.svg";
 import ColourIcon from "../../assets/icons/water.svg";
 import DividerIcon from "../../assets/icons/hrule.svg";
+import FictoanIcon from "../../assets/images/fictoan-icon.svg";
+import FictoanLogo from "../../assets/images/fictoan-logo.svg";
 import FormWrapperIcon from "../../assets/icons/form-wrapper.svg";
 import HomeIcon from "../../assets/icons/home.svg";
 import InfoPanelIcon from "../../assets/icons/drawer.svg";
 import InputFieldIcon from "../../assets/icons/input.svg";
-import ListBoxIcon from "../../assets/icons/list-box.svg";
 import LayoutIcon from "../../assets/icons/layout.svg";
-import ModalIcon from "../../assets/icons/modal.svg";
+import ListBoxIcon from "../../assets/icons/list-box.svg";
 import ManifestoIcon from "../../assets/icons/manifesto.svg";
+import ModalIcon from "../../assets/icons/modal.svg";
 import NotificationIcon from "../../assets/icons/notification.svg";
+import OptionCardsIcon from "../../assets/icons/option-cards.svg";
 import PaginationIcon from "../../assets/icons/pagination.svg";
 import PinInputIcon from "../../assets/icons/pin-input.svg";
-import OptionCardsIcon from "../../assets/icons/option-cards.svg";
 import ProgressBarIcon from "../../assets/icons/progress-bar.svg";
 import RadioButtonIcon from "../../assets/icons/radio-button.svg";
 import RangeIcon from "../../assets/icons/range.svg";
 import SelectIcon from "../../assets/icons/select.svg";
 import SidebarIcon from "../../assets/icons/sidebar.svg";
 import SkeletonIcon from "../../assets/icons/skeleton.svg";
+import TabGroupIcon from "../../assets/icons/tabs-group.svg";
 import TableIcon from "../../assets/icons/table.svg";
 import TabsIcon from "../../assets/icons/tabs.svg";
 import ThemeIcon from "../../assets/icons/paintbrush.svg";
 import ThemeSwitchIcon from "../../assets/icons/theme.svg";
 import ToastIcon from "../../assets/icons/toast.svg";
 import TooltipIcon from "../../assets/icons/tooltip.svg";
-import ToolboxIcon from "../../assets/icons/toolbox.svg";
 import TypographyIcon from "../../assets/icons/typography.svg";
 
+// STYLES ==============================================================================================================
+import "./sidebar.css";
 
 export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, setShowSidebarOnMobile }) => {
     const ref = useRef(null);
@@ -69,7 +66,6 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
     // const [ theme, setTheme ] = useTheme();
     //
     // const toggleTheme = () => {
-    //     if (theme === "theme-light") {
     //         setTheme("theme-dark");
     //     } else {
     //         setTheme("theme-light");
@@ -130,7 +126,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             {/* OVERVIEW */}
             {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
             <SidebarItem hasEmptyIcon>
-                <Text weight="400">OVERVIEW</Text>
+                <Text weight="600">OVERVIEW</Text>
             </SidebarItem>
 
             {/* GETTING STARTED ==================================================================================== */}
@@ -185,11 +181,9 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
 
             <Divider kind="tertiary" verticalMargin="micro" />
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/* ELEMENTS */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
+            {/* PRIMITIVES ///////////////////////////////////////////////////////////////////////////////////////// */}
             <SidebarItem hasEmptyIcon>
-                <Text weight="400">COMPONENTS</Text>
+                <Text weight="600">PRIMITIVES</Text>
             </SidebarItem>
 
             {/* ACCORDION ========================================================================================== */}
@@ -209,7 +203,8 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* BREADCRUMBS ======================================================================================== */}
-            <Link href="/components/breadcrumbs" className={`${pathname === "/components/breadcrumbs" ? "active" : ""}`}>
+            <Link href="/components/breadcrumbs"
+                  className={`${pathname === "/components/breadcrumbs" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <BreadcrumbsIcon />
                     <Text weight="400">Breadcrumbs</Text>
@@ -225,9 +220,10 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* BUTTON GROUP ======================================================================================= */}
-            <Link href="/components/button-group" className={`${pathname === "/components/button-group" ? "active" : ""}`}>
+            <Link href="/components/button-group"
+                  className={`${pathname === "/components/button-group" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
-                    <ButtonIcon />
+                    <ButtonGroupIcon />
                     <Text weight="400">Button group</Text>
                 </SidebarItem>
             </Link>
@@ -289,7 +285,8 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* INPUT FIELD ======================================================================================== */}
-            <Link href="/components/input-field" className={`${pathname === "/components/input-field" ? "active" : ""}`}>
+            <Link href="/components/input-field"
+                  className={`${pathname === "/components/input-field" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <InputFieldIcon />
                     <Text weight="400">Input field</Text>
@@ -320,40 +317,9 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
                 </SidebarItem>
             </Link>
 
-            {/* NOTIFICATIONS ====================================================================================== */}
-            <Link href="/components/notifications" className={`${pathname === "/components/notifications" ? "active" : ""}`}>
-                <SidebarItem onClick={closeMobileSidebar}>
-                    <NotificationIcon />
-                    <Text weight="400">Notifications</Text>
-                </SidebarItem>
-            </Link>
-
-            {/* OPTION CARDS ======================================================================================= */}
-            <Link href="/components/option-cards" className={`${pathname === "/components/option-cards" ? "active" : ""}`}>
-                <SidebarItem onClick={closeMobileSidebar}>
-                    <OptionCardsIcon />
-                    <Text weight="400">Option cards</Text>
-                </SidebarItem>
-            </Link>
-
-            {/* PAGINATION ========================================================================================= */}
-            <Link href="/components/pagination" className={`${pathname === "/components/pagination" ? "active" : ""}`}>
-                <SidebarItem onClick={closeMobileSidebar}>
-                    <PaginationIcon />
-                    <Text weight="400">Pagination</Text>
-                </SidebarItem>
-            </Link>
-
-            {/* PIN INPUT FIELD ==================================================================================== */}
-            <Link href="/components/pin-input-field" className={`${pathname === "/components/pin-input-field" ? "active" : ""}`}>
-                <SidebarItem onClick={closeMobileSidebar}>
-                    <PinInputIcon />
-                    <Text weight="400">Pin Input</Text>
-                </SidebarItem>
-            </Link>
-
             {/* PROGRESS BAR ======================================================================================= */}
-            <Link href="/components/progress-bar" className={`${pathname === "/components/progress-bar" ? "active" : ""}`}>
+            <Link href="/components/progress-bar"
+                  className={`${pathname === "/components/progress-bar" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <ProgressBarIcon />
                     <Text weight="400">Progress bar</Text>
@@ -361,18 +327,11 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             </Link>
 
             {/* RADIO BUTTON ======================================================================================= */}
-            <Link href="/components/radio-button" className={`${pathname === "/components/radio-button" ? "active" : ""}`}>
+            <Link href="/components/radio-button"
+                  className={`${pathname === "/components/radio-button" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
                     <RadioButtonIcon />
                     <Text weight="400">Radio button</Text>
-                </SidebarItem>
-            </Link>
-
-            {/* RADIO TABS ========================================================================================= */}
-            <Link href="/components/radio-tab-group" className={`${pathname === "/components/radio-tab-group" ? "active" : ""}`}>
-                <SidebarItem onClick={closeMobileSidebar}>
-                    <TabsIcon />
-                    <Text weight="400">Radio tab group</Text>
                 </SidebarItem>
             </Link>
 
@@ -389,34 +348,6 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
                 <SidebarItem onClick={closeMobileSidebar}>
                     <SelectIcon />
                     <Text weight="400">Select</Text>
-                </SidebarItem>
-            </Link>
-
-            {/* SIDEBAR ============================================================================================ */}
-            <Accordion summary={(
-                <SidebarItem>
-                    <SidebarIcon />
-                    <Text weight="400">Sidebar</Text>
-                </SidebarItem>
-            )}>
-                <Link href="/components/sidebar" className={`${pathname === "/components/sidebar" ? "active" : ""}`}>
-                    <SidebarItem onClick={closeMobileSidebar} hasEmptyIcon>
-                        <Text weight="400" marginLeft="micro">Wrapper</Text>
-                    </SidebarItem>
-                </Link>
-
-                <Link href="/components/sidebar-item" className={`${pathname === "/components/sidebar-item" ? "active" : ""}`}>
-                    <SidebarItem onClick={closeMobileSidebar} hasEmptyIcon>
-                        <Text weight="400" marginLeft="micro">Item</Text>
-                    </SidebarItem>
-                </Link>
-            </Accordion>
-
-            {/* SKELETON =========================================================================================== */}
-            <Link href="/components/skeleton" className={`${pathname === "/components/skeleton" ? "active" : ""}`}>
-                <SidebarItem onClick={closeMobileSidebar}>
-                    <SkeletonIcon />
-                    <Text weight="400">Skeleton</Text>
                 </SidebarItem>
             </Link>
 
@@ -449,6 +380,87 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
                 <SidebarItem onClick={closeMobileSidebar}>
                     <TooltipIcon />
                     <Text weight="400">Tooltip</Text>
+                </SidebarItem>
+            </Link>
+
+            <Divider kind="tertiary" verticalMargin="micro" />
+
+            {/* PRIMITIVES ///////////////////////////////////////////////////////////////////////////////////////// */}
+            <SidebarItem hasEmptyIcon>
+                <Text weight="600">WIDGETS</Text>
+            </SidebarItem>
+
+            {/* NOTIFICATIONS ====================================================================================== */}
+            <Link href="/components/notifications"
+                  className={`${pathname === "/components/notifications" ? "active" : ""}`}>
+                <SidebarItem onClick={closeMobileSidebar}>
+                    <NotificationIcon />
+                    <Text weight="400">Notifications</Text>
+                </SidebarItem>
+            </Link>
+
+            {/* OPTION CARDS ======================================================================================= */}
+            <Link href="/components/option-cards"
+                  className={`${pathname === "/components/option-cards" ? "active" : ""}`}>
+                <SidebarItem onClick={closeMobileSidebar}>
+                    <OptionCardsIcon />
+                    <Text weight="400">Option cards</Text>
+                </SidebarItem>
+            </Link>
+
+            {/* PAGINATION ========================================================================================= */}
+            <Link href="/components/pagination" className={`${pathname === "/components/pagination" ? "active" : ""}`}>
+                <SidebarItem onClick={closeMobileSidebar}>
+                    <PaginationIcon />
+                    <Text weight="400">Pagination</Text>
+                </SidebarItem>
+            </Link>
+
+            {/* PIN INPUT FIELD ==================================================================================== */}
+
+            <Link href="/components/pin-input-field"
+                  className={`${pathname === "/components/pin-input-field" ? "active" : ""}`}>
+                <SidebarItem onClick={closeMobileSidebar}>
+                    <PinInputIcon />
+                    <Text weight="400">Pin Input</Text>
+                </SidebarItem>
+            </Link>
+
+            {/* RADIO TABS ========================================================================================= */}
+            <Link href="/components/radio-tab-group"
+                  className={`${pathname === "/components/radio-tab-group" ? "active" : ""}`}>
+                <SidebarItem onClick={closeMobileSidebar}>
+                    <TabGroupIcon />
+                    <Text weight="400">Radio tab group</Text>
+                </SidebarItem>
+            </Link>
+
+            {/* SIDEBAR ============================================================================================ */}
+            <Accordion summary={(
+                <SidebarItem>
+                    <SidebarIcon />
+                    <Text weight="400">Sidebar</Text>
+                </SidebarItem>
+            )}>
+                <Link href="/components/sidebar" className={`${pathname === "/components/sidebar" ? "active" : ""}`}>
+                    <SidebarItem onClick={closeMobileSidebar} hasEmptyIcon>
+                        <Text weight="400" marginLeft="micro">Wrapper</Text>
+                    </SidebarItem>
+                </Link>
+
+                <Link href="/components/sidebar-item"
+                      className={`${pathname === "/components/sidebar-item" ? "active" : ""}`}>
+                    <SidebarItem onClick={closeMobileSidebar} hasEmptyIcon>
+                        <Text weight="400" marginLeft="micro">Item</Text>
+                    </SidebarItem>
+                </Link>
+            </Accordion>
+
+            {/* SKELETON =========================================================================================== */}
+            <Link href="/components/skeleton" className={`${pathname === "/components/skeleton" ? "active" : ""}`}>
+                <SidebarItem onClick={closeMobileSidebar}>
+                    <SkeletonIcon />
+                    <Text weight="400">Skeleton</Text>
                 </SidebarItem>
             </Link>
 

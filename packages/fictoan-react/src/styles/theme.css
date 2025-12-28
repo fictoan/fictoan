@@ -503,12 +503,12 @@
 
     --sidebar-item-icon-width                : 24px;
 
-    --sidebar-item-icon-stroke-default       : var(--slate-dark40);
+    --sidebar-item-icon-stroke-default       : var(--slate-dark60);
     --sidebar-item-icon-stroke-width-default : 2px;
     --sidebar-item-icon-fill-default         : var(--slate-light40);
-    --sidebar-item-text-colour-default       : var(--slate-light40);
+    --sidebar-item-text-colour-default       : var(--slate-light20);
 
-    --sidebar-item-bg-hover                  : var(--grey-dark70);
+    --sidebar-item-bg-hover                  : var(--slate-dark70);
     --sidebar-item-text-hover                : var(--hue);
     --sidebar-item-icon-stroke-hover         : var(--slate-dark30);
     --sidebar-item-icon-fill-hover           : var(--slate-dark30);
@@ -522,8 +522,8 @@
 
     --sidebar-item-default-link-bg           : var(--white);
     --sidebar-item-default-link-text         : var(--shade);
-    --sidebar-item-text-scale                : 100%;
-    --sidebar-item-text-weight               : 600;
+    --sidebar-item-text-scale                : 92%;
+    --sidebar-item-text-weight               : 400;
 
     --sidebar-item-alert-bg                  : var(--red);
 
