@@ -52,6 +52,9 @@ export const ToastItem = React.forwardRef(
                 <Element<ToastItemElementType>
                     as="div"
                     data-toast-item
+                    role="status"
+                    aria-live="polite"
+                    aria-atomic="true"
                     classNames={[ ...classNames, showWhen ? "visible" : "" ]}
                     onTransitionEnd={onTransitionEnd}
                     shadow="soft"
