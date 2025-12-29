@@ -4,7 +4,7 @@
 import React from "react";
 
 // UI ==================================================================================================================
-import { Row, Portion, Text, CodeBlock, Section, Heading2 } from "fictoan-react";
+import { Row, Portion, Text, CodeBlock, Section, Heading6, Heading2 } from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./code-comparison.css";
@@ -18,14 +18,9 @@ export const CodeComparison = () => {
                     <Heading2 fontStyle="serif" weight="400" marginBottom="nano">
                         See the difference
                     </Heading2>
-                </Portion>
-
-                <Portion desktopSpan="one-third" />
-
-                <Portion>
-                    <Text marginBottom="micro" textColour="slate-light40">
+                    <Heading6 weight="400" textColour="slate-light40">
                         A simple card — same output, different syntax
-                    </Text>
+                    </Heading6>
                 </Portion>
 
                 <Portion desktopSpan="half" className="code-portion">
@@ -81,9 +76,9 @@ export const CodeComparison = () => {
             {/* INPUT FIELD COMPARISON */}
             <Row horizontalPadding="medium" gutters="large" marginTop="medium" marginBottom="none">
                 <Portion>
-                    <Text marginBottom="micro" textColour="slate-light40">
-                        A form input with icon, suffix, label, help text, and validation — built-in
-                    </Text>
+                    <Heading6 weight="400" textColour="slate-light40">
+                        A form input with icon, suffix, label, help text, and native validation
+                    </Heading6>
                 </Portion>
 
                 <Portion desktopSpan="half" className="code-portion">

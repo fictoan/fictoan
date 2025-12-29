@@ -113,7 +113,7 @@
         padding       : 2px;
         overflow      : hidden;
         height        : 320px;
-        background    : linear-gradient(90deg, var(--indigo), var(--indigo-dark40));
+        background    : linear-gradient(90deg, var(--blue-dark10), var(--indigo));
         border-radius : var(--micro);
         transform     : translateZ(0);
         box-shadow    : 0 0 0 1px var(--blue),
@@ -131,7 +131,7 @@
             bottom          : -48px;
             right           : 40px;
             height          : 120%;
-            stroke          : var(--blue);
+            stroke          : var(--sky);
             fill            : none;
             opacity         : 0.32;
             z-index         : -1;
@@ -145,25 +145,8 @@
         z-index       : 1;
         padding       : 32px;
         height        : 100%;
-        background    : var(--indigo-dark60);
-        background    : linear-gradient(0deg, rgb(27, 51, 176), rgb(0, 45, 136));
-        border        : 1px solid hsla(0, 0%, 100%, .1);
-        border-radius : calc(var(--micro) + 1px);
-    }
-
-    /* THE GLOWING BORDER */
-    #manifesto-card-bg {
-        position         : absolute;
-        inset            : 0;
-        top              : 24%;
-        left             : 0;
-        height           : 100%;
-        background       : conic-gradient(transparent 1%, var(--blue) 80deg, transparent 100deg);
-        filter           : blur(8px);
-        transform-origin : center;
-        /* Keyframes are defined in globals.css, doesn't work if kept here */
-        animation        : border-glow -.64s linear 4s infinite;
-        will-change      : transform
+        background    : linear-gradient(90deg, var(--blue-dark40), var(--blue-dark10));
+        border-radius : var(--micro);
     }
 }
 

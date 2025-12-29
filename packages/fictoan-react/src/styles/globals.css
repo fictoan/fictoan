@@ -4,6 +4,8 @@
     --global-border-width  : 1px;
     --global-border-style  : solid;
     --global-focus-colour  : var(--blue);
+    --global-focus-width   : 2px;
+    --global-focus-offset  : 2px;
 }
 
 :root {

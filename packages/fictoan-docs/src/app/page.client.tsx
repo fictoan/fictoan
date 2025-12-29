@@ -16,6 +16,7 @@ import {
     Heading6,
     Card,
     Section,
+    Heading1,
     Heading2,
     Header,
     Badge,
@@ -42,18 +43,18 @@ const HomePage = () => {
             <Section id="hero-section" verticalPadding="medium">
                 <Row horizontalPadding="medium" marginBottom="none">
                     <Portion desktopSpan="two-third">
-                        <Heading2 fontStyle="serif" weight="400" marginBottom="nano">
+                        <Heading1 fontStyle="serif" weight="400" textColour="blue" marginBottom="nano">
                             React UI in plain English
-                        </Heading2>
+                        </Heading1>
 
-                        <Heading4 weight="400" opacity="80" marginBottom="micro">
-                            Components so obvious, anyone can ship them
+                        <Heading4 weight="400" marginBottom="micro">
+                            Components so obvious, get designers on the team to contribute in code.
                         </Heading4>
 
-                        <Text size="large" marginBottom="small">
+                        <Heading6 weight="400" opacity="40" marginBottom="small">
                             Props that read like prose. Pure CSS, zero runtime. The UI library your designers will
                             actually use.
-                        </Text>
+                        </Heading6>
                     </Portion>
 
                     <Portion desktopSpan="one-third" />

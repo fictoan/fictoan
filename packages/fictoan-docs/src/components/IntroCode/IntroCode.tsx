@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import {
     Button,
     Div,
-    Heading1,
+    Heading2,
     Heading4,
     Heading5,
     Portion,
@@ -177,10 +177,6 @@ export const IntroCode = () => {
                 {/* MAIN ROW =========================================================================================== */}
                 <Row {...rowProps}>
                     <Portion {...portion1Props} className={`demo-portion ${vizMode ? "border-red" : ""}`}>
-                        <Heading1 {...mainHeadingProps} fontStyle="serif">
-                            As simple as describing it
-                        </Heading1>
-
                         <Heading4 {...taglineProps}>
                             Props that make sense at first glance
                         </Heading4>
@@ -248,9 +244,6 @@ export const IntroCode = () => {
                             {[
                                 `<Row horizontalPadding="medium" marginTop="tiny" marginBottom="small"> {/* Try "none", "small", "medium", "large" or "huge" */}`,
                                 `    <Portion desktopSpan="half"> {/* Try "one-third", or whole numbers between 1–24 */}`,
-                                `        <Heading1 textColour="blue-light20" marginBottom="nano" weight="700">`,
-                                `            As simple as describing it.`,
-                                `        </Heading1> \n`,
                                 `        <Heading4 marginBottom="micro">`,
                                 `            Props that make sense at first glance`,
                                 `        </Heading4> \n`,
