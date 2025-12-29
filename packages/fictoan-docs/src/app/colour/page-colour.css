@@ -4,6 +4,44 @@
         height : 24px;
     }
 
+    /* COLOUR SWATCHES ===================================== */
+    .colour-swatches-grid {
+        display               : grid;
+        grid-template-columns : repeat(auto-fill, minmax(100px, 1fr));
+        gap                   : 8px;
+    }
+
+    .colour-swatch-item {
+        border-radius : 8px;
+    }
+
+    .colour-swatch-preview {
+        height        : 64px;
+        border-radius : 4px;
+        margin-bottom : 4px;
+    }
+
+    .colour-swatch-name {
+        font-size   : 12px;
+        font-weight : 500;
+    }
+
+    .colour-swatch-meta {
+        font-size : 10px;
+        opacity   : 0.5;
+    }
+
+    .neutrals-grid {
+        display : flex;
+        gap     : 8px;
+    }
+
+    .neutral-swatch-item {
+        border-radius : 8px;
+        padding       : 8px;
+        width         : 100px;
+    }
+
     .colour-name {
         opacity     : 0;
         font-weight : 400;

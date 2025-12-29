@@ -6,7 +6,6 @@
 
     p:first-of-type {
         display     : inline-flex;
-        font-weight : bold;
         margin      : 0;
         color       : var(--progress-bar-label);
     }

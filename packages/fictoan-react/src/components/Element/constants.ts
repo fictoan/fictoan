@@ -1,40 +1,13 @@
 import { ElementType, FormEvent, HTMLProps } from "react";
 
-export const DefaultColours = [
-    "red",
-    "salmon",
-    "orange",
-    "amber",
-    "yellow",
-    "spring",
-    "pistachio",
-    "green",
-    "teal",
-    "cyan",
-    "sky",
-    "blue",
-    "indigo",
-    "violet",
-    "purple",
-    "pink",
-    "crimson",
-    "brick",
-    "sienna",
-    "brown",
-    "slate",
-    "grey"
-] as const;
+import { oklchColourDefinitions, type OklchColourName } from "../../styles/colours";
 
-export const BasicColours = [
-    "transparent",
-    "black",
-    "white"
-] as const;
-
-export const FictoanColours = [...DefaultColours, ...BasicColours] as const;
-
-type DefaultColoursType = typeof DefaultColours[number];
+// Basic colours without hue/chroma (not part of OKLCH definitions)
+export const BasicColours = ["transparent", "black", "white"] as const;
 type BasicColoursType = typeof BasicColours[number];
+
+// Combined list of all available colours
+export const FictoanColours = [...Object.keys(oklchColourDefinitions), ...BasicColours] as const;
 
 type Luminance = "dark" | "light";
 type ShadeLevel = 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90;
@@ -50,11 +23,11 @@ export type OpacityTypes = "0" | "5" | "10" | "20" | "30" | "40" | "50" | "60" |
 export type WeightTypes  = "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
 
 export type ColourPropTypes =
-    | `${DefaultColoursType}-${Luminance}${ShadeLevel}`
-    | `${DefaultColoursType}-${Luminance}${ShadeLevel}-opacity${OpacityLevel}`
-    | `${DefaultColoursType}-opacity${OpacityLevel}`
+    | `${OklchColourName}-${Luminance}${ShadeLevel}`
+    | `${OklchColourName}-${Luminance}${ShadeLevel}-opacity${OpacityLevel}`
+    | `${OklchColourName}-opacity${OpacityLevel}`
     | `${BasicColoursType}-opacity${OpacityLevel}`
-    | DefaultColoursType
+    | OklchColourName
     | BasicColoursType
     | CustomColours
     | "";

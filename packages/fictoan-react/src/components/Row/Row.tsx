@@ -1,23 +1,22 @@
 // REACT CORE ==========================================================================================================
 import React from "react";
 
-// ELEMENT =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps, SpacingTypes } from "../Element/constants";
 import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./row.css";
 
-// prettier-ignore
 interface RowCustomProps {
-        layout                        ? : "grid" | "flexbox";
-        gutters                       ? : SpacingTypes;
-        retainLayoutOnTabletLandscape ? : boolean;
-        retainLayoutOnTabletPortrait  ? : boolean;
-        retainLayoutOnMobile          ? : boolean;
-        retainLayoutAlways            ? : boolean;
-        groupLabel                    ? : string;
-        // Accessible label for the group
+    layout                        ? : "grid" | "flexbox";
+    gutters                       ? : SpacingTypes;
+    retainLayoutOnTabletLandscape ? : boolean;
+    retainLayoutOnTabletPortrait  ? : boolean;
+    retainLayoutOnMobile          ? : boolean;
+    retainLayoutAlways            ? : boolean;
+    allowUltraWide                ? : boolean;
+    groupLabel                    ? : string;
 }
 
 export type RowElementType = HTMLDivElement;
@@ -35,10 +34,11 @@ export const Row = React.forwardRef(
             retainLayoutOnTabletPortrait,
             retainLayoutOnMobile,
             retainLayoutAlways,
+            allowUltraWide,
             groupLabel,
             ...props
-        }: RowProps,
-        ref: React.Ref<RowElementType>
+        } : RowProps,
+        ref : React.Ref<RowElementType>,
     ) => {
         // CLASS NAMES -------------------------------------------------------------------------------------------------
         let classNames = [];
@@ -74,8 +74,12 @@ export const Row = React.forwardRef(
 
         if (retainLayoutAlways) {
             classNames.push(
-                "retain-layout-on-tablet-landscape retain-layout-on-tablet-portrait retain-layout-on-mobile"
+                "retain-layout-on-tablet-landscape retain-layout-on-tablet-portrait retain-layout-on-mobile",
             );
+        }
+
+        if (allowUltraWide) {
+            classNames.push("allow-ultra-wide");
         }
 
         // RENDER -----------------------------------------------------------------------------------------------------
@@ -84,13 +88,13 @@ export const Row = React.forwardRef(
                 as="div"
                 data-row
                 ref={ref}
-                classNames={[classNames.join(" ")]}
+                classNames={[ classNames.join(" ") ]}
                 marginBottom="tiny"
                 role="grid"
                 aria-label={groupLabel}
                 {...props}
             />
         );
-    }
+    },
 );
 Row.displayName = "Row";

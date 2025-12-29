@@ -157,7 +157,6 @@ export {
 
 // CONSTANTS AND TYPES /////////////////////////////////////////////////////////////////////////////////////////////////
 export {
-    DefaultColours,
     BasicColours,
     FictoanColours,
     type ColourPropTypes,
@@ -168,3 +167,9 @@ export {
     type OpacityTypes,
     type WeightTypes,
 } from "./components/Element/constants";
+
+export {
+    oklchColourDefinitions,
+    type ColourDefinition,
+    type OklchColourName,
+} from "./styles/colours";
