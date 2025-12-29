@@ -18,9 +18,6 @@ const colors : Record<string, ColourDefinition> = oklchColourDefinitions;
 /** Number of lightness levels on each side (dark/light) */
 const levels = 10;
 
-/** Opacity levels to generate (0-90 in increments) */
-const alphaLevels = [ 0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90 ] as const;
-
 /** CSS utility prefixes */
 const prefixes : UtilityPrefix[] = [ "bg", "text", "border" ];
 
@@ -39,15 +36,6 @@ function oklch(lightness : number, chroma : number, hue : number) : string {
     return `oklch(${l}% ${c} ${h})`;
 }
 
-/**
- * Generates OKLCH color string with alpha
- */
-function oklchAlpha(lightness : number, chroma : number, hue : number, alpha : number) : string {
-    const l = lightness.toFixed(1);
-    const c = chroma.toFixed(3);
-    const h = hue.toFixed(1);
-    return `oklch(${l}% ${c} ${h} / ${alpha})`;
-}
 
 /**
  * Generates a CSS variable definition
@@ -57,54 +45,51 @@ function cssVar(name : string, value : string) : string {
 }
 
 /**
- * Generates a utility class for background or text color
+ * Generates a utility class for background, text, or border color
+ * Uses CSS custom properties for runtime opacity control
  */
-function colorUtilityClass(prefix : UtilityPrefix, className : string) : string {
-    if (prefix === "border") {
-        return `.${prefix}-${className} { border-color: var(--${className}); border-width: var(--global-border-width); border-style: var(--global-border-style); }`;
+function colorUtilityClass(prefix : UtilityPrefix, baseName : string) : string {
+    const property = prefix === "bg" ? "background-color" : (prefix === "border" ? "border-color" : "color");
+
+    // Use color-mix with CSS custom property for opacity (defaults to 1 = 100%)
+    const opacityVar = prefix === "bg" ? "--bg-opacity" : (prefix === "border" ? "--border-opacity" : null);
+
+    let value : string;
+    if (opacityVar) {
+        // bg and border use custom property for opacity
+        value = `color-mix(in oklch, var(--${baseName}) calc(var(${opacityVar}, 1) * 100%), transparent)`;
+    } else {
+        // text just uses the color directly
+        value = `var(--${baseName})`;
     }
-    const property = prefix === "bg" ? "background-color" : "color";
-    return `.${prefix}-${className} { ${property}: var(--${className}); }`;
+
+    if (prefix === "border") {
+        return `.${prefix}-${baseName} { ${property}: ${value}; border-width: var(--global-border-width); border-style: var(--global-border-style); }`;
+    }
+    return `.${prefix}-${baseName} { ${property}: ${value}; }`;
 }
 
 /**
- * Generates CSS variables for a single color shade
+ * Generates CSS variable for a single color shade (no opacity variants)
  */
-function generateShadeVariables(
-    colorName : string,
+function generateShadeVariable(
     hue : number,
     chroma : number,
     lightness : number,
     shadeName : string,
 ) : string {
-    const lines : string[] = [];
-
-    // Base color variable
-    lines.push(cssVar(shadeName, oklch(lightness, chroma, hue)));
-
-    // Opacity variants
-    for (const alpha of alphaLevels) {
-        const alphaValue = alpha / 100;
-        lines.push(cssVar(`${shadeName}-opacity${alpha}`, oklchAlpha(lightness, chroma, hue, alphaValue)));
-    }
-
-    return lines.join("\n");
+    return cssVar(shadeName, oklch(lightness, chroma, hue));
 }
 
 /**
  * Generates utility classes for a single color shade
+ * No opacity variants - opacity is controlled via bgOpacity/borderOpacity props
  */
 function generateShadeUtilities(shadeName : string) : string {
     const lines : string[] = [];
 
     for (const prefix of prefixes) {
-        // Base utility
         lines.push(colorUtilityClass(prefix, shadeName));
-
-        // Opacity variants
-        for (const alpha of alphaLevels) {
-            lines.push(colorUtilityClass(prefix, `${shadeName}-opacity${alpha}`));
-        }
     }
 
     return lines.join("\n");
@@ -163,21 +148,13 @@ function generateCSS() : string {
     // CSS VARIABLES
     variableLines.push(":root {");
 
-    // White, black, transparent
+    // White, black, transparent (no opacity variants - use color-mix at runtime)
     variableLines.push("    --white: oklch(100% 0 0);");
     variableLines.push("    --black: oklch(0% 0 0);");
     variableLines.push("    --transparent: transparent;");
-
-    // White/black opacity variants
-    for (const alpha of alphaLevels) {
-        const alphaValue = alpha / 100;
-        variableLines.push(`    --white-opacity${alpha}: oklch(100% 0 0 / ${alphaValue});`);
-        variableLines.push(`    --black-opacity${alpha}: oklch(0% 0 0 / ${alphaValue});`);
-    }
-
     variableLines.push("");
 
-    // Generate variables for each color
+    // Generate variables for each color (no opacity variants - use color-mix at runtime)
     for (const [ colorName, {hue, chroma} ] of Object.entries(colors)) {
         variableLines.push(`    /* ${colorName.toUpperCase()} */`);
 
@@ -189,14 +166,14 @@ function generateCSS() : string {
                 // Dark shades (dark90 to dark10)
                 const level = (levels - i) * 10;
                 const shadeName = `${colorName}-dark${level}`;
-                variableLines.push(generateShadeVariables(colorName, hue, adjustedChroma, lightness, shadeName));
+                variableLines.push(generateShadeVariable(hue, adjustedChroma, lightness, shadeName));
             } else if (i > levels) {
                 // Light shades (light10 to light90)
                 const level = (i - levels) * 10;
                 const shadeName = `${colorName}-light${level}`;
-                variableLines.push(generateShadeVariables(colorName, hue, adjustedChroma, lightness, shadeName));
+                variableLines.push(generateShadeVariable(hue, adjustedChroma, lightness, shadeName));
             } else {
-                variableLines.push(generateShadeVariables(colorName, hue, adjustedChroma, lightness, colorName));
+                variableLines.push(generateShadeVariable(hue, adjustedChroma, lightness, colorName));
             }
         }
         variableLines.push("");
@@ -223,16 +200,11 @@ function generateCSS() : string {
         }
     }
 
-    // White, black, transparent utilities
+    // White, black, transparent utilities (no opacity variants)
     for (const prefix of prefixes) {
         utilityLines.push(colorUtilityClass(prefix, "white"));
         utilityLines.push(colorUtilityClass(prefix, "black"));
         utilityLines.push(colorUtilityClass(prefix, "transparent"));
-
-        for (const alpha of alphaLevels) {
-            utilityLines.push(colorUtilityClass(prefix, `white-opacity${alpha}`));
-            utilityLines.push(colorUtilityClass(prefix, `black-opacity${alpha}`));
-        }
     }
 
     return variableLines.join("\n") + "\n" + utilityLines.join("\n");
@@ -256,13 +228,13 @@ function main() : void {
     const lines = css.split("\n").length;
     const sizeKB = (Buffer.byteLength(css, "utf8") / 1024).toFixed(1);
     const colorCount = Object.keys(colors).length;
-    const shadeCount = colorCount * (2 * levels - 1);
-    const variantCount = shadeCount * (alphaLevels.length + 1);
+    const shadeCount = colorCount * (2 * levels - 1) + 3; // +3 for white, black, transparent
+    const utilityClassCount = shadeCount * prefixes.length;
 
     console.log(`Generated colours.css with OKLCH successfully!`);
     console.log(`  - ${colorCount} base colours`);
-    console.log(`  - ${shadeCount} shades (dark90→light90)`);
-    console.log(`  - ${variantCount} total variants (with opacity)`);
+    console.log(`  - ${shadeCount} CSS variables`);
+    console.log(`  - ${utilityClassCount} utility classes (opacity via bgOpacity/borderOpacity props)`);
     console.log(`  - ${lines} lines, ${sizeKB} KB`);
 }
 

@@ -37,10 +37,12 @@ export interface CommonProps {
     // STYLING =================================================================
     bgColor      ? : ColourPropTypes;
     bgColour     ? : ColourPropTypes;
+    bgOpacity    ? : OpacityTypes;
     textColor    ? : ColourPropTypes;
     textColour   ? : ColourPropTypes;
     borderColor  ? : ColourPropTypes;
     borderColour ? : ColourPropTypes;
+    borderOpacity? : OpacityTypes;
     fillColor    ? : ColourPropTypes;
     fillColour   ? : ColourPropTypes;
     strokeColor  ? : ColourPropTypes;
