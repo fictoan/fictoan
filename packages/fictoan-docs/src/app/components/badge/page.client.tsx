@@ -58,6 +58,11 @@ const BadgeDocs = () => {
                 <Text>
                     Default size is <code>medium</code>.
                 </Text>
+
+                <Text>
+                    Use the <code>actionIcon</code> prop to add an action button with icons
+                    like <code>cross</code>, <code>tick</code>, <code>plus</code>, or <code>minus</code>.
+                </Text>
             </Div>
 
             {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
@@ -66,6 +71,8 @@ const BadgeDocs = () => {
                     ref={interactiveElementRef}
                     {...props}
                     {...themeConfig}
+                    actionIcon={props.actionIcon || undefined}
+                    onActionClick={props.actionIcon ? () => console.log("Action clicked") : undefined}
                 >
                     {props.children || "Badge"}
                 </Badge>

@@ -174,9 +174,11 @@ export const FileUpload = React.forwardRef(
                             {files.map((file, index) => (
                                 <Badge
                                     key={`${file.name}-${index}`}
-                                    size="small" shape="rounded"
-                                    hasDelete
-                                    onDelete={() => removeFile(index)}
+                                    size="small"
+                                    shape="rounded"
+                                    actionIcon="cross"
+                                    onActionClick={() => removeFile(index)}
+                                    actionAriaLabel={`Remove ${file.name}`}
                                     bgColour={badgeBgColour}
                                     textColour={badgeTextColour}
                                 >

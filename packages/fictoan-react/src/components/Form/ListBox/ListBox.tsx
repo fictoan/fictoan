@@ -258,8 +258,9 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                                             {selectedOptions.map(option => (
                                                 <Badge
                                                     key={option.value}
-                                                    hasDelete={allowMultiSelect}
-                                                    onDelete={() => handleDeleteOption(option.value)}
+                                                    actionIcon="cross"
+                                                    onActionClick={() => handleDeleteOption(option.value)}
+                                                    actionAriaLabel={`Remove ${option.label}`}
                                                     size="small"
                                                     shape="rounded"
                                                 >

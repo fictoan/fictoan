@@ -24,6 +24,13 @@
     --badge-border        : var(--blue);
     --badge-border-radius : var(--global-border-radius);
     --badge-border-width  : var(--global-border-width);
+
+    --badge-action-bg           : var(--blue-light40);
+    --badge-action-text         : var(--blue-dark20);
+    --badge-action-border       : var(--blue-light20);
+    --badge-action-border-width : var(--global-border-width);
+    --badge-action-bg-hover     : var(--blue-light20);
+    --badge-action-text-hover   : var(--blue-dark40);
 }
 
 /* BODY ///////////////////////////////////////////////////////////////////// */

@@ -31,15 +31,30 @@ export const badgeRegistry = createPropsRegistry({
             ],
             defaultValue : "rounded",
         },
-        hasDelete : {
-            label        : "hasDelete",
-            control      : "Checkbox",
-            defaultValue : false,
+        actionIcon : {
+            label        : "Action icon",
+            control      : "RadioTabGroup",
+            options      : [
+                { value : "", label : "none" },
+                { value : "tick", label : "tick" },
+                { value : "cross", label : "cross" },
+                { value : "plus", label : "plus" },
+                { value : "minus", label : "minus" },
+            ],
+            defaultValue : "",
             inputProps   : {
-                helpText : "Shows a delete button on the badge",
+                helpText : "Shows an action button with the selected icon",
             },
         },
-        onDelete : {
+        actionAriaLabel : {
+            label        : "Action aria-label",
+            control      : "InputField",
+            defaultValue : "Remove badge",
+            inputProps   : {
+                helpText : "Accessible label for the action button",
+            },
+        },
+        onActionClick : {
             hidden : true,
         },
     },
