@@ -2,7 +2,28 @@
 
 ## 2.0.0
 
-### ⚠️ Breaking Changes
+### ⚠️ Breaking changes
+
+**OKLCH colour system migration**
+- All colours now use the OKLCH colour space for perceptually uniform lightness and better colour mixing
+- Expanded palette from 22 to 36 named colours, with ~10° hue gaps for comprehensive coverage
+- New colours: `rose`, `gold`, `lime`, `chartreuse`, `sage`, `emerald`, `jade`, `aqua`, `azure`, `cerulean`, `cobalt`, `navy`, `royal`, `iris`, `plum`, `magenta`, `fuchsia`, `cerise`
+- Removed: `brick` colour (use `sienna` or `crimson` as alternatives)
+- Single source of truth: all colour definitions now live in `oklchColourDefinitions`
+
+**New `bgOpacity` and `borderOpacity` props**
+- Opacity is now controlled via dedicated props instead of pre-generated utility classes
+- This reduces CSS bundle size by ~90% (from ~35k lines to ~3k lines)
+  ```tsx
+  // Before (v1.x)
+  <Card bgColour="red-opacity50" />
+
+  // After (v2.0) - cleaner, more flexible
+  <Card bgColour="red" bgOpacity="50" />
+  ```
+- Uses CSS `color-mix()` for runtime opacity calculation
+- Removes ~24,000 pre-generated opacity utility classes
+
 **Modal and Drawer now use declarative API**
 
 - Replace imperative functions with declarative `isOpen` and `onClose` props
