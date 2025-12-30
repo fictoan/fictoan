@@ -118,9 +118,9 @@
 
     --option-card-focus                  : var(--global-focus-colour);
 
-    --option-card-bg-hover               : var(--green-light70-opacity40);
+    --option-card-bg-hover               : color-mix(in oklch, var(--green-light70) 40%, transparent);
     --option-card-border-hover           : var(--green-light40);
-    --option-card-tick-bg-hover          : var(--green-light60-opacity30);
+    --option-card-tick-bg-hover          : color-mix(in oklch, var(--green-light60) 30%, transparent);
     --option-card-tick-line-hover        : var(--green);
 
     --option-card-bg-selected            : var(--green-light60);
@@ -175,7 +175,7 @@
 
     /* TEXT ///////////////////////////////////////////////////////////////// */
     --font-sans-serif                    : "Inter", sans-serif;
-    --font-serif                         : "Fraunces", serif;
+    --font-serif                         : "Mondwest", serif;
     --font-monospace                     : "Geist Mono", monospace;
 
     --paragraph-font-size                : 1rem;
@@ -193,19 +193,23 @@
     /* ////////////////////////////////////////////////////////////////////// */
     /* COMPONENT GRID /////////////////////////////////////////////////////// */
 
-    --component-card-bg                  : var(--slate-dark80-opacity80);
-    --component-card-border              : var(--slate-dark90);
+    --component-card-bg                  : color-mix(in oklch, var(--slate-dark80) 40%, transparent);
+    --component-card-border              : var(--slate-dark60);
     --component-card-footer-border       : var(--slate-dark60);
 
     /* SITE HEADER ////////////////////////////////////////////////////////// */
-    --site-header-bg                     : var(--black-opacity20);
+    --site-header-bg                     : color-mix(in oklch, var(--black) 20%, transparent);
     --site-header-border                 : var(--grey-dark60);
+
+    /* SITE FOOTER ////////////////////////////////////////////////////////// */
+    --footer-border                      : var(--grey-dark60);
+    --footer-pattern-color               : var(--slate-light40);
 
     /* USP CARDS //////////////////////////////////////////////////////////// */
     /*--usp-section-bg                          : var(--grey-dark90);*/
 
-    --usp-card-gradient-top              : var(--green-dark80-opacity40);
-    --usp-card-gradient-bottom           : var(--grey-dark80-opacity40);
+    --usp-card-gradient-top              : color-mix(in oklch, var(--green-dark80) 40%, transparent);
+    --usp-card-gradient-bottom           : color-mix(in oklch, var(--grey-dark80) 40%, transparent);
 
     /* SEARCH /////////////////////////////////////////////////////////////// */
     --search-input-bg                    : var(--slate-dark80);

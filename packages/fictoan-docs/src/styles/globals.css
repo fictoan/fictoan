@@ -1,5 +1,5 @@
 @import "fictoan-react/dist/index.css";
-@import "./fonts.css";
+@import "../assets/fonts/fonts.css";
 @import "./theme-dark.css";
 @import "./theme-test.css";
 @import "./theme-light.css";

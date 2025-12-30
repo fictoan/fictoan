@@ -8,12 +8,12 @@ import React, { useState } from "react";
 import {
     Button,
     Div,
-    Heading2,
     Heading4,
     Heading5,
     Portion,
     Row,
     Switch,
+    Card,
     Text,
     CodeBlock,
     type SpacingTypes,
@@ -27,100 +27,98 @@ import {
 import "./intro-code.css";
 
 export const IntroCode = () => {
-    const flipACoin = () => Math.random() >= 0.5;
-
-    const [rowProps, setRowProps] = useState<{
-        horizontalPadding: SpacingTypes;
-        marginTop: SpacingTypes;
-        marginBottom: SpacingTypes;
+    const [ rowProps, setRowProps ] = useState<{
+        horizontalPadding : SpacingTypes;
+        marginTop : SpacingTypes;
+        marginBottom : SpacingTypes;
     }>({
         horizontalPadding : "medium",
         marginTop         : "tiny",
         marginBottom      : "tiny",
     });
 
-    const [portion1Props, setPortion1Props] = useState<{
-        desktopSpan: SpanTypes;
+    const [ portion1Props, setPortion1Props ] = useState<{
+        desktopSpan : SpanTypes;
     }>({
         desktopSpan : "half",
     });
 
-    const [portion2Props, setPortion2Props] = useState<{
-        desktopSpan: SpanTypes;
+    const [ portion2Props, setPortion2Props ] = useState<{
+        desktopSpan : SpanTypes;
     }>({
         desktopSpan : "half",
     });
 
-    const [mainHeadingProps, setMainHeadingProps] = useState<{
-        textColour: ColourPropTypes;
-        marginBottom: SpacingTypes;
-        weight: WeightTypes;
+    const [ mainHeadingProps, setMainHeadingProps ] = useState<{
+        textColour : ColourPropTypes;
+        marginBottom : SpacingTypes;
+        weight : WeightTypes;
     }>({
         textColour   : "blue",
         marginBottom : "nano",
         weight       : "700",
     });
 
-    const [taglineProps, setTaglineProps] = useState<{
-        textColour: ColourPropTypes;
-        marginBottom: SpacingTypes;
-        weight: WeightTypes;
+    const [ taglineProps, setTaglineProps ] = useState<{
+        textColour : ColourPropTypes;
+        marginBottom : SpacingTypes;
+        weight : WeightTypes;
     }>({
         textColour   : "blue-light30",
         marginBottom : "micro",
         weight       : "400",
     });
 
-    const [subHeading1Props, setSubHeading1Props] = useState<{
-        weight: WeightTypes;
-        marginBottom: SpacingTypes;
+    const [ subHeading1Props, setSubHeading1Props ] = useState<{
+        weight : WeightTypes;
+        marginBottom : SpacingTypes;
     }>({
         weight       : "400",
         marginBottom : "micro",
     });
 
-    const [subHeading2Props, setSubHeading2Props] = useState<{
-        weight: WeightTypes;
-        marginBottom: SpacingTypes;
+    const [ subHeading2Props, setSubHeading2Props ] = useState<{
+        weight : WeightTypes;
+        marginBottom : SpacingTypes;
     }>({
         weight       : "400",
         marginBottom : "micro",
     });
 
-    const [buttonProps, setButtonProps] = useState<{
-        kind: EmphasisTypes;
+    const [ buttonProps, setButtonProps ] = useState<{
+        kind : EmphasisTypes;
     }>({
         kind : "primary",
     });
 
-    const handleCodeChange = (newContent: string) => {
+    const handleCodeChange = (newContent : string) => {
         const newProps = parseCodeToProperties(newContent);
 
         // Update all component props based on parsed content
-        setRowProps(prev => ({ ...prev, ...newProps.Row } as typeof prev));
+        setRowProps(prev => ({...prev, ...newProps.Row} as typeof prev));
 
         // Update portions
         if (newProps.Portion[0]) setPortion1Props(newProps.Portion[0] as typeof portion1Props);
         if (newProps.Portion[1]) setPortion2Props(newProps.Portion[1] as typeof portion2Props);
 
         // Update headings
-        setMainHeadingProps(prev => ({ ...prev, ...newProps.Heading1 } as typeof prev));
-        if (newProps.Heading5[0]) setSubHeading1Props(prev => ({ ...prev, ...newProps.Heading5[0] } as typeof prev));
-        if (newProps.Heading5[1]) setSubHeading2Props(prev => ({ ...prev, ...newProps.Heading5[1] } as typeof prev));
+        setMainHeadingProps(prev => ({...prev, ...newProps.Heading1} as typeof prev));
+        if (newProps.Heading5[0]) setSubHeading1Props(prev => ({...prev, ...newProps.Heading5[0]} as typeof prev));
+        if (newProps.Heading5[1]) setSubHeading2Props(prev => ({...prev, ...newProps.Heading5[1]} as typeof prev));
 
         // Update button
-        setButtonProps(prev => ({ ...prev, ...newProps.Button } as typeof prev));
+        setButtonProps(prev => ({...prev, ...newProps.Button} as typeof prev));
     };
 
-    const parseCodeToProperties = (codeContent: string) => {
+    const parseCodeToProperties = (codeContent : string) => {
         const propRegex = /<(Heading1|Heading5|Row|Portion|Button)\s+(.*?)>/gs;
         const propertiesRegex = /(\w+)="([^"]+)"/g;
-        const newProps: {
-            Row: Record<string, string>;
-            Portion: Record<string, string>[];
-            Heading1: Record<string, string>;
-            Heading5: Record<string, string>[];
-            Button: Record<string, string>;
+        const newProps : {
+            Row : Record<string, string>;
+            Portion : Record<string, string>[];
+            Heading1 : Record<string, string>;
+            Heading5 : Record<string, string>[];
+            Button : Record<string, string>;
         } = {
             Row      : {},
             Portion  : [],
@@ -135,7 +133,7 @@ export const IntroCode = () => {
         ) !== null) {
             const tagName = tagMatch[1] as "Heading1" | "Heading5" | "Row" | "Portion" | "Button";
             const tagProperties = tagMatch[2];
-            let tagProps: Record<string, string> = {};
+            let tagProps : Record<string, string> = {};
 
             let propsMatch;
             while ((
@@ -156,8 +154,7 @@ export const IntroCode = () => {
         return newProps;
     };
 
-
-    const [vizMode, setVizMode] = useState(true);
+    const [ vizMode, setVizMode ] = useState(true);
     const numberOfPortions = 24;
 
     return (
@@ -165,8 +162,12 @@ export const IntroCode = () => {
             {/* ROW VISUALISATION ================================================================================== */}
             <Div id="viz-row-wrapper">
                 {vizMode && (
-                    <Row id="viz-row" horizontalPadding={rowProps.horizontalPadding} retainLayoutAlways>
-                        {Array.from({ length : numberOfPortions }, (_, index) => (
+                    <Row
+                        id="viz-row"
+                        horizontalPadding={rowProps.horizontalPadding} retainLayoutAlways
+                        marginBottom="micro"
+                    >
+                        {Array.from({length : numberOfPortions}, (_, index) => (
                             <Portion key={index} desktopSpan="1">
                                 <Text align="centre">{index + 1}</Text>
                             </Portion>
@@ -174,8 +175,8 @@ export const IntroCode = () => {
                     </Row>
                 )}
 
-                {/* MAIN ROW =========================================================================================== */}
-                <Row {...rowProps}>
+                {/* MAIN ROW ======================================================================================= */}
+                <Row {...rowProps} marginBottom="micro">
                     <Portion {...portion1Props} className={`demo-portion ${vizMode ? "border-red" : ""}`}>
                         <Heading4 {...taglineProps}>
                             Props that make sense at first glance
@@ -213,7 +214,7 @@ export const IntroCode = () => {
             </Div>
 
             {/* EDITABLE CODE BLOCK ================================================================================ */}
-            <Row horizontalPadding="medium" gutters="large" verticalMargin="small">
+            <Row horizontalPadding="medium" gutters="large" verticalMargin="micro">
                 <Portion>
                     <Div verticallyCentreItems pushItemsToEnds>
                         <Text textColour="blue" weight="700">

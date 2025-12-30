@@ -1,8 +1,13 @@
 /* MEASUREMENTS ///////////////////////////////////////////////////////////// */
 :root {
+    /* BORDERS ============================================================== */
     --global-border-radius : 8px;
     --global-border-width  : 1px;
     --global-border-style  : solid;
+    --global-border-colour : var(--grey-light40);
+    --global-border-color  : var(--grey-light40);
+
+    /* FOCUS ================================================================ */
     --global-focus-colour  : var(--blue);
     --global-focus-width   : 2px;
     --global-focus-offset  : 2px;

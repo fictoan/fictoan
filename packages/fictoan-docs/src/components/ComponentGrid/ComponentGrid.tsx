@@ -5,7 +5,34 @@ import Link from "next/link";
 import React, { useState } from "react";
 
 // UI ==================================================================================================================
-import { Element, Badge, Breadcrumbs, Button, Callout, Card, Checkbox, Div, InputField, NotificationItem, Portion, ProgressBar, RadioButton, Row, Select, Switch, Table, Text, Heading1, Heading4, NotificationsWrapper, CodeBlock, OptionCard, OptionCardsGroup, Modal, PinInputField } from "fictoan-react";
+import {
+    Element,
+    Badge,
+    Breadcrumbs,
+    Button,
+    Callout,
+    Card,
+    Checkbox,
+    Div,
+    InputField,
+    NotificationItem,
+    Portion,
+    ProgressBar,
+    RadioButton,
+    Row,
+    Select,
+    Switch,
+    Table,
+    Text,
+    Heading1,
+    Heading4,
+    NotificationsWrapper,
+    CodeBlock,
+    OptionCard,
+    OptionCardsGroup,
+    Modal,
+    PinInputField,
+} from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./component-grid.css";
@@ -352,7 +379,7 @@ export const ComponentGrid = () => {
                             <Badge
                                 bgColour="red-light70" textColour="red-dark10"
                                 shape="curved"
-                                margin="nano" hasDelete
+                                margin="nano"
                             >
                                 A
                             </Badge>
@@ -360,7 +387,7 @@ export const ComponentGrid = () => {
                             <Badge
                                 bgColour="green-light60" textColour="green-dark40"
                                 shape="curved" size="large"
-                                margin="nano" hasDelete
+                                margin="nano"
                             >
                                 BADGE
                             </Badge>
@@ -368,7 +395,7 @@ export const ComponentGrid = () => {
                             <Badge
                                 bgColour="amber-light40" textColour="orange-dark30"
                                 shape="rounded"
-                                margin="nano" hasDelete
+                                margin="nano"
                             >
                                 of
                             </Badge>
@@ -376,7 +403,7 @@ export const ComponentGrid = () => {
                             <Badge
                                 bgColour="violet" textColour="white"
                                 shape="rounded" size="medium"
-                                margin="nano" hasDelete
+                                margin="nano"
                             >
                                 HONOUR
                             </Badge>

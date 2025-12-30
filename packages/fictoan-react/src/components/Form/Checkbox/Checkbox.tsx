@@ -3,27 +3,27 @@ import React, { useMemo } from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { Element } from "$element";
-import { FormItem } from "../FormItem/FormItem";
 import { SpacingTypes } from "../../Element/constants";
 
 // STYLES ==============================================================================================================
 import "./checkbox.css";
 
-// TYPES ===============================================================================================================
+// OTHER ===============================================================================================================
+import { FormItem } from "../FormItem/FormItem";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 
 export type CheckboxElementType = HTMLInputElement;
 export type CheckboxProps = InputLabelCustomProps & {
-    id?: string;
-    name?: string;
-    checked?: boolean;
-    defaultChecked?: boolean;
-    disabled?: boolean;
-    required?: boolean;
-    onChange?: (checked: boolean) => void;
-    size?: Exclude<SpacingTypes, "nano" | "huge">;
-    helpText?: string;
-    errorText?: string;
+    id             ? : string;
+    name           ? : string;
+    checked        ? : boolean;
+    defaultChecked ? : boolean;
+    disabled       ? : boolean;
+    required       ? : boolean;
+    onChange       ? : (checked : boolean) => void;
+    size           ? : Exclude<SpacingTypes, "nano" | "huge">;
+    helpText       ? : string;
+    errorText      ? : string;
 };
 
 // TODO: Fix required indicator that clashes with tick because both use the same `label::after` setup.
@@ -45,12 +45,12 @@ export const Checkbox = React.forwardRef(
             required,
             size = "medium",
             ...props
-        }: CheckboxProps,
-        ref: React.Ref<CheckboxElementType>
+        } : CheckboxProps,
+        ref : React.Ref<CheckboxElementType>,
     ) => {
-        const derivedName = useMemo(() => name || id, [name, id]);
+        const derivedName = useMemo(() => name || id, [ name, id ]);
 
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
             onChange?.(e.target.checked);
         };
 
@@ -83,6 +83,6 @@ export const Checkbox = React.forwardRef(
                 />
             </FormItem>
         );
-    }
+    },
 );
 Checkbox.displayName = "Checkbox";

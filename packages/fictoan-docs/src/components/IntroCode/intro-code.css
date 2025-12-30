@@ -1,4 +1,6 @@
 #intro-code {
+    position: relative;
+
     #viz-row-wrapper {
         position : relative;
         height   : fit-content;
@@ -13,7 +15,7 @@
         user-select : none;
 
         [data-portion] {
-            background-color : hsla(0, 100%, 50%, 0.2);
+            background-color : color-mix(in oklch, var(--red-light70) 40%, transparent);
 
             p {
                 opacity    : 1;

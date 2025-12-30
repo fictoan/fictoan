@@ -4,22 +4,19 @@
 import React from "react";
 
 // UI ==================================================================================================================
-import { Row, Portion, Text, CodeBlock, Section, Heading6, Heading2 } from "fictoan-react";
+import { Row, Portion, CodeBlock, Heading6 } from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./code-comparison.css";
 
 export const CodeComparison = () => {
     return (
-        <Section id="comparison-section" verticalPadding="medium">
-            {/* CARD COMPARISON */}
-            <Row horizontalPadding="medium" gutters="large" marginBottom="none">
+        <>
+            {/* CARD COMPARISON //////////////////////////////////////////////////////////////////////////////////// */}
+            <Row horizontalPadding="medium" gutters="large" marginBottom="small">
                 <Portion desktopSpan="two-third">
-                    <Heading2 fontStyle="serif" weight="400" marginBottom="nano">
-                        See the difference
-                    </Heading2>
-                    <Heading6 weight="400" textColour="slate-light40">
-                        A simple card — same output, different syntax
+                    <Heading6>
+                        A simple card — same output, clearer syntax
                     </Heading6>
                 </Portion>
 
@@ -47,12 +44,8 @@ export const CodeComparison = () => {
                 </Portion>
 
                 <Portion desktopSpan="half" className="code-portion">
-                    <CodeBlock
-                        withSyntaxHighlighting
-                        language="jsx"
-                        marginBottom="none"
-                    >
-{`// Fictoan
+                    <CodeBlock withSyntaxHighlighting language="jsx">
+{`// Fictoan reads the way you’d describe it in conversation
 <Card
     shape="rounded" shadow="soft" padding="small"
     bgColour="white" borderColour="slate-light20"
@@ -73,10 +66,10 @@ export const CodeComparison = () => {
                 </Portion>
             </Row>
 
-            {/* INPUT FIELD COMPARISON */}
-            <Row horizontalPadding="medium" gutters="large" marginTop="medium" marginBottom="none">
+            {/* INPUT FIELD COMPARISON ///////////////////////////////////////////////////////////////////////////// */}
+            <Row horizontalPadding="medium" gutters="large">
                 <Portion>
-                    <Heading6 weight="400" textColour="slate-light40">
+                    <Heading6>
                         A form input with icon, suffix, label, help text, and native validation
                     </Heading6>
                 </Portion>
@@ -155,6 +148,6 @@ export const CodeComparison = () => {
                     </CodeBlock>
                 </Portion>
             </Row>
-        </Section>
+        </>
     );
 };

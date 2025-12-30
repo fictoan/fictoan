@@ -61,7 +61,7 @@
     }
 }
 
-/* BASE TYPOGRAPHY ===================================================== */
+/* BASE TYPOGRAPHY ========================================================== */
 body {
     font-family      : var(--paragraph-font);
     font-size        : var(--paragraph-font-size);
@@ -73,7 +73,7 @@ body {
     text-rendering   : optimizeLegibility;
 }
 
-/* HEADINGS ========================================================== */
+/* HEADINGS ================================================================= */
 h1, h2, h3, h4, h5, h6 {
     font-family : var(--heading-font);
     line-height : var(--heading-line-height);
@@ -93,7 +93,7 @@ h6 { font-size: var(--text-large); }
 /*    h1, h2, h3, h4, h5, h6 { word-wrap : break-word; }*/
 /*}*/
 
-/* PARAGRAPHS ======================================================= */
+/* PARAGRAPHS =============================================================== */
 p {
     font-family : var(--paragraph-font);
     color       : var(--paragraph-text-colour);
@@ -207,7 +207,7 @@ kbd {
     line-height      : 1.4;
     border-radius    : var(--kbd-border-radius);
     text-shadow      : 0 1px 0 #fff;
-    box-shadow       : 0 3px 0 0 rgba(0, 0, 0, 0.16);
+    box-shadow       : 0 2px 0 0 var(--kbd-shadow);
     user-select      : none;
 
     &:active {
@@ -216,7 +216,7 @@ kbd {
     }
 }
 
-/* TEXT SELECTION /////////////////////////////////////////////////////// */
+/* TEXT SELECTION /////////////////////////////////////////////////////////// */
 /* For Firefox browsers */
 ::-moz-selection {
     background : var(--text-bg-selected);

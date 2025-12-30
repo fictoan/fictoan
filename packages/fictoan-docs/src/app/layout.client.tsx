@@ -14,7 +14,7 @@ import { SiteHeader } from "$components/Header/Header";
 // STYLES ==============================================================================================================
 import "../styles/globals.css";
 
-export const RootLayoutClient = ({children}: {children: ReactNode}) => {
+export const RootLayoutClient = ({children} : { children : ReactNode }) => {
     const [ sidebarState, setSidebarState ] = useState("");
     const [ showSidebarOnMobile, setShowSidebarOnMobile ] = useState(false);
 
@@ -36,7 +36,7 @@ export const RootLayoutClient = ({children}: {children: ReactNode}) => {
         </head>
 
         <body>
-        <ThemeProvider themeList={listOfThemes} currentTheme="theme-dark">
+        <ThemeProvider themeList={listOfThemes} currentTheme="theme-light">
             {/* <LoadingBar */}
             {/*     ref={loadingBarRef} */}
             {/*     height="4px" */}

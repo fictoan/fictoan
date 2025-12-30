@@ -11,6 +11,7 @@
     "dependencies": {
         "@svgr/webpack": "^8.1.0",
         "color": "^4.2.3",
+        "embla-carousel-react": "^8.6.0",
         "fictoan-react": "workspace:*",
         "fuse.js": "^7.0.0",
         "gsap": "^3.12.4",
