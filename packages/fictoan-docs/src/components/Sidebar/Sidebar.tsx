@@ -16,33 +16,34 @@ import {
 } from "fictoan-react";
 
 // ASSETS ==============================================================================================================
-import AccordionIcon from "../../assets/icons/accordion.svg";
-import BadgeIcon from "../../assets/icons/badge.svg";
-import BaseElementIcon from "../../assets/icons/building-block.svg";
-import BreadcrumbsIcon from "../../assets/icons/breadcrumbs.svg";
+import AccordionIcon from "../../assets/icons/new-icons/accordion.svg";
+import BadgeIcon from "../../assets/icons/new-icons/badge.svg";
+import BaseElementIcon from "../../assets/icons/new-icons/lego-brick.svg";
+import BreadcrumbsIcon from "../../assets/icons/new-icons/breadcrumbs.svg";
 import ButtonGroupIcon from "../../assets/icons/button-group.svg";
-import ButtonIcon from "../../assets/icons/button.svg";
-import CalloutIcon from "../../assets/icons/callout.svg";
-import CardIcon from "../../assets/icons/card.svg";
-import CheckboxIcon from "../../assets/icons/checkbox.svg";
-import CodeIcon from "../../assets/icons/braces.svg";
-import ColourIcon from "../../assets/icons/water.svg";
-import DividerIcon from "../../assets/icons/hrule.svg";
+import ButtonIcon from "../../assets/icons/new-icons/button.svg";
+import CalloutIcon from "../../assets/icons/new-icons/callout.svg";
+import CardIcon from "../../assets/icons/new-icons/card.svg";
+import CheckboxIcon from "../../assets/icons/new-icons/checkbox.svg";
+import CodeIcon from "../../assets/icons/new-icons/braces.svg";
+import ColourIcon from "../../assets/icons/new-icons/drop.svg";
+import DividerIcon from "../../assets/icons/new-icons/line.svg";
+import DrawerIcon from "../../assets/icons/new-icons/drawer.svg";
 import FictoanIcon from "../../assets/images/fictoan-icon.svg";
 import FictoanLogo from "../../assets/images/fictoan-logo.svg";
-import FormWrapperIcon from "../../assets/icons/form-wrapper.svg";
-import HomeIcon from "../../assets/icons/home.svg";
-import InfoPanelIcon from "../../assets/icons/drawer.svg";
-import InputFieldIcon from "../../assets/icons/input.svg";
-import LayoutIcon from "../../assets/icons/layout.svg";
-import ListBoxIcon from "../../assets/icons/list-box.svg";
+import FormIcon from "../../assets/icons/new-icons/form.svg";
+import HomeIcon from "../../assets/icons/new-icons/home.svg";
+import InputIcon from "../../assets/icons/new-icons/input.svg";
+import LayoutIcon from "../../assets/icons/new-icons/window.svg";
+import ListBoxIcon from "../../assets/icons/new-icons/listbox.svg";
 import ManifestoIcon from "../../assets/icons/manifesto.svg";
-import ModalIcon from "../../assets/icons/modal.svg";
+import ModalIcon from "../../assets/icons/new-icons/window.svg";
 import NotificationIcon from "../../assets/icons/notification.svg";
 import OptionCardsIcon from "../../assets/icons/option-cards.svg";
 import PaginationIcon from "../../assets/icons/pagination.svg";
+import PaintRollerIcon from "../../assets/icons/new-icons/paint-roller.svg";
 import PinInputIcon from "../../assets/icons/pin-input.svg";
-import ProgressBarIcon from "../../assets/icons/progress-bar.svg";
+import ProgressIcon from "../../assets/icons/new-icons/meter.svg";
 import RadioButtonIcon from "../../assets/icons/radio-button.svg";
 import RangeIcon from "../../assets/icons/range.svg";
 import SelectIcon from "../../assets/icons/select.svg";
@@ -51,17 +52,23 @@ import SkeletonIcon from "../../assets/icons/skeleton.svg";
 import TabGroupIcon from "../../assets/icons/tabs-group.svg";
 import TableIcon from "../../assets/icons/table.svg";
 import TabsIcon from "../../assets/icons/tabs.svg";
-import ThemeIcon from "../../assets/icons/paintbrush.svg";
 import ThemeSwitchIcon from "../../assets/icons/theme.svg";
 import ToastIcon from "../../assets/icons/toast.svg";
 import TooltipIcon from "../../assets/icons/tooltip.svg";
-import TypographyIcon from "../../assets/icons/typography.svg";
+import TypographyIcon from "../../assets/icons/new-icons/caret.svg";
 
 // STYLES ==============================================================================================================
 import "./sidebar.css";
 
-export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, setShowSidebarOnMobile }) => {
-    const ref = useRef(null);
+interface SidebarProps {
+    sidebarState           : string;
+    setSidebarState        : (state: string) => void;
+    showSidebarOnMobile    : boolean;
+    setShowSidebarOnMobile : (show: boolean) => void;
+}
+
+export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, setShowSidebarOnMobile }: SidebarProps) => {
+    const ref = useRef<HTMLDivElement>(null);
 
     // const [ theme, setTheme ] = useTheme();
     //
@@ -88,6 +95,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
 
     return (
         <SidebarWrapper
+            id="site-sidebar"
             ref={ref}
             showMobileSidebar={showSidebarOnMobile}
             closeOnClickOutside={closeMobileSidebar}
@@ -140,7 +148,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             {/* THEME ============================================================================================== */}
             <Link href="/theme" className={`${pathname === "/theme" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
-                    <ThemeIcon />
+                    <PaintRollerIcon />
 
                     <Text weight="400">Theme</Text>
                 </SidebarItem>
@@ -271,7 +279,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             {/* DRAWER ============================================================================================= */}
             <Link href="/components/drawer" className={`${pathname === "/components/drawer" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
-                    <InfoPanelIcon />
+                    <DrawerIcon />
                     <Text weight="400">Drawer</Text>
                 </SidebarItem>
             </Link>
@@ -279,7 +287,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             {/* FORM WRAPPER ======================================================================================= */}
             <Link href="/components/form" className={`${pathname === "/components/form" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
-                    <FormWrapperIcon />
+                    <FormIcon />
                     <Text weight="400">Form</Text>
                 </SidebarItem>
             </Link>
@@ -288,7 +296,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             <Link href="/components/input-field"
                   className={`${pathname === "/components/input-field" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
-                    <InputFieldIcon />
+                    <InputIcon />
                     <Text weight="400">Input field</Text>
                 </SidebarItem>
             </Link>
@@ -304,7 +312,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             {/* METER ============================================================================================== */}
             <Link href="/components/meter" className={`${pathname === "/components/meter" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
-                    <ProgressBarIcon />
+                    <ProgressIcon />
                     <Text weight="400">Meter</Text>
                 </SidebarItem>
             </Link>
@@ -321,7 +329,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
             <Link href="/components/progress-bar"
                   className={`${pathname === "/components/progress-bar" ? "active" : ""}`}>
                 <SidebarItem onClick={closeMobileSidebar}>
-                    <ProgressBarIcon />
+                    <ProgressIcon />
                     <Text weight="400">Progress bar</Text>
                 </SidebarItem>
             </Link>

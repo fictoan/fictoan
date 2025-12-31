@@ -59,16 +59,16 @@
     --drawer-border                      : var(--grey-dark40);
 
     /* INPUT FIELD ////////////////////////////////////////////////////////// */
-    --input-bg-default                   : var(--grey-dark70);
-    --input-border-default               : var(--grey-dark40);
+    --input-bg-default                   : var(--grey-light90);
+    --input-border-default               : var(--grey-light60);
     --input-border-radius-default        : var(--global-border-radius);
-    --input-label-default                : var(--paragraph-text-colour);
+    --input-label-default                : var(--black);
     --input-placeholder-default          : var(--slate);
-    --input-text-default                 : var(--slate-light60);
+    --input-text-default                 : var(--paragraph-text-colour);
 
-    --input-bg-focus                     : var(--grey-dark50);
+    --input-bg-focus                     : var(--white);
     --input-border-focus                 : var(--grey-light20);
-    --input-text-focus                   : var(--grey-light80);
+    --input-text-focus                   : var(--black);
 
     --input-bg-valid                     : var(--white);
     --input-border-valid                 : var(--green-dark30);
@@ -92,7 +92,7 @@
 
     --input-required-indicator           : var(--red);
 
-    --input-helptext                     : var(--slate-dark40);
+    --input-helptext                     : var(--paragraph-subtext-colour);
     --input-helptext-scale               : 92%;
 
     --input-icon-default                 : var(--slate-light40);
@@ -218,7 +218,7 @@
     --usp-card-gradient-bottom           : color-mix(in oklch, var(--grey-dark80) 40%, transparent);
 
     /* SEARCH /////////////////////////////////////////////////////////////// */
-    --search-input-bg                    : var(--grey-light80);
+    --search-input-bg                    : var(--input-bg-default);
 
     --search-result-item-bg-default      : var(--slate-dark80);
     --search-result-item-bg-hover        : var(--blue-dark80);

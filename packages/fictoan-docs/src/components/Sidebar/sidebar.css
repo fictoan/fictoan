@@ -1,0 +1,6 @@
+#site-sidebar {
+    [data-sidebar-item] svg {
+        stroke : none;
+        fill   : var(--sidebar-item-icon-fill-default);
+    }
+}
