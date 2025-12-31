@@ -1,23 +1,21 @@
 // REACT CORE ==========================================================================================================
 import React, { useRef, useImperativeHandle } from "react";
 
+// LOCAL COMPONENTS ====================================================================================================
+import { CommonAndHTMLProps } from "../../Element/constants";
+import { Element } from "$element";
+
 // HOOKS ===============================================================================================================
 import { useClickOutside } from "../../../hooks/UseClickOutside";
-
-// ELEMENT =============================================================================================================
-import { CommonAndHTMLProps } from "../../Element/constants";
 
 // STYLES ==============================================================================================================
 import "./sidebar-wrapper.css";
 
-// OTHER ===============================================================================================================
-import { Element } from "$element";
-
 // prettier-ignore
 export interface SidebarWrapperCustomProps {
-        collapsed           ? : boolean;
-        closeOnClickOutside ? : () => void;
-        showMobileSidebar   ? : boolean;
+    collapsed           ? : boolean;
+    closeOnClickOutside ? : () => void;
+    showMobileSidebar   ? : boolean;
 }
 
 export type SidebarWrapperElementType = HTMLDivElement;
@@ -31,7 +29,7 @@ export const SidebarWrapper = React.forwardRef(
             closeOnClickOutside,
             showMobileSidebar,
             ...props
-        }: SidebarWrapperNewProps, forwardedRef: React.Ref<SidebarWrapperElementType>) => {
+        } : SidebarWrapperNewProps, forwardedRef : React.Ref<SidebarWrapperElementType>) => {
 
         const internalRef = useRef<HTMLDivElement>(null);
 

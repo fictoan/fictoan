@@ -1,35 +1,31 @@
 // REACT CORE ==========================================================================================================
 import React from "react";
 
-// ELEMENT =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps } from "../../Element/constants";
+import { Div } from "$tags";
 import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./sidebar-item.css";
 
-// OTHER ===============================================================================================================
-import { Div } from "$tags";
-
-// prettier-ignore
 type BaseItemProps = {
-        hasAlert ? : boolean;
+    hasAlert ? : boolean;
 }
 
-// prettier-ignore
 type IconProps =
-        | {
-          hasEmptyIcon : boolean;
-          hasNoIcon? : never;
-      } // If hasEmptyIcon is set, hasNoIcon can't be set
-        | {
-          hasEmptyIcon? : never;
-          hasNoIcon : boolean;
-      } // If hasNoIcon is set, hasEmptyIcon can't be set
-        | {
-          hasEmptyIcon? : never;
-          hasNoIcon? : never;
-      } // Neither is set
+    | {
+        hasEmptyIcon   : boolean;
+        hasNoIcon    ? : never;
+    } // If hasEmptyIcon is set, hasNoIcon can't be set
+    | {
+        hasEmptyIcon ? : never;
+        hasNoIcon      : boolean;
+    } // If hasNoIcon is set, hasEmptyIcon can't be set
+    | {
+        hasEmptyIcon ? : never;
+        hasNoIcon    ? : never;
+    } // Neither is set
 
 export type SidebarItemCustomProps = BaseItemProps & IconProps;
 

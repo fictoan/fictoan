@@ -1,6 +1,6 @@
 # .seriseirc
-TO_COLUMN_WIDTH = 120
-HEADER_CHAR = =
+header-comment-fill-character = =
+comment-column-width = 120
 
 [groups]
 # Use quotes to match the exact package name
