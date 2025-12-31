@@ -1,24 +1,24 @@
-// FRAMEWORK ============================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../Element/constants";
+import { Element } from "$element";
 
-// STYLES =============================================================================================================
+// STYLES ==============================================================================================================
 import "./portion.css";
 
-// TYPES =============================================================================================================
-import { CommonAndHTMLProps } from "../Element/constants";
+// OTHER ===============================================================================================================
 import { SpanTypes } from "./types";
 
 // prettier-ignore
 export interface PortionCustomProps {
-    desktopSpan         ? : SpanTypes;
-    tabletLandscapeSpan ? : SpanTypes;
-    tabletPortraitSpan  ? : SpanTypes;
-    mobileSpan          ? : SpanTypes;
-    isHorizontal        ? : boolean;
-    role                ? : string;
+        desktopSpan         ? : SpanTypes;
+        tabletLandscapeSpan ? : SpanTypes;
+        tabletPortraitSpan  ? : SpanTypes;
+        mobileSpan          ? : SpanTypes;
+        isHorizontal        ? : boolean;
+        role                ? : string;
 }
 
 export type PortionElementType = HTMLDivElement;
@@ -78,3 +78,4 @@ export const Portion = React.forwardRef(
         );
     }
 );
+Portion.displayName = "Portion";

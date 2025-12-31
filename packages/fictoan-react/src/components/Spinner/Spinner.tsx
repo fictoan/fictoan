@@ -1,19 +1,18 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./spinner.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../Element/constants";
-
 // prettier-ignore
 export interface SpinnerCustomProps {
-    size        ? : "tiny" | "small" | "medium" | "large" | "huge";
-    loadingText ? : string; // Custom loading message for screen readers
+        size        ? : "tiny" | "small" | "medium" | "large" | "huge";
+        loadingText ? : string;
+        // Custom loading message for screen readers
 }
 
 export type SpinnerElementType = HTMLDivElement;
@@ -49,3 +48,4 @@ export const Spinner = React.forwardRef((
         );
     },
 );
+Spinner.displayName = "Spinner";

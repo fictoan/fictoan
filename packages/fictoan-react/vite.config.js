@@ -41,18 +41,18 @@ function generateColors() {
             sequential : true,
             handler() {
                 console.log("Generating color system...");
-                execSync("node src/scripts/generateColourClasses.js", { stdio : "inherit" });
+                execSync("npx tsx src/scripts/generateColourClasses.ts", { stdio : "inherit" });
             },
         },
         configureServer(server) {
             console.log("Generating color system...");
-            execSync("node src/scripts/generateColourClasses.js", { stdio : "inherit" });
+            execSync("npx tsx src/scripts/generateColourClasses.ts", { stdio : "inherit" });
 
-            server.watcher.add("src/scripts/generateColourClasses.js");
-            server.watcher.on("change", (path) => {
-                if (path.endsWith("generateColourClasses.js")) {
+            server.watcher.add("src/scripts/generateColourClasses.ts");
+            server.watcher.on("change", (changedPath) => {
+                if (changedPath.endsWith("generateColourClasses.ts")) {
                     console.log("Color generation script changed, regenerating...");
-                    execSync("node scripts/generateColourClasses.js", { stdio : "inherit" });
+                    execSync("npx tsx src/scripts/generateColourClasses.ts", { stdio : "inherit" });
                 }
             });
         },
@@ -72,7 +72,7 @@ export default defineConfig({
             "$"           : path.resolve(__dirname, "./src"),
             "$colour"     : path.resolve(__dirname, "./src/colour/colour"),
             "$components" : path.resolve(__dirname, "./src/components"),
-            "$element"    : path.resolve(__dirname, "./src/components/Element/Element"),
+            "$element"    : path.resolve(__dirname, "./src/components/Element/index"),
             "$hooks"      : path.resolve(__dirname, "./src/hooks"),
             "$form"       : path.resolve(__dirname, "./src/components/Form"),
             "$styles"     : path.resolve(__dirname, "./src/styles"),
@@ -83,13 +83,8 @@ export default defineConfig({
         },
     },
     build   : {
-        minify        : "terser",
-        terserOptions : {
-            format : {
-                comments             : false,
-                preserve_annotations : true,
-            },
-        },
+        minify        : "esbuild",
+        sourcemap     : true,
         lib           : {
             entry    : input,
             name     : pkg.name,
@@ -112,17 +107,7 @@ export default defineConfig({
         svgr(),
         preserveUseClient(),
         createVisualizer(),
-        react({
-            babel : {
-                presets : [
-                    ["@babel/preset-env", { modules : false }],
-                    ["@babel/preset-react"],
-                ],
-                plugins : [
-                    ["transform-react-remove-prop-types", { removeImport : true }],
-                ],
-            },
-        }),
+        react(),
         dts({
             insertTypesEntry : true,
             include          : ["src/**/*"],
@@ -135,7 +120,7 @@ export default defineConfig({
                     "components/*"  : ["./src/components/*"],
                     "$/*"           : ["./src/*"],
                     "$components/*" : ["./src/components/*"],
-                    "$element"      : ["./src/components/Element/Element"],
+                    "$element"      : ["./src/components/Element/index"],
                     "$hooks/*"      : ["./src/hooks/*"],
                     "$form/*"       : ["./src/components/Form/*"],
                     "$styles/*"     : ["./src/styles/*"],

@@ -1,73 +1,53 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Element,
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Section,
-    Div,
-} from "fictoan-react";
-
-// STYLES ==============================================================================================================
-import "./page-h-rule.css";
-import "../../../styles/fictoan-theme.css";
-
-// HOOKS ===============================================================================================================
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
-import { createThemeConfigurator } from "../../../utils/themeConfigurator";
+// UI ==================================================================================================================
+import { Element, Heading1, Heading4, Divider, Portion, Row, Text, Article, Section, Div } from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
+
+// STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
+import "./page-divider.css";
+
+// OTHER ===============================================================================================================
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 
 const DividerDocs = () => {
-    // PROPS CONFIG ====================================================================================================
-    const {
-        propsConfigurator,
-        componentProps: propsConfig,
-    } = createPropsConfigurator(
-        "Divider", [
-            "kind",
-        ],
-        colourOptions,
-        {
-            isSelfClosing : true
-        }
-    );
+    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
 
-    // THEME CONFIG ====================================================================================================
-    const DividerComponent = (varName) => {
+    const DividerComponent = (varName : string) => {
         return varName.startsWith("divider-");
     };
 
     const {
         interactiveElementRef,
-        componentProps: themeConfig,
+        componentProps : themeConfig,
         themeConfigurator,
     } = createThemeConfigurator("Divider", DividerComponent);
 
     return (
-        <Article id="page-h-rule">
+        <Article id="page-divider">
             {/*  INTRO ///////////////////////////////////////////////////////////////////////////////////////////// */}
             <Section>
                 <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                     <Portion>
-                        <Heading1>Divider</Heading1>
-                        <Text size="large" marginBottom="small">
+                        <Heading4 id="component-name">
+                            Divider
+                        </Heading4>
+
+                        <Heading4
+                            id="component-description"
+                            weight="400" marginBottom="small"
+                        >
                             A horizontal line to separate content
-                        </Text>
+                        </Heading4>
                     </Portion>
 
                     <Portion>
-                        <Heading4 marginBottom="micro">Characteristics</Heading4>
                         <ul>
                             <li>Is a self-closing element</li>
                         </ul>
@@ -89,9 +69,8 @@ const DividerDocs = () => {
                             data-centered-children
                         >
                             <Divider
-                                id="interactive-component"
                                 ref={interactiveElementRef}
-                                {...propsConfig}
+                                {...props}
                                 {...themeConfig}
                             />
                         </Div>
@@ -101,7 +80,7 @@ const DividerDocs = () => {
                 <Row horizontalPadding="small">
                     {/* PROPS CONFIGURATOR ========================================================================= */}
                     <Portion desktopSpan="half">
-                        {propsConfigurator()}
+                        <PropsConfigurator componentName="Divider" onPropsChange={setProps} />
                     </Portion>
 
                     {/* THEME CONFIGURATOR ========================================================================= */}

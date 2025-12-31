@@ -1,7 +1,4 @@
 export {
     Modal,
-    type ModalProps,
-    showModal,
-    hideModal,
-    toggleModal
+    type ModalProps
 } from "./Modal";

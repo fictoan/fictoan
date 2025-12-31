@@ -1,0 +1,8 @@
+#page-configurator {
+    min-height : 100vh;
+}
+
+#components-showcase {
+    background-color : var(--body-bg);
+    padding          : 24px;
+}

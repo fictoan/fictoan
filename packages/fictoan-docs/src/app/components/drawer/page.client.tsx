@@ -4,49 +4,31 @@
 import React, { useState } from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading2, Heading4, Divider, Portion, Row, Text, Article, Button, Drawer, Div, showDrawer, hideDrawer } from "fictoan-react";
+import { Element, Heading1, Heading2, Divider, Portion, Row, Text, Article, Button, Drawer, Div } from "fictoan-react";
+
+// LOCAL COMPONENTS ====================================================================================================
+import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
 
 // UTILS ===============================================================================================================
-import { createPropsConfigurator } from "$utils/propsConfigurator";
 import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
 import "./page-drawer.css";
 
-// OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
+const DrawerDocs: React.FC = () => {
+    const [props, setProps] = React.useState<{ [key: string]: any }>({});
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-const DrawerDocs : React.FC = () => {
-    const {
-        propsConfigurator,
-        componentProps : propsConfig,
-    } = createPropsConfigurator(
-        "Drawer",
-        [
-            "strings",
-            "position",
-            "size",
-            "padding",
-            "showOverlay",
-            "blurOverlay",
-            "isDismissible",
-            "closeOnClickOutside",
-        ],
-        colourOptions,
-        {
-            isSelfClosing   : false,
-            canHaveChildren : true,
-            defaultChildren : null,
-        },
-    );
+    // Ensure consistent drawer ID across all references
+    const drawerId = props.id || "interactive-component";
 
-    const DrawerComponent = (varName : string) => {
+    const DrawerComponent = (varName: string) => {
         return varName.startsWith("drawer-");
     };
 
     const {
         interactiveElementRef,
-        componentProps : themeConfig,
+        componentProps: themeConfig,
         themeConfigurator,
     } = createThemeConfigurator("Drawer", DrawerComponent);
 
@@ -61,12 +43,14 @@ const DrawerDocs : React.FC = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
                     <ul>
                         <li>Accepts any React node as children</li>
                         <li>
                             You can add as many Drawers you want on a page, as long as you match the IDs to the right
                             triggers
+                        </li>
+                        <li>
+                            Use the <code>isOpen</code> and <code>onClose</code> props to control the drawer state.
                         </li>
                     </ul>
                 </Portion>
@@ -82,7 +66,7 @@ const DrawerDocs : React.FC = () => {
                         data-centered-children
                     >
                         <Button
-                            onClick={() => showDrawer("interactive-component")}
+                            onClick={() => setIsDrawerOpen(true)}
                             kind="primary"
                         >
                             Open the drawer
@@ -92,7 +76,7 @@ const DrawerDocs : React.FC = () => {
 
                 {/* PROPS CONFIGURATOR ============================================================================= */}
                 <Portion desktopSpan="half">
-                    {propsConfigurator()}
+                    <PropsConfigurator componentName="Drawer" onPropsChange={setProps} />
                 </Portion>
 
                 {/* THEME CONFIGURATOR ============================================================================= */}
@@ -103,30 +87,30 @@ const DrawerDocs : React.FC = () => {
 
             {/* SAMPLE DRAWER ////////////////////////////////////////////////////////////////////////////////////// */}
             <Drawer
-                id="interactive-component"
                 ref={interactiveElementRef}
-                position={propsConfig.position || "right"}
-                {...(propsConfig.size ? {size : propsConfig.size} : {})}
-                {...(propsConfig.padding ? {padding : propsConfig.padding} : {})}
-                {...(typeof propsConfig.showOverlay === "boolean" ? {showOverlay : propsConfig.showOverlay} : {})}
-                {...(typeof propsConfig.blurOverlay === "boolean" ? {blurOverlay : propsConfig.blurOverlay} : {})}
-                {...(typeof propsConfig.isDismissible === "boolean" ? {isDismissible : propsConfig.isDismissible} : {})}
-                {...(typeof propsConfig.closeOnClickOutside === "boolean" ? {closeOnClickOutside : propsConfig.closeOnClickOutside} : {})}
-                label={propsConfig.content || "Sample drawer"}
-                {...(({id, ...rest}) => rest)(themeConfig)}
+                {...props}
+                {...themeConfig}
+                id={drawerId}
+                isOpen={isDrawerOpen}
+                onClose={() => setIsDrawerOpen(false)}
+                zIndex={60000}
             >
-                <Heading2 textColour="green" marginBottom="nano">Hello</Heading2>
+                {props.children || (
+                    <>
+                        <Heading2 textColour="green" marginBottom="nano">Hello</Heading2>
 
-                <Text marginBottom="micro">
-                    You can add all sorts of content here inside the info panel.
-                </Text>
+                        <Text marginBottom="micro">
+                            You can add all sorts of content here inside the info panel.
+                        </Text>
 
-                <Button
-                    kind="secondary"
-                    onClick={() => hideDrawer("interactive-component")}
-                >
-                    Close
-                </Button>
+                        <Button
+                            kind="secondary"
+                            onClick={() => setIsDrawerOpen(false)}
+                        >
+                            Close
+                        </Button>
+                    </>
+                )}
 
                 <Div marginTop="large" marginBottom="medium">
                     <Text weight="700" marginBottom="small">

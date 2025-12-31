@@ -1,18 +1,18 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../../Element/constants";
 
 // STYLES ==============================================================================================================
 import "./sidebar-footer.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../../Element/constants";
+// OTHER ===============================================================================================================
+import { Element } from "$element";
 
 // prettier-ignore
 export interface SidebarFooterCustomProps {
-    isSticky ? : boolean;
+        isSticky ? : boolean;
 }
 
 export type SidebarFooterElementType = HTMLDivElement;
@@ -37,3 +37,4 @@ export const SidebarFooter = React.forwardRef(
             />
         );
     });
+SidebarFooter.displayName = "SidebarFooter";

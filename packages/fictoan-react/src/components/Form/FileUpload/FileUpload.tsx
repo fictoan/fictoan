@@ -1,35 +1,43 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useRef, useState } from "react";
 
-// FICTOAN =============================================================================================================
-import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
+// LOCAL COMPONENTS ====================================================================================================
+import { ColourPropTypes } from "$components/Element/constants";
 import { Div } from "../../Element/Tags";
-import { Text } from "../../Typography/Text";
+import { FormItem } from "../FormItem/FormItem";
 import { Badge } from "../../Badge/Badge";
+import { Text } from "../../Typography/Text";
 
 // STYLES ==============================================================================================================
 import "./file-upload.css";
 
 // TYPES ===============================================================================================================
-import { BaseInputComponentProps } from "../BaseInputComponent/constants";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
-import { ColourPropTypes } from "$components/Element/constants";
 
 export type FileUploadElementType = HTMLInputElement;
-export type FileUploadProps = Omit<BaseInputComponentProps<HTMLInputElement>, "onChange"> &
-    InputLabelCustomProps & {
-        accept              ? : string;
-        allowMultipleFiles  ? : boolean;
-        capture             ? : "user" | "environment";
-        height              ? : string;
-        onChange            ? : (files: File[]) => void;
-        instructionMainText ? : string;
-        instructionSubText  ? : string;
-        badgeBgColour       ? : ColourPropTypes;
-        badgeBgColor        ? : ColourPropTypes;
-        badgeTextColour     ? : ColourPropTypes;
-        badgeTextColor      ? : ColourPropTypes;
-    };
+export type FileUploadProps = InputLabelCustomProps & {
+    id?: string;
+    name?: string;
+    accept?: string;
+    allowMultipleFiles?: boolean;
+    capture?: "user" | "environment";
+    height?: string;
+    onChange?: (files: File[]) => void;
+    instructionMainText?: string;
+    instructionSubText?: string;
+    badgeBgColour?: ColourPropTypes;
+    badgeBgColor?: ColourPropTypes;
+    badgeTextColour?: ColourPropTypes;
+    badgeTextColor?: ColourPropTypes;
+    helpText?: string;
+    errorText?: string;
+    required?: boolean;
+    disabled?: boolean;
+    invalid?: boolean;
+    className?: string;
+    "aria-label"?: string;
+    "aria-invalid"?: boolean;
+};
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const FileUpload = React.forwardRef(
@@ -37,6 +45,10 @@ export const FileUpload = React.forwardRef(
         {
             "aria-label": ariaLabel,
             "aria-invalid": ariaInvalid,
+            label,
+            helpText,
+            errorText,
+            required,
             accept,
             allowMultipleFiles = false,
             capture,
@@ -45,6 +57,11 @@ export const FileUpload = React.forwardRef(
             className = "",
             instructionMainText = "Drag and drop or click to upload",
             instructionSubText = "You can add multiple files",
+            invalid,
+            id,
+            name,
+            badgeBgColour,
+            badgeTextColour,
             ...props
         }: FileUploadProps,
         ref: React.Ref<FileUploadElementType>
@@ -103,67 +120,76 @@ export const FileUpload = React.forwardRef(
         };
 
         return (
-            <BaseInputComponent<FileUploadElementType>
-                as="div"
-                data-file-upload-area
-                ref={ref}
-                className={[
-                    "file-upload-wrapper",
-                    isDragging ? "dragging" : "",
-                    className
-                ].filter(Boolean).join(" ")}
-                aria-label={ariaLabel || props.label}
-                aria-invalid={ariaInvalid || props.invalid || undefined}
-                aria-required={props.required}
-                {...props}
+            <FormItem
+                label={label}
+                htmlFor={id}
+                helpText={helpText}
+                errorText={errorText}
+                required={required}
             >
                 <Div
-                    className="file-upload-area"
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}
-                    onClick={openFileDialog}
-                    style={{ height }}
+                    data-file-upload-area
+                    ref={ref as React.Ref<HTMLDivElement>}
+                    className={[
+                        "file-upload-wrapper",
+                        isDragging ? "dragging" : "",
+                        className
+                    ].filter(Boolean).join(" ")}
+                    aria-label={ariaLabel || label}
+                    aria-invalid={ariaInvalid || invalid || undefined}
+                    aria-required={required}
                 >
-                    <input
-                        ref={fileInputRef}
-                        type="file"
-                        id={props.id}
-                        name={props.name}
-                        onChange={handleFileInput}
-                        multiple={allowMultipleFiles}
-                        accept={accept}
-                        capture={capture}
-                        className="file-input"
-                    />
+                    <Div
+                        className="file-upload-area"
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                        onClick={openFileDialog}
+                        style={{ height }}
+                    >
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            id={id}
+                            name={name}
+                            onChange={handleFileInput}
+                            multiple={allowMultipleFiles}
+                            accept={accept}
+                            capture={capture}
+                            className="file-input"
+                        />
 
-                    {instructionMainText &&
-                        <Div className="file-upload-content">
-                            <Text>{instructionMainText}</Text>
-                            {instructionSubText && (
-                                <Text isSubtext>{instructionSubText}</Text>
-                            )}
-                        </Div>
-                    }
-                </Div>
-
-                {files.length > 0 && (
-                    <Div className="uploaded-files">
-                        {files.map((file, index) => (
-                            <Badge
-                                key={`${file.name}-${index}`}
-                                size="small" shape="rounded"
-                                withDelete
-                                onDelete={() => removeFile(index)}
-                                bgColour={props.badgeBgColour}
-                                textColour={props.badgeTextColour}
-                            >
-                                {file.name}
-                            </Badge>
-                        ))}
+                        {instructionMainText &&
+                            <Div className="file-upload-content">
+                                <Text>{instructionMainText}</Text>
+                                {instructionSubText && (
+                                    <Text isSubtext>{instructionSubText}</Text>
+                                )}
+                            </Div>
+                        }
                     </Div>
-                )}
-            </BaseInputComponent>
+
+                    {files.length > 0 && (
+                        <Div className="uploaded-files">
+                            {files.map((file, index) => (
+                                <Badge
+                                    key={`${file.name}-${index}`}
+                                    size="small"
+                                    shape="rounded"
+                                    actionIcon="cross"
+                                    onActionClick={() => removeFile(index)}
+                                    actionAriaLabel={`Remove ${file.name}`}
+                                    bgColour={badgeBgColour}
+                                    textColour={badgeTextColour}
+                                >
+                                    {file.name}
+                                </Badge>
+                            ))}
+                        </Div>
+                    )}
+                </Div>
+            </FormItem>
         );
     }
 );
+FileUpload.displayName = "FileUpload";

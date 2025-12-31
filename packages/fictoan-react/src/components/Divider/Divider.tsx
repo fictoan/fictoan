@@ -1,20 +1,18 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./divider.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../Element/constants";
-
 // prettier-ignore
 export interface DividerCustomProps {
-    kind   ? : "primary" | "secondary" | "tertiary";
-    height ? : string;
-    label  ? : string;
+        kind   ? : "primary" | "secondary" | "tertiary";
+        height ? : string;
+        label  ? : string;
 }
 
 export type DividerElementType = HTMLHRElement;
@@ -45,3 +43,4 @@ export const Divider = React.forwardRef(
         );
     },
 );
+Divider.displayName = "Divider";

@@ -1,0 +1,7 @@
+.density-grid-pattern {
+    position       : absolute;
+    left           : 0;
+    right          : 0;
+    width          : 100%;
+    pointer-events : none;
+}

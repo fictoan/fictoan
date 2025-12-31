@@ -614,14 +614,9 @@ export const createThemeConfigurator = (componentName, filter) => {
 
         // Return configurator UI component ----------------------------------------------------------------------------
         return (
-            <Card padding="micro" shape="rounded">
+            <Div id="theme-configurator">
                 <Header marginBottom="micro">
-                    <Heading6 style={{ marginBottom : "4px" }}>
-                        Set global theme values
-                    </Heading6>
-                    <Text size="small">
-                        This will affect all {componentName} elements
-                    </Text>
+                    <Text>This will affect all {componentName} elements</Text>
                 </Header>
 
                 {/* Theme code ------------------------------------------------------------------------------------- */}
@@ -698,7 +693,7 @@ export const createThemeConfigurator = (componentName, filter) => {
                         return null;
                     })}
                 </Row>
-            </Card>
+            </Div>
         );
     }, [variables.componentVariables, variables.cssVariablesList, handleVariableChange, componentName, colourOptionsWithShades]);
 

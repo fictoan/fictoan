@@ -1,35 +1,39 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useMemo } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
-import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
+// LOCAL COMPONENTS ====================================================================================================
+import { Element } from "$element";
+import { FormItem } from "../FormItem/FormItem";
 
 // STYLES ==============================================================================================================
 import "./radio-button.css";
 
-// TYPES ===============================================================================================================
+// OTHER ===============================================================================================================
 import { RadioButtonProps, RadioButtonElementType } from "./constants";
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const RadioButton = React.forwardRef(
-    ({
-         id,
-         name,
-         value,
-         onChange,
-         checked,
-         ...props
-     }: RadioButtonProps,
-     ref: React.Ref<RadioButtonElementType>,
+    (
+        {
+            id,
+            name,
+            value,
+            label,
+            helpText,
+            errorText,
+            onChange,
+            checked,
+            disabled,
+            required,
+            ...props
+        }: RadioButtonProps,
+        ref: React.Ref<RadioButtonElementType>
     ) => {
         const derivedName = useMemo(() => name || id, [name, id]);
 
-        // Handle change events to return boolean instead of event
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            // If the radio is being checked, emit its value
             if (e.target.checked && onChange) {
-                onChange(value);  // Just pass the string value as expected by the type
+                onChange(value);
             }
         };
 
@@ -40,19 +44,30 @@ export const RadioButton = React.forwardRef(
                 ref={ref}
                 role="radio"
                 aria-checked={checked}
-                aria-disabled={props.disabled}
+                aria-disabled={disabled}
             >
-                <BaseInputComponent
-                    as="input"
-                    type="radio"
-                    id={id}
-                    name={derivedName}
-                    value={value}
-                    checked={checked}
-                    onChange={handleChange}
-                    {...props}
-                />
+                <FormItem
+                    label={label}
+                    htmlFor={id}
+                    helpText={helpText}
+                    errorText={errorText}
+                    required={required}
+                >
+                    <Element
+                        as="input"
+                        type="radio"
+                        id={id}
+                        name={derivedName}
+                        value={value}
+                        checked={checked}
+                        disabled={disabled}
+                        required={required}
+                        onChange={handleChange}
+                        {...props}
+                    />
+                </FormItem>
             </Element>
         );
-    },
+    }
 );
+RadioButton.displayName = "RadioButton";

@@ -1,18 +1,18 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../../Element/constants";
 
 // STYLES ==============================================================================================================
 import "./sidebar-header.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../../Element/constants";
+// OTHER ===============================================================================================================
+import { Element } from "$element";
 
 // prettier-ignore
 export interface SidebarHeaderCustomProps {
-    isSticky ? : boolean;
+        isSticky ? : boolean;
 }
 
 export type SidebarHeaderElementType = HTMLDivElement;
@@ -38,3 +38,4 @@ export const SidebarHeader = React.forwardRef(
         );
     }
 );
+SidebarHeader.displayName = "SidebarHeader";

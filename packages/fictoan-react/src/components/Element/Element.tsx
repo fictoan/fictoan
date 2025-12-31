@@ -28,8 +28,10 @@ export const Element = React.forwardRef(
             classNames = [],
             bgColor,
             bgColour,
+            bgOpacity,
             borderColor,
             borderColour,
+            borderOpacity,
             className,
             columns,
             fillColor,
@@ -47,6 +49,8 @@ export const Element = React.forwardRef(
             isFullWidth,
             layoutAsFlexbox,
             layoutAsGrid,
+            stackVertically,
+            stackHorizontally,
             marginLeft,
             marginBottom,
             margin,
@@ -75,10 +79,18 @@ export const Element = React.forwardRef(
             verticallyCenterItems,
             verticallyCentreItems,
             weight,
+            style,
             ...minimalProps
         } = props;
 
         const {className : _, classNames : __, ...sanitizedProps} = props;
+
+        // Build style object with opacity CSS custom properties
+        const computedStyle = {
+            ...style,
+            ...(bgOpacity && { "--bg-opacity": Number(bgOpacity) / 100 }),
+            ...(borderOpacity && { "--border-opacity": Number(borderOpacity) / 100 }),
+        } as React.CSSProperties;
 
         return (
             <Component
@@ -88,6 +100,7 @@ export const Element = React.forwardRef(
                 tabIndex={tabIndex}
                 onKeyDown={onKeyDown}
                 {...minimalProps}
+                style={Object.keys(computedStyle).length > 0 ? computedStyle : undefined}
                 className={createClassName(
                     [
                         className,
@@ -109,6 +122,9 @@ export const Element = React.forwardRef(
                         isFullWidth && "full-width",
                         layoutAsFlexbox && "layout-flexbox",
                         layoutAsGrid && "layout-grid",
+                        stackVertically && "stack-vertically",
+                        stackHorizontally && "stack-horizontally",
+                        gap && `gap-${gap}`,
                         marginLeft && `margin-left-${marginLeft}`,
                         marginBottom && `margin-bottom-${marginBottom}`,
                         margin && `margin-all-${margin}`,
@@ -143,3 +159,4 @@ export const Element = React.forwardRef(
         );
     },
 ) as <K extends {}>(props : ElementProps<K> & { ref? : React.LegacyRef<HTMLElement> }) => React.ReactElement;
+(Element as any).displayName = "Element";

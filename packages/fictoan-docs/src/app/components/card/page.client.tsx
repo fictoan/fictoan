@@ -1,118 +1,90 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Div,
-    Card,
-    Section,
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Div, Heading6, Text, Divider, Card } from "fictoan-react";
 
-// STYLES ==============================================================================================================
-import "./page-card.css";
-import "../../../styles/fictoan-theme.css";
-
-// HOOKS ===============================================================================================================
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
-import { createThemeConfigurator } from "../../../utils/themeConfigurator";
+// LOCAL COMPONENTS ====================================================================================================
+import { PropsConfiguratorNew } from "$components/PropsConfigurator/PropsConfiguratorNew";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
+import { cardRegistry } from "./props.registry";
 
 // UTILS ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
+
+// STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
+import "./page-card.css";
 
 const CardDocs = () => {
-    // PROPS CONFIG ====================================================================================================
-    const {
-        propsConfigurator,
-        componentProps: propsConfig,
-    } = createPropsConfigurator(
-        "Card", [
-            "padding", "shape", "bgColour", "borderColour",
-        ],
-        colourOptions,
-        {
-            canHaveChildren: true,
-            isSelfClosing : false
-        }
-    );
+    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
 
-    // THEME CONFIG ====================================================================================================
-    const CardComponent = (varName) => {
+    const CardComponent = (varName : string) => {
         return varName.startsWith("card-");
     };
 
     const {
         interactiveElementRef,
-        componentProps: themeConfig,
+        componentProps : themeConfig,
         themeConfigurator,
     } = createThemeConfigurator("Card", CardComponent);
 
     return (
-        <Article id="page-card">
-            <Section>
-                <Row horizontalPadding="huge" marginTop="medium" marginBottom="tiny">
-                    <Portion>
-                        <Heading1 marginBottom="micro">Card</Heading1>
-                        <Text size="large" marginBottom="small">
-                            A box to put all sorts of content inside
-                        </Text>
-                    </Portion>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading6 id="component-name">
+                    Card
+                </Heading6>
 
-                    <Portion>
-                        <Heading4 marginBottom="micro">Characteristics</Heading4>
-                        <ul>
-                            <li>Accepts any React node as a child</li>
-                            <li>The card always takes up 100% width of its parent</li>
-                            <li>It grows to take the height of its content</li>
-                            <li>Border-radius values work only when <code>shape="rounded"</code> is present</li>
-                        </ul>
-                    </Portion>
-                </Row>
-            </Section>
+                <Text
+                    id="component-description"
+                    weight="400"
+                >
+                    A box to put all sorts of content inside
+                </Text>
+            </Div>
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
+
+                <Text>
+                    Accepts any React node as a child.
+                </Text>
+
+                <Text>
+                    The card always takes up 100% width of its parent and grows to the height of its content.
+                </Text>
+
+                <Text>
+                    Border-radius values work only when <code>shape="rounded"</code> is present.
+                </Text>
+            </Div>
 
             {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
-            <Row horizontalPadding="small" className="rendered-component">
-                <Portion id="component-wrapper">
-                    <Div
-                        padding="small"
-                        shape="rounded"
-                        bgColour="slate-light80"
-                        data-centered-children
-                    >
-                        <Card
-                            id="interactive-component"
-                            ref={interactiveElementRef}
-                            {...propsConfig}
-                            {...themeConfig}
-                        >
-                            Content shows up here
-                        </Card>
-                    </Div>
-                </Portion>
-            </Row>
+            <Div id="demo-component">
+                <Card
+                    ref={interactiveElementRef}
+                    {...props}
+                    {...themeConfig}
+                >
+                    {props.children || "Content shows up here"}
+                </Card>
+            </Div>
 
-            <Row horizontalPadding="small">
-                {/* PROPS CONFIGURATOR ///////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    {propsConfigurator()}
-                </Portion>
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <PropsConfiguratorNew registry={cardRegistry} onPropsChange={setProps} />
+            </Div>
 
-                {/* THEME CONFIGURATOR ///////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    {themeConfigurator()}
-                </Portion>
-            </Row>
-        </Article>
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

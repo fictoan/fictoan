@@ -1,21 +1,20 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useState, useEffect } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../../Element/constants";
 
 // STYLES ==============================================================================================================
 import "./toast-item.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../../Element/constants";
-
+// OTHER ===============================================================================================================
+import { Element } from "$element";
 
 // prettier-ignore
 export interface ToastItemCustomProps {
-    showWhen         ? : boolean;
-    secondsToShowFor ? : number;
-    closeWhen        ? : () => void;
+        showWhen         ? : boolean;
+        secondsToShowFor ? : number;
+        closeWhen        ? : () => void;
 }
 
 export type ToastItemElementType = HTMLDivElement;
@@ -53,6 +52,9 @@ export const ToastItem = React.forwardRef(
                 <Element<ToastItemElementType>
                     as="div"
                     data-toast-item
+                    role="status"
+                    aria-live="polite"
+                    aria-atomic="true"
                     classNames={[ ...classNames, showWhen ? "visible" : "" ]}
                     onTransitionEnd={onTransitionEnd}
                     shadow="soft"
@@ -64,3 +66,4 @@ export const ToastItem = React.forwardRef(
         );
     },
 );
+ToastItem.displayName = "ToastItem";

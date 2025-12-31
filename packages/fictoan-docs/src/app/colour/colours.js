@@ -1,29 +1,7 @@
-import { Div, Text } from "fictoan-react";
+import { Div, Text, oklchColourDefinitions } from "fictoan-react";
 
-export const listOfColours = [
-    "red",
-    "salmon",
-    "orange",
-    "amber",
-    "yellow",
-    "spring",
-    "pistachio",
-    "green",
-    "teal",
-    "cyan",
-    "sky",
-    "blue",
-    "indigo",
-    "violet",
-    "purple",
-    "pink",
-    "crimson",
-    "brick",
-    "sienna",
-    "brown",
-    "slate",
-    "grey",
-];
+// Derive colour list from single source of truth
+export const listOfColours = Object.keys(oklchColourDefinitions);
 
 export const generateShades = (color) => [
     `${color}-dark90`,

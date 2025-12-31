@@ -1,26 +1,29 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useMemo } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
-import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
+// LOCAL COMPONENTS ====================================================================================================
+import { Element } from "$element";
+import { FormItem } from "../FormItem/FormItem";
+import { SpacingTypes } from "../../Element/constants";
 
 // STYLES ==============================================================================================================
 import "./switch.css";
 
 // TYPES ===============================================================================================================
-import { BaseInputComponentProps } from "../BaseInputComponent/constants";
-
-export interface SwitchCustomProps {
-    size ? : "small" | "medium" | "large";
-}
+import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 
 export type SwitchElementType = HTMLInputElement;
-export type SwitchProps = Omit<BaseInputComponentProps<SwitchElementType>,
-    keyof SwitchCustomProps | "as" | "onChange" | "value"> & SwitchCustomProps & {
-    onChange       ? : (checked: boolean) => void;
-    checked        ? : boolean;
-    defaultChecked ? : boolean;
+export type SwitchProps = InputLabelCustomProps & {
+    id?: string;
+    name?: string;
+    checked?: boolean;
+    defaultChecked?: boolean;
+    disabled?: boolean;
+    required?: boolean;
+    onChange?: (checked: boolean) => void;
+    size?: Exclude<SpacingTypes, "nano" | "huge">;
+    helpText?: string;
+    errorText?: string;
 };
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,41 +32,55 @@ export const Switch = React.forwardRef(
         {
             id,
             name,
+            label,
+            hideLabel,
+            helpText,
+            errorText,
             onChange,
             checked,
             defaultChecked,
+            disabled,
+            required,
             size = "medium",
             ...props
-        }: SwitchProps, ref: React.Ref<SwitchElementType>) => {
-        // Use ID as default for name and value if they’re not provided
-        const derivedName  = useMemo(() => name || id, [ name, id ]);
+        }: SwitchProps,
+        ref: React.Ref<SwitchElementType>
+    ) => {
+        const derivedName = useMemo(() => name || id, [name, id]);
 
-        // Handle the change event to return boolean instead of event
-        const handleChange = (value: string) => {
-            // Since we're dealing with a switch, the value parameter isn't relevant
-            // Instead, we need to check the current checked state
-            const isChecked = !checked;
-            onChange?.(isChecked);
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            onChange?.(e.target.checked);
         };
 
         return (
-            <Element<SwitchElementType>
-                as="div"
-                data-switch
-                ref={ref}
-                className={`size-${size}`}
+            <FormItem
+                label={label}
+                htmlFor={id}
+                helpText={helpText}
+                errorText={errorText}
+                required={required}
+                size={size}
             >
-                <BaseInputComponent
+                <Element<SwitchElementType>
                     as="input"
                     type="checkbox"
+                    ref={ref}
                     id={id}
                     name={derivedName}
                     checked={checked}
                     defaultChecked={defaultChecked}
+                    disabled={disabled}
+                    required={required}
                     onChange={handleChange}
                     {...props}
                 />
-            </Element>
+                <Element
+                    as="div"
+                    data-switch
+                    className={`size-${size}`}
+                />
+            </FormItem>
         );
-    },
+    }
 );
+Switch.displayName = "Switch";

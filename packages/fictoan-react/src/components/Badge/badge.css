@@ -1,81 +1,87 @@
 [data-badge] {
-    position            : relative;
-    font-family         : var(--badge-font);
-    font-size           : 92%;
-    text-decoration     : none;
-    transition          : all 0.2s ease-in-out;
-    background-position : center;
-    user-select         : none;
-    width               : fit-content;
-    height              : fit-content;
-    display             : flex;
-    align-items         : center;
-    background-color    : var(--badge-bg);
-    color               : var(--badge-text);
-    border-color        : var(--badge-border);
-    border-style        : solid;
-    border-width        : var(--badge-border-width);
-
-    /* To make sure a badge’s children don’t style themselves like a d-bag*/
-    > * { all : unset; }
+    position              : relative;
+    display               : grid;
+    grid-template-columns : 1fr;
+    align-items           : center;
+    width                 : fit-content;
+    height                : fit-content;
+    font-family           : var(--badge-font);
+    font-size             : 92%;
+    text-decoration       : none;
+    transition            : all 0.2s ease-in-out;
+    background-position   : center;
+    user-select           : none;
+    background-color      : var(--badge-bg);
+    color                 : var(--badge-text);
+    border-color          : var(--badge-border);
+    border-style          : solid;
+    border-width          : var(--badge-border-width);
+    padding-block         : 0.16em;
+    padding-inline        : 1.2em;
 
     &.shape-rounded { border-radius : var(--badge-border-radius); }
     &.shape-curved { border-radius : 5000px; }
 
     &.border-none { border-width : 0 !important; }
 
-    & .badge-dismiss-button {
-        position    : relative;
-        margin-left : 8px;
-        font-size   : 1.6rem;
-        cursor      : pointer;
-        line-height : 1;
-        top         : -1px;
-        font-weight : 400;
+    /* DIFFERENT SIZES ////////////////////////////////////////////////////// */
+    &.size-nano { font-size : 0.4rem; }
+    &.size-micro { font-size : 0.48rem; }
+    &.size-tiny { font-size : 0.56rem; }
+    &.size-small { font-size : 0.64rem; }
+    &.size-medium { font-size : 0.8rem; }
+    &.size-large { font-size : 0.96rem; }
+    &.size-huge { font-size : 1.12rem; }
+}
+
+/* WITH ACTION BUTTON /////////////////////////////////////////////////////// */
+[data-badge][data-has-action] {
+    grid-template-columns : 1fr auto;
+    gap                   : var(--nano);
+    padding-right         : 0;
+
+    & .badge-action-button {
+        all              : unset;
+        display          : flex;
+        align-items      : center;
+        justify-content  : center;
+        aspect-ratio     : 1;
+        align-self       : stretch;
+        cursor           : pointer;
+        background-color : var(--badge-action-bg);
+        color            : var(--badge-action-text);
+        transition       : all 0.1s ease-in-out;
+        margin-right     : 2px;
+
+        & svg {
+            width        : 1em;
+            height       : calc(100% - 4px);
+            stroke       : currentColor;
+            stroke-width : 2;
+            fill         : none;
+        }
 
         &:hover {
-            transform  : scale(1.1);
-            transition : all 0.1s;
+            background-color : var(--badge-action-bg-hover);
+            color            : var(--badge-action-text-hover);
         }
 
         &:active {
-            transform : scale(0.9);
+            transform : scale(0.95);
         }
     }
 
-    /* DIFFERENT SIZES ////////////////////////////////////////////////////// */
-    &.size-nano {
-        padding   : 1px 2px;
-        font-size : 0.48rem;
+    &.size-nano .badge-action-button,
+    &.size-micro .badge-action-button,
+    &.size-tiny .badge-action-button {
+        margin-right : 1px;
     }
 
-    &.size-micro {
-        padding   : 2px 4px;
-        font-size : 0.56rem;
+    &.shape-rounded .badge-action-button {
+        border-radius : calc(var(--badge-border-radius) - 2px);
     }
 
-    &.size-tiny {
-        padding   : 2px 8px;
-        font-size : 0.64rem;
-    }
-
-    &.size-small {
-        padding   : 4px 10px;
-        font-size : 0.72rem;
-    }
-
-    &.size-medium {
-        padding   : 6px 12px;
-        font-size : 0.88rem;
-    }
-
-    &.size-large {
-        padding   : 8px 16px;
-        font-size : 1.16rem;
-    }
-
-    &.size-huge {
-        padding   : 12px 24px;
-        font-size : 1.24rem;
+    &.shape-curved .badge-action-button {
+        border-radius : 50%;
     }
 }

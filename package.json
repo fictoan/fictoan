@@ -2,19 +2,20 @@
     "name"           : "fictoan-monorepo",
     "version"        : "1.0.0",
     "private"        : true,
-    "workspaces"     : [
-        "packages/*"
-    ],
     "scripts"        : {
-        "dev"     : "turbo run dev",
-        "build"   : "turbo run build",
-        "rebuild" : "./scripts/rebuild.sh"
+        "preinstall"     : "npx only-allow pnpm",
+        "dev"            : "turbo run dev",
+        "build"          : "turbo run build",
+        "rebuild"        : "./scripts/rebuild.sh",
+        "start:docs"     : "pnpm --filter fictoan-docs dev",
+        "build-and-copy" : "node scripts/copy-lib.js"
     },
-    "dependencies"   : {
-        "turbo"       : "^2.4.0",
-        "react"       : "^18.2.0",
-        "react-dom"   : "^18.2.0",
-        "@babel/core" : "^7.0.0"
+    "engines"        : {
+        "node" : ">=18.0.0",
+        "pnpm" : ">=10.15.1"
     },
-    "packageManager" : "yarn@1.22.19"
+    "devDependencies" : {
+        "turbo" : "^2.4.0"
+    },
+    "packageManager" : "pnpm@10.15.1"
 }

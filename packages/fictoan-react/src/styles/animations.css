@@ -56,3 +56,16 @@
     0% { background-position: 100% 50%; }
     100% { background-position: 0  50%; }
 }
+
+/* ACCESSIBILITY //////////////////////////////////////////////////////////// */
+/* Respect user's motion preferences for accessibility (WCAG 2.1) */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration        : 0.01ms !important;
+        animation-iteration-count : 1 !important;
+        transition-duration       : 0.01ms !important;
+        scroll-behavior           : auto !important;
+    }
+}

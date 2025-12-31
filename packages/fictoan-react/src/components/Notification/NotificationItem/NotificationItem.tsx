@@ -1,25 +1,25 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useState, useEffect, SyntheticEvent } from "react";
 
-// FICTOAN =============================================================================================================
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../../Element/constants";
 import { Div } from "../../Element/Tags";
-import { Element } from "../../Element/Element";
 
 // STYLES ==============================================================================================================
 import "./notification-item.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../../Element/constants";
+// OTHER ===============================================================================================================
+import { Element } from "$element";
 
 // prettier-ignore
 export interface NotificationItemCustomProps {
-    kind             ? : "info" | "warning" | "error" | "success";
-    showWhen           : boolean;
-    isDismissible    ? : boolean;
-    closeWhen          : () => void;
-    secondsToShowFor ? : number;
-    title            ? : string;
-    description      ? : string;
+        kind             ? : "info" | "warning" | "error" | "success";
+        showWhen           : boolean;
+        isDismissible    ? : boolean;
+        closeWhen          : () => void;
+        secondsToShowFor ? : number;
+        title            ? : string;
+        description      ? : string;
 }
 
 export type NotificationItemElementType = HTMLDivElement;
@@ -129,3 +129,4 @@ export const NotificationItem = React.forwardRef(
         );
     },
 );
+NotificationItem.displayName = "NotificationItem";

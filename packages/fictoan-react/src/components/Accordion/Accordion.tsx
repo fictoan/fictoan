@@ -1,18 +1,18 @@
 // REACT CORE ==========================================================================================================
 import React, { ReactNode } from "react";
 
-// ELEMENT =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps } from "../Element/constants";
 import { Element } from "$element";
-
-// TYPOGRAPHY ==========================================================================================================
-import { Text } from "$typography/Text";
 
 // STYLES ==============================================================================================================
 import "./accordion.css";
 
+// OTHER ===============================================================================================================
+import { Text } from "$/components";
+
 export interface AccordionCustomProps {
-    open     ? : boolean;
+    isOpen   ? : boolean;
     summary    : ReactNode;
     children   : ReactNode;
 }
@@ -24,7 +24,7 @@ export type AccordionProps =
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const Accordion = React.forwardRef(
-    ({summary, children, open = false, ...props} : AccordionProps, ref : React.Ref<AccordionElementType>) => {
+    ({summary, children, isOpen = false, ...props} : AccordionProps, ref : React.Ref<AccordionElementType>) => {
 
         return (
             <Element
@@ -32,7 +32,7 @@ export const Accordion = React.forwardRef(
                 data-expandable-content
                 ref={ref}
                 {...props}
-                open={open}
+                open={isOpen}
                 role="region"
                 aria-labelledby="accordion-summary"
             >
@@ -40,7 +40,7 @@ export const Accordion = React.forwardRef(
                     role="button"
                     tabIndex={0}
                     aria-controls="accordion-content"
-                    aria-expanded={open}
+                    aria-expanded={isOpen}
                 >
                     {typeof summary === "string" ? <Text margin="none">{summary}</Text> : summary}
                 </summary>
@@ -49,3 +49,4 @@ export const Accordion = React.forwardRef(
         );
     },
 );
+Accordion.displayName = "Accordion";

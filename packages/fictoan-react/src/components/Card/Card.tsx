@@ -1,14 +1,12 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./card.css";
-
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../Element/constants";
 
 export type CardElementType = HTMLDivElement;
 export interface CardCustomProps {
@@ -39,3 +37,4 @@ export const Card = React.forwardRef(({ shape, heading, children, ...props }: Ca
         </Element>
     );
 });
+Card.displayName = "Card";

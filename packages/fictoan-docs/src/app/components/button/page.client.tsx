@@ -1,122 +1,84 @@
 "use client";
 
-// FRAMEWORK ===========================================================================================================
-import React, { useState } from "react";
+// REACT CORE ==========================================================================================================
+import React from "react";
 
-// FICTOAN =============================================================================================================
-import {
-    Element,
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Card,
-    Form,
-    Header,
-    Select,
-    Button,
-    Range,
-    CodeBlock,
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Button, Heading6, Div, Text, Divider } from "fictoan-react";
+
+// LOCAL COMPONENTS ====================================================================================================
+import { PropsConfiguratorNew } from "$components/PropsConfigurator/PropsConfiguratorNew";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
+import { buttonRegistry } from "./props.registry";
+
+// UTILS ===============================================================================================================
+import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
 import "./page-button.css";
 
-// OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
-import { createThemeConfigurator } from "../../../utils/themeConfigurator";
-
 const ButtonDocs = () => {
-    // PROPS CONFIGURATOR ///////////////////////////////////////////////////////////////////////////////////////////////
-    const {
-        propsConfigurator,
-        componentProps: propsConfig,
-    } = createPropsConfigurator(
-        "Button",
-        ["strings", "kind", "size", "shape", "shadow", "bgColour", "textColour", "borderColour", "isLoading"],
-        colourOptions,
-        {
-            isSelfClosing: false,
-            canHaveChildren: true,
-            defaultChildren: "Button"
-        }
-    );
+    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
 
-    // THEME CONFIGURATOR //////////////////////////////////////////////////////////////////////////////////////////////
-    const ButtonComponent = (varName) => {
+    const ButtonComponent = (varName : string) => {
         return varName.startsWith("button-");
     };
-    
+
     const {
         interactiveElementRef,
-        componentProps: themeConfig,
+        componentProps : themeConfig,
         themeConfigurator,
     } = createThemeConfigurator("Button", ButtonComponent);
 
     return (
-        <Article id="page-component">
-            <Row horizontalPadding="huge" marginTop="medium">
-                <Portion>
-                    <Heading1>Button</Heading1>
-                    <Text size="large" marginBottom="small">
-                        A clickable component to trigger an action or an event
-                    </Text>
-                </Portion>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading6 id="component-name">
+                    Button
+                </Heading6>
 
-                <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
-                    <ul>
-                        <li>
-                            The <code>kind</code> prop accepts <code>primary / secondary / tertiary</code> and
-                            also <code>custom</code>
-                        </li>
-                        <li>
-                            For the first three &ldquo;named&rdquo; types, the background, text and border colours are
-                            defined in the theme, to ensure consistency. The <code>custom</code> value lets you add them
-                            manually.
-                        </li>
-                    </ul>
-                </Portion>
-            </Row>
+                <Text
+                    id="component-description"
+                    weight="400"
+                >
+                    A clickable component to trigger an action or an event
+                </Text>
+            </Div>
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/*  CONFIGURATOR */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Row horizontalPadding="small" className="rendered-component">
-                {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////// */}
-                <Portion id="component-wrapper">
-                    <Element
-                        as="div" padding="small" shape="rounded" bgColour="slate-light80"
-                        data-centered-children
-                    >
-                        <Button
-                            id="interactive-component"
-                            ref={interactiveElementRef}
-                            {...propsConfig}
-                            {...themeConfig}
-                        >
-                            {propsConfig.content}
-                        </Button>
-                    </Element>
-                </Portion>
+                <Text>
+                    For the <code>primary / secondary / tertiary</code> kinds, the background, text and border colours are
+                    defined in the theme, to ensure consistency. The <code>custom</code> value lets you add them
+                    manually.
+                </Text>
+            </Div>
 
-                {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    {propsConfigurator()}
-                </Portion>
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                <Button
+                    ref={interactiveElementRef}
+                    {...props}
+                    {...themeConfig}
+                >
+                    {props.children || "Button"}
+                </Button>
+            </Div>
 
-                {/* THEME CONFIGURATOR //////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    {themeConfigurator()}
-                </Portion>
-            </Row>
-        </Article>
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <PropsConfiguratorNew registry={buttonRegistry} onPropsChange={setProps} />
+            </Div>
+
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

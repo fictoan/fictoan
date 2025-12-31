@@ -1,9 +1,10 @@
-// FRAMEWORK ===========================================================================================================
-import React from "react";
+// REACT CORE ==========================================================================================================
+import React, { useMemo } from "react";
 
-// FICTOAN =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { Div } from "../../Element/Tags";
-import { BaseInputComponent } from "../BaseInputComponent/BaseInputComponent";
+import { Element } from "$element";
+import { FormItem } from "../FormItem/FormItem";
 
 // STYLES ==============================================================================================================
 import "./radio-group.css";
@@ -12,74 +13,89 @@ import "./radio-group.css";
 import { RadioGroupProps } from "./constants";
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-export const RadioGroup = React.forwardRef((props: RadioGroupProps, ref: React.Ref<HTMLDivElement>) => {
-    const RadioGroupOptions = (
+export const RadioGroup = React.forwardRef(
+    (
         {
             id,
             name,
+            label,
+            helpText,
+            errorText,
             options,
             value,
             defaultValue,
             onChange,
-            ...groupProps
-        }: RadioGroupProps) => {
-        const derivedName = React.useMemo(() => name || id, [ name, id ]);
+            align,
+            equaliseWidth,
+            equalizeWidth,
+            required,
+            disabled,
+            ...props
+        }: RadioGroupProps,
+        ref: React.Ref<HTMLDivElement>
+    ) => {
+        const derivedName = useMemo(() => name || id, [name, id]);
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            if (onChange) {
-                onChange(e.target.value);
-            }
+            onChange?.(e.target.value);
         };
 
+        let classNames: string[] = [];
+
+        if (align) {
+            classNames.push(`align-${align}`);
+        }
+
+        if (equaliseWidth || equalizeWidth) {
+            classNames.push(`equalise-width`);
+        }
+
         return (
-            <React.Fragment>
-                {options.map((option, index) => {
-                    const { id: optionId, value: optionValue, label, ...optionProps } = option;
-                    const finalId = optionId || `${id}-option-${index}`;
-                    const isChecked = value ? value === optionValue : defaultValue === optionValue;
+            <FormItem
+                label={label}
+                htmlFor={id}
+                helpText={helpText}
+                errorText={errorText}
+                required={required}
+            >
+                <Element
+                    as="div"
+                    data-radio-group
+                    ref={ref}
+                    classNames={classNames}
+                    role="radiogroup"
+                    aria-label={label}
+                    {...props}
+                >
+                    {options.map((option, index) => {
+                        const { id: optionId, value: optionValue, label: optionLabel, ...optionProps } = option;
+                        const finalId = optionId || `${id}-option-${index}`;
+                        const isChecked = value ? value === optionValue : defaultValue === optionValue;
 
-                    return (
-                        <Div
-                            key={finalId}
-                            data-radio-button
-                            role="radio"
-                            aria-checked={isChecked}
-                            classNames={classNames}
-                        >
-                            <input
-                                type="radio"
-                                id={finalId}
-                                name={derivedName}
-                                value={optionValue}
-                                checked={isChecked}
-                                onChange={handleChange}
-                                {...optionProps}
-                            />
-                            <label htmlFor={finalId}>{label}</label>
-                        </Div>
-                    );
-                })}
-            </React.Fragment>
+                        return (
+                            <Div
+                                key={finalId}
+                                data-radio-button
+                                role="radio"
+                                aria-checked={isChecked}
+                            >
+                                <input
+                                    type="radio"
+                                    id={finalId}
+                                    name={derivedName}
+                                    value={optionValue}
+                                    checked={isChecked}
+                                    disabled={disabled}
+                                    onChange={handleChange}
+                                    {...optionProps}
+                                />
+                                <label htmlFor={finalId}>{optionLabel}</label>
+                            </Div>
+                        );
+                    })}
+                </Element>
+            </FormItem>
         );
-    };
-
-    let classNames: string[] | undefined = [];
-
-    if (props.align) {
-        classNames.push(`align-${props.align}`);
     }
-
-    if (props.equaliseWidth || props.equalizeWidth) {
-        classNames.push(`equalise-width`);
-    }
-
-    return (
-        <BaseInputComponent<HTMLDivElement>
-            data-radio-group
-            as={RadioGroupOptions}
-            ref={ref}
-            {...props}
-            classNames={classNames}
-        />
-    );
-});
+);
+RadioGroup.displayName = "RadioGroup";

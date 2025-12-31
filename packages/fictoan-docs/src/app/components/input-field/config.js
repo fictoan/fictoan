@@ -3,6 +3,7 @@ export const inputProps = {
     properties : [
         "kind",
         "shadow",
+        "size"
     ],
     variables  : {
         "input-bg-default"            : {
@@ -139,7 +140,6 @@ export const inputProps = {
             defaultValue : "green-dark30",
         },
     },
-
 };
 
 

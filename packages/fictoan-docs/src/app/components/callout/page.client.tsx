@@ -1,121 +1,86 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
-import React, { useState } from "react";
+// REACT CORE ==========================================================================================================
+import React from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Div,
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Callout,
-    Section,
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Div, Heading6, Text, Divider, Callout } from "fictoan-react";
 
-// STYLES ==============================================================================================================
-import "./page-callout.css";
-import "../../../styles/fictoan-theme.css";
-
-// HOOKS ===============================================================================================================
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
-import { createThemeConfigurator } from "../../../utils/themeConfigurator";
+// LOCAL COMPONENTS ====================================================================================================
+import { PropsConfiguratorNew } from "$components/PropsConfigurator/PropsConfiguratorNew";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
+import { calloutRegistry } from "./props.registry";
 
 // UTILS ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
+
+// STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
+import "./page-callout.css";
 
 const CalloutDocs = () => {
-    // PROPS CONFIG ====================================================================================================
-    const {
-        propsConfigurator,
-        componentProps: propsConfig,
-    } = createPropsConfigurator(
-        "Callout",
-        [
-            "kind",
-        ],
-        colourOptions,
-        {
-            canHaveChildren: true,
-            isSelfClosing : false
-        }
-    );
+    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
 
-    // THEME CONFIG ====================================================================================================
-    const CalloutComponent = (varName) => {
+    const CalloutComponent = (varName : string) => {
         return varName.startsWith("callout-");
     };
 
     const {
         interactiveElementRef,
-        componentProps: themeConfig,
+        componentProps : themeConfig,
         themeConfigurator,
     } = createThemeConfigurator("Callout", CalloutComponent);
 
     return (
-        <Article id="page-callout">
-            {/*  INTRO ///////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                    <Portion>
-                        <Heading1>Callout</Heading1>
-                        <Text size="large" marginBottom="small">
-                            A box that can be used to highlight important information. It comes in four
-                            variants.
-                        </Text>
-                    </Portion>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading6 id="component-name">
+                    Callout
+                </Heading6>
 
-                    <Portion>
-                        <Heading4 marginBottom="micro">Characteristics</Heading4>
-                        <ul>
-                            <li>Accepts any React node as a child</li>
-                        </ul>
-                    </Portion>
-                </Row>
-            </Section>
+                <Text
+                    id="component-description"
+                    weight="400"
+                >
+                    A box that can be used to highlight important information. It comes in four variants.
+                </Text>
+            </Div>
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-            {/* INTERACTIVE COMPONENT ////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                {/* DEMO COMPONENT ================================================================================= */}
-                <Row id="component-wrapper" horizontalPadding="small" className="rendered-component">
-                    <Portion>
-                        <Div
-                            padding="small"
-                            shape="rounded"
-                            bgColour="slate-light80"
-                            data-centered-children
-                        >
-                            <Callout
-                                id="interactive-component"
-                                ref={interactiveElementRef}
-                                {...propsConfig}
-                                {...themeConfig}
-                            >
-                                Content goes here
-                            </Callout>
-                        </Div>
-                    </Portion>
-                </Row>
+                <Text>
+                    Accepts any React node as a child.
+                </Text>
 
-                <Row horizontalPadding="small">
-                    {/* PROPS CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        {propsConfigurator()}
-                    </Portion>
+                <Text>
+                    Use the <code>kind</code> prop to set the variant: info, success, warning, or error.
+                </Text>
+            </Div>
 
-                    {/* THEME CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        {themeConfigurator()}
-                    </Portion>
-                </Row>
-            </Section>
-        </Article>
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                <Callout
+                    ref={interactiveElementRef}
+                    {...props}
+                    {...themeConfig}
+                >
+                    {props.children || "Content goes here"}
+                </Callout>
+            </Div>
+
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <PropsConfiguratorNew registry={calloutRegistry} onPropsChange={setProps} />
+            </Div>
+
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

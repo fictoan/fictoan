@@ -65,14 +65,14 @@
 }
 
 /* STATES =================================================================== */
-[data-radio-button]:has(input[type="radio"]:checked) > label::before {
+[data-radio-button]:has(input[type="radio"]:checked) label::before {
     background : var(--radio-circle-bg-checked);
 }
 
-[data-radio-button]:has(input[type="radio"]:checked) > label::after {
+[data-radio-button]:has(input[type="radio"]:checked) label::after {
     opacity : 1;
 }
 
-[data-radio-button]:has(input[type="radio"]:focus) > label::before {
+[data-radio-button]:has(input[type="radio"]:focus) label::before {
     outline : solid 2px var(--radio-circle-bg-checked);
 }

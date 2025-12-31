@@ -1,15 +1,17 @@
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-import { Element } from "../Element";
+// LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps, SpacingTypes, WeightTypes } from "../Element/constants";
+import { Element } from "$element";
 
 // prettier-ignore
 export interface TextCustomProps {
     fontStyle ? : "sans-serif" | "serif" | "monospace";
     weight    ? : WeightTypes;
-    isSubtext ? : boolean;
     size      ? : SpacingTypes;
     align     ? : "left" | "centre" | "center" | "right";
+    isSubtext ? : boolean;
 }
 
 export type TextElementType = HTMLParagraphElement;
@@ -17,8 +19,8 @@ export type TextProps = Omit<CommonAndHTMLProps<TextElementType>, keyof TextCust
 
 export const Text = React.forwardRef(
     (
-        { weight, size, fontStyle = "sans-serif", align, isSubtext, ...props }: TextProps,
-        ref: React.Ref<TextElementType>
+        {weight, size, fontStyle = "sans-serif", align, isSubtext, ...props} : TextProps,
+        ref : React.Ref<TextElementType>,
     ) => {
         let classNames = [];
 
@@ -43,5 +45,6 @@ export const Text = React.forwardRef(
         }
 
         return <Element<TextElementType> as="p" ref={ref} classNames={classNames} {...props} />;
-    }
+    },
 );
+Text.displayName = "Text";

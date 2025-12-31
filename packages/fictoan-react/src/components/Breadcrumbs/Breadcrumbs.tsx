@@ -1,35 +1,34 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element";
-import { Text } from "../Typography/Text";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps, SpacingTypes } from "../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./breadcrumbs.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps, SpacingTypes } from "../Element/constants";
+// OTHER ===============================================================================================================
+import { Text } from "$/components";
 
 export type BreadcrumbsElementType = HTMLDivElement;
 export interface BreadcrumbsProps extends CommonAndHTMLProps<BreadcrumbsElementType> {
-    children    : React.ReactNode;
-    separator ? : string;
-    spacing   ? : SpacingTypes;
+        children    : React.ReactNode;
+        separator ? : string;
+        spacing   ? : SpacingTypes;
 }
 
 export type BreadcrumbItemElementType = HTMLLIElement;
 export interface BreadcrumbItemProps extends CommonAndHTMLProps<BreadcrumbItemElementType> {
-    children   : React.ReactNode;
-    current  ? : boolean;
+        children   : React.ReactNode;
+        current  ? : boolean;
 }
 
 interface SeparatorProps {
-    separator : string;
+        separator : string;
 }
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-// BREADCRUMB ITEM =====================================================================================================
 const BreadcrumbItem = React.forwardRef<HTMLLIElement, BreadcrumbItemProps>(
     ({ children, current, ...props }, ref) => {
         return (
@@ -50,7 +49,6 @@ const BreadcrumbItem = React.forwardRef<HTMLLIElement, BreadcrumbItemProps>(
     }
 );
 
-// SEPARATOR ===========================================================================================================
 const Separator: React.FC<SeparatorProps> = ({ separator }) => (
     <Text
         className="breadcrumb-separator"
@@ -62,9 +60,8 @@ const Separator: React.FC<SeparatorProps> = ({ separator }) => (
     </Text>
 );
 
-// BREADCRUMBS =========================================================================================================
 export const Breadcrumbs = React.forwardRef<HTMLDivElement, BreadcrumbsProps>(
-    ({ children, separator = "/", spacing, ...props }, ref) => {
+    ({ children, separator = "/", spacing = "micro", ...props }, ref) => {
         let classNames = [];
 
         if (spacing) {
@@ -117,3 +114,4 @@ export const Breadcrumbs = React.forwardRef<HTMLDivElement, BreadcrumbsProps>(
         );
     }
 );
+Breadcrumbs.displayName = "Breadcrumbs";

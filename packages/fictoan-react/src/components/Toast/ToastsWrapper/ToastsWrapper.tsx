@@ -1,26 +1,25 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
+// ELEMENT =============================================================================================================
 import { CommonAndHTMLProps } from "../../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./toasts-wrapper.css";
 
 // prettier-ignore
 export interface ToastsWrapperCustomProps {
-    position ? : "top" | "bottom";
+        position ? : "top" | "bottom";
 }
 
-// TYPES ===============================================================================================================
 export type ToastsWrapperElementType = HTMLDivElement;
 export type ToastsWrapperProps = CommonAndHTMLProps<ToastsWrapperElementType> &
-    ToastsWrapperCustomProps;
+                                 ToastsWrapperCustomProps;
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const ToastsWrapper = React.forwardRef(
-    ({ position, ...props }: ToastsWrapperProps, ref: React.Ref<ToastsWrapperElementType>) => {
+    ({position, ...props} : ToastsWrapperProps, ref : React.Ref<ToastsWrapperElementType>) => {
         let classNames = [];
 
         if (position) {
@@ -36,5 +35,6 @@ export const ToastsWrapper = React.forwardRef(
                 {...props}
             />
         );
-    }
+    },
 );
+ToastsWrapper.displayName = "ToastsWrapper";

@@ -2,134 +2,88 @@
 
 // REACT CORE ==========================================================================================================
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading4, Divider, Portion, Row, Text, Article, Badge, Breadcrumbs, Div, Section } from "fictoan-react";
+import { Div, Heading6, Text, Divider, Breadcrumbs } from "fictoan-react";
+
+// LOCAL COMPONENTS ====================================================================================================
+import { PropsConfiguratorNew } from "$components/PropsConfigurator/PropsConfiguratorNew";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
+import { breadcrumbsRegistry } from "./props.registry";
 
 // UTILS ===============================================================================================================
-import { createPropsConfigurator } from "$utils/propsConfigurator";
 import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
 import "../../../styles/fictoan-theme.css";
 import "./page-breadcrumbs.css";
 
-// OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
-
 const BreadcrumbsDocs = () => {
-    const [showCurrentPageMessage, setShowCurrentPageMessage] = useState(false);
+    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
 
-    // PROPS CONFIGURATOR //////////////////////////////////////////////////////////////////////////////////////////////
-    const {
-        propsConfigurator,
-        componentProps : propsConfig,
-    } = createPropsConfigurator(
-        "Breadcrumbs",
-        ["separator", "spacing"],
-        colourOptions,
-        {
-            isSelfClosing   : false,
-            canHaveChildren : true,
-            defaultChildren : `    <Link href="/">Home</Link>
-    <Link href="/components">Components</Link>
-    <Link href="/components/breadcrumbs">Breadcrumbs</Link>`,
-        },
-    );
-
-    useEffect(() => {
-        let timer: NodeJS.Timeout | undefined;
-        if (showCurrentPageMessage) {
-            timer = setTimeout(() => {
-                setShowCurrentPageMessage(false);
-            }, 3000);
-        }
-
-        return () => {
-            if (timer) clearTimeout(timer);
-        };
-    }, [showCurrentPageMessage]);
-
-    // The filter ensures we only show breadcrumb-related variables
-    const BreadcrumbsComponent = (varName: string) => {
+    const BreadcrumbsComponent = (varName : string) => {
         return varName.startsWith("breadcrumb") || varName.startsWith("breadcrumbs");
     };
 
     const {
         interactiveElementRef,
-        componentProps: themeConfig,
+        componentProps : themeConfig,
         themeConfigurator,
     } = createThemeConfigurator("Breadcrumbs", BreadcrumbsComponent);
 
     return (
-        <Article id="page-breadcrumbs">
-            <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                <Portion>
-                    <Heading1 id="component-name">
-                        Breadcrumbs
-                    </Heading1>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading6 id="component-name">
+                    Breadcrumbs
+                </Heading6>
 
-                    <Heading4
-                        id="component-description"
-                        weight="400" marginBottom="small"
-                    >
-                        A set of links to show the current page’s hierarchy
-                    </Heading4>
-                </Portion>
+                <Text
+                    id="component-description"
+                    weight="400"
+                >
+                    A set of links to show the current page's hierarchy
+                </Text>
+            </Div>
 
-                <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
-                    <ul>
-                        <li>The BreadcrumbItem accepts React nodes</li>
-                        <li>Use <code>current</code> prop to indicate active page</li>
-                    </ul>
-                </Portion>
-            </Row>
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+                <Text>
+                    The component accepts React nodes as children.
+                </Text>
 
-            {/* INTERACTIVE COMPONENT ////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                {/* DEMO COMPONENT ================================================================================= */}
-                <Row id="component-wrapper" horizontalPadding="small" className="rendered-component">
-                    <Portion>
-                        <Div padding="small" shape="rounded" bgColour="slate-light80">
-                            {showCurrentPageMessage && (
-                                <Badge shape="rounded" id="current-page-message">That's this page 🙂</Badge>
-                            )}
+                <Text>
+                    Use Link components from your router for navigation.
+                </Text>
+            </Div>
 
-                            <Breadcrumbs
-                                ref={interactiveElementRef}
-                                {...propsConfig}
-                                {...themeConfig}
-                            >
-                                <Link href="/">Home</Link>
-                                <Link href="/components">Components</Link>
-                                <Link
-                                    href="/components/breadcrumbs"
-                                    onClick={() => setShowCurrentPageMessage(true)}
-                                >
-                                    Breadcrumbs
-                                </Link>
-                            </Breadcrumbs>
-                        </Div>
-                    </Portion>
-                </Row>
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                <Breadcrumbs
+                    ref={interactiveElementRef}
+                    {...props}
+                    {...themeConfig}
+                >
+                    <Link href="/">Home</Link>
+                    <Link href="/components">Components</Link>
+                    <Link href="/components/breadcrumbs">Breadcrumbs</Link>
+                </Breadcrumbs>
+            </Div>
 
-                <Row horizontalPadding="small">
-                    {/* PROPS CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        {propsConfigurator()}
-                    </Portion>
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <PropsConfiguratorNew registry={breadcrumbsRegistry} onPropsChange={setProps} />
+            </Div>
 
-                    {/* THEME CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        {themeConfigurator()}
-                    </Portion>
-                </Row>
-            </Section>
-        </Article>
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

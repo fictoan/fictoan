@@ -1,0 +1,61 @@
+/* FLEXBOX ////////////////////////////////////////////////////////////////// */
+.layout-flexbox { display : flex; }
+
+.stack-vertically { flex-direction : column; }
+.stack-horizontally { flex-direction : row; }
+
+/* Flexbox layout directions ------------------------------------------------ */
+.horizontal-layout { flex-direction : row; }
+.reverse-horizontal-layout { flex-direction : row-reverse; }
+.vertical-layout { flex-direction : column; }
+.reverse-vertical-layout { flex-direction : column-reverse; }
+
+/* For when you want things bang in the centre */
+/* of both axes. Apply to parent. */
+.totally-centre-items,
+.totally-center-items {
+    display         : flex !important;
+    align-items     : center;
+    justify-content : center;
+}
+
+/* For when you want child elements vertically in the middle ---------------- */
+.vertically-centre-items,
+.vertically-center-items {
+    display : flex;
+}
+
+.vertically-centre-items > *,
+.vertically-center-items > * {
+    align-self : center;
+}
+
+/* Parent div needs to be a flex element */
+.vertically-centre-this,
+.vertically-center-this {
+    align-self : center;
+}
+
+/* Parent div needs a set width */
+.horizontally-centre-this,
+.horizontally-center-this {
+    position : relative;
+    display  : block;
+    margin   : 0 auto;
+    width    : fit-content;
+}
+
+.push-to-ends { justify-content : space-between; }
+
+/* GAP ====================================================================== */
+.gap-none   { gap : 0; }
+.gap-nano   { gap : var(--nano); }
+.gap-micro  { gap : var(--micro); }
+.gap-tiny   { gap : var(--tiny); }
+.gap-small  { gap : var(--small); }
+.gap-medium { gap : var(--medium); }
+.gap-large  { gap : var(--large); }
+.gap-huge   { gap : var(--huge); }
+
+/* GRID ///////////////////////////////////////////////////////////////////// */
+.layout-grid { display : grid; }

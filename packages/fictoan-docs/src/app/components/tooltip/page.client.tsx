@@ -1,124 +1,72 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Div,
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Tooltip,
-    Button
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Div, Heading6, Text, Divider, Tooltip } from "fictoan-react";
+
+// LOCAL COMPONENTS ====================================================================================================
+import { PropsConfiguratorNew } from "$components/PropsConfigurator/PropsConfiguratorNew";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
+import { tooltipRegistry } from "./props.registry";
 
 // STYLES ==============================================================================================================
-import "./page-tooltip.css";
 import "../../../styles/fictoan-theme.css";
-
-// HOOKS ===============================================================================================================
-import { createPropsConfigurator } from "../../../utils/propsConfigurator";
-import { createThemeConfigurator } from "../../../utils/themeConfigurator";
-
-
-// UTILS ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
+import "./page-tooltip.css";
 
 const TooltipDocs = () => {
-    const [sampleComponentId, setSampleComponentId] = React.useState("tooltip-target");
-
-    // PROPS CONFIG ====================================================================================================
-    const {
-        propsConfigurator,
-        componentProps: propsConfig,
-        propValues
-    } = createPropsConfigurator(
-        "Tooltip",
-        [
-            "strings", "isTooltipFor", "showOn", "position",
-        ],
-        colourOptions,
-        {
-            canHaveChildren: true,
-        }
-    );
-
-    // THEME CONFIG ====================================================================================================
-    const TooltipComponent = (varName) => {
-        return varName.startsWith("tooltip-");
-    };
-
-    const {
-        interactiveElementRef,
-        componentProps: themeConfig,
-        themeConfigurator,
-    } = createThemeConfigurator("Tooltip", TooltipComponent);
-
-    const tooltipTargetId = propValues.isTooltipFor || "tooltip-target";
+    const [props, setProps] = React.useState<{ [key: string]: any }>({});
 
     return (
-        <Article id="page-badge">
-            <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                <Portion>
-                    <Heading1>Tooltip</Heading1>
-                    <Text size="large" marginBottom="small">
-                        A small helper popup to display extra information
-                    </Text>
-                </Portion>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading6 id="component-name">
+                    Tooltip
+                </Heading6>
 
-                <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
-                    <ul>
-                        <li>Requires an element with a specified ID to attach to. Can be any element with an ID.</li>
-                        <li>Automatically positions itself to stay within viewport</li>
-                        <li>Tooltip can have any React node as children</li>
-                    </ul>
-                </Portion>
-            </Row>
+                <Text
+                    id="component-description"
+                    weight="400"
+                >
+                    A small helper popup to display extra information
+                </Text>
+            </Div>
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
+
+                <ul>
+                    <li>Requires an element with a specified ID to attach to. Can be any element with an ID.</li>
+                    <li>Automatically positions itself to stay within viewport.</li>
+                    <li>Tooltip can have any React node as children.</li>
+                    <li>
+                        Uses a singleton pattern internally—only one tooltip DOM element exists regardless
+                        of how many <code>&lt;Tooltip&gt;</code> components you use, making it highly performant.
+                    </li>
+                </ul>
+            </Div>
 
             {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
-            <Row horizontalPadding="small" className="rendered-component">
-                <Portion id="component-wrapper">
-                    <Div
-                        padding="small"
-                        shape="rounded"
-                        bgColour="slate-light80"
-                        data-centered-children
-                    >
-                        <Div id={tooltipTargetId}>Tooltip target</Div>
+            <Div id="demo-component">
+                <Div id="tooltip-target">Tooltip target</Div>
 
-                        <Tooltip
-                            id="interactive-component"
-                            ref={interactiveElementRef}
-                            isTooltipFor={sampleComponentId}
-                            {...propsConfig}
-                            {...themeConfig}
-                        >
-                            This is a tooltip, you can add any content here
-                        </Tooltip>
-                    </Div>
-                </Portion>
-            </Row>
+                <Tooltip
+                    isTooltipFor="tooltip-target"
+                    position={props.position}
+                    showOn={props.showOn}
+                >
+                    {props.children || "This is a tooltip"}
+                </Tooltip>
+            </Div>
 
-            <Row horizontalPadding="small">
-                {/* PROPS CONFIGURATOR ///////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    {propsConfigurator()}
-                </Portion>
-
-                {/* THEME CONFIGURATOR ///////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    {themeConfigurator()}
-                </Portion>
-            </Row>
-        </Article>
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <PropsConfiguratorNew registry={tooltipRegistry} onPropsChange={setProps} />
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

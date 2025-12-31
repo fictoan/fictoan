@@ -1,50 +1,26 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
-import React, { useState, useEffect } from "react";
+// REACT CORE ==========================================================================================================
 import Link from "next/link";
+import React, { useState, useEffect } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    Element,
-    Row,
-    Portion,
-    Heading1,
-    Heading4,
-    Heading5,
-    Heading6,
-    Text,
-    Divider,
-    Drawer,
-    Tabs,
-    CodeBlock,
-    Accordion,
-    Section,
-    Span, Article,
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { Element, Row, Portion, Heading1, Heading4, Heading5, Heading6, Text, Divider, Drawer, Tabs, CodeBlock, Accordion, Section, Span, Article } from "fictoan-react";
 
-// COMPONENTS ==========================================================================================================
-import { InteractiveCardExample } from "./InteractiveCardExample";
+// ASSETS ==============================================================================================================
+import AppleIcon from "../../assets/icons/logo-apple.svg";
+import LinuxIcon from "../../assets/icons/logo-linux.svg";
+import NPMIcon from "../../assets/icons/npm.svg";
+import PNPMIcon from "../../assets/icons/pnpm.svg";
+import WindowsIcon from "../../assets/icons/logo-windows.svg";
+import YarnIcon from "../../assets/icons/yarn.svg";
+import { snippetPageSetupJSX, snippetPageSetupCSS, snippetStructure, snippetUsage, snippetInstallation } from "../../assets/code-samples/CodeSamples";
 
 // STYLES ==============================================================================================================
 import "./getting-started.css";
 
-// STYLES ==============================================================================================================
-import PNPMIcon from "../../assets/icons/pnpm.svg";
-import YarnIcon from "../../assets/icons/yarn.svg";
-import NPMIcon from "../../assets/icons/npm.svg";
-import AppleIcon from "../../assets/icons/logo-apple.svg";
-import WindowsIcon from "../../assets/icons/logo-windows.svg";
-import LinuxIcon from "../../assets/icons/logo-linux.svg";
-
-// CODE SAMPLES ========================================================================================================
-import {
-    snippetPageSetupJSX,
-    snippetPageSetupCSS,
-    snippetStructure,
-    snippetUsage,
-    snippetInstallation,
-} from "../../assets/code-samples/CodeSamples";
+// OTHER ===============================================================================================================
+import { InteractiveCardExample } from "./InteractiveCardExample";
 
 const GettingStarted = () => {
     const [isComplexSetupDrawerOpen, setIsComplexSetupDrawerOpen] = useState(false);
@@ -195,13 +171,13 @@ const GettingStarted = () => {
 
                                                 <Divider kind="secondary" verticalMargin="tiny" />
 
-                                                {/* STEP 3 — INSTALL PNPM ////////////////////////////////////////////////////////////// */}
+                                                {/* STEP 3 — INSTALL YARN ////////////////////////////////////////////////////////////// */}
                                                 <Heading6 weight="700" marginBottom="nano">
-                                                    Step 3 — Install pnpm
+                                                    Step 3 — Install yarn
                                                 </Heading6>
 
                                                 <Text marginBottom="micro">
-                                                    Now, we need to install <code>pnpm</code>. <Span opacity="60">This
+                                                    Now, we need to install <code>yarn</code>. <Span opacity="60">This
                                                     is also a package
                                                     manager, but we&rsquo;ll just for your project dependencies, not for
                                                     your entire
@@ -212,7 +188,7 @@ const GettingStarted = () => {
                                                     <li>
                                                         Open your terminal and run:
                                                         <CodeBlock withSyntaxHighlighting language="bash" showCopyButton>brew install
-                                                            pnpm</CodeBlock>
+                                                            yarn</CodeBlock>
                                                     </li>
                                                 </ul>
 
@@ -247,14 +223,14 @@ const GettingStarted = () => {
                                                         In your terminal, navigate to the directory you extracted the
                                                         file to, and run:
                                                         <CodeBlock withSyntaxHighlighting language="bash" showCopyButton marginBottom="nano">
-                                                            pnpm install
+                                                            yarn install
                                                         </CodeBlock>
                                                         This will install all the dependencies the project needs to run.
                                                     </li>
 
                                                     <li>
                                                         Once the installation is complete, then run:
-                                                        <CodeBlock withSyntaxHighlighting language="bash" showCopyButton marginBottom="nano">pnpm
+                                                        <CodeBlock withSyntaxHighlighting language="bash" showCopyButton marginBottom="nano">yarn
                                                             dev</CodeBlock>
                                                         This should open a new tab in your default browser, go
                                                         to <code>http://localhost:3000</code> and display the home page
@@ -297,8 +273,9 @@ const GettingStarted = () => {
                                                     </li>
                                                 </ul>
 
-                                                <Heading6 weight="400" marginTop="tiny">Good luck and build great
-                                                    things! 🥳</Heading6>
+                                                <Heading6 weight="400" marginTop="tiny">
+                                                    Good luck and build great things! 🥳
+                                                </Heading6>
                                             </>
                                         ),
                                     },
@@ -354,11 +331,11 @@ const GettingStarted = () => {
                                                 <Divider kind="secondary" verticalMargin="tiny" />
 
                                                 <Heading6 weight="700" marginBottom="nano">Step 2 — Install
-                                                    pnpm</Heading6>
+                                                    yarn</Heading6>
 
                                                 <Text marginBottom="micro">
-                                                    Now, we need to install <code>pnpm</code>. <Span opacity="60">This
-                                                    is a package manager that we’ll use for your project
+                                                    Now, we need to install <code>yarn</code>. <Span opacity="60">This
+                                                    is a package manager that we&rsquo;ll use for your project
                                                     dependencies.</Span>
                                                 </Text>
 
@@ -366,13 +343,13 @@ const GettingStarted = () => {
                                                     <li>
                                                         Open PowerShell as Administrator and run:
                                                         <CodeBlock withSyntaxHighlighting language="bash" showCopyButton>
-                                                            iwr https://get.pnpm.io/install.ps1 -useb | iex
+                                                            npm install -g yarn
                                                         </CodeBlock>
                                                     </li>
                                                     <li>
                                                         Close and reopen PowerShell, then verify the installation by
                                                         running:
-                                                        <CodeBlock withSyntaxHighlighting language="bash" showCopyButton>pnpm
+                                                        <CodeBlock withSyntaxHighlighting language="bash" showCopyButton>yarn
                                                             --version</CodeBlock>
                                                     </li>
                                                 </ul>
@@ -401,13 +378,13 @@ const GettingStarted = () => {
                                                     <li>
                                                         Open PowerShell, navigate to the directory you extracted the
                                                         file to, and run:
-                                                        <CodeBlock withSyntaxHighlighting language="bash" showCopyButton marginBottom="nano">pnpm
+                                                        <CodeBlock withSyntaxHighlighting language="bash" showCopyButton marginBottom="nano">yarn
                                                             install</CodeBlock>
                                                         This will install all the dependencies the project needs to run.
                                                     </li>
                                                     <li>
                                                         Once the installation is complete, then run:
-                                                        <CodeBlock withSyntaxHighlighting language="bash" showCopyButton marginBottom="nano">pnpm
+                                                        <CodeBlock withSyntaxHighlighting language="bash" showCopyButton marginBottom="nano">yarn
                                                             dev</CodeBlock>
                                                         This should open a new tab in your default browser, go
                                                         to <code>http://localhost:3000</code> and display the home page
@@ -499,11 +476,11 @@ const GettingStarted = () => {
                                                 <Divider kind="secondary" verticalMargin="tiny" />
 
                                                 <Heading6 weight="700" marginBottom="nano">Step 2 — Install
-                                                    pnpm</Heading6>
+                                                    yarn</Heading6>
 
                                                 <Text marginBottom="micro">
-                                                    Now, we need to install <code>pnpm</code>. <Span opacity="60">This
-                                                    is a package manager that we’ll use for your project
+                                                    Now, we need to install <code>yarn</code>. <Span opacity="60">This
+                                                    is a package manager that we&rsquo;ll use for your project
                                                     dependencies.</Span>
                                                 </Text>
 
@@ -511,12 +488,12 @@ const GettingStarted = () => {
                                                     <li>
                                                         Run this command:
                                                         <CodeBlock withSyntaxHighlighting language="bash" showCopyButton>
-                                                            curl -fsSL https://get.pnpm.io/install.sh | sh -
+                                                            npm install -g yarn
                                                         </CodeBlock>
                                                     </li>
                                                     <li>
                                                         Close and reopen your terminal, then verify the installation:
-                                                        <CodeBlock withSyntaxHighlighting language="bash" showCopyButton>pnpm
+                                                        <CodeBlock withSyntaxHighlighting language="bash" showCopyButton>yarn
                                                             --version</CodeBlock>
                                                     </li>
                                                 </ul>
@@ -546,13 +523,13 @@ const GettingStarted = () => {
                                                         In your terminal, navigate to the directory you extracted the
                                                         file to, and run:
                                                         <CodeBlock withSyntaxHighlighting language="bash" showCopyButton marginBottom="nano">
-                                                            pnpm install
+                                                            yarn install
                                                         </CodeBlock>
                                                         This will install all the dependencies the project needs to run.
                                                     </li>
                                                     <li>
                                                         Once the installation is complete, then run:
-                                                        <CodeBlock withSyntaxHighlighting language="bash" showCopyButton marginBottom="nano">pnpm
+                                                        <CodeBlock withSyntaxHighlighting language="bash" showCopyButton marginBottom="nano">yarn
                                                             dev</CodeBlock>
                                                         This should open a new tab in your default browser, go
                                                         to <code>http://localhost:3000</code> and display the home page

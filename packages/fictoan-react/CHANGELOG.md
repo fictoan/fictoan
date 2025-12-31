@@ -1,5 +1,110 @@
 # CHANGELOG
 
+## 2.0.0
+
+### ⚠️ Breaking changes
+
+**OKLCH colour system migration**
+- All colours now use the OKLCH colour space for perceptually uniform lightness and better colour mixing
+- Expanded palette from 22 to 36 named colours, with ~10° hue gaps for comprehensive coverage
+- New colours: `rose`, `gold`, `lime`, `chartreuse`, `sage`, `emerald`, `jade`, `aqua`, `azure`, `cerulean`, `cobalt`, `navy`, `royal`, `iris`, `plum`, `magenta`, `fuchsia`, `cerise`
+- Removed: `brick` colour (use `sienna` or `crimson` as alternatives)
+- Single source of truth: all colour definitions now live in `oklchColourDefinitions`
+
+**New `bgOpacity` and `borderOpacity` props**
+- Opacity is now controlled via dedicated props instead of pre-generated utility classes
+- This reduces CSS bundle size by ~90% (from ~35k lines to ~3k lines)
+  ```tsx
+  // Before (v1.x)
+  <Card bgColour="red-opacity50" />
+
+  // After (v2.0) - cleaner, more flexible
+  <Card bgColour="red" bgOpacity="50" />
+  ```
+- Uses CSS `color-mix()` for runtime opacity calculation
+- Removes ~24,000 pre-generated opacity utility classes
+
+**Modal and Drawer now use declarative API**
+
+- Replace imperative functions with declarative `isOpen` and `onClose` props
+  - Removed: `showModal()`, `hideModal()`, `toggleModal()`
+  - Removed: `showDrawer()`, `hideDrawer()`, `toggleDrawer()`, `closeAllDrawers()`, `isDrawerOpen()`
+    ```tsx
+    // Before (v1.x)
+    <Modal id="my-modal">Content</Modal>
+    <Button onClick={() => showModal("my-modal")}>Open</Button>
+    
+    // After (v2.0)
+    const [isOpen, setIsOpen] = useState(false);
+    <Modal id="my-modal" isOpen={isOpen} onClose={() => setIsOpen(false)}>Content</Modal>
+    <Button onClick={() => setIsOpen(true)}>Open</Button>
+    ```
+
+### Build and performance improvements
+- Remove Babel transform in favour of native Vite/esbuild (75-80% faster builds)
+- Switch from terser to esbuild minifier for faster production builds
+- Enable production sourcemaps for easier debugging
+- Update TypeScript target from `es2016` to `ES2022` with automatic JSX transform
+- Update core dependencies: React 18.3, Vite 6, TypeScript 5.9
+- Remove unused Babel and terser packages
+- Add `displayName` to all 52 components for better React DevTools debugging
+
+### Accessibility improvements
+- Add `prefers-reduced-motion` media query support for WCAG 2.1 compliance
+
+### Developer experience improvements
+**Standardized value-based `onChange` across all form components**
+- All form components now use value-based `onChange` (modern component library standard)
+  - Removed `onValueChange` prop - use `onChange` for all value updates
+  - `onChange` now receives extracted value directly: `onChange={(value) => setValue(value)}`
+  - Affected components: `InputField`, `TextArea`, `Select`, `ListBox`, `Checkbox`, `Switch`, `RadioButton`, 
+    `RadioGroup`, `RadioTabGroup`, `Range`
+  - No more event extraction: `e.target.value` handled internally
+  - Matches modern libraries: Chakra UI, Material-UI, Radix UI
+    ```tsx
+    // Before (v1.x) - Dual API
+    <InputField
+      onChange={(e) => setValue(e.target.value)}     // Event-based
+      onValueChange={(value) => setValue(value)}     // Value-based
+    />
+    
+    // After (v2.0) - Clean, consistent API
+    <InputField
+      onChange={(value) => setValue(value)}          // Always value-based ✅
+    />
+    
+    <RadioTabGroup
+      onChange={(value) => setTab(value)}            // Always value-based ✅
+    />
+    ```
+
+**Additional improvements:**
+- Remove ambiguous `FlexibleEventHandler` union types
+- Remove runtime type checking from form components
+- Add comprehensive JSDoc documentation to `RadioTabGroup`
+- Fix `RadioTabGroup` indicator positioning on initial load (font loading timing)
+- Fix `RadioTabGroup` click interaction not updating indicator
+- Add `RadioTabGroupInternalProps` interface for better type organization
+- Add dual-thumb support for `RangeSlider`
+- Add `ButtonGroup` component for grouping related buttons
+- Fix PrismJS race condition causing syntax highlighting to fail on first load
+- Fix sidebar text colour styles
+- Remove `hasDelete` prop from `Button` (use `Badge` with `withDelete` instead)
+- Refactor `Tooltip` to use singleton pattern for improved performance
+  - Only one tooltip DOM element exists regardless of how many `<Tooltip>` components are used
+  - Uses event delegation instead of per-element listeners
+  - Eliminates DOM pollution from multiple hidden tooltip elements
+
+## 1.12.0
+- `ThemeProvider` now uses unique key based on hostname for local storage, instead of default `fictoan-theme`
+- Decouple border classes to use separate `borderWidth` and `borderStyle` values
+- Fix `Accordion` chevron position bug
+- Remove redundant `label` prop from `Badge`
+- Add `zIndex` as a prop for `Drawer` for easy, dynamic positioning
+- Tweak `Badge` delete button sizes
+- Fix `Tabs` accessibility and behaviour
+- `InputField`, `Textarea`, `Select`,`ListBox`, `RadioButtonGroup` now support a `size` prop
+
 ## 1.11.14
 - Refactor `Drawer` to behave more like the `Modal` for open and close behaviour ⚠️ BREAKING CHANGE
 

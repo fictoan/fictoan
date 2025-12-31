@@ -24,6 +24,13 @@
     --badge-border        : var(--blue);
     --badge-border-radius : var(--global-border-radius);
     --badge-border-width  : var(--global-border-width);
+
+    --badge-action-bg           : var(--blue-light40);
+    --badge-action-text         : var(--blue-dark20);
+    --badge-action-border       : var(--blue-light20);
+    --badge-action-border-width : var(--global-border-width);
+    --badge-action-bg-hover     : var(--blue-light20);
+    --badge-action-text-hover   : var(--blue-dark40);
 }
 
 /* BODY ///////////////////////////////////////////////////////////////////// */
@@ -241,7 +248,7 @@
     --input-border-valid              : var(--green-dark30);
     --input-label-valid               : var(--shade);
 
-    --input-bg-invalid                : var(--red-dark40);
+    --input-bg-invalid                : var(--red-light70);
     --input-border-invalid            : var(--red-dark30);
     --input-label-invalid             : var(--red);
     --input-text-invalid              : var(--red);
@@ -474,7 +481,7 @@
     --range-label         : var(--input-label-default);
     --range-value         : var(--input-label-default);
 
-    --range-track-bg      : var(--slate-light70);
+    --range-track-bg      : var(--slate-light60);
     --range-thumb-bg      : var(--blue-light20);
     --range-thumb-border  : var(--blue-light20);
 
@@ -503,12 +510,12 @@
 
     --sidebar-item-icon-width                : 24px;
 
-    --sidebar-item-icon-stroke-default       : var(--slate-dark40);
+    --sidebar-item-icon-stroke-default       : var(--slate-dark60);
     --sidebar-item-icon-stroke-width-default : 2px;
     --sidebar-item-icon-fill-default         : var(--slate-light40);
-    --sidebar-item-text-colour-default       : var(--slate-light40);
+    --sidebar-item-text-colour-default       : var(--slate-light20);
 
-    --sidebar-item-bg-hover                  : var(--grey-dark70);
+    --sidebar-item-bg-hover                  : var(--slate-dark70);
     --sidebar-item-text-hover                : var(--hue);
     --sidebar-item-icon-stroke-hover         : var(--slate-dark30);
     --sidebar-item-icon-fill-hover           : var(--slate-dark30);
@@ -522,8 +529,8 @@
 
     --sidebar-item-default-link-bg           : var(--white);
     --sidebar-item-default-link-text         : var(--shade);
-    --sidebar-item-text-scale                : 100%;
-    --sidebar-item-text-weight               : 600;
+    --sidebar-item-text-scale                : 92%;
+    --sidebar-item-text-weight               : 400;
 
     --sidebar-item-alert-bg                  : var(--red);
 
@@ -615,7 +622,7 @@
     /* GENERICS ============================================================= */
     --font-sans-serif                : sans-serif;
     --font-serif                     : serif;
-    --font-mono                      : monospace;
+    --font-monospace                 : monospace;
 
     /* PARAGRAPHS =========================================================== */
     --paragraph-font                 : var(--font-sans-serif);
@@ -643,7 +650,7 @@
     --text-bg-selected               : var(--hue);
 
     /* CODE ================================================================= */
-    --code-font                      : var(--font-mono);
+    --code-font                      : var(--font-monospace);
     --code-inline-font-size          : 0.8rem;
     --code-inline-bg                 : var(--blue-light80);
     --code-inline-text               : var(--blue-dark40);
@@ -666,7 +673,7 @@
     --code-block-copied-badge-border : var(--green-dark20);
 
     /* KBD ================================================================== */
-    --kbd-font                       : var(--font-mono);
+    --kbd-font                       : var(--font-monospace);
     --kbd-bg                         : var(--grey-light10);
     --kbd-text                       : var(--grey);
     --kbd-text-outline               : var(--transparent);

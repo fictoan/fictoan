@@ -1,14 +1,12 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { ReactNode } from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element";
+// ELEMENT =============================================================================================================
+import { CommonAndHTMLProps } from "../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./callout.css";
-
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../Element/constants";
 
 // prettier-ignore
 export interface CalloutCustomProps {
@@ -46,3 +44,4 @@ export const Callout = React.forwardRef(
         );
     }
 );
+Callout.displayName = "Callout";

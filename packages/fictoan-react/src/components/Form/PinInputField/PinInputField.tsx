@@ -296,3 +296,4 @@ export const PinInputField = React.forwardRef(
         );
     }
 );
+PinInputField.displayName = "PinInputField";

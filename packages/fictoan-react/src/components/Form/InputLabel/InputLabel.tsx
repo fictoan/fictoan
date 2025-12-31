@@ -1,17 +1,17 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../../Element/Element";
-
-// TYPES ===============================================================================================================
+// ELEMENT =============================================================================================================
 import { CommonAndHTMLProps } from "../../Element/constants";
+
+// OTHER ===============================================================================================================
+import { Element } from "$element";
 
 // prettier-ignore
 export interface InputLabelCustomProps {
-    label     ? : string;
-    htmlFor   ? : string;
-    hideLabel ? : boolean;
+        label     ? : string;
+        htmlFor   ? : string;
+        hideLabel ? : boolean;
 }
 
 export type InputLabelElementType = HTMLLabelElement;
@@ -48,3 +48,4 @@ export const InputLabel = React.forwardRef(
         );
     }
 );
+InputLabel.displayName = "InputLabel";

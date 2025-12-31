@@ -42,7 +42,7 @@ const SidebarDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <Text>&bull; </Text>
                 </Portion>
             </Row>

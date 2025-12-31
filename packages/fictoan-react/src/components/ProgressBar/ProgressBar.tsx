@@ -1,35 +1,38 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
-import { Text } from "../Typography/Text";
+// LOCAL COMPONENTS ====================================================================================================
+import { CommonAndHTMLProps, ColourPropTypes, ShapeTypes } from "../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./progress-bar.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../Element/constants";
+// OTHER ===============================================================================================================
+import { Text } from "../Typography/Text";
 
-// prettier-ignore
 export interface ProgressBarLabelCustomProps {
     suffix ? : string;
 }
 
-// prettier-ignore
 export interface ProgressBarCustomProps {
-    barBg    ? : string;
-    barFill  ? : string;
-    suffix   ? : string;
-    height   ? : string;
-    max      ? : number;    // Maximum value
+    label      ? : string;
+    value      ? : number;
+    suffix     ? : string;
+    height     ? : string;
+    max        ? : number;
+    shape      ? : ShapeTypes;
+    bgColor    ? : ColourPropTypes;
+    bgColour   ? : ColourPropTypes;
+    fillColor  ? : ColourPropTypes;
+    fillColour ? : ColourPropTypes;
 }
 
 export type ProgressBarElementType = HTMLProgressElement;
 export type ProgressBarProps = Omit<CommonAndHTMLProps<ProgressBarElementType>, keyof ProgressBarCustomProps> &
-    ProgressBarCustomProps;
+                               ProgressBarCustomProps;
 export type ProgressBarMetaProps = Omit<CommonAndHTMLProps<HTMLDivElement>, keyof ProgressBarLabelCustomProps> &
-    ProgressBarLabelCustomProps;
+                                   ProgressBarLabelCustomProps;
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const ProgressBar = React.forwardRef(
@@ -39,10 +42,26 @@ export const ProgressBar = React.forwardRef(
             value,
             height,
             max = 100,
+            shape,
+            bgColor,
+            bgColour,
+            fillColor,
+            fillColour,
             ...props
-        }: ProgressBarProps, ref: React.Ref<ProgressBarElementType>) => {
-        const validValue   = Math.max(0, Math.min(max, Number(value) || 0));
+        } : ProgressBarProps, ref : React.Ref<ProgressBarElementType>) => {
+        const validValue = Math.max(0, Math.min(max, Number(value) || 0));
         const progressText = `${validValue}${props.suffix || ""}`;
+
+        // Use UK spelling as primary, fall back to US spelling
+        const backgroundColour = bgColour || bgColor;
+        const progressFillColour = fillColour || fillColor;
+
+        // Build CSS custom properties for styling
+        const progressBarStyles : React.CSSProperties = {
+            height,
+            ...(backgroundColour && {"--progress-bar-bg" : `var(--${backgroundColour})`}),
+            ...(progressFillColour && {"--progress-bar-fill" : `var(--${progressFillColour})`}),
+        };
 
         return (
             <>
@@ -70,10 +89,12 @@ export const ProgressBar = React.forwardRef(
                     aria-valuemax={max}
                     aria-valuenow={validValue}
                     aria-valuetext={`${label ? `${label}: ` : ""}${progressText}`}
+                    shape={shape}
                     {...props}
-                    style={{ height }}
+                    style={progressBarStyles}
                 />
             </>
         );
     },
 );
+ProgressBar.displayName = "ProgressBar";

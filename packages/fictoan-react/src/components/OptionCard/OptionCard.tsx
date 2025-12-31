@@ -226,6 +226,7 @@ export const OptionCardsGroup = React.forwardRef<OptionCardsGroupRef, OptionCard
         );
     }
 );
+OptionCardsGroup.displayName = "OptionCardsGroup";
 
 export const useOptionCard = (id: string) => {
     const context = useContext(OptionCardsContext);
@@ -312,8 +313,8 @@ export const OptionCard: React.FC<OptionCardProps> = ({ id, children, disabled =
             data-option-card
             role="button"
             tabIndex={disabled ? -1 : 0}
-            aria-disabled={disabled ? "true" : "false"}
-            aria-selected={isSelected(id) ? "true" : "false"}
+            aria-disabled={disabled}
+            aria-selected={isSelected(id)}
             classNames={classNames}
             onClick={handleClick}
             onKeyDown={handleKeyDown}

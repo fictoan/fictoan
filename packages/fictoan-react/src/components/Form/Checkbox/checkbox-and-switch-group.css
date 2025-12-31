@@ -15,3 +15,27 @@
 [data-switch-group].align-vertical {
     flex-direction : column;
 }
+
+[data-checkbox-group] [data-form-item],
+[data-switch-group] [data-form-item] {
+    width : fit-content;
+}
+
+[data-form-item]:has([data-checkbox-group]),
+[data-form-item]:has([data-switch-group]) {
+    flex-direction : column;
+    align-items    : flex-start;
+    gap            : 8px !important;
+}
+
+[data-form-item]:has([data-checkbox-group]) > [data-label-wrapper] > label,
+[data-form-item]:has([data-switch-group]) > [data-label-wrapper] > label {
+    padding-left : 0 !important;
+}
+
+[data-form-item]:has([data-checkbox-group]) > [data-label-wrapper] > label::before,
+[data-form-item]:has([data-checkbox-group]) > [data-label-wrapper] > label::after,
+[data-form-item]:has([data-switch-group]) > [data-label-wrapper] > label::before,
+[data-form-item]:has([data-switch-group]) > [data-label-wrapper] > label::after {
+    display : none !important;
+}

@@ -1,6 +1,6 @@
 /*
 +-----------------------------------------+
-| Label                                   |
+| Label wrapper                           |
 +-----------------------------------------+
 | ANY INPUT ITEM                          |
 +-----------------------------------------+
@@ -10,15 +10,17 @@
 
 /* SUPER PARENT ///////////////////////////////////////////////////////////// */
 /* Need this as a common parent to align the left/right icons */
-[data-input-wrapper] {
-    position : relative;
-    display  : flex;
+[data-form-item] > [data-input-wrapper] {
+    grid-area : input;
+    position  : relative;
+    display   : flex;
 }
 
 /* PARENT ELEMENT /////////////////////////////////////////////////////////// */
 [data-form-item] {
     position              : relative;
-    width                 : 100%;
+    width                 : fit-content;
+    height                : fit-content;
     display               : grid;
     grid-template-rows    : auto auto auto;
     grid-template-columns : 1fr;
@@ -29,12 +31,16 @@
         "info";
 }
 
+form[data-form] [data-form-item] {
+    width : 100%;
+}
+
 /* Hide empty grid areas when there is no label or info section ============= */
 [data-form-item]:not(:has(label)) {
+    grid-template-rows  : auto auto;
     grid-template-areas :
         "input"
         "info";
-    grid-template-rows  : auto auto;
 }
 
 [data-form-item]:not(:has(.info-section)) {
@@ -50,7 +56,7 @@
 }
 
 /* LABEL //////////////////////////////////////////////////////////////////// */
-[data-form-item] > label {
+[data-form-item] > [data-label-wrapper] {
     grid-area   : label;
     position    : relative;
     color       : var(--input-label-default);
@@ -58,7 +64,39 @@
     width       : fit-content;
 }
 
-[data-form-item][required] > label::after {
+/* Only apply flex layout when validation is present */
+[data-form-item] > [data-label-wrapper][data-has-validation="true"] {
+    width           : 100%;
+    display         : flex;
+    align-items     : center;
+    justify-content : space-between;
+    gap             : 8px;
+}
+
+/* Validation icon styling */
+[data-validation-icon] {
+    flex-shrink : 0;
+    display     : block;
+}
+
+[data-form-item].size-tiny label {
+    font-size : calc(var(--paragraph-font-size) * 0.6);
+}
+
+[data-form-item].size-small label {
+    font-size : calc(var(--paragraph-font-size) * 0.8);
+}
+
+[data-form-item].size-large label {
+    font-size : calc(var(--paragraph-font-size) * 1.2);
+}
+
+/* Asterisk */
+[data-form-item][required] label {
+    position : relative;
+}
+
+[data-form-item][required] label::after {
     position  : absolute;
     top       : -4px;
     bottom    : 0;
@@ -71,9 +109,9 @@
 
 /* INPUT //////////////////////////////////////////////////////////////////// */
 [data-form-item] [data-input-field],
-[data-form-item] [data-text-area],
-[data-form-item] [data-select-wrapper],
-[data-form-item] [data-listbox-wrapper] {
+[data-form-item] [data-textarea],
+[data-form-item] [data-select],
+[data-form-item] [data-list-box] {
     grid-area : input;
 }
 
@@ -104,8 +142,8 @@
 }
 
 [data-form-item] [data-input-field],
-[data-form-item] [data-text-area],
-[data-form-item] [data-select-wrapper] {
+[data-form-item] [data-textarea],
+[data-form-item] [data-select] {
     &:read-only {
         background-color : var(--input-bg-read-only);
         color            : var(--input-text-read-only);
@@ -141,9 +179,10 @@
 }
 
 /* DISABLED ///////////////////////////////////////////////////////////////// */
-[data-form-item]:has(input:disabled) > label,
-[data-form-item]:has(input:disabled) > label::before,
-[data-form-item]:has(input:disabled) > label::after {
+/* Only apply to form-items with a single disabled input, not groups with mixed states */
+[data-form-item]:has(input:disabled):not(:has([data-radio-tab-group])):not(:has([data-radio-group])):not(:has([data-checkbox-group])):not(:has([data-switch-group])) label,
+[data-form-item]:has(input:disabled):not(:has([data-radio-tab-group])):not(:has([data-radio-group])):not(:has([data-checkbox-group])):not(:has([data-switch-group])) label::before,
+[data-form-item]:has(input:disabled):not(:has([data-radio-tab-group])):not(:has([data-radio-group])):not(:has([data-checkbox-group])):not(:has([data-switch-group])) label::after {
     filter         : grayscale(24%);
     user-select    : none;
     pointer-events : none;
@@ -158,6 +197,25 @@
 [data-form-item]:has([data-radio-tab-group]),
 [data-input-wrapper]:has([data-radio-tab-group]) {
     overflow : auto;
+}
+
+[data-form-item] [data-radio-tab-group] input:disabled + label {
+    filter         : grayscale(24%);
+    user-select    : none;
+    pointer-events : none;
+    cursor         : not-allowed;
+    opacity        : 0.24;
+}
+
+/* Keep the main label normal when a disabled input is inside Radio Tab Group */
+[data-form-item]:has([data-radio-tab-group] input:disabled) [data-label-wrapper] > label,
+[data-form-item]:has([data-radio-tab-group] input:disabled) [data-label-wrapper] > label::before,
+[data-form-item]:has([data-radio-tab-group] input:disabled) [data-label-wrapper] > label::after {
+    filter         : none;
+    user-select    : auto;
+    pointer-events : auto;
+    cursor         : auto;
+    opacity        : 1;
 }
 
 /* FOR RANGE ================================================================ */

@@ -11,7 +11,6 @@
 
     p:first-of-type {
         display     : inline-flex;
-        font-weight : bold;
         margin      : 0;
         color       : var(--meter-label);
     }
@@ -37,10 +36,11 @@ meter[data-meter] {
     position   : absolute;
     top        : -2px;
     height     : calc(100% + 4px);
-    width      : 2px;
+    width      : var(--meter-optimum-marker-width);
     background : var(--meter-optimum-marker-bg);
 }
 
+/* Base meter bar styling */
 meter::-moz-meter-bar,
 meter::-webkit-meter-bar {
     background       : none;
@@ -49,6 +49,7 @@ meter::-webkit-meter-bar {
     border-radius    : var(--meter-border-radius);
 }
 
+/* Shape variants */
 meter.shape-rounded::-webkit-meter-bar,
 meter.shape-rounded::-moz-meter-bar {
     border-radius : var(--meter-border-radius);
@@ -59,20 +60,19 @@ meter.shape-curved::-moz-meter-bar {
     border-radius : 8000px;
 }
 
-
-/* SUPER LOW VALUES ========================================================= */
+/* DANGER VALUES (super low, typically <= low threshold) */
 meter:-moz-meter-sub-sub-optimum::-moz-meter-bar,
 meter::-webkit-meter-even-less-good-value {
     background-color : var(--meter-danger);
 }
 
-/* LOW VALUES =============================================================== */
+/* WARNING VALUES (low, between low and high thresholds) */
 meter:-moz-meter-sub-optimum::-moz-meter-bar,
 meter::-webkit-meter-suboptimum-value {
     background-color : var(--meter-low);
 }
 
-/* HIGH VALUES ============================================================== */
+/* SUCCESS VALUES (high, >= high threshold or optimal) */
 meter:-moz-meter-optimum::-moz-meter-bar,
 meter::-webkit-meter-optimum-value {
     background-color : var(--meter-high);

@@ -1,16 +1,13 @@
-// FRAMEWORK ============================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
+// LOCAL COMPONENTS ====================================================================================================
+import { CommonAndHTMLProps, SpacingTypes } from "../Element/constants";
+import { Element } from "$element";
 
-// STYLES =============================================================================================================
+// STYLES ==============================================================================================================
 import "./row.css";
 
-// TYPES =============================================================================================================
-import { CommonAndHTMLProps, SpacingTypes } from "../Element/constants";
-
-// prettier-ignore
 interface RowCustomProps {
     layout                        ? : "grid" | "flexbox";
     gutters                       ? : SpacingTypes;
@@ -18,7 +15,8 @@ interface RowCustomProps {
     retainLayoutOnTabletPortrait  ? : boolean;
     retainLayoutOnMobile          ? : boolean;
     retainLayoutAlways            ? : boolean;
-    groupLabel                    ? : string;     // Accessible label for the group
+    allowUltraWide                ? : boolean;
+    groupLabel                    ? : string;
 }
 
 export type RowElementType = HTMLDivElement;
@@ -36,10 +34,11 @@ export const Row = React.forwardRef(
             retainLayoutOnTabletPortrait,
             retainLayoutOnMobile,
             retainLayoutAlways,
+            allowUltraWide,
             groupLabel,
             ...props
-        }: RowProps,
-        ref: React.Ref<RowElementType>
+        } : RowProps,
+        ref : React.Ref<RowElementType>,
     ) => {
         // CLASS NAMES -------------------------------------------------------------------------------------------------
         let classNames = [];
@@ -52,20 +51,15 @@ export const Row = React.forwardRef(
             classNames.push(gutters === "none" ? "no-gutters" : `${gutters}-gutters`);
         }
 
-        // CONDITIONAL GUTTERS =========================================================================================
         // Add medium gutters by default for grid layouts only, remove them for flexbox layouts
-        // const conditionalGutters = gutters ?? (layout === "grid" ? "medium" : "none");
         //
         // if (conditionalGutters) {
-        //     classNames.push(conditionalGutters === "none" ? "no-gutters" : `${conditionalGutters}-gutters`);
         // }
 
-        // FLEXBOX-SPECIFIC CLASSNAMES =================================================================================
         // if (equaliseChildren || equalizeChildren) {
         //     classNames.push("equalise-children");
         // }
 
-        // COMMON CLASSNAMES ===========================================================================================
         if (retainLayoutOnTabletLandscape) {
             classNames.push("retain-layout-on-tablet-landscape");
         }
@@ -80,8 +74,12 @@ export const Row = React.forwardRef(
 
         if (retainLayoutAlways) {
             classNames.push(
-                "retain-layout-on-tablet-landscape retain-layout-on-tablet-portrait retain-layout-on-mobile"
+                "retain-layout-on-tablet-landscape retain-layout-on-tablet-portrait retain-layout-on-mobile",
             );
+        }
+
+        if (allowUltraWide) {
+            classNames.push("allow-ultra-wide");
         }
 
         // RENDER -----------------------------------------------------------------------------------------------------
@@ -90,12 +88,13 @@ export const Row = React.forwardRef(
                 as="div"
                 data-row
                 ref={ref}
-                classNames={[classNames.join(" ")]}
+                classNames={[ classNames.join(" ") ]}
                 marginBottom="tiny"
                 role="grid"
                 aria-label={groupLabel}
                 {...props}
             />
         );
-    }
+    },
 );
+Row.displayName = "Row";

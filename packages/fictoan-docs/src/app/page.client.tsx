@@ -1,0 +1,176 @@
+"use client";
+
+// REACT CORE ==========================================================================================================
+import Link from "next/link";
+import React from "react";
+
+// UI ==================================================================================================================
+import {
+    Div,
+    Article,
+    Divider,
+    Portion,
+    Row,
+    Text,
+    Heading4,
+    Heading6,
+    Card,
+    Section,
+    Heading1,
+    Heading2,
+    Header,
+    Badge,
+} from "fictoan-react";
+
+// LOCAL COMPONENTS ====================================================================================================
+import { CodeComparison } from "$components/CodeComparison/CodeComparison";
+import { ComponentGrid } from "$components/ComponentGrid/ComponentGrid";
+import { DensityGridPattern } from "$components/DensityGridPattern/DensityGridPattern";
+import { IntroCode } from "$components/IntroCode/IntroCode";
+
+// ASSETS ==============================================================================================================
+import AirplaneIcon from "../assets/icons/pictograms/paper-airplane.svg";
+import DocumentIcon from "../assets/icons/pictograms/dead-document.svg";
+import GhostIcon from "../assets/icons/pictograms/ghost.svg";
+import LightingIcon from "../assets/icons/pictograms/lightning-bolt.svg";
+
+// STYLES ==============================================================================================================
+import "./home.css";
+
+// OTHER ===============================================================================================================
+import { PenLine, Zap, Palette, Gauge, Layers, Minimize2, FileCode, Feather, Package, RefreshCw } from "lucide-react";
+
+const HomePage = () => {
+    return (
+        <Article id="home-page">
+            {/* HERO /////////////////////////////////////////////////////////////////////////////////////////////// */}
+            <Section id="hero-section" verticalPadding="tiny">
+                <Row horizontalPadding="medium" marginBottom="none">
+                    <Portion>
+                        <Card id="hero-card" padding="large">
+                            <Row marginBottom="none">
+                                <Portion desktopSpan="two-third">
+                                    <Heading1 textColour="white">
+                                        Build React UI in plain English
+                                    </Heading1>
+
+                                    <Heading4 weight="400" textColour="white" marginBottom="tiny">
+                                        Components so obvious, and props that read like prose.
+                                    </Heading4>
+
+                                    <Heading6 weight="400" textColour="white" marginBottom="small">
+                                        Pure CSS, zero runtime. A library so simple, and UI code that can be
+                                        maintained by designers.
+                                    </Heading6>
+                                </Portion>
+                            </Row>
+
+                            <Div id="hero-card-bg" />
+                        </Card>
+                    </Portion>
+                </Row>
+            </Section>
+
+            {/* INTRO CODE ///////////////////////////////////////////////////////////////////////////////////////// */}
+            <Section id="intro-code-section" marginBottom="small">
+                <IntroCode />
+            </Section>
+
+            {/* DIFFERENTIATORS //////////////////////////////////////////////////////////////////////////////////// */}
+            <Section id="differentiators-section" paddingTop="small">
+                <DensityGridPattern
+                    dotSize={12} gap={24}
+                    color="var(--green)" opacity={0.24}
+                    fadeDirection="to-bottom"
+                    height="80%"
+                />
+
+                <Row horizontalPadding="medium" marginBottom="small">
+                    <Portion desktopSpan="two-third">s
+                        <Heading4>
+                            What’s different
+                        </Heading4>
+                    </Portion>
+
+                    <Portion desktopSpan="one-third" />
+
+                    <Portion desktopSpan="half">
+                        <Card className="differentiator-card" padding="micro" shape="rounded">
+                            <Header>
+                                <GhostIcon />
+
+                                <Heading6 marginTop="nano">
+                                    No cryptic class names
+                                </Heading6>
+                            </Header>
+
+                            <Text>
+                                Semantic props
+                                like <code>bgColour</code>, <code>marginBottom</code>, <code>horizontallyCentreThis</code>,
+                                and <code>stackVertically</code> etc, not abbreviated utility classes to memorise. And,
+                                you can use either British and US spelling for props!</Text>
+                        </Card>
+                    </Portion>
+
+                    <Portion desktopSpan="half">
+                        <Card className="differentiator-card" padding="micro" shape="rounded">
+                            <Header>
+                                <LightingIcon />
+
+                                <Heading6 marginTop="nano">
+                                    No runtime CSS
+                                </Heading6>
+                            </Header>
+
+                            <Text>
+                                Pure CSS variables. No style injection, no hydration mismatch, no flash of unstyled
+                                content.
+                            </Text>
+                        </Card>
+                    </Portion>
+
+                    <Portion desktopSpan="half">
+                        <Card className="differentiator-card" padding="micro" shape="rounded">
+                            <Header>
+                                <AirplaneIcon />
+
+                                <Heading6 marginTop="nano">
+                                    No assembly required
+                                </Heading6>
+                            </Header>
+
+                            <Text>
+                                Components are styled and ready to use. No building your own design system from
+                                primitives.
+                            </Text>
+                        </Card>
+                    </Portion>
+
+                    <Portion desktopSpan="half">
+                        <Card className="differentiator-card" padding="micro" shape="rounded">
+                            <Header>
+                                <DocumentIcon />
+
+                                <Heading6 marginTop="nano">
+                                    No copy-paste to maintain
+                                </Heading6>
+                            </Header>
+
+                            <Text>
+                                An actual library with updates. You don’t need to setup and maintain hundreds of
+                                component files.
+                            </Text>
+                        </Card>
+                    </Portion>
+                </Row>
+            </Section>
+
+            {/* COMPARISON ///////////////////////////////////////////////////////////////////////////////////////// */}
+            <Section id="comparison-section">
+                <CodeComparison />
+            </Section>
+        </Article>
+    );
+};
+
+export default HomePage;

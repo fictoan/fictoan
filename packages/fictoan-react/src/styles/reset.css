@@ -13,6 +13,11 @@
     outline : 0;
 }
 
+*:focus-visible {
+    outline        : var(--global-focus-width) solid var(--global-focus-colour);
+    outline-offset : var(--global-focus-offset);
+}
+
 /* This affects all type scale values */
 html {
     font-size : 1em;

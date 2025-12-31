@@ -1,21 +1,33 @@
+// REACT CORE ==========================================================================================================
 import React, { ElementType, ReactNode } from "react";
 
-import { Element } from "../../Element/Element";
+// ELEMENT =============================================================================================================
 import { ElementProps, SpacingTypes } from "../../Element/constants";
 
-import { Row } from "../../Row/Row";
-import { PortionProps, Portion } from "../../Portion/Portion";
-import { InputLabel, InputLabelCustomProps } from "../InputLabel/InputLabel";
-import { InputCommonProps } from "../BaseInputComponent/constants";
-import { InputField } from "../InputField/InputField";
-import { FileUpload } from "../FileUpload/FileUpload";
+// INPUT ===============================================================================================================
+// Common props shared by form inputs
+export interface InputCommonProps {
+    label?: string;
+    helpText?: string;
+    errorText?: string;
+    required?: boolean;
+    disabled?: boolean;
+}
+
+// OTHER ===============================================================================================================
 import { Checkbox } from "../Checkbox/Checkbox";
-import { Switch } from "../Checkbox/Switch";
+import { Element } from "$element";
+import { FileUpload } from "../FileUpload/FileUpload";
+import { InputField } from "../InputField/InputField";
+import { InputLabel, InputLabelCustomProps } from "../InputLabel/InputLabel";
+import { PortionProps, Portion } from "../../Portion/Portion";
 import { RadioButton } from "../RadioButton/RadioButton";
 import { RadioGroup } from "../RadioButton/RadioGroup";
-import { Select } from "../Select/Select";
-import { TextArea } from "../TextArea/TextArea";
 import { RadioGroupOptionProps } from "../RadioButton/constants";
+import { Row } from "../../Row/Row";
+import { Select } from "../Select/Select";
+import { Switch } from "../Checkbox/Switch";
+import { TextArea } from "../TextArea/TextArea";
 
 // Types
 export type FormFieldsType = ElementProps<HTMLInputElement> &
@@ -27,15 +39,16 @@ export type FormFieldsType = ElementProps<HTMLInputElement> &
 export type FormFieldsConfigBase = PortionProps & FormFieldsType;
 
 interface FormFieldOptionsType extends RadioGroupOptionProps {
-    id: string;
-    label: string;
-    value: string;
+    id    : string;
+    label : string;
+    value : string;
 }
 
 export interface FormFieldsConfig extends FormFieldsConfigBase {
-    as: ElementType;
-    options?: FormFieldOptionsType[];
-    name: string;  // Making name required for field identification
+    as        : ElementType;
+    options ? : FormFieldOptionsType[];
+    name      : string;
+    // Making name required for field identification
 }
 
 // Supported Form elements for "as" prop in config

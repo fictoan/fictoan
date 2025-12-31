@@ -1,0 +1,82 @@
+"use client";
+
+// REACT CORE ==========================================================================================================
+import { ReactNode, Children, isValidElement } from "react";
+
+// UI ==================================================================================================================
+import { Article, Divider, Portion, Row, Section, Div, Tabs } from "fictoan-react";
+
+interface ComponentDocsLayoutProps {
+    children : ReactNode;
+}
+
+export const ComponentDocsLayout = ({ children }: ComponentDocsLayoutProps) => {
+    // Extract content by ID
+    const getContentById = (targetId: string) => {
+        let content = null;
+        Children.forEach(children, (child) => {
+            if (isValidElement(child) && child.props.id === targetId) {
+                content = child.props.children;
+            }
+        });
+        return content;
+    };
+
+    return (
+        <Article id="component-docs-page">
+            {/* INTRO SECTION ////////////////////////////////////////////////////////////////////////////////////// */}
+            <Section>
+                <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
+                    {/* HEADER ===================================================================================== */}
+                    <Portion>
+                        {getContentById("intro-header")}
+                    </Portion>
+
+                    {/* NOTES ====================================================================================== */}
+                    {getContentById("intro-notes") && (
+                        <Portion>
+                            {getContentById("intro-notes")}
+                        </Portion>
+                    )}
+                </Row>
+            </Section>
+
+            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+
+            {/* INTERACTIVE COMPONENT SECTION ////////////////////////////////////////////////////////////////////// */}
+            <Section>
+                <Row id="component-wrapper" horizontalPadding="small" className="rendered-component">
+                    <Portion>
+                        <Div
+                            padding="small"
+                            shape="rounded"
+                            bgColour="slate-light80"
+                            data-centered-children
+                        >
+                            {getContentById("demo-component")}
+                        </Div>
+                    </Portion>
+                </Row>
+
+                <Row horizontalPadding="huge">
+                    <Portion>
+                        <Tabs
+                            tabs={[
+                                {
+                                    key: "props-tab",
+                                    label: "Props config",
+                                    content: (getContentById("props-config"))
+                                },
+                                {
+                                    key: "theme-tab",
+                                    label: "Theme config",
+                                    content: (getContentById("theme-config"))
+                                }
+                            ]}
+                        />
+                    </Portion>
+                </Row>
+            </Section>
+        </Article>
+    );
+};

@@ -23,12 +23,12 @@ export { RadioButton } from "./RadioButton/RadioButton";
 export { RadioGroup } from "./RadioButton/RadioGroup";
 export { type RadioButtonProps, type RadioGroupProps, type RadioTabGroupProps } from "./RadioButton/constants";
 
+export { RadioTabGroup } from "./RadioButton/RadioTabGroup";
+
 export { Range, type RangeProps } from "./Range";
 
 export { Select } from "./Select/Select";
 export { type SelectProps } from "./Select/constants";
-
-export { RadioTabGroup } from "./RadioButton/RadioTabGroup";
 
 export { Switch, type SwitchProps } from "./Checkbox/Switch";
 

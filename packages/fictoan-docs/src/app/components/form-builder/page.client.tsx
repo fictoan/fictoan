@@ -98,11 +98,12 @@ const FormBuilderDocs = () => {
 
             {/* CONFIGURE ////////////////////////////////////////////////////////////////////////////////////// */}
             <Drawer
+                id="add-element-drawer"
                 position="right"
                 padding="micro"
-                openWhen={isAddElementDrawerOpen}
-                closeWhen={() => setIsAddElementDrawerOpen(false)}
-                isDismissable={true}
+                isOpen={isAddElementDrawerOpen}
+                onClose={() => setIsAddElementDrawerOpen(false)}
+                isDismissible={true}
                 closeOnClickOutside={true}
                 size="large"
             >

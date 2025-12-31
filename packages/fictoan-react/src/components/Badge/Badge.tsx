@@ -1,38 +1,61 @@
-// FRAMEWORK ===========================================================================================================
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// FICTOAN =============================================================================================================
-import { Element } from "../Element/Element";
-import { Text } from "../Typography/Text";
+// LOCAL COMPONENTS ====================================================================================================
+import { CommonAndHTMLProps, ShapeTypes, SpacingTypes } from "../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./badge.css";
 
 // TYPES ===============================================================================================================
-import { CommonAndHTMLProps, ShapeTypes, SpacingTypes } from "../Element/constants";
+export type BadgeActionIconType = "cross" | "tick" | "plus" | "minus";
 
-// prettier-ignore
 export interface BadgeCustomProps {
-    size       ? : SpacingTypes;
-    shape      ? : ShapeTypes;
-    withDelete ? : boolean;
-    onDelete   ? : (event: React.MouseEvent<HTMLElement>) => void;
-    label      ? : string;
+    size             ? : SpacingTypes;
+    shape            ? : ShapeTypes;
+    actionIcon       ? : BadgeActionIconType;
+    onActionClick    ? : (event: React.MouseEvent<HTMLButtonElement>) => void;
+    actionAriaLabel  ? : string;
 }
 
 export type BadgeElementType = HTMLDivElement;
 export type BadgeProps = Omit<CommonAndHTMLProps<BadgeElementType>, keyof BadgeCustomProps> & BadgeCustomProps;
 
+// ICONS ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const ActionIcons: Record<BadgeActionIconType, React.ReactNode> = {
+    cross: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+    ),
+    tick: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12l5 5L20 7" />
+        </svg>
+    ),
+    plus: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5v14M5 12h14" />
+        </svg>
+    ),
+    minus: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14" />
+        </svg>
+    ),
+};
+
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const Badge = React.forwardRef(
     ({
-         children,
-         size = "medium",
-         shape,
-         withDelete,
-         onDelete,
-         label,
-         ...props
+        children,
+        size = "medium",
+        shape,
+        actionIcon,
+        onActionClick,
+        actionAriaLabel,
+        ...props
     }: BadgeProps, ref: React.Ref<BadgeElementType>) => {
         let classNames = [];
 
@@ -44,42 +67,37 @@ export const Badge = React.forwardRef(
             classNames.push(`shape-${shape}`);
         }
 
-        const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
+        const handleActionClick = (e: React.MouseEvent<HTMLButtonElement>) => {
             e.stopPropagation();
-            onDelete?.(e);
+            onActionClick?.(e);
         };
 
-        const handleKeyPress = (e: React.KeyboardEvent) => {
-            if (withDelete && (e.key === "Enter" || e.key === " ")) {
-                e.preventDefault();
-                onDelete?.(e as unknown as React.MouseEvent<HTMLElement>);
-            }
-        };
+        const hasAction = Boolean(actionIcon);
 
         return (
             <Element<BadgeElementType>
                 data-badge
+                data-has-action={hasAction || undefined}
                 ref={ref}
                 classNames={classNames}
                 role="status"
-                aria-label={label || (typeof children === "string" ? children : undefined)}
+                aria-label={(typeof children === "string" ? children : undefined)}
                 {...props}
             >
                 {children}
 
-                {withDelete && (
-                    <Text
-                        className="badge-dismiss-button"
-                        onClick={handleDelete}
-                        onKeyDown={handleKeyPress}
-                        role="button"
-                        tabIndex={0}
-                        aria-label={`Remove badge`}
+                {hasAction && (
+                    <button
+                        type="button"
+                        className="badge-action-button"
+                        onClick={handleActionClick}
+                        aria-label={actionAriaLabel}
                     >
-                        &times;
-                    </Text>
+                        {ActionIcons[actionIcon!]}
+                    </button>
                 )}
             </Element>
         );
     },
 );
+Badge.displayName = "Badge";

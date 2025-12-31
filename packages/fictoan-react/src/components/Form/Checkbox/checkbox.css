@@ -1,4 +1,4 @@
-[data-checkbox] {
+[data-form-item]:has([data-checkbox]) {
     display        : inline-flex;
     flex-direction : row;
     align-items    : center;
@@ -73,16 +73,16 @@
 }
 
 
-/* HOVER */
-[data-form-item]:has(input[type="checkbox"]:hover) > label::before {
+/* HOVER ==================================================================== */
+[data-form-item]:has(> [data-input-wrapper] > input[type="checkbox"]:hover) > [data-label-wrapper] > label::before {
     background : var(--checkbox-square-bg-hover);
 }
 
-/* FOCUS */
-[data-form-item]:has(input[type="checkbox"]:focus) > label::before {
+/* FOCUS ==================================================================== */
+[data-form-item]:has(> [data-input-wrapper] > input[type="checkbox"]:focus) > [data-label-wrapper] > label::before {
     outline : solid 2px var(--checkbox-square-bg-disabled);
 }
 
-/* CHECKED */
-[data-form-item]:has(input[type="checkbox"]:checked) > label::before { background : var(--checkbox-square-bg-checked); }
-[data-form-item]:has(input[type="checkbox"]:checked) > label::after { opacity : 1; }
+/* CHECKED ================================================================== */
+[data-form-item]:has(> [data-input-wrapper] > input[type="checkbox"]:checked) > [data-label-wrapper] > label::before { background : var(--checkbox-square-bg-checked); }
+[data-form-item]:has(> [data-input-wrapper] > input[type="checkbox"]:checked) > [data-label-wrapper] > label::after { opacity : 1; }

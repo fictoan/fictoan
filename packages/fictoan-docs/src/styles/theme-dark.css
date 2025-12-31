@@ -1,145 +1,143 @@
 .theme-dark {
     /* BADGE //////////////////////////////////////////////////////////////// */
-    --badge-border                            : var(--transparent);
+    --badge-border                       : var(--transparent);
 
     /* BODY ///////////////////////////////////////////////////////////////// */
-    --body-bg                                 : var(--black);
+    --body-bg                            : var(--black);
 
     /* BREADCRUMBS ////////////////////////////////////////////////////////// */
-    --breadcrumbs-wrapper-bg                  : var(--transparent);
+    --breadcrumbs-wrapper-bg             : var(--transparent);
 
-    --breadcrumb-item-text-colour             : var(--slate);
-    --breadcrumb-item-text-colour-active      : var(--paragraph-text-colour);
+    --breadcrumb-item-text-colour        : var(--slate);
+    --breadcrumb-item-text-colour-active : var(--paragraph-text-colour);
 
-    --breadcrumb-item-separator-colour        : var(--slate-light10);
+    --breadcrumb-item-separator-colour   : var(--slate-light10);
 
     /* BODY ///////////////////////////////////////////////////////////////// */
-    --callout-border-radius                   : var(--global-border-radius);
-    --callout-border-width                    : var(--nano);
+    --callout-border-radius              : var(--global-border-radius);
+    --callout-border-width               : var(--nano);
 
-    --callout-info-bg                         : var(--sky-light60);
-    --callout-info-border                     : var(--sky-dark30);
+    --callout-info-bg                    : var(--sky-light60);
+    --callout-info-border                : var(--sky-dark30);
 
-    --callout-success-bg                      : var(--green-light40);
-    --callout-success-border                  : var(--green-dark40);
+    --callout-success-bg                 : var(--green-light40);
+    --callout-success-border             : var(--green-dark40);
 
-    --callout-warning-bg                      : var(--amber-light40);
-    --callout-warning-border                  : var(--amber-dark40);
+    --callout-warning-bg                 : var(--amber-light40);
+    --callout-warning-border             : var(--amber-dark40);
 
-    --callout-error-bg                        : var(--red-light40);
-    --callout-error-border                    : var(--red-dark40);
+    --callout-error-bg                   : var(--red-light40);
+    --callout-error-border               : var(--red-dark40);
 
     /* CARD ///////////////////////////////////////////////////////////////// */
-    --card-bg                                 : var(--grey-dark90);
-    --card-border                             : var(--slate-dark60);
-    --card-border-width                       : var(--global-border-width);
-    --card-border-radius                      : var(--global-border-radius);
+    --card-bg                            : var(--grey-dark90);
+    --card-border                        : var(--slate-dark60);
+    --card-border-width                  : var(--global-border-width);
+    --card-border-radius                 : var(--global-border-radius);
 
     /* CODE ///////////////////////////////////////////////////////////////// */
-    --code-inline-bg                          : var(--slate-dark70);
-    --code-inline-text                        : var(--slate-light40);
+    --code-inline-bg                     : var(--slate-dark70);
+    --code-inline-text                   : var(--slate-light40);
 
-    --code-block-font-size                    : 0.98rem;
-    --code-block-bg                           : var(--slate-dark80);
+    --code-block-font-size               : 0.98rem;
+    --code-block-bg                      : var(--slate-dark80);
 
     /* DIVIDER ////////////////////////////////////////////////////////////// */
-    --divider-height                          : 1px;
+    --divider-height                     : 1px;
 
-    --divider-primary-height                  : 2px;
-    --divider-primary-bg                      : var(--slate-dark20);
+    --divider-primary-height             : 2px;
+    --divider-primary-bg                 : var(--slate-dark20);
 
-    --divider-secondary-height                : 2px;
-    --divider-secondary-bg                    : var(--slate-dark60);
+    --divider-secondary-height           : 2px;
+    --divider-secondary-bg               : var(--slate-dark60);
 
-    --divider-tertiary-height                 : 1px;
-    --divider-tertiary-bg                     : var(--slate-dark80);
-
-    /* INPUT FIELD ////////////////////////////////////////////////////////// */
-    --drawer-bg                               : var(--grey-dark70);
-    --drawer-border                           : var(--grey-dark40);
+    --divider-tertiary-height            : 1px;
+    --divider-tertiary-bg                : var(--grey-dark60);
 
     /* INPUT FIELD ////////////////////////////////////////////////////////// */
-    --input-bg-default                        : var(--grey-dark70);
-    --input-border-default                    : var(--grey-dark40);
-    --input-border-radius-default             : var(--global-border-radius);
-    --input-label-default                     : var(--paragraph-text-colour);
-    --input-placeholder-default               : var(--slate);
-    --input-text-default                      : var(--slate-light60);
+    --drawer-bg                          : var(--grey-dark70);
+    --drawer-border                      : var(--grey-dark40);
 
-    --input-bg-focus                          : var(--grey-dark50);
-    --input-border-focus                      : var(--grey-light20);
-    --input-text-focus                        : var(--grey-light80);
+    /* INPUT FIELD ////////////////////////////////////////////////////////// */
+    --input-bg-default                   : var(--grey-dark70);
+    --input-border-default               : var(--grey-dark40);
+    --input-border-radius-default        : var(--global-border-radius);
+    --input-label-default                : var(--paragraph-text-colour);
+    --input-placeholder-default          : var(--slate);
+    --input-text-default                 : var(--slate-light60);
 
-    --input-bg-valid                          : var(--white);
-    --input-border-valid                      : var(--green-dark30);
-    --input-label-valid                       : var(--shade);
+    --input-bg-focus                     : var(--grey-dark50);
+    --input-border-focus                 : var(--grey-light20);
+    --input-text-focus                   : var(--grey-light80);
 
-    --input-bg-invalid                        : var(--red-light60);
-    --input-border-invalid                    : var(--red-dark30);
-    --input-label-invalid                     : var(--red);
-    --input-text-invalid                      : var(--red);
-    --input-error-text-invalid                : var(--red);
+    --input-bg-valid                     : var(--white);
+    --input-border-valid                 : var(--green-dark30);
+    --input-label-valid                  : var(--shade);
 
-    --input-bg-disabled                       : var(--slate-dark70);
-    --input-border-disabled                   : var(--slate-dark70);
-    --input-label-disabled                    : var(--slate-dark40);
-    --input-text-disabled                     : var(--slate-dark40);
+    --input-bg-invalid                   : var(--red-light60);
+    --input-border-invalid               : var(--red-dark30);
+    --input-label-invalid                : var(--red);
+    --input-text-invalid                 : var(--red);
+    --input-error-text-invalid           : var(--red);
 
-    --input-bg-read-only                      : var(--slate-light40);
-    --input-border-read-only                  : var(--slate-light40);
-    --input-label-read-only                   : var(--slate-dark40);
-    --input-text-read-only                    : var(--slate-dark60);
+    --input-bg-disabled                  : var(--slate-dark70);
+    --input-border-disabled              : var(--slate-dark70);
+    --input-label-disabled               : var(--slate-dark40);
+    --input-text-disabled                : var(--slate-dark40);
 
-    --input-required-indicator                : var(--red);
+    --input-bg-read-only                 : var(--slate-light40);
+    --input-border-read-only             : var(--slate-light40);
+    --input-label-read-only              : var(--slate-dark40);
+    --input-text-read-only               : var(--slate-dark60);
 
-    --input-helptext                          : var(--slate-dark40);
-    --input-helptext-scale                    : 92%;
+    --input-required-indicator           : var(--red);
 
-    --input-icon-default                      : var(--slate-light40);
-    --input-icon-focus                        : var(--hue);
-    --input-icon-valid                        : var(--green-dark30);
+    --input-helptext                     : var(--slate-dark40);
+    --input-helptext-scale               : 92%;
+
+    --input-icon-default                 : var(--slate-light40);
+    --input-icon-focus                   : var(--hue);
+    --input-icon-valid                   : var(--green-dark30);
 
     /* KEYBOARD ///////////////////////////////////////////////////////////// */
-    --kbd-bg                                  : var(--black);
-    --kbd-text                                : var(--slate-light10);
-    --kbd-shadow                              : var(--transparent);
+    --kbd-bg                             : var(--black);
+    --kbd-text                           : var(--slate-light10);
+    --kbd-shadow                         : var(--transparent);
 
     /* LIST BOX ///////////////////////////////////////////////////////////// */
-    --list-box-badge-bg                       : var(--slate-dark40);
-    --list-box-badge-text                     : var(--slate-light70);
+    --list-box-badge-bg                  : var(--slate-dark40);
+    --list-box-badge-text                : var(--slate-light70);
 
     /* MODAL //////////////////////////////////////////////////////////////// */
-    --modal-backdrop-bg                       : var(--amber);
-    --modal-backdrop-opacity                  : 0.8;
-    --modal-backdrop-blur                     : 4px;
+    --modal-backdrop-bg                  : var(--amber);
+    --modal-backdrop-opacity             : 0.8;
+    --modal-backdrop-blur                : 4px;
 
     /* OPTION CARDS ///////////////////////////////////////////////////////// */
-    --option-card-border-width                : var(--global-border-width);
+    --option-card-border-width           : var(--global-border-width);
 
-    --option-card-focus                       : var(--global-focus-colour);
+    --option-card-focus                  : var(--global-focus-colour);
 
-    --option-card-bg-hover                    : var(--green-light70-opacity40);
-    --option-card-border-hover                : var(--green-light40);
-    --option-card-tick-bg-hover               : var(--green-light60-opacity30);
-    --option-card-tick-line-hover             : var(--green);
+    --option-card-bg-hover               : color-mix(in oklch, var(--green-light70) 40%, transparent);
+    --option-card-border-hover           : var(--green-light40);
+    --option-card-tick-bg-hover          : color-mix(in oklch, var(--green-light60) 30%, transparent);
+    --option-card-tick-line-hover        : var(--green);
 
-    --option-card-bg-selected                 : var(--green-light60);
-    --option-card-border-selected             : var(--green);
-    --option-card-tick-bg-selected            : var(--green-dark10);
-    --option-card-tick-line-selected          : var(--white);
+    --option-card-bg-selected            : var(--green-light60);
+    --option-card-border-selected        : var(--green);
+    --option-card-tick-bg-selected       : var(--green-dark10);
+    --option-card-tick-line-selected     : var(--white);
 
     /* RADIO BUTTON ///////////////////////////////////////////////////////// */
-    --radio-tabs-height                       : 32px;
+    --radio-tabs-height                  : 32px;
 
     /* SIDEBAR ////////////////////////////////////////////////////////////// */
-    --sidebar-bg                              : var(--grey-dark90);
-    --sidebar-header-bg                       : var(--grey-dark90);
-    --sidebar-header-border-bottom            : var(--grey-dark60);
+    --sidebar-bg                         : var(--grey-dark90);
+    --sidebar-header-bg                  : var(--grey-dark90);
+    --sidebar-header-border-bottom       : var(--grey-dark60);
 
-    --sidebar-item-icon-default-stroke-colour : var(--slate-dark40);
-
-    --sidebar-footer-bg                       : var(--grey-dark90);
-    --sidebar-footer-border-top               : var(--grey-dark60);
+    --sidebar-footer-bg                  : var(--grey-dark90);
+    --sidebar-footer-border-top          : var(--grey-dark60);
 
     /* SKELETON ///////////////////////////////////////////////////////////// */
     :root {
@@ -147,81 +145,78 @@
         --skeleton-highlight : var(--slate-light60);
     }
 
-
     /* SWITCH /////////////////////////////////////////////////////////////// */
-    --switch-bg-default                       : var(--slate-dark40);
-    --switch-bg-hover                         : var(--slate-dark20);
-    --switch-bg-checked                       : var(--hue);
-    --switch-bg-disabled                      : var(--slate-light90);
+    --switch-bg-default                  : var(--slate-dark40);
+    --switch-bg-hover                    : var(--slate-dark20);
+    --switch-bg-checked                  : var(--hue);
+    --switch-bg-disabled                 : var(--slate-light90);
 
-    --switch-slider-bg-default                : var(--white);
-    --switch-slider-bg-hover                  : var(--white);
-    --switch-slider-bg-checked                : var(--white);
-    --switch-slider-bg-disabled               : var(--slate-light40);
+    --switch-slider-bg-default           : var(--white);
+    --switch-slider-bg-hover             : var(--white);
+    --switch-slider-bg-checked           : var(--white);
+    --switch-slider-bg-disabled          : var(--slate-light40);
 
     /* TABLE //////////////////////////////////////////////////////////////// */
-    --table-bg                                : var(--slate-dark80);
-    --table-border                            : var(--slate-dark60);
-    --table-font-family                       : var(--paragraph-font);
-    --table-text                              : var(--paragraph-text-colour);
+    --table-bg                           : var(--slate-dark80);
+    --table-border                       : var(--slate-dark60);
+    --table-font-family                  : var(--paragraph-font);
+    --table-text                         : var(--paragraph-text-colour);
 
-    --table-striped-header-bg                 : var(--slate-dark70);
-    --table-striped-cell-bg                   : var(--slate-dark50);
+    --table-striped-header-bg            : var(--slate-dark70);
+    --table-striped-cell-bg              : var(--slate-dark50);
 
-    --table-bg-hover                          : var(--amber-light20);
-    --table-text-hover                        : var(--paragraph-text-colour);
+    --table-bg-hover                     : var(--amber-light20);
+    --table-text-hover                   : var(--paragraph-text-colour);
 
-    --table-pagination-bg                     : var(--white);
-    --table-pagination-border-radius          : var(--global-border-radius);
-    --table-pagination-text                   : var(--paragraph-text-colour);
-    --table-pagination-nav-icon-bg-hover      : var(--slate-dark60);
+    --table-pagination-bg                : var(--white);
+    --table-pagination-border-radius     : var(--global-border-radius);
+    --table-pagination-text              : var(--paragraph-text-colour);
+    --table-pagination-nav-icon-bg-hover : var(--slate-dark60);
 
     /* TEXT ///////////////////////////////////////////////////////////////// */
-    --font-sans-serif                         : "Inter", sans-serif;
-    --font-mono                               : "Geist Mono", monospace;
+    --font-sans-serif                    : "Inter", sans-serif;
+    --font-serif                         : "Mondwest", serif;
+    --font-monospace                     : "Geist Mono", monospace;
 
-    --paragraph-font-size                     : 1rem;
-    --paragraph-line-height                   : 1.6;
-    --paragraph-text-colour                   : var(--slate);
+    --paragraph-font-size                : 1rem;
+    --paragraph-line-height              : 1.6;
+    --paragraph-text-colour              : var(--slate);
 
-    --heading-text-colour                     : var(--white);
-    --heading-size-multiplier                 : 1.2;
-    --heading-line-height                     : 1.2;
+    --heading-text-colour                : var(--white);
+    --heading-size-multiplier            : 1.2;
+    --heading-line-height                : 1.2;
+
+    --code-font                          : var(--font-monospace);
 
     /* ////////////////////////////////////////////////////////////////////// */
     /* CUSTOM COMPONENTS */
     /* ////////////////////////////////////////////////////////////////////// */
     /* COMPONENT GRID /////////////////////////////////////////////////////// */
-    --component-card-bg                       : var(--slate-dark90);
-    --component-card-footer-border            : var(--slate-dark60);
+
+    --component-card-bg                  : color-mix(in oklch, var(--slate-dark80) 40%, transparent);
+    --component-card-border              : var(--slate-dark60);
+    --component-card-footer-border       : var(--slate-dark60);
 
     /* SITE HEADER ////////////////////////////////////////////////////////// */
-    --site-header-bg                          : var(--black-opacity20);
-    --site-header-border                      : var(--grey-dark60);
+    --site-header-bg                     : color-mix(in oklch, var(--black) 20%, transparent);
+    --site-header-border                 : var(--grey-dark60);
+
+    /* SITE FOOTER ////////////////////////////////////////////////////////// */
+    --footer-border                      : var(--grey-dark60);
+    --footer-pattern-color               : var(--slate-light40);
 
     /* USP CARDS //////////////////////////////////////////////////////////// */
     /*--usp-section-bg                          : var(--grey-dark90);*/
 
-    --usp-card-gradient-top                   : var(--grey-dark80-opacity40);
-    --usp-card-gradient-bottom                : var(--grey-dark80-opacity40);
-
-    --usp-card-1-bg                           : var(--blue-dark70);
-    --usp-card-1-border                       : var(--blue-dark30);
-    --usp-card-2-bg                           : var(--green-dark70);
-    --usp-card-2-border                       : var(--green-dark50);
-    --usp-card-3-bg                           : var(--salmon-dark70);
-    --usp-card-3-border                       : var(--salmon-dark50);
-    --usp-card-4-bg                           : var(--violet-dark70);
-    --usp-card-4-border                       : var(--violet-dark50);
-    --usp-card-5-bg                           : var(--teal-dark70);
-    --usp-card-5-border                       : var(--teal-dark50);
+    --usp-card-gradient-top              : color-mix(in oklch, var(--green-dark80) 40%, transparent);
+    --usp-card-gradient-bottom           : color-mix(in oklch, var(--grey-dark80) 40%, transparent);
 
     /* SEARCH /////////////////////////////////////////////////////////////// */
-    --search-input-bg                         : var(--slate-dark80);
-    --search-input-border                     : var(--slate-dark70);
-    --search-input-text                       : var(--slate);
+    --search-input-bg                    : var(--slate-dark80);
+    --search-input-border                : var(--slate-dark70);
+    --search-input-text                  : var(--slate);
 
-    --search-result-item-bg-default           : var(--slate-dark80);
-    --search-result-item-bg-hover             : var(--blue-dark80);
-    --search-result-item-border-hover         : var(--blue-dark20);
+    --search-result-item-bg-default      : var(--slate-dark80);
+    --search-result-item-bg-hover        : var(--blue-dark80);
+    --search-result-item-border-hover    : var(--blue-dark20);
 }

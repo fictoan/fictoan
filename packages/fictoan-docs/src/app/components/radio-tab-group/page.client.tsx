@@ -1,9 +1,9 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useEffect, useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
+// UI ==================================================================================================================
 import {
     Heading1,
     Heading4,
@@ -18,23 +18,21 @@ import {
     Header,
     RadioTabGroup,
     Select,
-    Range, InputField, Button,
-CodeBlock
+    Range,
+    InputField,
+    Button,
+    CodeBlock,
 } from "fictoan-react";
 
-// COMPONENTS ==========================================================================================================
+// UTILS ===============================================================================================================
+import { toKebabCase } from "$utils/toKebabCase";
+import { useThemeVariables } from "$utils/useThemeVariables";
 
 // STYLES ==============================================================================================================
 import "./page-radio-tab-group.css";
 
-// HOOKS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-
-// UTILS ===============================================================================================================
+// OTHER ===============================================================================================================
 import { colourOptions } from "../../colour/colours";
-import { toKebabCase } from "../../../utils/toKebabCase";
-
-// DATA ================================================================================================================
 import { radioTabGroupProps } from "./config";
 
 // Helper functions for localStorage
@@ -165,7 +163,7 @@ const RadioTabGroupDocs = () => {
                 </Portion>
 
                 <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
+                    
                     <ul>
                         <li>Each option takes the width of the longest option</li>
                     </ul>

@@ -4,7 +4,21 @@
 import React, { useState } from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading1, Divider, Portion, Row, Text, Article, Card, Form, Header, RadioTabGroup, Checkbox, CodeBlock } from "fictoan-react";
+import {
+    Div,
+    Heading1,
+    Divider,
+    Portion,
+    Row,
+    Text,
+    Article,
+    Card,
+    Form,
+    Header,
+    RadioTabGroup,
+    Checkbox,
+    CodeBlock,
+} from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./page-form.css";
@@ -56,8 +70,10 @@ const FormDocs = () => {
 
                             <Row marginBottom="none">
                                 <Portion>
-                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton
-                                               marginBottom="micro">
+                                    <CodeBlock
+                                        withSyntaxHighlighting language="jsx" showCopyButton
+                                        marginBottom="micro"
+                                    >
                                         {[
                                             `// Paste this in your content file`,
                                             `<Form${selectedSpacing && ` spacing="${selectedSpacing}"`}>`,
@@ -109,7 +125,6 @@ const FormDocs = () => {
                                 <Portion>
                                     <Checkbox
                                         id="checkbox-button-full-width"
-                                        value="checkbox-button-full-width"
                                         name="checkbox-button-full-width"
                                         label="Make button full width"
                                         checked={isButtonFullWidth}

@@ -44,13 +44,13 @@ export const PropsList = ({ propData }) => {
                     >
                         <Portion desktopSpan="5">
                             <Text>
-                                {<span dangerouslySetInnerHTML={{ __html: props.name }} />}
+                                {props.name}
                             </Text>
                         </Portion>
 
                         <Portion desktopSpan="9">
                             <Text>
-                                {<span dangerouslySetInnerHTML={{ __html: props.description }} />}
+                                {props.description}
                             </Text>
                         </Portion>
 

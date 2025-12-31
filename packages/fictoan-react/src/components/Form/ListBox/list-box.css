@@ -82,12 +82,18 @@
 
 [data-list-box] .options-wrapper {
     display         : flex;
-    flex-direction  : column;
-    gap             : 8px;
     justify-content : space-between;
     margin-right    : 8px;
 
-    .options-limit-warning { margin-bottom : -6px; }
+    &:has(.options-limit-warning) {
+        flex-direction : column;
+    }
+
+    .options-limit-warning {
+        margin-top    : 4px;
+        margin-bottom : -6px;
+        color         : var(--red-dark20) !important;
+    }
 }
 
 [data-list-box] .options-list {
@@ -189,4 +195,40 @@
 
 .list-box-wrapper.disabled .icon-wrapper svg {
     opacity : 0.6;
+}
+
+[data-form-item].size-tiny {
+    .list-box-input-wrapper {
+        padding : calc(var(--input-padding) * 0.4) 8px;
+    }
+
+    .list-box-option,
+    .selected-option,
+    .placeholder,
+    .options-limit-warning {
+        font-size   : calc(var(--paragraph-font-size) * 0.72);
+        line-height : unset;
+    }
+
+    [data-badge] {
+        padding : 1px 8px;
+    }
+}
+
+[data-form-item].size-small {
+    .list-box-input-wrapper {
+        padding : calc(var(--input-padding) * 0.6) 8px;
+    }
+
+    .list-box-option,
+    .selected-option,
+    .placeholder,
+    .options-limit-warning {
+        font-size   : calc(var(--paragraph-font-size) * 0.88);
+        line-height : unset;
+    }
+
+    [data-badge] {
+        padding : 2px 8px;
+    }
 }

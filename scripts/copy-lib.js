@@ -94,12 +94,12 @@ function copyPackageFiles() {
 // Build and copy function
 function buildAndCopy() {
     console.log("Building fictoan-react...");
-    
+
     // Build the library
     try {
-        execSync("npm run build", { 
-            cwd: fictoanReactDir, 
-            stdio: "inherit" 
+        execSync("pnpm build", {
+            cwd: fictoanReactDir,
+            stdio: "inherit"
         });
         console.log("✓ Build completed successfully");
     } catch (err) {
@@ -107,6 +107,25 @@ function buildAndCopy() {
         process.exit(1);
     }
 
+    // Generate props metadata
+    try {
+        execSync("pnpm build:props-metadata", {
+            cwd: fictoanReactDir,
+            stdio: "inherit"
+        });
+        console.log("✓ Props metadata generated successfully");
+    } catch (err) {
+        console.error("✗ Props metadata generation failed:", err.message);
+        process.exit(1);
+    }
+
+    copyOnly();
+}
+
+// Copy-only function (for when build is already done)
+function copyOnly() {
+    console.log("Copying library to documentation...");
+    
     // Copy all required package files
     try {
         copyPackageFiles();
@@ -117,5 +136,11 @@ function buildAndCopy() {
     }
 }
 
-// Execute the build and copy
-buildAndCopy();
+// Check if we should only copy (when called from rebuild script)
+const copyOnlyMode = process.argv.includes('--copy-only');
+
+if (copyOnlyMode) {
+    copyOnly();
+} else {
+    buildAndCopy();
+}

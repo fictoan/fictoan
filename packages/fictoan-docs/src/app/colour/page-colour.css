@@ -4,29 +4,62 @@
         height : 24px;
     }
 
+    /* COLOUR SWATCHES ===================================== */
+    .colour-swatches-grid {
+        display               : grid;
+        grid-template-columns : repeat(auto-fill, minmax(100px, 1fr));
+        gap                   : 8px;
+    }
+
+    .colour-swatch-item {
+        border-radius : 8px;
+    }
+
+    .colour-swatch-preview {
+        height        : 64px;
+        border-radius : 4px;
+        margin-bottom : 4px;
+    }
+
+    .colour-swatch-name {
+        font-size   : 12px;
+        font-weight : 500;
+    }
+
+    .colour-swatch-meta {
+        font-size : 10px;
+        opacity   : 0.5;
+    }
+
+    .neutrals-grid {
+        display : flex;
+        gap     : 8px;
+    }
+
+    .neutral-swatch-item {
+        border-radius : 8px;
+        padding       : 8px;
+        width         : 100px;
+    }
+
+    /* COLOUR LIST ========================================= */
     .colour-name {
         opacity     : 0;
         font-weight : 400;
         line-height : 1;
         width       : fit-content;
         text-shadow : 0 1px 2px rgba(0, 0, 0, 0.2);
+        font-size   : 12px;
     }
 
     .colour-card {
         cursor : pointer;
 
-
         &:hover {
             .colour-name {
-                opacity     : 1;
-                font-weight : 700;
+                opacity : 1;
             }
         }
-    }
-
-    .colour-indicator {
-        width  : 64px;
-        height : 32px;
     }
 
     .colour-card[class*="dark"] {
@@ -48,24 +81,5 @@
         linear-gradient(45deg, transparent 75%, #c8c8c8 75%),
         linear-gradient(45deg, transparent 75%, #c8c8c8 75%),
         linear-gradient(45deg, #c8c8c8 25%, transparent 25%);
-    }
-
-    #configurator {
-        position : relative;
-    }
-
-    .gradient-bg {
-        z-index         : -1;
-        background      : linear-gradient(
-                135deg, var(--amber), var(--green), var(--white), var(--purple), var(--red), var(--black)
-        );
-        background-size : 400% 400%;
-        animation       : gradient 15s ease infinite;
-        height          : 100%;
-        display         : block;
-        position        : absolute;
-        top             : 0;
-        left            : 0;
-        width           : 100%;
     }
 }

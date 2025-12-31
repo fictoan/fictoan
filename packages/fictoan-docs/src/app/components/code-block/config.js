@@ -3,7 +3,7 @@ export const toastProps = {
     variables : {
         "code-font"                      : {
             type         : "reference",
-            defaultValue : "font-mono",
+            defaultValue : "font-monospace",
         },
         "code-inline-font-size"          : {
             type         : "value-unit",

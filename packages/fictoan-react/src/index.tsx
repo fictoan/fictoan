@@ -9,6 +9,7 @@ import "./styles/animations.css";
 import "./styles/colours.css";
 import "./styles/custom-colours.css";
 import "./styles/globals.css";
+import "./styles/layout.css";
 import "./styles/reset.css";
 import "./styles/theme.css";
 import "./styles/utilities.css";
@@ -22,6 +23,8 @@ export { Breadcrumbs, type BreadcrumbsProps } from "./components/Breadcrumbs";
 
 export { Button, type ButtonProps } from "./components/Button";
 
+export { ButtonGroup, type ButtonGroupProps } from "./components/ButtonGroup";
+
 export { Callout, type CalloutProps } from "./components/Callout";
 
 export { Card, type CardProps } from "./components/Card";
@@ -30,7 +33,7 @@ export { CodeBlock, type CodeBlockProps } from "./components/CodeBlock";
 
 export { Divider, type DividerProps } from "./components/Divider";
 
-export { Drawer, type DrawerProps, showDrawer, hideDrawer, toggleDrawer, isDrawerOpen } from "./components/Drawer";
+export { Drawer, type DrawerProps } from "./components/Drawer";
 
 export {
     Element,
@@ -88,7 +91,7 @@ export {
 
 export { Meter, type MeterProps, type MeterMetaProps } from "./components/Meter";
 
-export { Modal, type ModalProps, showModal, hideModal, toggleModal } from "./components/Modal";
+export { Modal, type ModalProps } from "./components/Modal";
 
 export {
     NotificationsWrapper,
@@ -102,7 +105,7 @@ export { useOptionCard, useOptionCardsGroup } from "./components/OptionCard";
 
 export { Pagination, type PaginationProps } from "./components/Pagination";
 
-export { Portion, type PortionProps } from "./components/Portion";
+export { Portion, type PortionProps, type SpanTypes } from "./components/Portion";
 
 export { ProgressBar, type ProgressBarProps, type ProgressBarMetaProps } from "./components/ProgressBar";
 
@@ -154,7 +157,6 @@ export {
 
 // CONSTANTS AND TYPES /////////////////////////////////////////////////////////////////////////////////////////////////
 export {
-    DefaultColours,
     BasicColours,
     FictoanColours,
     type ColourPropTypes,
@@ -165,3 +167,9 @@ export {
     type OpacityTypes,
     type WeightTypes,
 } from "./components/Element/constants";
+
+export {
+    oklchColourDefinitions,
+    type ColourDefinition,
+    type OklchColourName,
+} from "./styles/colours";

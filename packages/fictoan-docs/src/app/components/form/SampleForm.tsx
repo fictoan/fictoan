@@ -6,7 +6,7 @@ import React, { FormEvent, useState } from "react";
 // UI ==================================================================================================================
 import { Button, Card, Checkbox, CheckboxGroup, CodeBlock, Divider, FileUpload, Footer, Form, FormItemGroup, InputField, ListBox, Portion, RadioGroup, RadioTabGroup, Range, Row, Select, Switch, SwitchGroup, Text, TextArea } from "fictoan-react";
 
-// OTHER ===============================================================================================================
+// ASSETS ==============================================================================================================
 import EyeClosedIcon from "../../../assets/icons/eye-closed.svg";
 import EyeOpenIcon from "../../../assets/icons/eye-open.svg";
 
@@ -37,9 +37,10 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
         contactPreference : "sms",
 
         // Checkboxes and Switches
-        interests     : [] as string[],
-        food          : [] as string[],
-        hobbies       : [] as string[],
+        interests          : [] as string[],
+        food               : [] as string[],
+        preferredCountries : [] as string[],
+        hobbies            : [] as string[],
         notifications : false,
         newsletter    : false,
 
@@ -120,10 +121,14 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
     };
 
     const handleRangeChange = (name: string) => (value: number) => {
-        setFormData(prev => ({
-            ...prev,
-            [name] : value.toString(),
-        }));
+        setFormData(prev => {
+            const updates: Record<string, string> = { [name]: value.toString() };
+            // If experience drops below manager experience, clamp it
+            if (name === "experienceLevel" && value < Number(prev.experienceAsManager)) {
+                updates.experienceAsManager = value.toString();
+            }
+            return { ...prev, ...updates };
+        });
     };
 
     const handleFileChange = (name: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -168,6 +173,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 value={formData.firstName}
                                 onChange={handleInputChange("firstName")}
                                 placeholder="John"
+                                size="small"
                                 required
                             />
 
@@ -210,6 +216,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             value={formData.password}
                             onChange={handleInputChange("password")}
                             helpText="At least 8 characters"
+                            size="small"
                             innerIconRight={
                                 <div
                                     onClick={(e) => {
@@ -225,7 +232,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                         {/* PHONE NUMBER AND WEBSITE =============================================================== */}
                         <FormItemGroup isJoint={isJoint}>
                             <InputField
-                                label="Phone Number"
+                                label="Phone number"
                                 type="tel"
                                 name="phoneNumber"
                                 value={formData.phoneNumber}
@@ -266,6 +273,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                     { label : "Canada", value : "ca" },
                                 ]}
                                 isFullWidth
+                                size="small"
                             />
 
                             <Select
@@ -297,7 +305,9 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             ]}
                             allowMultiSelect
                             allowCustomEntries
+                            selectionLimit={2}
                             helpText="Select from the list, or add your own"
+                            size="tiny"
                         />
 
                         {/* FILE UPLOAD ============================================================================ */}
@@ -323,7 +333,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 name="experienceLevel"
                                 min={1} max={20}
                                 suffix=" years"
-                                value={formData.experienceLevel}
+                                value={Number(formData.experienceLevel)}
                                 onChange={handleRangeChange("experienceLevel")}
                             />
 
@@ -332,10 +342,9 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 label="Exp as manager"
                                 name="experienceAsManager"
                                 min={1}
-                                // @ts-expect-error
-                                max={formData.experienceLevel}
+                                max={Number(formData.experienceLevel)}
                                 suffix={` years`}
-                                value={formData.experienceAsManager}
+                                value={Number(formData.experienceAsManager)}
                                 onChange={handleRangeChange("experienceAsManager")}
                             />
                         </FormItemGroup>
@@ -351,9 +360,10 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 { id : "phone-contact", label : "Phone", value : "phone" },
                                 { id : "sms-contact", label : "SMS", value : "sms" },
                                 { id : "letters-contact", label : "Letters", value : "letters" },
-                                { id : "pigeon", label : "Pigeon", value : "pigeon" },
+                                { id : "pigeon", label : "Pigeon", value : "pigeon", disabled : true },
                             ]}
                             onChange={handleRadioChange("contactPreference")}
+                            size="small"
                         />
 
                         {/* GENDER ================================================================================ */}
@@ -375,7 +385,6 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             <Checkbox
                                 id="interest-tech"
                                 name="interests"
-                                value="tech"
                                 label="Technology"
                                 checked={formData.interests.includes("tech")}
                                 onChange={handleCheckboxChange("interests", "tech")}
@@ -384,7 +393,6 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             <Checkbox
                                 id="interest-books"
                                 name="interests"
-                                value="books"
                                 label="Books"
                                 checked={formData.interests.includes("books")}
                                 onChange={handleCheckboxChange("interests", "books")}
@@ -393,7 +401,6 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             <Checkbox
                                 id="interest-movies"
                                 name="interests"
-                                value="movies"
                                 label="Movies"
                                 checked={formData.interests.includes("movies")}
                                 onChange={handleCheckboxChange("interests", "movies")}
@@ -402,19 +409,17 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             <Checkbox
                                 id="interest-business"
                                 name="interests"
-                                value="business"
                                 label="Business"
                                 checked={formData.interests.includes("business")}
                                 onChange={handleCheckboxChange("interests", "business")}
                             />
 
                             <Checkbox
-                                id="interest-Travel"
+                                id="interest-travel"
                                 name="interests"
-                                value="Travel"
                                 label="Travel"
-                                checked={formData.interests.includes("Travel")}
-                                onChange={handleCheckboxChange("interests", "Travel")}
+                                checked={formData.interests.includes("travel")}
+                                onChange={handleCheckboxChange("interests", "travel")}
                             />
                         </FormItemGroup>
 
@@ -423,18 +428,32 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             label="Preferred cuisine"
                             name="food"
                             options={[
-                                { id : "indian", value : "Indian", label : "Indian" },
-                                { id : "italian", value : "Italian", label : "Italian" },
-                                { id : "French", value : "French", label : "French" },
-                                { id : "greek", value : "Greek", label : "Greek" },
-                                { id : "thai", value : "Thai", label : "Thai" },
+                                { id : "food-indian", value : "Indian", label : "Indian" },
+                                { id : "food-italian", value : "Italian", label : "Italian" },
+                                { id : "food-french", value : "French", label : "French" },
+                                { id : "food-greek", value : "Greek", label : "Greek" },
+                                { id : "food-thai", value : "Thai", label : "Thai" },
                             ]}
                             value={formData.food}
                             onChange={(values: any) => setFormData({ ...formData, food : values })}
                         />
 
+                        <SwitchGroup
+                            label="Preferred country"
+                            name="preferredCountries"
+                            options={[
+                                { id : "country-indian", value : "Indian", label : "Indian" },
+                                { id : "country-italian", value : "Italian", label : "Italian" },
+                                { id : "country-French", value : "French", label : "French" },
+                                { id : "country-greek", value : "Greek", label : "Greek" },
+                                { id : "country-thai", value : "Thai", label : "Thai" },
+                            ]}
+                            value={formData.preferredCountries}
+                            onChange={(values: any) => setFormData({ ...formData, preferredCountries : values })}
+                        />
+
                         <FormItemGroup equalWidthForChildren>
-                            {/* NOTIFICATIONS ========================================================================== */}
+                            {/* NOTIFICATIONS ====================================================================== */}
                             <Switch
                                 id="notifications"
                                 name="notifications"
@@ -443,13 +462,14 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 onChange={handleCheckboxChange("notifications")}
                             />
 
-                            {/* NEWSLETTER ============================================================================= */}
+                            {/* NEWSLETTER ========================================================================= */}
                             <Switch
                                 id="newsletter"
                                 name="newsletter"
                                 label="Subscribe to newsletter"
                                 checked={formData.newsletter}
                                 onChange={handleCheckboxChange("newsletter")}
+                                size="tiny"
                             />
                         </FormItemGroup>
 
@@ -469,6 +489,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             <Button
                                 kind="primary"
                                 type="submit"
+                                size="large"
                                 isFullWidth={isButtonFullWidth}
                             >
                                 Submit
