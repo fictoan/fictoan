@@ -99,7 +99,12 @@ export default defineConfig({
                     banner         : `"use client;"`,
                 },
             ],
-            external : [...Object.keys(pkg.peerDependencies)],
+            external : [
+                ...Object.keys(pkg.peerDependencies),
+                "react/jsx-runtime",
+                "react/jsx-dev-runtime",
+                "react-dom/client",
+            ],
         },
     },
     plugins : [
