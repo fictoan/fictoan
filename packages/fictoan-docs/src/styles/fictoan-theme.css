@@ -584,7 +584,7 @@
 
     /* PARAGRAPHS =========================================================== */
     --paragraph-font                 : var(--font-sans-serif);
-    --paragraph-font-size            : 1rem;
+    --paragraph-font-size            : var(--text-medium);
     --paragraph-line-height          : 1.2;
     --paragraph-font-weight          : 400;
     --paragraph-text-colour          : var(--grey);

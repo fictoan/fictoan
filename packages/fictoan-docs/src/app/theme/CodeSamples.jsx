@@ -711,14 +711,10 @@ export const sampleFictoanTheme = `/* ACCORDION ////////////////////////////////
 }
 
 /* TEXT ///////////////////////////////////////////////////////////////////// */
-/* To compute fluid font sizes based on screen size */
+/* Typography scale configuration */
 :root {
-    --screen-width-min : 320;
-    --screen-width-max : 1600;
-    --font-size-min    : 16;
-    --font-size-max    : 20;
-    --scale-ratio-min  : 1.08;
-    --scale-ratio-max  : 1.12;
+    --base-font-size : 1rem;   /* Body text size - browser default is 16px */
+    --type-scale     : 1.125;  /* Ratio between steps (1.067, 1.125, 1.200, 1.250, 1.333) */
 }
 
 :root {

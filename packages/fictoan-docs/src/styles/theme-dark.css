@@ -178,7 +178,7 @@
     --font-serif                         : "Mondwest", serif;
     --font-monospace                     : "Geist Mono", monospace;
 
-    --paragraph-font-size                : 1rem;
+    --paragraph-font-size                : var(--text-medium);
     --paragraph-line-height              : 1.6;
     --paragraph-text-colour              : var(--slate);
 
