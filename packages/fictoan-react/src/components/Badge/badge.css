@@ -17,7 +17,7 @@
     border-style          : solid;
     border-width          : var(--badge-border-width);
     padding-block         : 0.16em;
-    padding-inline        : 1.2em;
+    padding-inline        : 0.8em;
 
     &.shape-rounded { border-radius : var(--badge-border-radius); }
     &.shape-curved { border-radius : 5000px; }
@@ -25,13 +25,13 @@
     &.border-none { border-width : 0 !important; }
 
     /* DIFFERENT SIZES ////////////////////////////////////////////////////// */
-    &.size-nano { font-size : 0.4rem; }
-    &.size-micro { font-size : 0.48rem; }
-    &.size-tiny { font-size : 0.56rem; }
-    &.size-small { font-size : 0.64rem; }
-    &.size-medium { font-size : 0.8rem; }
-    &.size-large { font-size : 0.96rem; }
-    &.size-huge { font-size : 1.12rem; }
+    &.size-nano p { font-size : 0.4rem; }
+    &.size-micro p { font-size : 0.48rem; }
+    &.size-tiny p { font-size : 0.56rem; }
+    &.size-small p { font-size : 0.64rem; }
+    &.size-medium p { font-size : 0.8rem; }
+    &.size-large p { font-size : 0.96rem; }
+    &.size-huge p { font-size : 1.12rem; }
 }
 
 /* WITH ACTION BUTTON /////////////////////////////////////////////////////// */

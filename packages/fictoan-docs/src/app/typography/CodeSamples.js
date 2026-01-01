@@ -8,14 +8,10 @@ export const sampleHeadings = `<Heading1>Heading 1</Heading1>
 
 
 // Code sample 02 //////////////////////////////////////////////////////////////////////////////////////////////////////
-export const sampleTextTheme = `/* FLUID TYPE =================================================== */
+export const sampleTextTheme = `/* TYPOGRAPHY ================================================== */
 :root {
-    --screen-width-min : 320;
-    --screen-width-max : 1600;
-    --font-size-min    : 16;
-    --font-size-max    : 20;
-    --scale-ratio-min  : 1.08;
-    --scale-ratio-max  : 1.12;
+    --base-font-size : 1rem;   /* Body text size */
+    --type-scale     : 1.125;  /* Ratio between steps */
 }
 
 :root {

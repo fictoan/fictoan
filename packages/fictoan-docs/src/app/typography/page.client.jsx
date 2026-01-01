@@ -1,9 +1,9 @@
 "use client";
 
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useEffect, useRef, useState } from "react";
 
-// INTERNAL DEPS =======================================================================================================
+// UI ==================================================================================================================
 import {
     Element,
     Heading1,
@@ -15,32 +15,30 @@ import {
     Divider,
     Portion,
     Row,
-    Table,
     Text,
     Article,
-    CodeBlock, Hyperlink, Section,
-} from "fictoan-react";
+    CodeBlock,
+    Hyperlink,
+    Section,
+    Card,
+    Range,
+}from "fictoan-react";
 
-// COMPONENTS ==========================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { PropsList } from "../../components/PropsList/PropsList";
 
 // STYLES ==============================================================================================================
 import "./page-typography.css";
 
-// CODE SNIPPETS =======================================================================================================
-import {
-    sampleFontImport,
-    sampleHeadings,
-    sampleTextSizing,
-    sampleTextTheme,
-} from "./CodeSamples";
-
-// DATA ================================================================================================================
+// OTHER ===============================================================================================================
 import { listOfHeadingProps, listOfTextProps } from "./propsList";
-
+import { sampleFontImport, sampleHeadings, sampleTextSizing, sampleTextTheme, } from "./CodeSamples";
 
 const TypographyDocs = () => {
     const [fontSizes, setFontSizes] = useState({});
+    const [baseFontSize, setBaseFontSize] = useState(1);
+    const [typeScale, setTypeScale] = useState(1.125);
+
     const h1Ref = useRef(null);
     const h2Ref = useRef(null);
     const h3Ref = useRef(null);
@@ -48,24 +46,60 @@ const TypographyDocs = () => {
     const h5Ref = useRef(null);
     const h6Ref = useRef(null);
     const pRef = useRef(null);
+    const demoRef = useRef(null);
 
-    const updateSizes = () => {
-        setFontSizes({
-            size1 : h1Ref.current ? getComputedStyle(h1Ref.current).fontSize : "",
-            size2 : h2Ref.current ? getComputedStyle(h2Ref.current).fontSize : "",
-            size3 : h3Ref.current ? getComputedStyle(h3Ref.current).fontSize : "",
-            size4 : h4Ref.current ? getComputedStyle(h4Ref.current).fontSize : "",
-            size5 : h5Ref.current ? getComputedStyle(h5Ref.current).fontSize : "",
-            size6 : h6Ref.current ? getComputedStyle(h6Ref.current).fontSize : "",
-            size7 : pRef.current ? getComputedStyle(pRef.current).fontSize : "",
-        });
+    // Calculate sizes directly from state values (more reliable than getComputedStyle)
+    const calculateSizes = () => {
+        // Get viewport width in pixels
+        const viewportWidth = window.innerWidth;
+        const remSize = 16; // browser default
+
+        // Calculate fluid factor: 0 at 320px, 1 at 1600px
+        const minWidth = 320;
+        const maxWidth = 1600;
+        const fluid = Math.max(0, Math.min(1, (viewportWidth - minWidth) / (maxWidth - minWidth)));
+
+        // Base size is fixed (what user sets)
+        const base = baseFontSize * remSize;
+
+        // Scale varies with viewport (±0.04 from the set value)
+        const scale = typeScale - 0.04 + 0.08 * fluid;
+
+        // Calculate each size level
+        const medium = base;
+        const large = medium * scale;
+        const huge = large * scale;
+        const mega = huge * scale;
+        const giga = mega * scale;
+        const tera = giga * scale;
+        const peta = tera * scale;
+
+        return {
+            size1: `${Math.round(peta)}px`,   // H1
+            size2: `${Math.round(tera)}px`,   // H2
+            size3: `${Math.round(giga)}px`,   // H3
+            size4: `${Math.round(mega)}px`,   // H4
+            size5: `${Math.round(huge)}px`,   // H5
+            size6: `${Math.round(large)}px`,  // H6
+            size7: `${Math.round(medium)}px`, // Body
+        };
     };
 
+    // Update CSS variables and recalculate sizes
     useEffect(() => {
-        updateSizes();
-        window.addEventListener("resize", updateSizes);
-        return () => window.removeEventListener("resize", updateSizes);
-    }, []);
+        document.documentElement.style.setProperty("--base-font-size", `${baseFontSize}rem`);
+        document.documentElement.style.setProperty("--type-scale", typeScale);
+        setFontSizes(calculateSizes());
+    }, [baseFontSize, typeScale]);
+
+    // Recalculate on viewport resize
+    useEffect(() => {
+        setFontSizes(calculateSizes());
+
+        const handleResize = () => setFontSizes(calculateSizes());
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [baseFontSize, typeScale]);
 
     return (
         <Article id="page-typography">
@@ -94,19 +128,46 @@ const TypographyDocs = () => {
                     </Portion>
                 </Row>
 
+                <Row horizontalPadding="huge" marginBottom="micro">
+                    <Portion desktopSpan="half">
+                        <Range
+                            label={`Base font size: ${baseFontSize.toFixed(4)} rem`}
+                            min={0.75}
+                            max={1.5}
+                            step={0.0625}
+                            value={baseFontSize}
+                            suffix=" rem"
+                            onChange={(value) => setBaseFontSize(value)}
+                        />
+                    </Portion>
+
+                    <Portion desktopSpan="half">
+                        <Range
+                            label={`Type scale: ${typeScale.toFixed(4)}`}
+                            min={1.0}
+                            max={1.5}
+                            step={0.01}
+                            value={typeScale}
+                            onChange={(value) => setTypeScale(value)}
+                        />
+                    </Portion>
+                </Row>
+
                 <Row horizontalPadding="small">
                     <Portion>
-                        <Heading1 ref={h1Ref} align="centre" marginBottom="nano">H1 — {fontSizes.size1}</Heading1>
-                        <Heading2 ref={h2Ref} align="centre" marginBottom="nano">H2 — {fontSizes.size2}</Heading2>
-                        <Heading3 ref={h3Ref} align="centre" marginBottom="nano">H3 — {fontSizes.size3}</Heading3>
-                        <Heading4 ref={h4Ref} align="centre" marginBottom="nano">H4 — {fontSizes.size4}</Heading4>
-                        <Heading5 ref={h5Ref} align="centre" marginBottom="nano">H5 — {fontSizes.size5}</Heading5>
-                        <Heading6 ref={h6Ref} align="centre" marginBottom="nano">H6 — {fontSizes.size6}</Heading6>
-                        <Text ref={pRef} align="centre" marginBottom="nano">Body text — {fontSizes.size7}</Text>
+                        <Card padding="micro" shape="rounded" ref={demoRef}>
+                            <Heading1 ref={h1Ref} marginBottom="nano">H1 — {fontSizes.size1}</Heading1>
+                            <Heading2 ref={h2Ref} marginBottom="nano">H2 — {fontSizes.size2}</Heading2>
+                            <Heading3 ref={h3Ref} marginBottom="nano">H3 — {fontSizes.size3}</Heading3>
+                            <Heading4 ref={h4Ref} marginBottom="nano">H4 — {fontSizes.size4}</Heading4>
+                            <Heading5 ref={h5Ref} marginBottom="nano">H5 — {fontSizes.size5}</Heading5>
+                            <Heading6 ref={h6Ref} marginBottom="nano">H6 — {fontSizes.size6}</Heading6>
+                            <Text ref={pRef} marginBottom="nano">Body — {fontSizes.size7}</Text>
 
-                        <Text align="centre">
-                            <Hyperlink href="https://fictoan.io/">Link — {fontSizes.size7}</Hyperlink>
-                        </Text>
+                            <Text>
+                                <Hyperlink href="https://fictoan.io/">Link — {fontSizes.size7}</Hyperlink>
+                            </Text>
+                        </Card>
                     </Portion>
                 </Row>
             </Section>
@@ -290,79 +351,55 @@ const TypographyDocs = () => {
 
                         <CodeBlock withSyntaxHighlighting language="css" showCopyButton marginBottom="nano">
                             {`:root {
-    --scale-ratio-min: 1.08;  /* Scale for mobile */
-    --scale-ratio-max: 1.16; /* Scale for desktop */
+    --base-font-size : 1rem;   /* Body text size */
+    --type-scale     : 1.125;  /* Ratio between steps */
 }`}
                         </CodeBlock>
 
                         <Text marginBottom="micro">
-                            These ratios determine how much bigger each step in the scale gets. A larger ratio means
+                            The <code>type-scale</code> determines how much bigger each step gets. A larger ratio means
                             more dramatic size differences between levels.
                         </Text>
 
                         <Divider kind="secondary" verticalMargin="micro" />
 
-                        {/* THE BUILDING BLOCKS ==================================================================== */}
-                        <Heading6 marginBottom="nano">The building blocks</Heading6>
+                        {/* HOW THE MATH WORKS ===================================================================== */}
+                        <Heading6 marginTop="micro" marginBottom="nano">How it works</Heading6>
                         <Text marginBottom="micro">
-                            Fictoan's fluid typography system is built on six key variables that you can customize:
+                            Fictoan automatically scales your typography based on viewport width:
                         </Text>
 
-                        <CodeBlock
-                            withSyntaxHighlighting
-                            language="css"
-                            showCopyButton
-                        >
-                            {`:root {
-    --screen-width-min : 320;   /* Smallest screen width */
-    --screen-width-max : 1600;  /* Largest screen width */
-    --font-size-min    : 16;    /* Base size on mobile */
-    --font-size-max    : 20;    /* Base size on desktop */
-    --scale-ratio-min  : 1.08;  /* Mobile type scale */
-    --scale-ratio-max  : 1.16;  /* Desktop type scale */
-}`}
-                        </CodeBlock>
+                        <Text marginBottom="nano">1. At 320px (mobile), your base size stays
+                            at <code>--base-font-size</code></Text>
+                        <Text marginBottom="nano">2. At 1600px (desktop), the base grows by 25% (e.g., 1rem →
+                            1.25rem)</Text>
+                        <Text marginBottom="nano">3. Each step up multiplies by <code>--type-scale</code></Text>
 
                         <Text marginTop="micro" marginBottom="micro">
-                            Think of it this way:
+                            For example, with the defaults (1rem base, 1.125 scale):
                         </Text>
-
-                        <Text marginBottom="nano">1. First, you define your canvas: screens from 320px to 1600px wide</Text>
-                        <Text marginBottom="nano">2. Then, your base font size: growing from 16px on mobile to 20px on desktop</Text>
-                        <Text marginBottom="nano">3. Finally, your scale ratios: determining how dramatically sizes increase in your hierarchy</Text>
+                        <Text marginLeft="micro" marginBottom="nano">• On mobile: medium=16px, large=18px,
+                            huge=20px...</Text>
+                        <Text marginLeft="micro" marginBottom="nano">• On desktop: medium=20px, large=23px,
+                            huge=25px...</Text>
 
                         <Divider kind="secondary" verticalMargin="micro" />
 
-                        {/* HOW THE MATH WORKS ===================================================================== */}
-                        <Heading6 marginTop="micro" marginBottom="nano">How the Math Works</Heading6>
-                        <Text marginBottom="micro">
-                            When someone visits your site, Fictoan:
-                        </Text>
-
-                        <Text marginBottom="nano">1. Checks the current screen width</Text>
-                        <Text marginBottom="nano">2. Calculates where it falls between min and max screen widths (as a percentage)</Text>
-                        <Text marginBottom="nano">3. Uses that percentage to determine:</Text>
-                        <Text marginLeft="micro" marginBottom="nano">• The current base font size (between 16px and 20px)</Text>
-                        <Text marginLeft="micro" marginBottom="nano">• The current scale ratio (between 1.08 and 1.12)</Text>
-                        <Text marginBottom="nano">4. Applies these values to calculate all other type sizes</Text>
-
-                        <Text marginTop="micro">
-                            For example, on a 768px tablet screen (roughly halfway between 320px and 1600px):
-                            • Base font would be around 18px
-                            • Scale ratio would be around 1.10
-                        </Text>
+                        <Heading6 marginBottom="nano">Common type scales</Heading6>
+                        <Text marginBottom="nano">• <code>1.067</code> — Minor second (subtle, tight hierarchy)</Text>
+                        <Text marginBottom="nano">• <code>1.125</code> — Major second (balanced, default)</Text>
+                        <Text marginBottom="nano">• <code>1.200</code> — Minor third (moderate contrast)</Text>
+                        <Text marginBottom="nano">• <code>1.250</code> — Major third (strong hierarchy)</Text>
+                        <Text marginBottom="nano">• <code>1.333</code> — Perfect fourth (dramatic, editorial)</Text>
 
                         <Divider kind="secondary" verticalMargin="micro" />
 
                         <Heading6 marginBottom="nano">Customising the system</Heading6>
-                        <Text marginBottom="micro">
-                            You can adjust these values in your theme file to match your design needs:
-                        </Text>
-
-                        <Text marginTop="micro" marginBottom="nano">Tips for customizing:</Text>
-                        <Text marginBottom="nano">• Keep <code>font-size-min</code> at 16px for readability unless you have a specific reason to change it</Text>
-                        <Text marginBottom="nano">• Larger scale ratios (like 1.2) create more dramatic size differences</Text>
-                        <Text marginBottom="nano">• Smaller scale ratios (like 1.05) create more subtle hierarchies</Text>
+                        <Text marginTop="micro" marginBottom="nano">Tips:</Text>
+                        <Text marginBottom="nano">• Keep <code>--base-font-size</code> at 1rem for accessibility
+                            (respects user's browser settings)</Text>
+                        <Text marginBottom="nano">• Larger scale ratios create more dramatic size differences</Text>
+                        <Text marginBottom="nano">• Smaller scale ratios create more subtle hierarchies</Text>
                         <Text>• Test your changes across different screen sizes to ensure readability</Text>
                     </Portion>
                 </Row>

@@ -182,14 +182,15 @@
     --font-serif                         : "Mondwest", serif;
     --font-monospace                     : "Geist Mono", monospace;
 
-    --paragraph-font-size                : 1rem;
+    --paragraph-font-size                : var(--text-medium);
     --paragraph-line-height              : 1.6;
     --paragraph-text-colour              : var(--grey);
 
     --heading-font                       : var(--font-serif, serif);
     --heading-text-colour                : var(--black);
-    --heading-size-multiplier            : 1.2;
-    --heading-line-height                : 1.2;
+
+    --base-font-size                     : 1.2rem;
+    --type-scale                         : 1.2;
 
     --code-font                          : var(--font-monospace);
 

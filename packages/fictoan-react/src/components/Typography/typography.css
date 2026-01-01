@@ -1,64 +1,20 @@
-/* FLUID CALCULATIONS /////////////////////////////////////////////////////// */
+/* FLUID TYPOGRAPHY ///////////////////////////////////////////////////////// */
 :root {
-    /* Viewport scaling calculation */
-    --screen-width : 100vw;
-    --fluid-bp     : calc(
-            (var(--screen-width) - ((var(--screen-width-min) / 16) * 1rem)) /
-            ((var(--screen-width-max) / 16) - (var(--screen-width-min) / 16))
-    );
-}
+    /* Fluid factor: 0 at 320px, 1 at 1600px, clamped */
+    --_fluid : clamp(0, (100vw - 20rem) / 80rem, 1);
 
-:root {
-    /* Mobile scale steps */
-    --text-medium-scale : var(--scale-ratio-min); /* Base text */
-    --text-large-scale  : calc(var(--text-medium-scale) * var(--scale-ratio-min));
-    --text-huge-scale   : calc(var(--text-large-scale)  * var(--scale-ratio-min));
-    --text-mega-scale   : calc(var(--text-huge-scale)   * var(--scale-ratio-min));
-    --text-giga-scale   : calc(var(--text-mega-scale)   * var(--scale-ratio-min));
-    --text-tera-scale   : calc(var(--text-giga-scale)   * var(--scale-ratio-min));
-    --text-peta-scale   : calc(var(--text-tera-scale)   * var(--scale-ratio-min));
+    /* Scale ratio grows with viewport (tighter on mobile, more dramatic on desktop) */
+    /* At mobile: type-scale - 0.04, at desktop: type-scale + 0.04 */
+    --_scale : calc(var(--type-scale) - 0.04 + 0.08 * var(--_fluid));
 
-    /* Desktop scale steps */
-    --text-medium-scale-max : var(--scale-ratio-max);
-    --text-large-scale-max  : calc(var(--text-medium-scale-max) * var(--scale-ratio-max));
-    --text-huge-scale-max   : calc(var(--text-large-scale-max)  * var(--scale-ratio-max));
-    --text-mega-scale-max   : calc(var(--text-huge-scale-max)   * var(--scale-ratio-max));
-    --text-giga-scale-max   : calc(var(--text-mega-scale-max)   * var(--scale-ratio-max));
-    --text-tera-scale-max   : calc(var(--text-giga-scale-max)   * var(--scale-ratio-max));
-    --text-peta-scale-max   : calc(var(--text-tera-scale-max)   * var(--scale-ratio-max));
-
-    /* Convert to rem units */
-    --text-size-medium : calc(var(--font-size-min) / 16); /* Base size for paragraph */
-    --text-size-large  : calc((var(--font-size-min) * var(--text-large-scale)) / 16);
-    --text-size-huge   : calc((var(--font-size-min) * var(--text-huge-scale)) / 16);
-    --text-size-mega   : calc((var(--font-size-min) * var(--text-mega-scale)) / 16);
-    --text-size-giga   : calc((var(--font-size-min) * var(--text-giga-scale)) / 16);
-    --text-size-tera   : calc((var(--font-size-min) * var(--text-tera-scale)) / 16);
-    --text-size-peta   : calc((var(--font-size-min) * var(--text-peta-scale)) / 16);
-
-    --text-size-medium-max : calc(var(--font-size-max) / 16);
-    --text-size-large-max  : calc((var(--font-size-max) * var(--text-large-scale-max)) / 16);
-    --text-size-huge-max   : calc((var(--font-size-max) * var(--text-huge-scale-max)) / 16);
-    --text-size-mega-max   : calc((var(--font-size-max) * var(--text-mega-scale-max)) / 16);
-    --text-size-giga-max   : calc((var(--font-size-max) * var(--text-giga-scale-max)) / 16);
-    --text-size-tera-max   : calc((var(--font-size-max) * var(--text-tera-scale-max)) / 16);
-    --text-size-peta-max   : calc((var(--font-size-max) * var(--text-peta-scale-max)) / 16);
-
-    /* Final fluid sizes */
-    --text-medium : calc(((var(--text-size-medium) * 1rem) + (var(--text-size-medium-max) - var(--text-size-medium)) * var(--fluid-bp)));
-    --text-large  : calc(((var(--text-size-large)  * 1rem) + (var(--text-size-large-max)  - var(--text-size-large))  * var(--fluid-bp)));
-    --text-huge   : calc(((var(--text-size-huge)   * 1rem) + (var(--text-size-huge-max)   - var(--text-size-huge))   * var(--fluid-bp)));
-    --text-mega   : calc(((var(--text-size-mega)   * 1rem) + (var(--text-size-mega-max)   - var(--text-size-mega))   * var(--fluid-bp)));
-    --text-giga   : calc(((var(--text-size-giga)   * 1rem) + (var(--text-size-giga-max)   - var(--text-size-giga))   * var(--fluid-bp)));
-    --text-tera   : calc(((var(--text-size-tera)   * 1rem) + (var(--text-size-tera-max)   - var(--text-size-tera))   * var(--fluid-bp)));
-    --text-peta   : calc(((var(--text-size-peta)   * 1rem) + (var(--text-size-peta-max)   - var(--text-size-peta))   * var(--fluid-bp)));
-}
-
-/* Stop viewport scaling at max width */
-@media screen and (min-width: 1600px) {
-    :root {
-        --screen-width: calc(var(--screen-width-max) * 1px);
-    }
+    /* Type scale - base font size is fixed, scale varies with viewport */
+    --text-medium : var(--base-font-size);
+    --text-large  : calc(var(--text-medium) * var(--_scale));
+    --text-huge   : calc(var(--text-large)  * var(--_scale));
+    --text-mega   : calc(var(--text-huge)   * var(--_scale));
+    --text-giga   : calc(var(--text-mega)   * var(--_scale));
+    --text-tera   : calc(var(--text-giga)   * var(--_scale));
+    --text-peta   : calc(var(--text-tera)   * var(--_scale));
 }
 
 /* BASE TYPOGRAPHY ========================================================== */
