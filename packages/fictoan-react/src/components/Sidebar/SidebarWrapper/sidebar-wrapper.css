@@ -1,12 +1,14 @@
 [data-sidebar-wrapper] {
     display          : flex;
     flex-direction   : column;
+    gap              : var(--sidebar-items-gap);
     position         : fixed;
     top              : 0;
     left             : 0;
     bottom           : 0;
     width            : var(--sidebar-width-default);
     min-height       : 100vh;
+    padding-inline   : var(--sidebar-items-padding);
     overflow-y       : auto;
     transition       : all 0.4s ease-in-out;
     background-color : var(--sidebar-bg);
@@ -16,6 +18,12 @@
 
     /* BASICS =============================================================== */
     * { user-select : none; }
+
+    /* DIVIDER ============================================================== */
+    hr {
+        width         : calc(100% + (2 * var(--sidebar-items-padding)));
+        margin-inline : calc(-1 * var(--sidebar-items-padding));
+    }
 
     @media (max-width : 900px) {
         left    : calc(-200%);

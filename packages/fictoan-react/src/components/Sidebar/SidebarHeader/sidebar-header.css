@@ -1,6 +1,7 @@
 [data-sidebar-header] {
     display          : flex;
-    width            : 100%;
+    width            : calc(100% + (2 * var(--sidebar-items-padding)));
+    margin-inline    : calc(-1 * var(--sidebar-items-padding));
     min-height       : 80px;
     align-content    : center;
     order            : -1;

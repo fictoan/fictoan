@@ -219,7 +219,7 @@
     --file-upload-area-border-default    : var(--input-border-default);
     --file-upload-area-main-text-default : var(--input-label-default);
 
-    --file-upload-area-bg-hover          : var(--blue-light20-opacity30);
+    --file-upload-area-bg-hover          : color-mix(in oklch, var(--blue-light20), transparent 70%);
     --file-upload-area-border-hover      : var(--blue-light20);
     --file-upload-area-main-text-hover   : var(--blue);
 }
@@ -354,9 +354,9 @@
 
     --option-card-focus              : var(--global-focus-colour);
 
-    --option-card-bg-hover           : var(--green-light70-opacity40);
+    --option-card-bg-hover           : color-mix(in oklch, var(--green-light70), transparent 60%);
     --option-card-border-hover       : var(--green-light40);
-    --option-card-tick-bg-hover      : var(--green-light60-opacity30);
+    --option-card-tick-bg-hover      : color-mix(in oklch, var(--green-light60), transparent 70%);
     --option-card-tick-line-hover    : var(--green);
 
     --option-card-bg-selected        : var(--green-light60);
@@ -426,7 +426,7 @@
     --pagination-item-bg-disabled              : var(--transparent);
     --pagination-item-text-disabled            : var(--transparent);
     --pagination-item-border-disabled          : var(--transparent);
-    --pagination-arrows-stroke-disabled        : var(--slate-opacity40);
+    --pagination-arrows-stroke-disabled        : color-mix(in oklch, var(--slate), transparent 60%);
 
     --pagination-input-bg                      : var(--input-bg-default);
     --pagination-input-border                  : var(--input-border-default);
@@ -462,14 +462,14 @@
     --radio-tabs-label-text-default    : var(--input-text-default);
 
     --radio-tabs-label-text-hover      : var(--slate-dark80);
-    --radio-tabs-label-bg-hover        : var(--slate-light90-opacity40);
+    --radio-tabs-label-bg-hover        : color-mix(in oklch, var(--slate-light90), transparent 60%);
 
     --radio-tabs-label-bg-active       : var(--white);
     --radio-tabs-label-text-active     : var(--black);
 
     --radio-tabs-label-focus-border    : var(--blue);
 
-    --radio-tabs-scroll-button-default : var(--slate-light10-opacity30);
+    --radio-tabs-scroll-button-default : color-mix(in oklch, var(--slate-light10), transparent 70%);
     --radio-tabs-scroll-arrow-default  : var(--white);
 
     --radio-tabs-scroll-button-hover   : var(--white);
@@ -533,6 +533,10 @@
     --sidebar-item-text-weight               : 400;
 
     --sidebar-item-alert-bg                  : var(--red);
+
+    --sidebar-items-padding                  : var(--nano);
+    --sidebar-items-gap                      : 2px;
+    --sidebar-item-border-radius             : var(--global-border-radius);
 
     --sidebar-footer-height                  : 40px;
     --sidebar-footer-bg                      : var(--white);
