@@ -20,8 +20,8 @@
     --callout-info-bg                    : var(--sky-light60);
     --callout-info-border                : var(--sky-dark30);
 
-    --callout-success-bg                 : var(--green-light40);
-    --callout-success-border             : var(--green-dark40);
+    --callout-success-bg                 : var(--green-light80);
+    --callout-success-border             : var(--green-light40);
 
     --callout-warning-bg                 : var(--amber-light40);
     --callout-warning-border             : var(--amber-dark40);
@@ -150,8 +150,8 @@
     --skeleton-highlight                 : var(--slate-light60);
 
     /* SWITCH /////////////////////////////////////////////////////////////// */
-    --switch-bg-default                  : var(--slate-dark40);
-    --switch-bg-hover                    : var(--slate-dark20);
+    --switch-bg-default                  : var(--slate-light60);
+    --switch-bg-hover                    : var(--slate-light40);
     --switch-bg-checked                  : var(--hue);
     --switch-bg-disabled                 : var(--slate-light90);
 
@@ -161,13 +161,13 @@
     --switch-slider-bg-disabled          : var(--slate-light40);
 
     /* TABLE //////////////////////////////////////////////////////////////// */
-    --table-bg                           : var(--slate-dark80);
-    --table-border                       : var(--slate-dark60);
+    --table-bg                           : var(--slate-light90);
+    --table-border                       : var(--slate-light40);
     --table-font-family                  : var(--paragraph-font);
     --table-text                         : var(--paragraph-text-colour);
 
-    --table-striped-header-bg            : var(--slate-dark70);
-    --table-striped-cell-bg              : var(--slate-dark50);
+    --table-striped-header-bg            : var(--blue-light50);
+    --table-striped-cell-bg              : var(--slate-light70);
 
     --table-bg-hover                     : var(--amber-light20);
     --table-text-hover                   : var(--paragraph-text-colour);
@@ -189,7 +189,6 @@
     --heading-font                       : var(--font-serif, serif);
     --heading-text-colour                : var(--black);
 
-    --base-font-size                     : 1.2rem;
     --type-scale                         : 1.2;
 
     --code-font                          : var(--font-monospace);
@@ -199,18 +198,20 @@
     /* ////////////////////////////////////////////////////////////////////// */
     /* CUSTOM COMPONENTS */
     /* ////////////////////////////////////////////////////////////////////// */
-    /* COMPONENT GRID /////////////////////////////////////////////////////// */
+    /* INTRO CODE /////////////////////////////////////////////////////////// */
+    --viz-row-bg                         : color-mix(in oklch, var(--red-light70) 40%, transparent);
 
-    --component-card-bg                  : color-mix(in oklch, var(--slate-dark80) 40%, transparent);
-    --component-card-border              : var(--slate-dark60);
-    --component-card-footer-border       : var(--slate-dark60);
+    /* COMPONENT GRID /////////////////////////////////////////////////////// */
+    --component-card-bg                  : color-mix(in oklch, var(--blue-light90) 20%, transparent);
+    --component-card-border              : var(--slate-light90);
+    --component-card-footer-border       : var(--slate-light90);
 
     /* SITE HEADER ////////////////////////////////////////////////////////// */
     --site-header-bg                     : color-mix(in oklch, var(--white) 20%, transparent);
     --site-header-border                 : var(--grey-light40);
 
     /* SITE FOOTER ////////////////////////////////////////////////////////// */
-    --footer-pattern-color               : var(--blue);
+    --footer-pattern-color               : var(--blue-light60);
 
     /* USP CARDS //////////////////////////////////////////////////////////// */
     /*--usp-section-bg                          : var(--grey-dark90);*/
@@ -224,4 +225,6 @@
     --search-result-item-bg-default      : var(--slate-dark80);
     --search-result-item-bg-hover        : var(--blue-dark80);
     --search-result-item-border-hover    : var(--blue-dark20);
+
+    --sidebar-width-default              : 220px;
 }

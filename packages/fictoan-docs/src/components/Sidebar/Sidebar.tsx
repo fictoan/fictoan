@@ -13,7 +13,7 @@ import {
     Accordion,
     useTheme,
     Text,
-} from "fictoan-react";
+}from "fictoan-react";
 
 // ASSETS ==============================================================================================================
 import AccordionIcon from "../../assets/icons/new-icons/accordion.svg";
@@ -38,23 +38,23 @@ import LayoutIcon from "../../assets/icons/new-icons/window.svg";
 import ListBoxIcon from "../../assets/icons/new-icons/listbox.svg";
 import ManifestoIcon from "../../assets/icons/manifesto.svg";
 import ModalIcon from "../../assets/icons/new-icons/window.svg";
-import NotificationIcon from "../../assets/icons/notification.svg";
-import OptionCardsIcon from "../../assets/icons/option-cards.svg";
+import NotificationIcon from "../../assets/icons/new-icons/notification.svg";
+import OptionCardsIcon from "../../assets/icons/new-icons/option-card.svg";
 import PaginationIcon from "../../assets/icons/pagination.svg";
 import PaintRollerIcon from "../../assets/icons/new-icons/paint-roller.svg";
 import PinInputIcon from "../../assets/icons/pin-input.svg";
 import ProgressIcon from "../../assets/icons/new-icons/meter.svg";
-import RadioButtonIcon from "../../assets/icons/radio-button.svg";
-import RangeIcon from "../../assets/icons/range.svg";
-import SelectIcon from "../../assets/icons/select.svg";
+import RadioButtonIcon from "../../assets/icons/new-icons/radio.svg";
+import RangeIcon from "../../assets/icons/new-icons/range.svg";
+import SelectIcon from "../../assets/icons/new-icons/select.svg";
 import SidebarIcon from "../../assets/icons/sidebar.svg";
 import SkeletonIcon from "../../assets/icons/skeleton.svg";
 import TabGroupIcon from "../../assets/icons/tabs-group.svg";
-import TableIcon from "../../assets/icons/table.svg";
-import TabsIcon from "../../assets/icons/tabs.svg";
+import TableIcon from "../../assets/icons/new-icons/table.svg";
+import TabsIcon from "../../assets/icons/new-icons/tabs.svg";
 import ThemeSwitchIcon from "../../assets/icons/theme.svg";
-import ToastIcon from "../../assets/icons/toast.svg";
-import TooltipIcon from "../../assets/icons/tooltip.svg";
+import ToastIcon from "../../assets/icons/new-icons/toast.svg";
+import TooltipIcon from "../../assets/icons/new-icons/tooltip.svg";
 import TypographyIcon from "../../assets/icons/new-icons/caret.svg";
 
 // STYLES ==============================================================================================================

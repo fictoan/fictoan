@@ -24,23 +24,6 @@
         height            : 100%;
     }
 
-    #code-block-wrapper {
-        position : relative;
-    }
-
-    #code-block-wrapper::after {
-        filter     : blur(8px);
-        background : rgb(131, 58, 180);
-        background : linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
-        position   : absolute;
-        top        : -4px;
-        left       : -4px;
-        width      : calc(100% + 8px);
-        height     : calc(100% + 8px);
-        content    : "";
-        z-index    : -1;
-    }
-
     /* DIFFERENCES ////////////////////////////////////////////////////////// */
     #differentiators-section {
         position : relative;
@@ -52,6 +35,7 @@
         display         : flex;
         flex-direction  : column;
         justify-content : space-between;
+        background      : linear-gradient(0deg, var(--blue-light90) 24%, var(--blue-light70) 80%);
 
         svg {
             width : 48px;
@@ -81,19 +65,6 @@
     /* COMPONENT GRID /////////////////////////////////////////////////////// */
     #component-grid {
         position : relative;
-    }
-
-    #component-grid-bg {
-        z-index         : -1;
-        background      : linear-gradient(135deg, var(--amber-dark40), var(--blue-dark60), var(--purple-dark60), var(--orange));
-        background-size : 400% 400%;
-        animation       : gradient 15s ease infinite;
-        height          : 100%;
-        display         : block;
-        position        : absolute;
-        top             : 0;
-        left            : 0;
-        width           : 100%;
     }
 
     /* MANIFESTO-CARD /////////////////////////////////////////////////////// */

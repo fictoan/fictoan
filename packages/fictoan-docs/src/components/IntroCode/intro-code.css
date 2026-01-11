@@ -15,7 +15,7 @@
         user-select : none;
 
         [data-portion] {
-            background-color : color-mix(in oklch, var(--red-light70) 40%, transparent);
+            background-color : var(--viz-row-bg);
 
             p {
                 opacity    : 1;

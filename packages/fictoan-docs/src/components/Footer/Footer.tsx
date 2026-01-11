@@ -21,16 +21,7 @@ export const SiteFooter = () => {
     const currentYear = new Date().getFullYear();
 
     return (
-        <Footer id="site-footer" paddingTop="small" paddingBottom="huge">
-            {/* BACKGROUND PATTERN ///////////////////////////////////////////////////////////////////////////////// */}
-            <DensityGridPattern
-                fadeDirection="to-top"
-                color="var(--footer-pattern-color)"
-                dotSize={12} gap={24}
-                height="80%"
-                className="footer-bg-pattern"
-            />
-
+        <Footer id="site-footer" paddingTop="large" paddingBottom="huge">
             {/* MAIN FOOTER CONTENT //////////////////////////////////////////////////////////////////////////////// */}
             <Row horizontalPadding="medium" marginBottom="none">
                 {/* BRANDING */}
@@ -140,6 +131,15 @@ export const SiteFooter = () => {
                     </Link>
                 </Portion>
             </Row>
+
+            {/* BACKGROUND PATTERN ///////////////////////////////////////////////////////////////////////////////// */}
+            <DensityGridPattern
+                fadeDirection="to-top"
+                color="var(--footer-pattern-color)"
+                dotSize={12} gap={24}
+                height="80%"
+                className="footer-bg-pattern"
+            />
         </Footer>
     );
 };

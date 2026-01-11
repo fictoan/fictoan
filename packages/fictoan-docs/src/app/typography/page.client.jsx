@@ -131,13 +131,14 @@ const TypographyDocs = () => {
                 <Row horizontalPadding="huge" marginBottom="micro">
                     <Portion desktopSpan="half">
                         <Range
-                            label={`Base font size: ${baseFontSize.toFixed(4)} rem`}
+                            label={`Base font size`}
                             min={0.75}
                             max={1.5}
-                            step={0.0625}
+                            step={0.25}
                             value={baseFontSize}
                             suffix=" rem"
                             onChange={(value) => setBaseFontSize(value)}
+                            isFullWidth
                         />
                     </Portion>
 
