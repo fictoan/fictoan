@@ -35,7 +35,8 @@
         display         : flex;
         flex-direction  : column;
         justify-content : space-between;
-        background      : linear-gradient(0deg, var(--blue-light90) 24%, var(--blue-light70) 80%);
+        background      : linear-gradient(180deg, var(--blue-light90) 0%, var(--white) 100%);
+        border          : 1px solid var(--blue-light80);
 
         svg {
             width : 48px;

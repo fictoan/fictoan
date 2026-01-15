@@ -1,15 +1,10 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React from "react";
+import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading6, Text, Divider, Accordion } from "fictoan-react";
-
-// LOCAL COMPONENTS ====================================================================================================
-import { PropsConfiguratorNew } from "$components/PropsConfigurator/PropsConfiguratorNew";
-import { ComponentDocsLayout } from "../ComponentDocsLayout";
-import { accordionRegistry } from "./props.registry";
+import { Div, Heading4, Text, Divider, Accordion, Checkbox, CodeBlock, TextArea } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -18,31 +13,40 @@ import { createThemeConfigurator } from "$utils/themeConfigurator";
 import "../../../styles/fictoan-theme.css";
 import "./page-accordion.css";
 
+// OTHER ===============================================================================================================
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
+
 const AccordionDocs = () => {
-    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
+    // Props state
+    const [summary, setSummary] = useState("Click to expand");
+    const [children, setChildren] = useState("Accordion content goes here.");
+    const [isOpen, setIsOpen] = useState(false);
 
-    const AccordionComponent = (varName : string) : boolean => {
-        return varName.startsWith("accordion-");
-    };
-
+    // Theme configurator
     const {
         interactiveElementRef,
-        componentProps : themeConfig,
+        componentProps: themeProps,
         themeConfigurator,
-    } = createThemeConfigurator("Accordion", AccordionComponent);
+    } = createThemeConfigurator<HTMLDetailsElement>("Accordion", "accordion-");
+
+    // Generate code
+    const codeString = useMemo(() => {
+        const props = [];
+        props.push(`    summary="${summary}"`);
+        if (isOpen) props.push(`    isOpen`);
+
+        return `<Accordion\n${props.join("\n")}\n>\n    ${children}\n</Accordion>`;
+    }, [summary, children, isOpen]);
 
     return (
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading4 id="component-name">
                     Accordion
-                </Heading6>
+                </Heading4>
 
-                <Text
-                    id="component-description"
-                    weight="400"
-                >
+                <Text id="component-description" weight="400">
                     A simple click to expand/collapse block element.
                 </Text>
             </Div>
@@ -64,18 +68,49 @@ const AccordionDocs = () => {
             {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="demo-component">
                 <Accordion
+                    key={`accordion-${isOpen}`}
                     ref={interactiveElementRef}
-                    summary={props.summary || "Click to expand"}
-                    {...themeConfig}
-                    {...props}
+                    summary={summary}
+                    isOpen={isOpen}
+                    {...themeProps}
                 >
-                    {props.children || "Accordion content goes here"}
+                    {children}
                 </Accordion>
             </Div>
 
             {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="props-config">
-                <PropsConfiguratorNew registry={accordionRegistry} onPropsChange={setProps} />
+                <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                    {codeString}
+                </CodeBlock>
+
+                <Div className="doc-controls">
+                    <TextArea
+                        label="summary"
+                        value={summary}
+                        onChange={(value) => setSummary(value)}
+                        helpText="The clickable header text. Accepts React nodes for complex content."
+                        rows={2}
+                        marginBottom="micro" isFullWidth
+                    />
+
+                    <TextArea
+                        label="children"
+                        value={children}
+                        onChange={(value) => setChildren(value)}
+                        helpText="The expandable content. Accepts React nodes."
+                        rows={3}
+                        marginBottom="micro" isFullWidth
+                    />
+
+                    <Checkbox
+                        id="prop-isOpen"
+                        label="isOpen"
+                        checked={isOpen}
+                        onChange={(checked) => setIsOpen(checked)}
+                        helpText="Sets the initial open state. The native details element manages its own state after that."
+                    />
+                </Div>
             </Div>
 
             {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}

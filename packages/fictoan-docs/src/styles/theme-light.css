@@ -42,6 +42,8 @@
     --code-block-font-size               : 0.98rem;
     --code-block-bg                      : var(--slate-light90);
 
+    --token-string                       : var(--grey);
+
     /* DIVIDER ////////////////////////////////////////////////////////////// */
     --divider-height                     : 1px;
 
@@ -59,7 +61,7 @@
     --drawer-border                      : var(--grey-dark40);
 
     /* INPUT FIELD ////////////////////////////////////////////////////////// */
-    --input-bg-default                   : var(--grey-light90);
+    --input-bg-default                   : color-mix(in oklch, var(--grey-light90), transparent 40%);
     --input-border-default               : var(--grey-light60);
     --input-border-radius-default        : var(--global-border-radius);
     --input-label-default                : var(--black);
@@ -92,7 +94,7 @@
 
     --input-required-indicator           : var(--red);
 
-    --input-helptext                     : var(--paragraph-subtext-colour);
+    --input-helptext                     : var(--grey-light40);
     --input-helptext-scale               : 92%;
 
     --input-icon-default                 : var(--slate-light40);
@@ -118,9 +120,9 @@
 
     --option-card-focus                  : var(--global-focus-colour);
 
-    --option-card-bg-hover               : color-mix(in oklch, var(--green-light70) 40%, transparent);
+    --option-card-bg-hover               : color-mix(in oklch, var(--green-light70), transparent 40%);
     --option-card-border-hover           : var(--green-light40);
-    --option-card-tick-bg-hover          : color-mix(in oklch, var(--green-light60) 30%, transparent);
+    --option-card-tick-bg-hover          : color-mix(in oklch, var(--green-light60), transparent 30%);
     --option-card-tick-line-hover        : var(--green);
 
     --option-card-bg-selected            : var(--green-light60);
@@ -140,7 +142,7 @@
 
     --sidebar-item-icon-stroke-default   : var(--grey-light40);
 
-    --sidebar-item-bg-hover              : var(--grey-light40);
+    --sidebar-item-bg-hover              : var(--grey-light90);
 
     --sidebar-footer-bg                  : var(--grey-dark90);
     --sidebar-footer-border-top          : var(--grey-dark60);
@@ -192,6 +194,7 @@
     --type-scale                         : 1.2;
 
     --code-font                          : var(--font-monospace);
+    --code-block-text                    : var(--slate);
 
     --token-plain                        : var(--black);
 
@@ -199,15 +202,15 @@
     /* CUSTOM COMPONENTS */
     /* ////////////////////////////////////////////////////////////////////// */
     /* INTRO CODE /////////////////////////////////////////////////////////// */
-    --viz-row-bg                         : color-mix(in oklch, var(--red-light70) 40%, transparent);
+    --viz-row-bg                         : color-mix(in oklch, var(--red-light70), transparent 40%);
 
     /* COMPONENT GRID /////////////////////////////////////////////////////// */
-    --component-card-bg                  : color-mix(in oklch, var(--blue-light90) 20%, transparent);
+    --component-card-bg                  : color-mix(in oklch, var(--blue-light90), transparent 80%);
     --component-card-border              : var(--slate-light90);
     --component-card-footer-border       : var(--slate-light90);
 
     /* SITE HEADER ////////////////////////////////////////////////////////// */
-    --site-header-bg                     : color-mix(in oklch, var(--white) 20%, transparent);
+    --site-header-bg                     : color-mix(in oklch, var(--white), transparent 20%);
     --site-header-border                 : var(--grey-light40);
 
     /* SITE FOOTER ////////////////////////////////////////////////////////// */
@@ -216,8 +219,8 @@
     /* USP CARDS //////////////////////////////////////////////////////////// */
     /*--usp-section-bg                          : var(--grey-dark90);*/
 
-    --usp-card-gradient-top              : color-mix(in oklch, var(--green-dark80) 40%, transparent);
-    --usp-card-gradient-bottom           : color-mix(in oklch, var(--grey-dark80) 40%, transparent);
+    --usp-card-gradient-top              : color-mix(in oklch, var(--green-dark80), transparent 40%);
+    --usp-card-gradient-bottom           : color-mix(in oklch, var(--grey-dark80), transparent 40%);
 
     /* SEARCH /////////////////////////////////////////////////////////////// */
     --search-input-bg                    : var(--input-bg-default);

@@ -11,6 +11,7 @@ import "./checkbox.css";
 // OTHER ===============================================================================================================
 import { FormItem } from "../FormItem/FormItem";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
+import { separateWrapperProps } from "../../../utils/propSeparation";
 
 export type CheckboxElementType = HTMLInputElement;
 export type CheckboxProps = InputLabelCustomProps & {
@@ -54,6 +55,9 @@ export const Checkbox = React.forwardRef(
             onChange?.(e.target.checked);
         };
 
+        // Separate wrapper-level props (margin, padding, etc.) from input-specific props
+        const { wrapperProps, inputProps } = separateWrapperProps(props);
+
         return (
             <FormItem
                 label={label}
@@ -62,6 +66,7 @@ export const Checkbox = React.forwardRef(
                 errorText={errorText}
                 required={required}
                 size={size}
+                {...wrapperProps}
             >
                 <Element<CheckboxElementType>
                     as="input"
@@ -74,7 +79,7 @@ export const Checkbox = React.forwardRef(
                     disabled={disabled}
                     required={required}
                     onChange={handleChange}
-                    {...props}
+                    {...inputProps}
                 />
                 <Element
                     as="div"

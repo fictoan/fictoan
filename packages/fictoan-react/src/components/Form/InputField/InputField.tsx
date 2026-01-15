@@ -12,6 +12,7 @@ import "./input-field.css";
 // OTHER ===============================================================================================================
 import { FormItem } from "../FormItem/FormItem";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
+import { separateWrapperProps } from "../../../utils/propSeparation";
 
 // TODO: Add full-width support for standalone input fields
 
@@ -197,6 +198,9 @@ export const InputField = React.forwardRef(
         const hasLeftElement = Boolean(innerIconLeft || innerTextLeft);
         const hasRightElement = Boolean(innerIconRight || innerTextRight);
 
+        // Separate wrapper-level props (margin, padding, etc.) from input-specific props
+        const { wrapperProps, inputProps } = separateWrapperProps(props);
+
         return (
             <FormItem
                 label={label}
@@ -206,6 +210,7 @@ export const InputField = React.forwardRef(
                 validationState={validationState}
                 required={required}
                 size={size}
+                {...wrapperProps}
             >
                 <Element<InputFieldElementType>
                     as="input"
@@ -237,7 +242,7 @@ export const InputField = React.forwardRef(
                     onChange={handleChange}
                     onBlur={handleBlur}
                     onFocus={handleFocus}
-                    {...props}
+                    {...inputProps}
                 />
                 {(hasLeftElement || hasRightElement) && (
                     <Div data-input-helper aria-hidden="true">

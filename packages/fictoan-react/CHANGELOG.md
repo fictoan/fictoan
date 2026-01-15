@@ -94,6 +94,17 @@
   - Only one tooltip DOM element exists regardless of how many `<Tooltip>` components are used
   - Uses event delegation instead of per-element listeners
   - Eliminates DOM pollution from multiple hidden tooltip elements
+- Add `SidebarItemGroup` for grouping sidebar items
+
+### Bug fixes
+- Fix `Tabs` component losing state of controlled inputs (checkboxes, text fields, etc.) when parent re-renders
+  - Previously, only the active tab's content was rendered, causing React to lose component identity on re-renders
+  - Now all tab contents are rendered but inactive tabs are hidden with the `hidden` attribute
+  - This preserves component state when switching between tabs or when parent state changes
+- Fix form components applying wrapper props (margin, padding, etc.) to inner input element instead of outer wrapper
+  - Props like `marginBottom`, `padding`, `shadow`, etc. now correctly apply to the FormItem wrapper
+  - Affected components: `TextArea`, `InputField`, `Checkbox`, `Switch`, `Select`, `RadioButton`, `ListBox`
+  - Added `separateWrapperProps` utility in `propSeparation.ts` to handle prop separation consistently
 
 ## 1.12.0
 - `ThemeProvider` now uses unique key based on hostname for local storage, instead of default `fictoan-theme`

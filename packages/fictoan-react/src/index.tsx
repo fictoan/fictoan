@@ -118,6 +118,8 @@ export {
     type ContentWrapperProps,
     SidebarHeader,
     type SidebarHeaderNewProps,
+    SidebarItemsGroup,
+    type SidebarItemsGroupNewProps,
     SidebarItem,
     type SidebarItemNewProps,
     SidebarFooter,

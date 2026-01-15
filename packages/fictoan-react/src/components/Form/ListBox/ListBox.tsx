@@ -8,6 +8,7 @@ import { FormItem } from "../FormItem/FormItem";
 import { Badge } from "../../Badge/Badge";
 import { InputField } from "../InputField/InputField";
 import { Text } from "../../Typography/Text";
+import { separateWrapperProps } from "../../../utils/propSeparation";
 
 // HOOKS ===============================================================================================================
 import { useClickOutside } from "$hooks/UseClickOutside";
@@ -224,6 +225,9 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
             }
         }, [activeIndex]);
 
+        // Separate wrapper-level props (margin, padding, etc.) from input-specific props
+        const { wrapperProps, inputProps } = separateWrapperProps(props);
+
         return (
             <FormItem
                 label={label}
@@ -231,6 +235,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
+                {...wrapperProps}
             >
                 {/* PARENT */}
                 <Element
@@ -238,7 +243,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                     data-list-box
                     classNames={["list-box-wrapper", disabled ? "disabled" : "", className || ""]}
                     ref={dropdownRef}
-                    {...props}
+                    {...inputProps}
                 >
                     <Div
                         className="list-box-input-wrapper"

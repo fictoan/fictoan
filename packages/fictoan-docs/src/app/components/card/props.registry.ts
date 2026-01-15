@@ -8,13 +8,6 @@ export const cardRegistry = createPropsRegistry({
 
     // Props in display order
     props : {
-        heading : {
-            label        : "Heading",
-            control      : "InputField",
-            inputProps   : {
-                helpText : "Optional heading displayed at the top of the card",
-            },
-        },
         children : {
             label        : "Content",
             control      : "TextArea",

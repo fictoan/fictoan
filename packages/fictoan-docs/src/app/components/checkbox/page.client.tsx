@@ -1,36 +1,117 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 
 // UI ==================================================================================================================
 import {
-    Div, Heading6, Text, Divider, Checkbox, CheckboxGroup,
-    Card, Form, Header, Row, Portion, Range, Select, CodeBlock,
-} from "fictoan-react";
+    Div,
+    Heading6,
+    Text,
+    Divider,
+    Checkbox,
+    CheckboxGroup,
+    Switch,
+    SwitchGroup,
+    CodeBlock,
+    Header,
+    Form,
+    RadioTabGroup,
+}from "fictoan-react";
 
 // LOCAL COMPONENTS ====================================================================================================
-import { ComponentDocsLayout } from "../ComponentDocsLayout";
-import { CheckboxConfigurator } from "./CheckboxConfigurator";
-import { checkboxRegistry } from "./props.registry";
+import "../../../components/PropsConfigurator/props-configurator.css";
 
-// UTILS ===============================================================================================================
-import { useThemeVariables } from "$utils/useThemeVariables";
+// LIB =================================================================================================================
+import { ResolvedProp, ControlType } from "$/lib/props-registry/types";
+import { getControlComponent, inferControlType } from "$/lib/props-registry/controls";
+import { getOrderedPropNames } from "$/lib/props-registry/createPropsRegistry";
 
 // STYLES ==============================================================================================================
 import "../../../styles/fictoan-theme.css";
 import "./page-checkbox.css";
 
 // OTHER ===============================================================================================================
-import { checkboxProps } from "./config";
-import { colourOptions } from "../../colour/colours";
+import metadata from "fictoan-react/dist/props-metadata.json";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
+import { checkboxRegistry } from "./props.registry";
+
+interface PropMetadata {
+    name           : string;
+    type           : { name : string };
+    required     ? : boolean;
+    defaultValue ? : { value : any };
+    description  ? : string;
+    parent       ? : { fileName : string; name : string };
+}
+
+interface ComponentMetadata {
+    displayName : string;
+    description : string;
+    props       : Record<string, PropMetadata>;
+}
+
+// Parse enum type string into options
+function parseEnumType(typeString : string) {
+    return typeString
+        .split("|")
+        .map((v) => v.trim().replace(/['"]/g, ""))
+        .filter((v) => v && v !== "undefined")
+        .map((value) => ({ value, label : value }));
+}
+
+// Resolve a prop from registry config + optional metadata
+function resolveProp(
+    propName : string,
+    config : {
+        control? : ControlType; label? : string; options? : any;
+        defaultValue? : any; hidden? : boolean; inputProps? : Record<string, any>
+    },
+    propMeta : PropMetadata | undefined,
+    currentValue : any,
+) : ResolvedProp {
+    const typeString = propMeta?.type?.name || "string";
+
+    let options = config.options;
+    if (!options && typeString.includes("|")) {
+        options = parseEnumType(typeString);
+    }
+
+    const control : ControlType = config.control || inferControlType(propName, typeString, options);
+    const defaultValue = config.defaultValue ?? propMeta?.defaultValue?.value ?? undefined;
+
+    return {
+        name         : propName,
+        label        : config.label || propName,
+        control,
+        options,
+        defaultValue,
+        currentValue,
+        hidden       : config.hidden ?? false,
+        inputProps   : config.inputProps,
+    };
+}
 
 const CheckboxDocs = () => {
-    const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(checkboxProps.variables);
-
-    const [ props, setProps ] = useState<{ [key : string] : any }>({});
+    const [ props, setProps ] = useState<Record<string, any>>({});
     const [ showGroup, setShowGroup ] = useState(false);
     const [ groupValue, setGroupValue ] = useState<string[]>([]);
+    const [ componentType, setComponentType ] = useState<"checkbox" | "switch">("checkbox");
+    const [ componentMeta, setComponentMeta ] = useState<ComponentMetadata | null>(null);
+
+    // Load component metadata and initialize props with defaults
+    useEffect(() => {
+        const meta = (metadata as unknown as Record<string, ComponentMetadata>)[checkboxRegistry.component];
+        setComponentMeta(meta || null);
+
+        const initialProps : Record<string, any> = {};
+        for (const [ propName, config ] of Object.entries(checkboxRegistry.props)) {
+            if (config.defaultValue !== undefined) {
+                initialProps[propName] = config.defaultValue;
+            }
+        }
+        setProps(initialProps);
+    }, []);
 
     // Create group options with memoization
     const groupOptions = useMemo(() => [
@@ -45,12 +126,131 @@ const CheckboxDocs = () => {
     ], [ props.disabled ]);
 
     // Update group value when defaultChecked changes
-    React.useEffect(() => {
+    useEffect(() => {
         if (showGroup) {
             setGroupValue(props.defaultChecked ? ["option1"] : []);
         }
     }, [ props.defaultChecked, showGroup ]);
 
+    // Handle prop value change
+    const handlePropChange = useCallback((propName : string) => (value : any) => {
+        setProps((prev) => ({
+            ...prev,
+            [propName] : value,
+        }));
+    }, []);
+
+    // Debug handlers
+    const handleComponentTypeChange = (value : string) => {
+        console.log("Component type changing to:", value, "from:", componentType);
+        setComponentType(value as "checkbox" | "switch");
+    };
+
+    const handleShowGroupChange = (checked : boolean) => {
+        console.log("Show group changing to:", checked, "from:", showGroup);
+        setShowGroup(checked);
+    };
+
+    console.log("Render - componentType:", componentType, "showGroup:", showGroup);
+
+    // Generate code string
+    const generateCodeString = useCallback(() => {
+        const componentName = componentType === "checkbox" ? "Checkbox" : "Switch";
+
+        if (showGroup) {
+            const groupName = `${componentName.toLowerCase()}-group`;
+            const propsToShow = Object.entries(props).filter(([ key, value ]) => {
+                if (key === "id" || key === "label") return false;
+                if (value === undefined || value === null || value === "") return false;
+                if (value === false) return false;
+                return true;
+            });
+
+            const optionProps = propsToShow
+                .map(([ key, value ]) => {
+                    if (typeof value === "boolean" && value) {
+                        return `            ${key}`;
+                    }
+                    return null;
+                })
+                .filter(Boolean);
+
+            const initialValue = props.defaultChecked ? `["option1"]` : `[]`;
+
+            return [
+                `<${componentName}Group`,
+                `    name="${groupName}"`,
+                `    options={[`,
+                `        {`,
+                `            id: "option1",`,
+                `            value: "option1",`,
+                `            label: "Option 1",`,
+                ...optionProps.map(p => `${p},`),
+                `        },`,
+                `        { id: "option2", value: "option2", label: "Option 2" },`,
+                `        { id: "option3", value: "option3", label: "Option 3" },`,
+                `    ]}`,
+                `    value={${initialValue}}`,
+                `    onChange={(values) => console.log(values)}`,
+                `/>`,
+            ].join("\n");
+        }
+
+        const propsEntries = Object.entries(props).filter(([ key, value ]) => {
+            if (key === "label") return false;
+            if (value === undefined || value === null || value === "") return false;
+            if (value === false) return false;
+            return true;
+        });
+
+        const propsString = propsEntries
+            .map(([ key, value ]) => {
+                if (typeof value === "boolean" && value) {
+                    return `    ${key}`;
+                }
+                if (typeof value === "string") {
+                    return `    ${key}="${value}"`;
+                }
+                if (typeof value === "number") {
+                    return `    ${key}={${value}}`;
+                }
+                return `    ${key}={${JSON.stringify(value)}}`;
+            })
+            .join("\n");
+
+        const labelValue = props.label || "Check me";
+        const labelProp = `    label="${labelValue}"`;
+
+        if (propsString) {
+            return `<${componentName}\n${propsString}\n${labelProp}\n/>`;
+        }
+        return `<${componentName}\n${labelProp}\n/>`;
+    }, [ componentType, props, showGroup ]);
+
+    // Get prop names in registry order
+    const orderedPropNames = getOrderedPropNames(checkboxRegistry);
+
+    // Resolve all props
+    const resolvedProps = orderedPropNames.map((propName) => {
+        const config = checkboxRegistry.props[propName];
+        const propMeta = componentMeta?.props?.[propName];
+        return resolveProp(propName, config, propMeta, props[propName]);
+    }).filter((p) => !p.hidden);
+
+    // Render a single prop control
+    const renderPropControl = (resolvedProp : ResolvedProp) => {
+        const ControlComponent = getControlComponent(resolvedProp.control);
+        return (
+            <ControlComponent
+                key={resolvedProp.name}
+                prop={resolvedProp}
+                value={resolvedProp.currentValue}
+                onChange={handlePropChange(resolvedProp.name)}
+            />
+        );
+    };
+
+    const displayName = componentType === "checkbox" ? "Checkbox" : "Switch";
 
     return (
         <ComponentDocsLayout>
@@ -77,160 +277,90 @@ const CheckboxDocs = () => {
                 </Text>
 
                 <Text>
-                    For a single on/off toggle, consider using the <a href="/components/switch">Switch</a> component instead.
+                    For a single on/off toggle, use the Switch variant instead.
                 </Text>
             </Div>
 
             {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="demo-component">
                 {showGroup ? (
-                    <CheckboxGroup
-                        name="checkbox-group"
-                        options={groupOptions}
-                        value={groupValue}
-                        onChange={(values) => setGroupValue(values)}
-                        align="horizontal"
-                    />
+                    componentType === "checkbox" ? (
+                        <CheckboxGroup
+                            name="checkbox-group"
+                            options={groupOptions}
+                            value={groupValue}
+                            onChange={(values) => setGroupValue(values)}
+                            align="horizontal"
+                        />
+                    ) : (
+                        <SwitchGroup
+                            name="switch-group"
+                            options={groupOptions}
+                            value={groupValue}
+                            onChange={(values) => setGroupValue(values)}
+                            align="horizontal"
+                        />
+                    )
                 ) : (
-                    <Checkbox
-                        key={`checkbox-${props.defaultChecked}-${props.disabled}`}
-                        {...props}
-                    />
+                    componentType === "checkbox" ? (
+                        <Checkbox
+                            key={`checkbox-${props.defaultChecked}-${props.disabled}`}
+                            {...props}
+                        />
+                    ) : (
+                        <Switch
+                            key={`switch-${props.defaultChecked}-${props.disabled}`}
+                            {...props}
+                        />
+                    )
                 )}
             </Div>
 
             {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="props-config">
-                <CheckboxConfigurator
-                    registry={checkboxRegistry}
-                    onPropsChange={setProps}
-                    onGroupToggle={setShowGroup}
-                />
-            </Div>
+                <Div id="props-configurator-new">
+                    <Header marginBottom="micro">
+                        <Text>Configure {displayName} props</Text>
+                    </Header>
 
-            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
-            <Div id="theme-config">
-                    <Card padding="micro" shape="rounded">
-                        <Form>
-                            <Header verticallyCentreItems pushItemsToEnds>
-                                <Text size="large" weight="700" textColour="white" marginBottom="nano">
-                                    Set global theme values
-                                </Text>
-                            </Header>
+                    {/* Code Preview */}
+                    <CodeBlock
+                        language="tsx"
+                        withSyntaxHighlighting
+                        showCopyButton
+                        marginBottom="micro"
+                    >
+                        {generateCodeString()}
+                    </CodeBlock>
 
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock
-                                        withSyntaxHighlighting
-                                        source={cssVariablesList}
-                                        language="css"
-                                        showCopyButton
-                                        marginBottom="micro"
-                                    />
-                                </Portion>
-                            </Row>
-
-                            {/* CHECKBOX /////////////////////////////////////////////////////////////////////////// */}
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <Text weight="700" size="large">Checkbox</Text>
-                                </Portion>
-
-                                {/* BORDER RADIUS ================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Border radius"
-                                        value={componentVariables["checkbox-square-border-radius"].value}
-                                        onChange={(value) => handleVariableChange(
-                                            "checkbox-square-border-radius",
-                                            value)}
-                                        suffix={componentVariables["checkbox-square-border-radius"].unit}
-                                        min={0} max={10} step={1}
-                                    />
-                                </Portion>
-
-                                {/* BG DEFAULT ===================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Tick"
-                                        options={[ {
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions ]}
-                                        defaultValue={componentVariables["checkbox-tick"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("checkbox-tick", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* BG DEFAULT ===================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Square — default"
-                                        options={[ {
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions ]}
-                                        defaultValue={componentVariables["checkbox-square-bg-default"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("checkbox-square-bg-default", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* BG HOVER ======================================================================= */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Square — hover"
-                                        options={[ {
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions ]}
-                                        defaultValue={componentVariables["checkbox-square-bg-hover"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("checkbox-square-bg-hover", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* BG CHECKED ===================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Square — checked"
-                                        options={[ {
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions ]}
-                                        defaultValue={componentVariables["checkbox-square-bg-checked"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("checkbox-square-bg-checked", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* BG DISABLED ==================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Square — disabled"
-                                        options={[ {
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions ]}
-                                        defaultValue={componentVariables["checkbox-square-bg-disabled"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("checkbox-square-bg-disabled", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-                            </Row>
+                    {/* Props */}
+                    <Div id="props-list">
+                        <Form spacing="medium">
+                            {resolvedProps.map(renderPropControl)}
                         </Form>
-                    </Card>
+
+                        {/* Component Type Toggle */}
+                        <RadioTabGroup
+                            id="component-type-toggle"
+                            name="component-type-toggle"
+                            label="Component type"
+                            options={[
+                                { id : "type-checkbox", value : "checkbox", label : "Checkbox" },
+                                { id : "type-switch", value : "switch", label : "Switch" },
+                            ]}
+                            value={componentType}
+                            onChange={handleComponentTypeChange}
+                        />
+
+                        {/* Group Toggle */}
+                        <Checkbox
+                            id="show-as-group-toggle"
+                            label="Show as group"
+                            checked={showGroup}
+                            onChange={handleShowGroupChange}
+                        />
+                    </Div>
+                </Div>
             </Div>
         </ComponentDocsLayout>
     );

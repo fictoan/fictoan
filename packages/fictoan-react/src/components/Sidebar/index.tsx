@@ -3,6 +3,8 @@ export { ContentWrapper, type ContentWrapperProps } from "./ContentWrapper/Conte
 
 export { SidebarHeader, type SidebarHeaderNewProps } from "./SidebarHeader/SidebarHeader";
 
+export { SidebarItemsGroup, type SidebarItemsGroupNewProps } from "./SidebarItemsGroup/SidebarItemsGroup";
+
 export { SidebarItem, type SidebarItemNewProps } from "./SidebarItem/SidebarItem";
 
 export { SidebarFooter, type SidebarFooterNewProps } from "./SidebarFooter/SidebarFooter";

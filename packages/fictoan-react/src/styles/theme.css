@@ -538,6 +538,11 @@
     --sidebar-items-gap                      : 2px;
     --sidebar-item-border-radius             : var(--global-border-radius);
 
+    --sidebar-group-title-margin             : 4px 8px;
+    --sidebar-group-title-weight             : 600;
+    --sidebar-group-title-scale              : 72%;
+    --sidebar-group-title-text               : var(--slate);
+
     --sidebar-footer-height                  : 40px;
     --sidebar-footer-bg                      : var(--white);
     --sidebar-footer-border-top              : var(--slate-light10);

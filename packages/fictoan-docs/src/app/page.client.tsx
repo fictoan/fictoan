@@ -48,7 +48,7 @@ const HomePage = () => {
                             <Row marginBottom="none">
                                 <Portion desktopSpan="two-third">
                                     <Heading1 textColour="white">
-                                        Build React UI in plain English
+                                        Make UI code readable again.
                                     </Heading1>
 
                                     <Heading4 textColour="white" marginBottom="tiny">

@@ -145,17 +145,21 @@ export const Tabs = React.forwardRef(
 
                 <Divider kind="tertiary" marginTop="none" marginBottom="micro" />
 
-                <Div
-                    key={activeTab.key}
-                    id={`tab-panel-${activeTab.key}`}
-                    role="tabpanel"
-                    aria-labelledby={`tab-${activeTab.key}`}
-                    tabIndex={0}
-                    data-tab-content
-                    data-exiting={isExiting}
-                >
-                    {activeTab.content}
-                </Div>
+                {tabs.map((tab) => (
+                    <Div
+                        key={tab.key}
+                        id={`tab-panel-${tab.key}`}
+                        role="tabpanel"
+                        aria-labelledby={`tab-${tab.key}`}
+                        tabIndex={activeTab.key === tab.key ? 0 : -1}
+                        data-tab-content
+                        data-active={activeTab.key === tab.key}
+                        data-exiting={activeTab.key === tab.key && isExiting}
+                        hidden={activeTab.key !== tab.key}
+                    >
+                        {tab.content}
+                    </Div>
+                ))}
             </Element>
         );
     },
