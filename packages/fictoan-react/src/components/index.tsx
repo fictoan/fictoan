@@ -92,10 +92,12 @@ export { Modal, type ModalProps } from "./Modal";
 
 // NOTIFICATIONS =======================================================================================================
 export {
-    NotificationsWrapper,
-    type NotificationsWrapperProps,
-    NotificationItem,
-    type NotificationItemProps,
+    NotificationsProvider,
+    useNotifications,
+    type NotificationsProviderProps,
+    type NotificationOptions,
+    type NotifyFunction,
+    type NotificationKind,
 } from "./Notification";
 
 // PAGINATION ==========================================================================================================

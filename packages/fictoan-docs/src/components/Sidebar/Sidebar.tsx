@@ -1,6 +1,6 @@
 // REACT CORE ==========================================================================================================
 import Link from "next/link";
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 // UI ==================================================================================================================
@@ -19,7 +19,8 @@ import AccordionIcon from "../../assets/icons/new-icons/accordion.svg";
 import BadgeIcon from "../../assets/icons/new-icons/badge.svg";
 import BaseElementIcon from "../../assets/icons/new-icons/lego-brick.svg";
 import BreadcrumbsIcon from "../../assets/icons/new-icons/breadcrumbs.svg";
-import ButtonGroupIcon from "../../assets/icons/button-group.svg";
+import ButtonGroupIcon from "../../assets/icons/new-icons/button-group.svg";
+import ButtonGroupVerticalIcon from "../../assets/icons/new-icons/button-group-vertical.svg";
 import ButtonIcon from "../../assets/icons/new-icons/button.svg";
 import CalloutIcon from "../../assets/icons/new-icons/callout.svg";
 import CardIcon from "../../assets/icons/new-icons/card.svg";
@@ -35,7 +36,7 @@ import HomeIcon from "../../assets/icons/new-icons/home.svg";
 import InputIcon from "../../assets/icons/new-icons/input.svg";
 import LayoutIcon from "../../assets/icons/new-icons/window.svg";
 import ListBoxIcon from "../../assets/icons/new-icons/listbox.svg";
-import ManifestoIcon from "../../assets/icons/manifesto.svg";
+import ManifestoIcon from "../../assets/icons/new-icons/fist.svg";
 import ModalIcon from "../../assets/icons/new-icons/window.svg";
 import NotificationIcon from "../../assets/icons/new-icons/notification.svg";
 import OptionCardsIcon from "../../assets/icons/new-icons/option-card.svg";
@@ -68,6 +69,17 @@ interface SidebarProps {
 
 export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, setShowSidebarOnMobile }: SidebarProps) => {
     const ref = useRef<HTMLDivElement>(null);
+    const [buttonGroupVertical, setButtonGroupVertical] = useState(false);
+
+    // Listen for ButtonGroup orientation changes
+    useEffect(() => {
+        const handleOrientationChange = (e: CustomEvent) => {
+            setButtonGroupVertical(e.detail.isVertical);
+        };
+
+        window.addEventListener("buttonGroupOrientationChange", handleOrientationChange as EventListener);
+        return () => window.removeEventListener("buttonGroupOrientationChange", handleOrientationChange as EventListener);
+    }, []);
 
     // const [ theme, setTheme ] = useTheme();
     //
@@ -205,7 +217,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
 
                 <Link href="/components/button-group" className={`${pathname === "/components/button-group" ? "active" : ""}`}>
                     <SidebarItem onClick={closeMobileSidebar}>
-                        <ButtonGroupIcon />
+                        {buttonGroupVertical ? <ButtonGroupVerticalIcon /> : <ButtonGroupIcon />}
                         <Text weight="400">Button group</Text>
                     </SidebarItem>
                 </Link>

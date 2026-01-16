@@ -4,20 +4,22 @@ import React, { useState, useRef, useEffect, MutableRefObject, KeyboardEvent } f
 // LOCAL COMPONENTS ====================================================================================================
 import { Div } from "$tags";
 import { Element } from "$element";
-import { FormItem } from "../FormItem/FormItem";
-import { Badge } from "../../Badge/Badge";
-import { InputField } from "../InputField/InputField";
-import { Text } from "../../Typography/Text";
-import { separateWrapperProps } from "../../../utils/propSeparation";
 
 // HOOKS ===============================================================================================================
 import { useClickOutside } from "$hooks/UseClickOutside";
+
+// UTILS ===============================================================================================================
+import { separateWrapperProps } from "$utils/propSeparation";
 
 // STYLES ==============================================================================================================
 import "./list-box.css";
 
 // OTHER ===============================================================================================================
+import { Badge } from "../../Badge/Badge";
+import { FormItem } from "../FormItem/FormItem";
+import { InputField } from "../InputField/InputField";
 import { ListBoxProps, OptionForListBoxProps, ListBoxElementType, ListBoxCustomProps } from "./constants";
+import { Text } from "../../Typography/Text";
 import { searchOptions } from "./listBoxUtils";
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -235,6 +237,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
+                isFullWidth={isFullWidth}
                 {...wrapperProps}
             >
                 {/* PARENT */}
@@ -243,6 +246,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                     data-list-box
                     classNames={["list-box-wrapper", disabled ? "disabled" : "", className || ""]}
                     ref={dropdownRef}
+                    isFullWidth={isFullWidth}
                     {...inputProps}
                 >
                     <Div
@@ -274,7 +278,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                                             ))}
                                         </Div>
                                         {selectionLimit && selectedOptions.length >= selectionLimit && (
-                                            <Text className="options-limit-warning" textColour="red" size="small">
+                                            <Text className="options-limit-warning" textColour="red" size="tiny">
                                                 You can choose only {selectionLimit} option{selectionLimit === 1 ? "" : "s"}
                                             </Text>
                                         )}
@@ -325,6 +329,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                                     onKeyDown={handleKeyDown}
                                     aria-controls={`${listboxId}-listbox`}
                                     aria-label="Search options"
+                                    isFullWidth
                                 />
                                 {allowCustomEntries && searchValue.trim() && !selectedOptions.some(opt =>
                                     opt.label.toLowerCase() === searchValue.trim().toLowerCase()) && (

@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { Element } from "$element";
-import { SpacingTypes } from "../../Element/constants";
+import { CommonProps, SpacingTypes } from "../../Element/constants";
 
 // STYLES ==============================================================================================================
 import "./checkbox.css";
@@ -14,7 +14,7 @@ import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 import { separateWrapperProps } from "../../../utils/propSeparation";
 
 export type CheckboxElementType = HTMLInputElement;
-export type CheckboxProps = InputLabelCustomProps & {
+export type CheckboxProps = InputLabelCustomProps & CommonProps & {
     id             ? : string;
     name           ? : string;
     checked        ? : boolean;

@@ -129,7 +129,7 @@ const TypographyDocs = () => {
                 </Row>
 
                 <Row horizontalPadding="huge" marginBottom="micro">
-                    <Portion desktopSpan="half">
+                    <Portion desktopSpan="10">
                         <Range
                             label={`Base font size`}
                             min={0.75}
@@ -142,14 +142,17 @@ const TypographyDocs = () => {
                         />
                     </Portion>
 
-                    <Portion desktopSpan="half">
+                    <Portion desktopSpan="4" />
+
+                    <Portion desktopSpan="10">
                         <Range
-                            label={`Type scale: ${typeScale.toFixed(4)}`}
+                            label={`Type scale`}
                             min={1.0}
                             max={1.5}
-                            step={0.01}
+                            step={0.1}
                             value={typeScale}
                             onChange={(value) => setTypeScale(value)}
+                            isFullWidth
                         />
                     </Portion>
                 </Row>

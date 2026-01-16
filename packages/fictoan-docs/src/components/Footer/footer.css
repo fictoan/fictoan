@@ -41,10 +41,10 @@
     .footer-links {
         list-style     : none;
         padding        : 0;
-        margin         : 0;
         display        : flex;
         flex-direction : column;
         gap            : 4px;
+        margin         : 0;
         margin-bottom  : 32px;
     }
 

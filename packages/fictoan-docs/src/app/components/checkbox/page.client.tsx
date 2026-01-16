@@ -1,7 +1,7 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
 import {
@@ -14,243 +14,93 @@ import {
     Switch,
     SwitchGroup,
     CodeBlock,
-    Header,
-    Form,
+    InputField,
     RadioTabGroup,
-}from "fictoan-react";
+} from "fictoan-react";
 
-// LOCAL COMPONENTS ====================================================================================================
-import "../../../components/PropsConfigurator/props-configurator.css";
-
-// LIB =================================================================================================================
-import { ResolvedProp, ControlType } from "$/lib/props-registry/types";
-import { getControlComponent, inferControlType } from "$/lib/props-registry/controls";
-import { getOrderedPropNames } from "$/lib/props-registry/createPropsRegistry";
+// UTILS ===============================================================================================================
+import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
 import "../../../styles/fictoan-theme.css";
 import "./page-checkbox.css";
 
 // OTHER ===============================================================================================================
-import metadata from "fictoan-react/dist/props-metadata.json";
 import { ComponentDocsLayout } from "../ComponentDocsLayout";
-import { checkboxRegistry } from "./props.registry";
-
-interface PropMetadata {
-    name           : string;
-    type           : { name : string };
-    required     ? : boolean;
-    defaultValue ? : { value : any };
-    description  ? : string;
-    parent       ? : { fileName : string; name : string };
-}
-
-interface ComponentMetadata {
-    displayName : string;
-    description : string;
-    props       : Record<string, PropMetadata>;
-}
-
-// Parse enum type string into options
-function parseEnumType(typeString : string) {
-    return typeString
-        .split("|")
-        .map((v) => v.trim().replace(/['"]/g, ""))
-        .filter((v) => v && v !== "undefined")
-        .map((value) => ({ value, label : value }));
-}
-
-// Resolve a prop from registry config + optional metadata
-function resolveProp(
-    propName : string,
-    config : {
-        control? : ControlType; label? : string; options? : any;
-        defaultValue? : any; hidden? : boolean; inputProps? : Record<string, any>
-    },
-    propMeta : PropMetadata | undefined,
-    currentValue : any,
-) : ResolvedProp {
-    const typeString = propMeta?.type?.name || "string";
-
-    let options = config.options;
-    if (!options && typeString.includes("|")) {
-        options = parseEnumType(typeString);
-    }
-
-    const control : ControlType = config.control || inferControlType(propName, typeString, options);
-    const defaultValue = config.defaultValue ?? propMeta?.defaultValue?.value ?? undefined;
-
-    return {
-        name         : propName,
-        label        : config.label || propName,
-        control,
-        options,
-        defaultValue,
-        currentValue,
-        hidden       : config.hidden ?? false,
-        inputProps   : config.inputProps,
-    };
-}
 
 const CheckboxDocs = () => {
-    const [ props, setProps ] = useState<Record<string, any>>({});
-    const [ showGroup, setShowGroup ] = useState(false);
-    const [ groupValue, setGroupValue ] = useState<string[]>([]);
-    const [ componentType, setComponentType ] = useState<"checkbox" | "switch">("checkbox");
-    const [ componentMeta, setComponentMeta ] = useState<ComponentMetadata | null>(null);
+    // Props state
+    const [id, setId] = useState("checkbox-1");
+    const [label, setLabel] = useState("Check me");
+    const [defaultChecked, setDefaultChecked] = useState(false);
+    const [disabled, setDisabled] = useState(false);
+    const [helpText, setHelpText] = useState("");
+    const [errorText, setErrorText] = useState("");
 
-    // Load component metadata and initialize props with defaults
-    useEffect(() => {
-        const meta = (metadata as unknown as Record<string, ComponentMetadata>)[checkboxRegistry.component];
-        setComponentMeta(meta || null);
+    // Mode toggles
+    const [componentType, setComponentType] = useState<"checkbox" | "switch">("checkbox");
+    const [showGroup, setShowGroup] = useState(false);
+    const [groupValue, setGroupValue] = useState<string[]>([]);
 
-        const initialProps : Record<string, any> = {};
-        for (const [ propName, config ] of Object.entries(checkboxRegistry.props)) {
-            if (config.defaultValue !== undefined) {
-                initialProps[propName] = config.defaultValue;
-            }
-        }
-        setProps(initialProps);
-    }, []);
+    // Theme configurator
+    const CheckboxComponent = (varName: string) => {
+        return varName.startsWith("checkbox-") || varName.startsWith("switch-");
+    };
 
-    // Create group options with memoization
+    const {
+        interactiveElementRef,
+        componentProps: themeProps,
+        themeConfigurator,
+    } = createThemeConfigurator<HTMLDivElement>("Checkbox", CheckboxComponent);
+
+    // Group options
     const groupOptions = useMemo(() => [
-        {
-            id       : "option1",
-            value    : "option1",
-            label    : "Option 1",
-            disabled : props.disabled || false,
-        },
-        { id : "option2", value : "option2", label : "Option 2" },
-        { id : "option3", value : "option3", label : "Option 3" },
-    ], [ props.disabled ]);
+        { id: "option1", value: "option1", label: "Option 1", disabled },
+        { id: "option2", value: "option2", label: "Option 2" },
+        { id: "option3", value: "option3", label: "Option 3" },
+    ], [disabled]);
 
-    // Update group value when defaultChecked changes
-    useEffect(() => {
-        if (showGroup) {
-            setGroupValue(props.defaultChecked ? ["option1"] : []);
-        }
-    }, [ props.defaultChecked, showGroup ]);
-
-    // Handle prop value change
-    const handlePropChange = useCallback((propName : string) => (value : any) => {
-        setProps((prev) => ({
-            ...prev,
-            [propName] : value,
-        }));
-    }, []);
-
-    // Debug handlers
-    const handleComponentTypeChange = (value : string) => {
-        console.log("Component type changing to:", value, "from:", componentType);
-        setComponentType(value as "checkbox" | "switch");
-    };
-
-    const handleShowGroupChange = (checked : boolean) => {
-        console.log("Show group changing to:", checked, "from:", showGroup);
-        setShowGroup(checked);
-    };
-
-    console.log("Render - componentType:", componentType, "showGroup:", showGroup);
-
-    // Generate code string
-    const generateCodeString = useCallback(() => {
+    // Generate code
+    const codeString = useMemo(() => {
         const componentName = componentType === "checkbox" ? "Checkbox" : "Switch";
 
         if (showGroup) {
-            const groupName = `${componentName.toLowerCase()}-group`;
-            const propsToShow = Object.entries(props).filter(([ key, value ]) => {
-                if (key === "id" || key === "label") return false;
-                if (value === undefined || value === null || value === "") return false;
-                if (value === false) return false;
-                return true;
-            });
+            const groupName = `${componentName}Group`;
+            return `import { useState } from "react";
+import { ${groupName} } from "fictoan-react";
 
-            const optionProps = propsToShow
-                .map(([ key, value ]) => {
-                    if (typeof value === "boolean" && value) {
-                        return `            ${key}`;
-                    }
-                    return null;
-                })
-                .filter(Boolean);
+const [values, setValues] = useState<string[]>([]);
 
-            const initialValue = props.defaultChecked ? `["option1"]` : `[]`;
-
-            return [
-                `<${componentName}Group`,
-                `    name="${groupName}"`,
-                `    options={[`,
-                `        {`,
-                `            id: "option1",`,
-                `            value: "option1",`,
-                `            label: "Option 1",`,
-                ...optionProps.map(p => `${p},`),
-                `        },`,
-                `        { id: "option2", value: "option2", label: "Option 2" },`,
-                `        { id: "option3", value: "option3", label: "Option 3" },`,
-                `    ]}`,
-                `    value={${initialValue}}`,
-                `    onChange={(values) => console.log(values)}`,
-                `/>`,
-            ].join("\n");
+<${groupName}
+    name="${componentType}-group"
+    options={[
+        { id: "option1", value: "option1", label: "Option 1"${disabled ? ", disabled: true" : ""} },
+        { id: "option2", value: "option2", label: "Option 2" },
+        { id: "option3", value: "option3", label: "Option 3" },
+    ]}
+    value={values}
+    onChange={(vals) => setValues(vals)}
+/>`;
         }
 
-        const propsEntries = Object.entries(props).filter(([ key, value ]) => {
-            if (key === "label") return false;
-            if (value === undefined || value === null || value === "") return false;
-            if (value === false) return false;
-            return true;
-        });
+        const props = [];
+        props.push(`id="${id}"`);
+        props.push(`label="${label}"`);
+        props.push(`checked={checked}`);
+        props.push(`onChange={(val) => setChecked(val)}`);
+        if (disabled) props.push(`disabled`);
+        if (helpText) props.push(`helpText="${helpText}"`);
+        if (errorText) props.push(`errorText="${errorText}"`);
 
-        const propsString = propsEntries
-            .map(([ key, value ]) => {
-                if (typeof value === "boolean" && value) {
-                    return `    ${key}`;
-                }
-                if (typeof value === "string") {
-                    return `    ${key}="${value}"`;
-                }
-                if (typeof value === "number") {
-                    return `    ${key}={${value}}`;
-                }
-                return `    ${key}={${JSON.stringify(value)}}`;
-            })
-            .join("\n");
+        return `import { useState } from "react";
+import { ${componentName} } from "fictoan-react";
 
-        const labelValue = props.label || "Check me";
-        const labelProp = `    label="${labelValue}"`;
+const [checked, setChecked] = useState(${defaultChecked});
 
-        if (propsString) {
-            return `<${componentName}\n${propsString}\n${labelProp}\n/>`;
-        }
-        return `<${componentName}\n${labelProp}\n/>`;
-    }, [ componentType, props, showGroup ]);
-
-    // Get prop names in registry order
-    const orderedPropNames = getOrderedPropNames(checkboxRegistry);
-
-    // Resolve all props
-    const resolvedProps = orderedPropNames.map((propName) => {
-        const config = checkboxRegistry.props[propName];
-        const propMeta = componentMeta?.props?.[propName];
-        return resolveProp(propName, config, propMeta, props[propName]);
-    }).filter((p) => !p.hidden);
-
-    // Render a single prop control
-    const renderPropControl = (resolvedProp : ResolvedProp) => {
-        const ControlComponent = getControlComponent(resolvedProp.control);
-        return (
-            <ControlComponent
-                key={resolvedProp.name}
-                prop={resolvedProp}
-                value={resolvedProp.currentValue}
-                onChange={handlePropChange(resolvedProp.name)}
-            />
-        );
-    };
-
-    const displayName = componentType === "checkbox" ? "Checkbox" : "Switch";
+<${componentName}
+    ${props.join("\n    ")}
+/>`;
+    }, [componentType, showGroup, id, label, defaultChecked, disabled, helpText, errorText]);
 
     return (
         <ComponentDocsLayout>
@@ -260,10 +110,7 @@ const CheckboxDocs = () => {
                     Checkbox
                 </Heading6>
 
-                <Text
-                    id="component-description"
-                    weight="400"
-                >
+                <Text id="component-description" weight="400">
                     A click-to-toggle component to make a choice
                 </Text>
             </Div>
@@ -304,13 +151,25 @@ const CheckboxDocs = () => {
                 ) : (
                     componentType === "checkbox" ? (
                         <Checkbox
-                            key={`checkbox-${props.defaultChecked}-${props.disabled}`}
-                            {...props}
+                            key={`checkbox-${defaultChecked}-${disabled}`}
+                            id={id}
+                            label={label}
+                            defaultChecked={defaultChecked}
+                            disabled={disabled}
+                            helpText={helpText || undefined}
+                            errorText={errorText || undefined}
+                            {...themeProps}
                         />
                     ) : (
                         <Switch
-                            key={`switch-${props.defaultChecked}-${props.disabled}`}
-                            {...props}
+                            key={`switch-${defaultChecked}-${disabled}`}
+                            id={id}
+                            label={label}
+                            defaultChecked={defaultChecked}
+                            disabled={disabled}
+                            helpText={helpText || undefined}
+                            errorText={errorText || undefined}
+                            {...themeProps}
                         />
                     )
                 )}
@@ -318,49 +177,100 @@ const CheckboxDocs = () => {
 
             {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="props-config">
-                <Div id="props-configurator-new">
-                    <Header marginBottom="micro">
-                        <Text>Configure {displayName} props</Text>
-                    </Header>
+                <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                    {codeString}
+                </CodeBlock>
 
-                    {/* Code Preview */}
-                    <CodeBlock
-                        language="tsx"
-                        withSyntaxHighlighting
-                        showCopyButton
+                <Div className="doc-controls">
+                    <RadioTabGroup
+                        id="component-type"
+                        label="Component type"
+                        options={[
+                            { id: "type-checkbox", value: "checkbox", label: "Checkbox" },
+                            { id: "type-switch", value: "switch", label: "Switch" },
+                        ]}
+                        value={componentType}
+                        onChange={(value) => setComponentType(value as "checkbox" | "switch")}
                         marginBottom="micro"
-                    >
-                        {generateCodeString()}
-                    </CodeBlock>
+                    />
 
-                    {/* Props */}
-                    <Div id="props-list">
-                        <Form spacing="medium">
-                            {resolvedProps.map(renderPropControl)}
-                        </Form>
+                    <Checkbox
+                        id="show-group"
+                        label="Show as group"
+                        checked={showGroup}
+                        onChange={(checked) => setShowGroup(checked)}
+                        marginBottom="micro"
+                    />
 
-                        {/* Component Type Toggle */}
-                        <RadioTabGroup
-                            id="component-type-toggle"
-                            name="component-type-toggle"
-                            label="Component type"
-                            options={[
-                                { id : "type-checkbox", value : "checkbox", label : "Checkbox" },
-                                { id : "type-switch", value : "switch", label : "Switch" },
-                            ]}
-                            value={componentType}
-                            onChange={handleComponentTypeChange}
-                        />
+                    {!showGroup && (
+                        <>
+                            <InputField
+                                label="id"
+                                value={id}
+                                onChange={(value) => setId(value)}
+                                helpText="Unique identifier for the checkbox."
+                                marginBottom="micro" isFullWidth
+                            />
 
-                        {/* Group Toggle */}
+                            <InputField
+                                label="label"
+                                value={label}
+                                onChange={(value) => setLabel(value)}
+                                helpText="Text label displayed next to the checkbox."
+                                marginBottom="micro" isFullWidth
+                            />
+
+                            <Checkbox
+                                id="prop-defaultChecked"
+                                label="defaultChecked"
+                                checked={defaultChecked}
+                                onChange={(checked) => setDefaultChecked(checked)}
+                                helpText="Whether the checkbox is checked by default."
+                                marginBottom="micro"
+                            />
+
+                            <Checkbox
+                                id="prop-disabled"
+                                label="disabled"
+                                checked={disabled}
+                                onChange={(checked) => setDisabled(checked)}
+                                marginBottom="micro"
+                            />
+
+                            <InputField
+                                label="helpText"
+                                value={helpText}
+                                onChange={(value) => setHelpText(value)}
+                                helpText="Additional helper text displayed below."
+                                marginBottom="micro" isFullWidth
+                            />
+
+                            <InputField
+                                label="errorText"
+                                value={errorText}
+                                onChange={(value) => setErrorText(value)}
+                                helpText="Error message to display."
+                                marginBottom="micro" isFullWidth
+                            />
+                        </>
+                    )}
+
+                    {showGroup && (
                         <Checkbox
-                            id="show-as-group-toggle"
-                            label="Show as group"
-                            checked={showGroup}
-                            onChange={handleShowGroupChange}
+                            id="prop-disabled-group"
+                            label="disabled (first option)"
+                            checked={disabled}
+                            onChange={(checked) => setDisabled(checked)}
+                            helpText="Disable the first option in the group."
+                            marginBottom="micro"
                         />
-                    </Div>
+                    )}
                 </Div>
+            </Div>
+
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
             </Div>
         </ComponentDocsLayout>
     );

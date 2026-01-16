@@ -1,318 +1,305 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React, { useEffect, useState } from "react";
+import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Divider, Portion, Row, Text, Article, Card, Form, Header, Select, Range, Checkbox, Switch, RadioButton, CodeBlock, RadioGroup } from "fictoan-react";
+import {
+    Div,
+    Heading6,
+    Text,
+    Divider,
+    RadioGroup,
+    RadioButton,
+    CodeBlock,
+    InputField,
+    RadioTabGroup,
+    Checkbox,
+}from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
 import "./page-radio-button.css";
 
 // OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
-import { radioButtonProps } from "./config";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
 const RadioButtonDocs = () => {
+    // Mode toggle
+    const [mode, setMode] = useState<"group" | "individual">("group");
 
-    const [defaultChecked, setDefaultChecked] = useState("yes");
-    const [userSelectedRadio, setUserSelectedRadio] = useState("");
-    const [isDisabled, setIsDisabled] = useState({ yes: false, no: false, maybe: false });
+    // Selected value state
+    const [selectedValue, setSelectedValue] = useState("option-1");
 
-    const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(radioButtonProps.variables);
+    // Props state
+    const [label, setLabel] = useState("Choose an option");
+    const [helpText, setHelpText] = useState("");
+    const [align, setAlign] = useState("vertical");
+    const [disabled, setDisabled] = useState(false);
+    const [disabledOptionIndex, setDisabledOptionIndex] = useState<number | null>(null);
 
-    const handleDefaultCheckedChange = (checked) => {
-        setDefaultChecked(checked);
+    // Theme configurator
+    const RadioButtonComponent = (varName: string) => {
+        return varName.startsWith("radio-");
     };
 
-    const handleRadioChange = (value) => {
-        setUserSelectedRadio(value);
-    };
+    const {
+        interactiveElementRef,
+        componentProps: themeProps,
+        themeConfigurator,
+    } = createThemeConfigurator<HTMLDivElement>("RadioButton", RadioButtonComponent);
 
-    const handleDisableChange = (value) => {
-        const id = value.split("-").pop(); // Extract yes/no/maybe from the ID
-        setIsDisabled((prev) => ({ ...prev, [id]: !prev[id] }));
-    };
+    // Sample options
+    const baseOptions = [
+        { id: "opt-1", value: "option-1", label: "Option 1" },
+        { id: "opt-2", value: "option-2", label: "Option 2" },
+        { id: "opt-3", value: "option-3", label: "Option 3" },
+    ];
 
-    const isChecked = (value) => {
-        if (userSelectedRadio) {
-            return userSelectedRadio === value;
+    // Options with disabled state applied
+    const options = baseOptions.map((opt, index) => ({
+        ...opt,
+        disabled: mode === "group" && disabledOptionIndex === index,
+    }));
+
+    // Generate code
+    const codeString = useMemo(() => {
+        if (mode === "group") {
+            const props = [];
+            props.push(`id="my-radio-group"`);
+            props.push(`name="my-radio-group"`);
+            if (label) props.push(`label="${label}"`);
+            if (helpText) props.push(`helpText="${helpText}"`);
+
+            // Build options string with disabled if applicable
+            const optionsStr = baseOptions.map((opt, index) => {
+                const disabledStr = disabledOptionIndex === index ? ", disabled: true" : "";
+                return `        { id: "${opt.id}", value: "${opt.value}", label: "${opt.label}"${disabledStr} }`;
+            }).join(",\n");
+            props.push(`options={[\n${optionsStr},\n    ]}`);
+
+            props.push(`value={value}`);
+            props.push(`onChange={(val) => setValue(val)}`);
+            if (align !== "vertical") props.push(`align="${align}"`);
+
+            return `import { useState } from "react";
+import { RadioGroup } from "fictoan-react";
+
+const [value, setValue] = useState("option-1");
+
+<RadioGroup
+    ${props.join("\n    ")}
+/>`;
+        } else {
+            return `import { useState } from "react";
+import { RadioButton } from "fictoan-react";
+
+const [value, setValue] = useState("option-1");
+
+<RadioButton
+    id="radio-1"
+    name="my-radio-group"
+    value="option-1"
+    label="Option 1"
+    checked={value === "option-1"}
+    onChange={(val) => setValue(val)}${disabled ? `\n    disabled` : ""}
+/>
+
+<RadioButton
+    id="radio-2"
+    name="my-radio-group"
+    value="option-2"
+    label="Option 2"
+    checked={value === "option-2"}
+    onChange={(val) => setValue(val)}${disabled ? `\n    disabled` : ""}
+/>
+
+<RadioButton
+    id="radio-3"
+    name="my-radio-group"
+    value="option-3"
+    label="Option 3"
+    checked={value === "option-3"}
+    onChange={(val) => setValue(val)}${disabled ? `\n    disabled` : ""}
+/>`;
         }
-        return defaultChecked === value;
-    };
-
+    }, [mode, label, helpText, align, disabled, disabledOptionIndex]);
 
     return (
-        <Article id="page-component">
-            <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                <Portion>
-                    <Heading1>Radio button</Heading1>
-                    <Text size="large" marginBottom="small">
-                        An input to select one of many options
-                    </Text>
-                </Portion>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading6 id="component-name">
+                    Radio button
+                </Heading6>
 
-                <Portion>
-                    
-                    <Text>&bull; </Text>
-                </Portion>
-            </Row>
+                <Text id="component-description" weight="400">
+                    An input to select one of many options
+                </Text>
+            </Div>
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/*  CONFIGURATOR */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Row horizontalPadding="small" className="rendered-component">
-                {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////// */}
-                <Portion id="component-wrapper">
-                    <Element
-                        as="div" padding="small" shape="rounded" bgColour="slate-light80"
-                        data-centered-children
-                    >
-                        <RadioGroup
+                <Text>
+                    Use <code>RadioGroup</code> for a group of radio buttons with shared state.
+                </Text>
+
+                <Text>
+                    Use <code>RadioButton</code> individually for custom layouts.
+                </Text>
+
+                <Text>
+                    The <code>align</code> prop controls horizontal or vertical layout.
+                </Text>
+            </Div>
+
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                {mode === "group" ? (
+                    <RadioGroup
+                        ref={interactiveElementRef}
+                        name="demo-radio-group"
+                        label={label || undefined}
+                        helpText={helpText || undefined}
+                        options={options}
+                        value={selectedValue}
+                        onChange={(value) => setSelectedValue(value)}
+                        align={align as any}
+                        {...themeProps}
+                    />
+                ) : (
+                    <Div ref={interactiveElementRef} {...themeProps}>
+                        <RadioButton
                             id="radio-1"
-                            name="demo-group"
-                            value={userSelectedRadio || defaultChecked} // Use controlled value
-                            options={[
-                                { id: "radio-1", value: "yes", label: "Yes", disabled: isDisabled.yes },
-                                { id: "radio-2", value: "no", label: "No", disabled: isDisabled.no },
-                                { id: "radio-3", value: "maybe", label: "Maybe", disabled: isDisabled.maybe },
-                            ]}
-                            onChange={handleRadioChange}
+                            name="demo-individual"
+                            value="option-1"
+                            label="Option 1"
+                            checked={selectedValue === "option-1"}
+                            onChange={(value) => setSelectedValue(value)}
+                            disabled={disabled}
                         />
-                    </Element>
-                </Portion>
+                        <RadioButton
+                            id="radio-2"
+                            name="demo-individual"
+                            value="option-2"
+                            label="Option 2"
+                            checked={selectedValue === "option-2"}
+                            onChange={(value) => setSelectedValue(value)}
+                            disabled={disabled}
+                        />
+                        <RadioButton
+                            id="radio-3"
+                            name="demo-individual"
+                            value="option-3"
+                            label="Option 3"
+                            checked={selectedValue === "option-3"}
+                            onChange={(value) => setSelectedValue(value)}
+                            disabled={disabled}
+                        />
+                    </Div>
+                )}
 
-                {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Form spacing="none">
-                        <Card padding="micro" shape="rounded">
-                            <Header verticallyCentreItems pushItemsToEnds marginBottom="micro">
-                                <Text size="large" weight="700" textColour="white">
-                                    Configure props
-                                </Text>
-                            </Header>
+                <Div marginTop="nano">
+                    <Text size="small">
+                        Selected: {selectedValue}
+                    </Text>
+                </Div>
+            </Div>
 
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton marginBottom="micro">
-                                        {[
-                                            `// Paste this in your content file`,
-                                            `<RadioButton`,
-                                            `    id="checkbox-1"`,
-                                            `    value="checkbox-1"`,
-                                            `    name="checkbox-group"`,
-                                            `    label="Yes"`,
-                                            defaultChecked === "yes" ? `   defaultChecked` : null,
-                                            isDisabled.yes ? `   disabled` : null,
-                                            `/> \n`,
-                                            `<RadioButton`,
-                                            `    id="checkbox-2"`,
-                                            `    value="checkbox-2"`,
-                                            `    name="checkbox-group"`,
-                                            `    label="No"`,
-                                            defaultChecked === "no" ? `   defaultChecked` : null,
-                                            isDisabled.no ? `   disabled` : null,
-                                            `/> \n`,
-                                            `<RadioButton`,
-                                            `    id="checkbox-3"`,
-                                            `    value="checkbox-3"`,
-                                            `    name="checkbox-group"`,
-                                            `    label="Maybe"`,
-                                            defaultChecked === "maybe" ? `   defaultChecked` : null,
-                                            isDisabled.maybe ? `   disabled` : null,
-                                            `/> \n`,
-                                        ].filter(Boolean).join("\n")}
-                                    </CodeBlock>
-                                </Portion>
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                    {codeString}
+                </CodeBlock>
 
-                                {/* CHECKED ======================================================================== */}
-                                <Portion>
-                                    <RadioButton
-                                        id="control-radio-yes"
-                                        name="control-group"
-                                        value="yes"
-                                        label="Check 'Yes' by default"
-                                        checked={defaultChecked === "yes"}
-                                        onChange={handleDefaultCheckedChange}
-                                    />
-                                    <RadioButton
-                                        id="control-radio-no"
-                                        name="control-group"
-                                        value="no"
-                                        label="Check 'No' by default"
-                                        checked={defaultChecked === "no"}
-                                        onChange={handleDefaultCheckedChange}
-                                    />
-                                    <RadioButton
-                                        id="control-radio-maybe"
-                                        name="control-group"
-                                        value="maybe"
-                                        label="Check 'Maybe' by default"
-                                        checked={defaultChecked === "maybe"}
-                                        onChange={handleDefaultCheckedChange}
-                                    />
-                                    <RadioButton
-                                        id="control-radio-none"
-                                        name="control-group"
-                                        value="none"
-                                        label="Check none"
-                                        checked={defaultChecked === "none"}
-                                        onChange={handleDefaultCheckedChange}
-                                    />
+                <Div className="doc-controls">
+                    <RadioTabGroup
+                        id="prop-mode"
+                        label="Usage mode"
+                        options={[
+                            { id: "mode-group", value: "group", label: "RadioGroup" },
+                            { id: "mode-individual", value: "individual", label: "Individual" },
+                        ]}
+                        value={mode}
+                        onChange={(val) => setMode(val as "group" | "individual")}
+                        helpText="Choose between grouped or individual radio buttons."
+                        marginBottom="micro"
+                    />
 
-                                    <Divider kind="secondary" horizontalMargin="none" marginTop="micro" />
-                                </Portion>
+                    {mode === "group" && (
+                        <>
+                            <InputField
+                                label="label"
+                                value={label}
+                                onChange={(val) => setLabel(val)}
+                                helpText="Label text for the radio group."
+                                marginBottom="micro" isFullWidth
+                            />
 
-                                {/* DISABLED ======================================================================= */}
-                                <Portion>
-                                    <Checkbox
-                                        id="checkbox-disable-first"
-                                        value="checkbox-disable-yes"
-                                        name="checkbox-disable"
-                                        label="Disable 'Yes'"
-                                        checked={isDisabled.yes}
-                                        onChange={() => handleDisableChange("checkbox-disable-yes")}
-                                    />
+                            <InputField
+                                label="helpText"
+                                value={helpText}
+                                onChange={(val) => setHelpText(val)}
+                                helpText="Helper text shown below the group."
+                                marginBottom="micro" isFullWidth
+                            />
 
-                                    <Checkbox
-                                        id="checkbox-disable-second"
-                                        value="checkbox-disable-no"
-                                        name="checkbox-disable"
-                                        label="Disable 'No'"
-                                        checked={isDisabled.no}
-                                        onChange={() => handleDisableChange("checkbox-disable-no")}
-                                    />
+                            <RadioTabGroup
+                                id="prop-align"
+                                label="align"
+                                options={[
+                                    { id: "align-vertical", value: "vertical", label: "vertical" },
+                                    { id: "align-horizontal", value: "horizontal", label: "horizontal" },
+                                ]}
+                                value={align}
+                                onChange={(val) => setAlign(val)}
+                                helpText="Layout direction of the options."
+                                marginBottom="micro"
+                            />
+                        </>
+                    )}
 
-                                    <Checkbox
-                                        id="checkbox-disable-third"
-                                        value="checkbox-disable-maybe"
-                                        name="checkbox-disable"
-                                        label="Disable 'Maybe'"
-                                        checked={isDisabled.maybe}
-                                        onChange={() => handleDisableChange("checkbox-disable-maybe")}
-                                    />
+                    {mode === "group" ? (
+                        <Checkbox
+                            id="prop-disabled"
+                            label={disabledOptionIndex !== null
+                                ? `disabled (${baseOptions[disabledOptionIndex].label})`
+                                : "disabled"}
+                            checked={disabledOptionIndex !== null}
+                            onChange={() => {
+                                if (disabledOptionIndex !== null) {
+                                    setDisabledOptionIndex(null);
+                                } else {
+                                    const randomIndex = Math.floor(Math.random() * baseOptions.length);
+                                    setDisabledOptionIndex(randomIndex);
+                                }
+                            }}
+                            helpText="Disables a random radio button option."
+                            marginBottom="micro"
+                        />
+                    ) : (
+                        <Checkbox
+                            id="prop-disabled"
+                            label="disabled"
+                            checked={disabled}
+                            onChange={() => setDisabled(!disabled)}
+                            helpText="Disables all radio buttons."
+                            marginBottom="micro"
+                        />
+                    )}
+                </Div>
+            </Div>
 
-                                    <Divider kind="secondary" horizontalMargin="none" marginTop="micro" />
-                                </Portion>
-                            </Row>
-                        </Card>
-                    </Form>
-                </Portion>
-
-                {/* GLOBAL THEME /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Card padding="micro" shape="rounded">
-                        <Form>
-                            <Header verticallyCentreItems pushItemsToEnds>
-                                <Text size="large" weight="700" textColour="white" marginBottom="nano">
-                                    Set global theme values
-                                </Text>
-                            </Header>
-
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock
-                                        withSyntaxHighlighting
-                                        source={cssVariablesList}
-                                        language="css"
-                                        showCopyButton
-                                        marginBottom="micro"
-                                    />
-                                </Portion>
-                            </Row>
-
-                            {/* CHECKBOX /////////////////////////////////////////////////////////////////////////// */}
-                            <Row marginBottom="none">
-                                {/* BG DEFAULT ===================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Circle — default"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["radio-circle-bg-default"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("radio-circle-bg-default", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* BG HOVER ======================================================================= */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Circle — hover"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["radio-circle-bg-hover"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("radio-circle-bg-hover", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* BG CHECKED ===================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Circle — checked"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["radio-circle-bg-checked"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("radio-circle-bg-checked", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* BG DISABLED ==================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Circle — disabled"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["radio-circle-bg-disabled"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("radio-circle-bg-disabled", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* BG DISABLED ==================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Dot"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["radio-button-dot"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("radio-button-dot", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-                            </Row>
-                        </Form>
-                    </Card>
-                </Portion>
-            </Row>
-        </Article>
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

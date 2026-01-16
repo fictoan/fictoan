@@ -6,6 +6,7 @@ import { Div } from "$tags";
 import { Element } from "$element";
 import { FormItem } from "../FormItem/FormItem";
 import { SpacingTypes } from "../../Element/constants";
+import { separateWrapperProps } from "../../../utils/propSeparation";
 
 // STYLES ==============================================================================================================
 import "./radio-tab-group.css";
@@ -127,6 +128,9 @@ export const RadioTabGroup = React.forwardRef<HTMLDivElement, RadioTabGroupProps
             onChange?.(e.target.value);
         };
 
+        // Separate wrapper-level props (margin, padding, etc.) from component-specific props
+        const { wrapperProps, inputProps } = separateWrapperProps(props);
+
         const handleScroll = useCallback((direction: "left" | "right") => {
             const wrapper = optionsWrapperRef.current;
             if (!wrapper) return;
@@ -160,6 +164,7 @@ export const RadioTabGroup = React.forwardRef<HTMLDivElement, RadioTabGroupProps
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
+                {...wrapperProps}
             >
                 <Element
                     as="div"
@@ -167,7 +172,7 @@ export const RadioTabGroup = React.forwardRef<HTMLDivElement, RadioTabGroupProps
                     ref={ref}
                     classNames={classNames}
                     name={derivedName}
-                    {...props}
+                    {...inputProps}
                 >
                     {/* LEFT SCROLL BUTTON */}
                     {needsScroll && canScrollLeft && (

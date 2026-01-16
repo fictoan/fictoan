@@ -94,10 +94,12 @@ export { Meter, type MeterProps, type MeterMetaProps } from "./components/Meter"
 export { Modal, type ModalProps } from "./components/Modal";
 
 export {
-    NotificationsWrapper,
-    type NotificationsWrapperProps,
-    NotificationItem,
-    type NotificationItemProps,
+    NotificationsProvider,
+    useNotifications,
+    type NotificationsProviderProps,
+    type NotificationOptions,
+    type NotifyFunction,
+    type NotificationKind,
 } from "./components/Notification";
 
 export { OptionCard, OptionCardsGroup, type OptionCardProps, type OptionCardsGroupRef } from "./components/OptionCard";

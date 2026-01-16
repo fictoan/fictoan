@@ -1,22 +1,12 @@
-// EXTERNAL DEPS =======================================================================================================
+// REACT CORE ==========================================================================================================
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 
-// INTERNAL DEPS =======================================================================================================
-import {
-    ListBox,
-    Row,
-    Portion,
-    Text,
-    Div,
-    Range,
-    Header,
-    CodeBlock,
-} from "fictoan-react";
+// UI ==================================================================================================================
+import { ListBox, Row, Portion, Text, Div, Range, Header, CodeBlock, } from "fictoan-react";
 
-// DATA ================================================================================================================
+// OTHER ===============================================================================================================
 import { colourOptionsWithShades, listOfColours } from "../app/colour/colours";
 
-// TYPES ===============================================================================================================
 type VariableFilter = string | string[] | ((varName: string) => boolean);
 
 interface VariablesState {
@@ -40,27 +30,25 @@ interface NumericalVariable {
 type ThemeVariable = ColourVariable | NumericalVariable;
 
 interface RangeInputProps {
-    name         : string;
-    defaultValue : number;
-    onChange     : (name: string, value: number) => void;
-    suffix      ?: string;
+    name           : string;
+    defaultValue   : number;
+    onChange       : (name: string, value: number) => void;
+    suffix       ? : string;
 }
 
 interface ThemeConfiguratorReturn<T extends HTMLElement = HTMLElement> {
-    componentVariables   : Record<string, string>;
-    componentProps       : { id: string };
-    handleVariableChange : (varName: string, newValue: unknown) => void;
-    themeConfigurator    : () => React.ReactNode;
-    interactiveElementRef: React.RefObject<T>;
+    componentVariables    : Record<string, string>;
+    componentProps        : { id: string };
+    handleVariableChange  : (varName: string, newValue: unknown) => void;
+    themeConfigurator     : () => React.ReactNode;
+    interactiveElementRef : React.RefObject<T>;
 }
 
-// HELPERS =============================================================================================================
 const findLongestVarNameLength = (variables: Record<string, string>): number => {
     const keys = Object.keys(variables);
     return keys.length ? Math.max(...keys.map(name => name.length + 2)) : 0;
 };
 
-// TYPE DETECTION ======================================================================================================
 const isColourVariable = (value: unknown): boolean => {
     if (!value || typeof value !== "string") return false;
     if (/^\d+$/.test(value)) return false;
@@ -108,7 +96,6 @@ const isNumericalVariable = (value: unknown): boolean => {
     return !isNaN(parseInt(value));
 };
 
-// VALUE EXTRACTION ====================================================================================================
 const extractColourValue = (value: string): string | null => {
     if (!value?.startsWith("var(--")) return null;
 
@@ -177,7 +164,6 @@ const extractUnitSuffix = (value: string | undefined): string => {
     return match?.[1] || "px";
 };
 
-// CSS VARIABLE EXTRACTION =============================================================================================
 const extractThemeVariables = (filter: VariableFilter): Record<string, string> => {
     const variables: Record<string, string> = {};
 
@@ -220,7 +206,6 @@ const extractThemeVariables = (filter: VariableFilter): Record<string, string> =
     return variables;
 };
 
-// FORMAT OUTPUT =======================================================================================================
 const formatVariablesList = (vars: Record<string, string>): string => {
     if (!Object.keys(vars).length) return "";
 
@@ -237,7 +222,6 @@ const formatVariablesList = (vars: Record<string, string>): string => {
     return `/* Paste this in your theme file */\n${variablesList}`;
 };
 
-// RANGE INPUT COMPONENT ===============================================================================================
 const RangeInput: React.FC<RangeInputProps> = ({ name, defaultValue, onChange, suffix = "px" }) => {
     const extractNumber = (value: unknown): number => {
         if (value === null || value === undefined) return 0;
@@ -279,7 +263,6 @@ const RangeInput: React.FC<RangeInputProps> = ({ name, defaultValue, onChange, s
     );
 };
 
-// THEME CONFIGURATOR ==================================================================================================
 export const createThemeConfigurator = <T extends HTMLElement = HTMLElement>(
     componentName: string,
     filter: VariableFilter
@@ -418,8 +401,8 @@ export const createThemeConfigurator = <T extends HTMLElement = HTMLElement>(
                                         defaultValue={currentValue || undefined}
                                         onChange={(value) => handleVariableChange(name, value)}
                                         allowCustomEntries
-                                        isFullWidth
                                         placeholder={`Current: ${currentValue}`}
+                                        isFullWidth
                                     />
                                 </Portion>
                             );

@@ -33,10 +33,86 @@
     &.new-on-bottom { flex-direction : column; }
 }
 
+/* LIST KIND - default behavior */
+[data-notifications-wrapper].list:has([data-notification-item]) {
+    display : flex;
+    gap     : 1rem;
+}
+
+/* STACK KIND - mobile-style stacked notifications */
+[data-notifications-wrapper].stack:has([data-notification-item]) {
+    display       : grid !important;
+    grid-template : 1fr / 1fr;
+    gap           : 0;
+    overflow      : visible;
+    max-height    : none;
+    align-items   : start;
+}
+
+[data-notifications-wrapper].stack [data-notification-item] {
+    grid-area        : 1 / 1;
+    transition       : transform 0.3s ease, opacity 0.3s ease;
+    transform-origin : top center;
+}
+
+/* Most recent (last child) - fully visible */
+[data-notifications-wrapper].stack [data-notification-item]:last-child {
+    z-index   : 3;
+    transform : translateY(0) scale(1);
+    opacity   : 1;
+}
+
+/* Second most recent */
+[data-notifications-wrapper].stack [data-notification-item]:nth-last-child(2) {
+    z-index   : 2;
+    transform : translateY(8px) scale(0.96);
+    opacity   : 0.7;
+}
+
+/* Third most recent */
+[data-notifications-wrapper].stack [data-notification-item]:nth-last-child(3) {
+    z-index   : 1;
+    transform : translateY(14px) scale(0.92);
+    opacity   : 0.4;
+}
+
+/* Fourth+ - hidden */
+[data-notifications-wrapper].stack [data-notification-item]:nth-last-child(n+4) {
+    z-index    : 0;
+    transform  : translateY(18px) scale(0.88);
+    opacity    : 0;
+    visibility : hidden;
+}
+
+/* Stack anchored to bottom */
+[data-notifications-wrapper].stack.bottom:has([data-notification-item]) {
+    align-items : end;
+}
+
+[data-notifications-wrapper].stack.bottom [data-notification-item] {
+    transform-origin : bottom center;
+}
+
+[data-notifications-wrapper].stack.bottom [data-notification-item]:last-child {
+    transform : translateY(0) scale(1);
+}
+
+[data-notifications-wrapper].stack.bottom [data-notification-item]:nth-last-child(2) {
+    transform : translateY(-8px) scale(0.96);
+}
+
+[data-notifications-wrapper].stack.bottom [data-notification-item]:nth-last-child(3) {
+    transform : translateY(-14px) scale(0.92);
+}
+
+[data-notifications-wrapper].stack.bottom [data-notification-item]:nth-last-child(n+4) {
+    transform : translateY(-18px) scale(0.88);
+}
+
 [data-notifications-wrapper]::-webkit-scrollbar {
-    display : none; /* Webkit browsers */
+    display : none;
 }
 
 [data-notifications-wrapper] {
-    scrollbar-width : none; /* Firefox */
+    scrollbar-width : none;
 }

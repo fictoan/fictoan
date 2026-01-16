@@ -2,6 +2,8 @@
     /* BADGE //////////////////////////////////////////////////////////////// */
     --badge-border                       : var(--transparent);
 
+    --badge-action-bg                    : var(--blue-light60);
+
     /* BODY ///////////////////////////////////////////////////////////////// */
     --body-bg                            : var(--white);
 
@@ -102,13 +104,15 @@
     --input-icon-valid                   : var(--green-dark30);
 
     /* KEYBOARD ///////////////////////////////////////////////////////////// */
-    --kbd-bg                             : var(--grey-light40);
     --kbd-text                           : var(--black);
-    --kbd-shadow                         : var(--grey);
+    --kbd-bg                             : var(--grey-light70);
+    --kbd-shadow                         : var(--grey-light40);
 
     /* LIST BOX ///////////////////////////////////////////////////////////// */
-    --list-box-badge-bg                  : var(--slate-dark40);
-    --list-box-badge-text                : var(--slate-light70);
+    --list-box-dropdown-bg               : var(--white);
+    --list-box-badge-bg                  : var(--slate-light70);
+    --list-box-badge-text                : var(--slate);
+
 
     /* MODAL //////////////////////////////////////////////////////////////// */
     --modal-backdrop-bg                  : var(--amber);
@@ -214,6 +218,7 @@
     --site-header-border                 : var(--grey-light40);
 
     /* SITE FOOTER ////////////////////////////////////////////////////////// */
+    --footer-bg                          : linear-gradient(180deg, var(--body-bg) 0%, var(--navy-light90) 40%, var(--navy-light50) 100%);
     --footer-pattern-color               : var(--blue-light60);
 
     /* USP CARDS //////////////////////////////////////////////////////////// */

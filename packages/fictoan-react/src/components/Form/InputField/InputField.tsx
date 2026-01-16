@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 // LOCAL COMPONENTS ====================================================================================================
 import { Div } from "$tags";
 import { Element } from "$element";
-import { SpacingTypes } from "../../Element/constants";
+import { SpacingTypes, CommonProps } from "../../Element/constants";
 
 // STYLES ==============================================================================================================
 import "./input-field.css";
@@ -43,7 +43,8 @@ export type InputFieldProps =
     Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "onBlur" | "onFocus" | "size"> &
     InputLabelCustomProps &
     InputCommonProps &
-    InputSideElementProps & {
+    InputSideElementProps &
+    CommonProps & {
     type     ? : "text" | "password" | "email" | "number" | "tel" | "url" | "search" | "file";
     size     ? : Exclude<SpacingTypes, "nano" | "huge">;
     onFocus  ? : InputFocusHandler;

@@ -1,209 +1,183 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Divider, Portion, Row, Text, Article, Card, Form, Header, RadioTabGroup, Select, ToastItem, ToastsWrapper, Button, Range, CodeBlock } from "fictoan-react";
+import {
+    Div,
+    Heading6,
+    Text,
+    Divider,
+    ToastsWrapper,
+    ToastItem,
+    Button,
+    CodeBlock,
+    RadioTabGroup,
+    Range,
+    InputField,
+} from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
 import "./page-toast.css";
 
 // OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
-import { toastProps } from "./config";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
 const ToastDocs = () => {
-    const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(toastProps.variables);
+    // Toast visibility state
+    const [showToast, setShowToast] = useState(false);
 
-    const [showSampleToast, setShowSampleToast] = useState(false);
+    // Props state
+    const [position, setPosition] = useState("top");
+    const [secondsToShowFor, setSecondsToShowFor] = useState(3);
+    const [toastMessage, setToastMessage] = useState("Hello there, folks!");
 
-    const [selectedPosition, setSelectedPosition] = useState("top");
-    const [secondsToShowFor, setSecondsToShowFor] = useState(100);
+    // Theme configurator
+    const ToastComponent = (varName: string) => {
+        return varName.startsWith("toast-");
+    };
 
+    const {
+        interactiveElementRef,
+        componentProps: themeProps,
+        themeConfigurator,
+    } = createThemeConfigurator<HTMLDivElement>("Toast", ToastComponent);
+
+    // Generate code
+    const codeString = useMemo(() => {
+        const wrapperProps = [];
+        if (position !== "top") wrapperProps.push(`position="${position}"`);
+        const wrapperPropsStr = wrapperProps.length > 0 ? `\n    ${wrapperProps.join("\n    ")}\n` : "";
+
+        return `import { useState } from "react";
+import { ToastsWrapper, ToastItem, Button, Text } from "fictoan-react";
+
+const [showToast, setShowToast] = useState(false);
+
+<Button onClick={() => setShowToast(true)}>
+    Show Toast
+</Button>
+
+<ToastsWrapper${wrapperPropsStr}>
+    <ToastItem
+        showWhen={showToast}
+        secondsToShowFor={${secondsToShowFor}}
+        closeWhen={() => setShowToast(false)}
+    >
+        <Text>${toastMessage}</Text>
+    </ToastItem>
+</ToastsWrapper>`;
+    }, [position, secondsToShowFor, toastMessage]);
 
     return (
-        <Article id="page-toast">
-            <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                <Portion>
-                    <Heading1>Toast</Heading1>
-                    <Text size="large" marginBottom="small">
-                        A small static floating popup
+        <>
+            <ComponentDocsLayout>
+                {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+                <Div id="intro-header">
+                    <Heading6 id="component-name">
+                        Toast
+                    </Heading6>
+
+                    <Text id="component-description" weight="400">
+                        A small floating popup for notifications
                     </Text>
-                </Portion>
+                </Div>
 
-                <Portion>
-                    <Heading4 marginBottom="micro">Characteristics</Heading4>
-                    <Text>&bull; </Text>
-                </Portion>
-            </Row>
+                {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+                <Div id="intro-notes">
+                    <Divider kind="tertiary" verticalMargin="micro" />
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+                    <Text>
+                        Use <code>ToastsWrapper</code> to define the position, and <code>ToastItem</code> for each toast.
+                    </Text>
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/*  CONFIGURATOR */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Row horizontalPadding="small" className="rendered-component">
-                {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////// */}
-                <Portion id="component-wrapper">
-                    <Element
-                        as="div" padding="small" shape="rounded" bgColour="slate-light80"
-                        data-centered-children
+                    <Text>
+                        Toasts auto-dismiss after <code>secondsToShowFor</code> or can be manually closed.
+                    </Text>
+
+                    <Text>
+                        Multiple toasts stack automatically within the wrapper.
+                    </Text>
+                </Div>
+
+                {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+                <Div id="demo-component">
+                    <Button
+                        kind="primary"
+                        onClick={() => setShowToast(true)}
                     >
-                        <Button
-                            onClick={() => setShowSampleToast(true)}
-                            kind="primary"
-                        >
-                            Show a toast
-                        </Button>
-                    </Element>
-                </Portion>
+                        Show Toast
+                    </Button>
+                </Div>
 
-                {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Form spacing="none">
-                        <Card padding="micro" shape="rounded">
-                            <Header verticallyCentreItems pushItemsToEnds marginBottom="micro">
-                                <Text size="large" weight="700" textColour="white">
-                                    Configure props
-                                </Text>
-                            </Header>
+                {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+                <Div id="props-config">
+                    <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                        {codeString}
+                    </CodeBlock>
 
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton marginBottom="micro">
-                                        {[
-                                            `// Paste this in your content file`,
-                                            `const [showSampleToast, setShowSampleToast] = useState(false); \n`,
-                                            `<ToastsWrapper`,
-                                            selectedPosition ? `    position="${selectedPosition}"` : null,
-                                            `>`,
-                                            `    <ToastItem`,
-                                            `        showWhen={showSampleToast}`,
-                                            `        secondsToShowFor={${secondsToShowFor}}`,
-                                            `        closeWhen={() => setShowSampleToast(false)}`,
-                                            `    >`,
-                                            `        <Text>Hello there, folks!</Text>`,
-                                            `    </ToastItem>`,
-                                            `</ToastsWrapper>`,
-                                        ].filter(Boolean).join("\n")}
-                                    </CodeBlock>
-                                </Portion>
+                    <Div className="doc-controls">
+                        <RadioTabGroup
+                            id="prop-position"
+                            label="position"
+                            options={[
+                                { id: "position-top", value: "top", label: "top" },
+                                { id: "position-bottom", value: "bottom", label: "bottom" },
+                            ]}
+                            value={position}
+                            onChange={(val) => setPosition(val)}
+                            helpText="Position of the toast wrapper."
+                            marginBottom="micro"
+                        />
 
-                                {/* POSITION ======================================================================= */}
-                                <Portion>
-                                    <RadioTabGroup
-                                        id="position" label="Position" name="position"
-                                        options={[
-                                            { id : "position-opt-0", value : "top", label : "top" },
-                                            { id : "position-opt-1", value : "bottom", label : "bottom" },
-                                        ]}
-                                        value={selectedPosition || "right"}
-                                        onChange={(value) => setSelectedPosition(value)}
-                                    />
+                        <Range
+                            id="prop-secondsToShowFor"
+                            label="secondsToShowFor"
+                            min={1}
+                            max={10}
+                            value={secondsToShowFor}
+                            onChange={(val: number) => setSecondsToShowFor(val)}
+                            suffix={secondsToShowFor === 1 ? " second" : " seconds"}
+                            helpText="How long the toast stays visible."
+                            marginBottom="micro" isFullWidth
+                        />
 
-                                    <Divider kind="secondary" horizontalMargin="none" marginTop="micro" />
-                                </Portion>
+                        <InputField
+                            label="Toast message"
+                            value={toastMessage}
+                            onChange={(val) => setToastMessage(val)}
+                            helpText="Content to display in the toast."
+                            marginBottom="micro" isFullWidth
+                        />
+                    </Div>
+                </Div>
 
-                                {/* SHOW FOR ======================================================================= */}
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Show toast for"
-                                        value={secondsToShowFor}
-                                        onChange={(value) => setSecondsToShowFor(value)}
-                                        min={1} max={50} step={1}
-                                        suffix={secondsToShowFor > 1 ? " seconds" : " second"}
-                                    />
-                                </Portion>
-                            </Row>
-                        </Card>
-                    </Form>
-                </Portion>
+                {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+                <Div id="theme-config">
+                    {themeConfigurator()}
+                </Div>
+            </ComponentDocsLayout>
 
-                {/* GLOBAL THEME /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Card padding="micro" shape="rounded">
-                        <Form>
-                            <Header verticallyCentreItems pushItemsToEnds>
-                                <Text size="large" weight="700" textColour="white" marginBottom="nano">
-                                    Set global theme values
-                                </Text>
-                            </Header>
-
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock
-                                        withSyntaxHighlighting
-                                        source={cssVariablesList}
-                                        language="css"
-                                        showCopyButton
-                                        marginBottom="micro"
-                                    />
-                                </Portion>
-
-                                {/* BG COLOUR ====================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Background"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["toast-bg"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("toast-bg", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* TEXT COLOUR ==================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Text colour"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["toast-text"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("toast-text", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* BORDER RADIUS ================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Border radius"
-                                        value={componentVariables["toast-border-radius"].value}
-                                        onChange={(value) => handleVariableChange("toast-border-radius", value)}
-                                        suffix={componentVariables["toast-border-radius"].unit}
-                                        min={0} max={50} step={1}
-                                    />
-                                </Portion>
-                            </Row>
-                        </Form>
-                    </Card>
-                </Portion>
-            </Row>
-
+            {/* TOAST - rendered outside layout */}
             <ToastsWrapper
-                position={selectedPosition}
+                ref={interactiveElementRef}
+                position={position as any}
+                {...themeProps}
             >
                 <ToastItem
-                    showWhen={showSampleToast}
+                    showWhen={showToast}
                     secondsToShowFor={secondsToShowFor}
-                    closeWhen={() => setShowSampleToast(false)}
+                    closeWhen={() => setShowToast(false)}
                 >
-                    <Text>Hello there, folks!</Text>
+                    <Text>{toastMessage}</Text>
                 </ToastItem>
             </ToastsWrapper>
-        </Article>
+        </>
     );
 };
 

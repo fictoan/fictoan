@@ -175,7 +175,7 @@
 
 /* CARD ///////////////////////////////////////////////////////////////////// */
 #interactive-component {
-    --card-bg            : var(--amber);
+    --card-bg            : var(--white);
     --card-border        : var(--amber-dark30);
     --card-border-radius : var(--global-border-radius);
     --card-border-width  : var(--global-border-width);
