@@ -3,4 +3,8 @@
         stroke : none;
         fill   : var(--sidebar-item-icon-fill-default);
     }
+
+    #header-logo svg {
+        width : 50%;
+    }
 }

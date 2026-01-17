@@ -90,6 +90,23 @@ yarn add fictoan-react@2.0.0-beta.1
 npm install fictoan-react@2.0.0-beta.1`}
                         />
                     </Portion>
+
+                    <Portion desktopSpan="half">
+                        <Heading4 marginBottom="micro">Claude Code skill</Heading4>
+                        <Text marginBottom="nano">
+                            This repo includes a{" "}
+                            <Link href="https://github.com/fictoan/fictoan/blob/main/.claude/skills/fictoan.md">
+                                Claude Code skill
+                            </Link>{" "}
+                            that teaches Claude the Fictoan component patterns. Just run:
+                        </Text>
+                        <CodeBlock
+                            language="bash"
+                            withSyntaxHighlighting
+                            showCopyButton
+                            source="/fictoan"
+                        />
+                    </Portion>
                 </Row>
             </Section>
 

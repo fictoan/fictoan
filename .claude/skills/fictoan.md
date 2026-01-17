@@ -1,278 +1,858 @@
 # Fictoan Component Library Skill
 
 ## Description
-Help create, modify, and maintain Fictoan UI components following the library's established patterns and conventions.
+Help create UIs using Fictoan, and contribute to the Fictoan component library itself.
 
 ---
 
-## Project Structure
+# PART 1: USING FICTOAN (Consumer Guide)
+
+This section covers how to use Fictoan in your projects.
+
+---
+
+## Installation & Setup
+
+### 1. Install the package
+```bash
+pnpm add fictoan-react
+# or
+yarn add fictoan-react
+# or
+npm install fictoan-react
+```
+
+### 2. Import CSS (required, do this once in your app entry)
+```css
+/* globals.css or your main CSS file */
+@import "fictoan-react/dist/index.css";
+
+/* Then import your theme files */
+@import "./theme-light.css";
+@import "./theme-dark.css";
+```
+
+### 3. Setup ThemeProvider (root layout)
+```tsx
+"use client";
+
+import { ThemeProvider } from "fictoan-react";
+import "@styles/globals.css";
+
+export const RootLayoutClient = ({ children }: { children: ReactNode }) => {
+    const listOfThemes = ["theme-light", "theme-dark"];
+
+    return (
+        <html lang="en">
+        <body>
+            <ThemeProvider
+                themeList={listOfThemes}
+                currentTheme="theme-light"
+            >
+                {children}
+            </ThemeProvider>
+        </body>
+        </html>
+    );
+};
+```
+
+---
+
+## Layout System (Row & Portion)
+
+Fictoan uses a **24-column grid system** with `Row` and `Portion` components.
+
+### Basic Layout
+```tsx
+import { Row, Portion, Article, Section } from "fictoan-react";
+
+<Article id="my-page" verticalPadding="tiny">
+    <Section>
+        <Row horizontalPadding="large" marginBottom="small">
+            <Portion desktopSpan="two-third">
+                <Heading4>Main Content</Heading4>
+            </Portion>
+            <Portion desktopSpan="one-third">
+                <Card>Sidebar</Card>
+            </Portion>
+        </Row>
+    </Section>
+</Article>
+```
+
+### Portion Span Values
+| Value | Columns | Percentage |
+|-------|---------|------------|
+| `"one-fourth"` | 6 | 25% |
+| `"one-third"` | 8 | 33.3% |
+| `"half"` | 12 | 50% |
+| `"two-third"` | 16 | 66.6% |
+| `"three-fourth"` | 18 | 75% |
+| `"1"` to `"24"` | 1-24 | 4.16%-100% |
+
+### Responsive Breakpoints
+```tsx
+<Portion
+    desktopSpan="one-fourth"        // > 1200px
+    tabletLandscapeSpan="one-third" // 901-1200px
+    tabletPortraitSpan="half"       // 601-900px
+    mobileSpan="24"                 // < 600px (full width)
+>
+    Content
+</Portion>
+```
+
+### Row Props
+```tsx
+<Row
+    layout="grid"                    // "grid" (default) or "flexbox"
+    horizontalPadding="large"        // Padding on sides
+    gutters="small"                  // Gap between Portions
+    marginBottom="small"             // Bottom margin
+    retainLayoutAlways               // Don't collapse on mobile
+    retainLayoutOnMobile             // Keep layout on mobile only
+/>
+```
+
+---
+
+## Page Structure Pattern
+
+Standard page structure used in production apps:
+
+```tsx
+"use client";
+
+import {
+    Article, Section, Row, Portion,
+    Heading4, Heading6, Text, Card, Divider
+} from "fictoan-react";
+import "./page.css";
+
+const MyPage = () => {
+    return (
+        <Article id="my-page" verticalPadding="tiny">
+            {/* HEADER SECTION */}
+            <Section>
+                <Row horizontalPadding="large" marginBottom="small">
+                    <Portion desktopSpan="two-third">
+                        <Heading4 weight="900" marginBottom="nano">Page Title</Heading4>
+                        <Heading6 weight="400" opacity="60">
+                            Page description or subtitle
+                        </Heading6>
+                    </Portion>
+                </Row>
+            </Section>
+
+            {/* STATS/CARDS SECTION */}
+            <Section>
+                <Row horizontalPadding="large" marginBottom="none">
+                    <Portion desktopSpan="one-fourth">
+                        <Card padding="micro" shape="rounded">
+                            <Text>Stat 1</Text>
+                        </Card>
+                    </Portion>
+                    <Portion desktopSpan="one-fourth">
+                        <Card padding="micro" shape="rounded">
+                            <Text>Stat 2</Text>
+                        </Card>
+                    </Portion>
+                </Row>
+            </Section>
+
+            <Divider kind="tertiary" horizontalMargin="large" verticalMargin="micro" />
+
+            {/* MAIN CONTENT SECTION */}
+            <Section>
+                <Row horizontalPadding="large">
+                    <Portion>
+                        {/* Full-width content */}
+                    </Portion>
+                </Row>
+            </Section>
+        </Article>
+    );
+};
+
+export default MyPage;
+```
+
+### Page-Scoped CSS
+```css
+/* page.css - Scoped to this page only */
+#my-page {
+    .custom-element {
+        /* styles */
+    }
+
+    [data-card] {
+        /* override card styles for this page */
+    }
+}
+```
+
+---
+
+## Spacing Values
+
+Consistent across all components:
+
+| Value | Size |
+|-------|------|
+| `"none"` | 0 |
+| `"nano"` | 8px |
+| `"micro"` | 16px |
+| `"tiny"` | 24px |
+| `"small"` | 32px |
+| `"medium"` | 48px |
+| `"large"` | 64px |
+| `"huge"` | 96px |
+
+**Usage:**
+```tsx
+<Card padding="micro" marginBottom="small" />
+<Row horizontalPadding="large" gutters="small" />
+<InputField marginBottom="nano" />
+```
+
+---
+
+## Form Components
+
+### Complete Form Example
+```tsx
+import {
+    Form, InputField, Select, ListBox,
+    Button, Card, Text
+} from "fictoan-react";
+
+const MyForm = () => {
+    const [formData, setFormData] = useState({
+        email: "",
+        name: "",
+        role: "user",
+        org_id: "",
+    });
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        // Submit logic
+    };
+
+    return (
+        <Form onSubmit={handleSubmit} isFullWidth>
+            <InputField
+                label="Email"
+                type="email"
+                placeholder="user@example.com"
+                value={formData.email}
+                onChange={(value: string) =>
+                    setFormData(prev => ({ ...prev, email: value }))
+                }
+                required
+                marginBottom="nano"
+            />
+
+            <InputField
+                label="Name"
+                type="text"
+                placeholder="Full name"
+                value={formData.name}
+                onChange={(value: string) =>
+                    setFormData(prev => ({ ...prev, name: value }))
+                }
+                required
+                marginBottom="nano"
+            />
+
+            <ListBox
+                label="Organisation"
+                value={formData.org_id}
+                onChange={(value: string | string[]) => {
+                    const selectedValue = Array.isArray(value) ? value[0] : value;
+                    setFormData(prev => ({ ...prev, org_id: selectedValue || "" }));
+                }}
+                options={organisations.map(org => ({
+                    label: org.name,
+                    value: org.id,
+                }))}
+                placeholder="Search organisations..."
+                isFullWidth
+                marginBottom="nano"
+            />
+
+            <Select
+                label="Role"
+                value={formData.role}
+                onChange={(value: string) =>
+                    setFormData(prev => ({ ...prev, role: value }))
+                }
+                options={[
+                    { label: "User", value: "user" },
+                    { label: "Admin", value: "admin" },
+                ]}
+                isFullWidth
+                marginBottom="micro"
+            />
+
+            <Button
+                type="submit"
+                kind="primary"
+                isFullWidth
+                disabled={isLoading || !formData.email}
+            >
+                {isLoading ? "Submitting..." : "Submit"}
+            </Button>
+
+            {/* SUCCESS FEEDBACK */}
+            {success && (
+                <Card
+                    bgColour="green-light60"
+                    borderColour="green"
+                    padding="nano"
+                    marginTop="micro"
+                    shape="rounded"
+                >
+                    <Text size="small" textColour="green">
+                        Success! Form submitted.
+                    </Text>
+                </Card>
+            )}
+
+            {/* ERROR FEEDBACK */}
+            {error && (
+                <Card
+                    bgColour="red-light60"
+                    borderColour="red"
+                    padding="nano"
+                    marginTop="nano"
+                    shape="rounded"
+                >
+                    <Text size="small" textColour="red">
+                        {error}
+                    </Text>
+                </Card>
+            )}
+        </Form>
+    );
+};
+```
+
+### Form Event Handlers
+```tsx
+// InputField, TextArea - receives value directly
+<InputField
+    onChange={(value: string) => setFormData(prev => ({ ...prev, field: value }))}
+/>
+
+// Select - receives value directly
+<Select
+    onChange={(value: string) => setFormData(prev => ({ ...prev, field: value }))}
+/>
+
+// ListBox - can receive string or string[] (for multi-select)
+<ListBox
+    onChange={(value: string | string[]) => {
+        const selectedValue = Array.isArray(value) ? value[0] : value;
+        setFormData(prev => ({ ...prev, field: selectedValue }));
+    }}
+/>
+
+// CheckboxGroup - receives array of values
+<CheckboxGroup
+    onChange={(values: string[]) => setFormData(prev => ({ ...prev, field: values }))}
+/>
+
+// Range - receives number
+<Range
+    onChange={(value: number) => setFormData(prev => ({ ...prev, field: value }))}
+/>
+```
+
+---
+
+## Drawer Component
+
+### Setup and Usage
+```tsx
+import { Drawer, showDrawer, Button } from "fictoan-react";
+
+const MyComponent = () => {
+    return (
+        <>
+            {/* Trigger button */}
+            <Button onClick={() => showDrawer("my-drawer")}>
+                Open Drawer
+            </Button>
+
+            {/* Drawer component */}
+            <Drawer
+                id="my-drawer"
+                size="medium"           // "small" | "medium" | "large"
+                padding="micro"
+                isDismissible           // Can be closed by clicking outside
+                showOverlay             // Shows dark overlay behind
+            >
+                <Heading6 marginBottom="micro">Drawer Title</Heading6>
+
+                <Form onSubmit={handleSubmit}>
+                    {/* Form content */}
+                </Form>
+            </Drawer>
+        </>
+    );
+};
+```
+
+---
+
+## Theming
+
+### Theme File Structure
+```css
+/* theme-light.css */
+.theme-light {
+    /* Body */
+    --body-bg: var(--white);
+
+    /* Buttons */
+    --button-primary-bg-default: var(--blue);
+    --button-primary-bg-hover: var(--blue-dark10);
+    --button-primary-text-default: var(--white);
+
+    --button-secondary-bg-default: var(--blue-light70);
+    --button-secondary-text-default: var(--blue);
+    --button-secondary-border-default: var(--blue);
+
+    /* Card */
+    --card-bg: var(--white);
+    --card-border: var(--grey-light60);
+    --card-border-radius: 12px;
+
+    /* Input */
+    --input-bg-default: var(--grey-light90);
+    --input-border-default: var(--grey-light90);
+    --input-bg-focus: var(--white);
+
+    /* Table */
+    --table-striped-header-bg: var(--grey-light80);
+    --table-border: var(--grey-light60);
+}
+```
+
+### Custom Brand Colors
+```css
+/* brand-colours.css */
+:root {
+    --brand-primary: 262, 82%, 52%;     /* HSL values */
+    --brand-secondary: 38, 81%, 57%;
+}
+
+.theme-light {
+    --button-primary-bg-default: hsl(var(--brand-primary));
+}
+```
+
+### Theme Switching
+```tsx
+import { useTheme } from "fictoan-react";
+
+const ThemeSwitcher = () => {
+    const [theme, setTheme] = useTheme();
+
+    return (
+        <Button onClick={() => setTheme(theme === "theme-light" ? "theme-dark" : "theme-light")}>
+            Toggle Theme
+        </Button>
+    );
+};
+```
+
+---
+
+## Common Component Props
+
+All Fictoan components accept these common props:
+
+```tsx
+<Card
+    // Colors
+    bgColour="slate-light90"
+    textColour="slate"
+    borderColour="slate-light60"
+
+    // Spacing
+    padding="micro"
+    margin="small"
+    marginTop="nano"
+    marginBottom="small"
+    horizontalPadding="large"
+    verticalPadding="small"
+
+    // Layout
+    isFullWidth
+    isFullHeight
+    layoutAsFlexbox
+    stackVertically
+    gap="small"
+
+    // Alignment
+    horizontallyCentreThis
+    verticallyCentreItems
+    pushItemsToEnds
+
+    // Visual
+    shape="rounded"         // "rounded" | "curved"
+    shadow="soft"           // "none" | "mild" | "soft" | "hard"
+    opacity="80"
+
+    // Responsive
+    hideOnMobile
+    showOnlyOnDesktop
+
+    // Typography
+    weight="600"
+/>
+```
+
+---
+
+## Color Props
+
+### Format
+```tsx
+// Base color
+bgColour="red"
+
+// With shade (dark/light + 10-90)
+bgColour="red-light40"
+bgColour="red-dark20"
+
+// With opacity (0-90)
+bgColour="red-opacity50"
+
+// Combined
+bgColour="red-light40-opacity50"
+
+// Basic colors
+bgColour="white"
+bgColour="black"
+bgColour="transparent"
+```
+
+### Available Colors
+`pink`, `rose`, `crimson`, `red`, `salmon`, `sienna`, `orange`, `amber`, `gold`, `yellow`, `lime`, `chartreuse`, `spring`, `pistachio`, `sage`, `green`, `emerald`, `jade`, `teal`, `cyan`, `aqua`, `azure`, `sky`, `cerulean`, `cobalt`, `navy`, `blue`, `royal`, `indigo`, `iris`, `violet`, `plum`, `purple`, `magenta`, `fuchsia`, `cerise`, `slate`, `grey`, `brown`
+
+---
+
+## Typography
+
+```tsx
+import { Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Text } from "fictoan-react";
+
+<Heading4 weight="900" marginBottom="nano">Title</Heading4>
+<Heading6 weight="400" opacity="60">Subtitle</Heading6>
+<Text size="small" textColour="slate">Body text</Text>
+```
+
+---
+
+## Semantic Elements
+
+Use semantic HTML elements with Fictoan props:
+
+```tsx
+import { Article, Section, Header, Footer, Main, Nav, Aside, Div, Span } from "fictoan-react";
+
+<Article id="page-name" verticalPadding="tiny">
+    <Header marginBottom="small">
+        <Heading4>Title</Heading4>
+    </Header>
+
+    <Section marginBottom="medium">
+        <Row>...</Row>
+    </Section>
+
+    <Footer pushItemsToEnds>
+        <Button>Cancel</Button>
+        <Button kind="primary">Save</Button>
+    </Footer>
+</Article>
+```
+
+---
+
+## Project File Structure (Recommended)
+
+```
+src/
+├── app/
+│   ├── layout.tsx              # Server component (metadata)
+│   ├── layout.client.tsx       # Client component (ThemeProvider)
+│   ├── page.tsx                # Server component
+│   ├── (auth)/                 # Route group
+│   │   ├── layout.tsx          # Nested layout
+│   │   ├── dashboard/
+│   │   │   ├── page.tsx
+│   │   │   ├── page.client.tsx
+│   │   │   └── dashboard.css
+│   │   └── settings/
+│   │       └── ...
+├── components/
+│   ├── Navigation/
+│   ├── Forms/
+│   └── shared/
+├── styles/
+│   ├── globals.css             # Import Fictoan + themes
+│   ├── theme-light.css
+│   ├── theme-dark.css
+│   └── brand-colours.css       # Custom brand colors
+└── ...
+```
+
+---
+
+## Common Patterns
+
+### Loading State
+```tsx
+import { Spinner, Div, Article } from "fictoan-react";
+
+if (isLoading) {
+    return (
+        <Article>
+            <Div verticallyCentreItems horizontallyCentreThis isFullHeight>
+                <Spinner />
+            </Div>
+        </Article>
+    );
+}
+```
+
+### Error/Success Cards
+```tsx
+// Error
+<Card bgColour="red-light60" borderColour="red" padding="nano" shape="rounded">
+    <Text size="small" textColour="red">{errorMessage}</Text>
+</Card>
+
+// Success
+<Card bgColour="green-light60" borderColour="green" padding="nano" shape="rounded">
+    <Text size="small" textColour="green">{successMessage}</Text>
+</Card>
+
+// Warning
+<Card bgColour="amber-light60" borderColour="amber" padding="nano" shape="rounded">
+    <Text size="small" textColour="amber">{warningMessage}</Text>
+</Card>
+```
+
+### Stats Grid
+```tsx
+<Row horizontalPadding="micro">
+    {stats.map((stat, i) => (
+        <Portion desktopSpan="one-fourth" key={i}>
+            <Card padding="micro" shape="rounded">
+                <Text size="small" opacity="60">{stat.label}</Text>
+                <Heading4>{stat.value}</Heading4>
+            </Card>
+        </Portion>
+    ))}
+</Row>
+```
+
+### Footer with Actions
+```tsx
+<Footer verticallyCentreItems pushItemsToEnds marginTop="micro">
+    <Text size="small" opacity="60">Last updated: {date}</Text>
+    <Div layoutAsFlexbox gap="nano">
+        <Button kind="tertiary">Cancel</Button>
+        <Button kind="primary">Save</Button>
+    </Div>
+</Footer>
+```
+
+---
+
+---
+
+# PART 2: CONTRIBUTING TO FICTOAN (Library Development)
+
+This section covers how Fictoan components are built internally.
+
+---
+
+## Fictoan Source Structure
 
 ```
 fictoan-turborepo/
 ├── packages/
-│   ├── fictoan-react/        # Core component library
+│   ├── fictoan-react/           # Core component library
 │   │   ├── src/
-│   │   │   ├── components/   # 50+ components (each in own folder)
-│   │   │   ├── hooks/        # Custom hooks (useClickOutside, etc.)
-│   │   │   ├── styles/       # Global CSS & theme variables
-│   │   │   ├── utils/        # Utility functions
-│   │   │   ├── types/        # Shared TypeScript types
-│   │   │   └── index.tsx     # Main export file
-│   │   └── package.json
-│   └── fictoan-docs/         # Next.js documentation site
-└── package.json              # Root workspace config
+│   │   │   ├── components/      # 50+ components (each in own folder)
+│   │   │   ├── hooks/           # Custom hooks
+│   │   │   ├── styles/          # Global CSS & theme variables
+│   │   │   ├── utils/           # Utility functions
+│   │   │   └── index.tsx        # Main exports
+│   │   ├── tsconfig.json
+│   │   └── vite.config.ts
+│   └── fictoan-docs/            # Documentation site
+└── package.json
 ```
 
 ---
 
 ## Component File Structure
 
-Every component MUST follow this exact structure:
+Every component MUST follow this structure:
 
 ```
 ComponentName/
 ├── ComponentName.tsx    # Main component implementation
-├── componentname.css    # Scoped CSS (lowercase, using data attributes)
+├── componentname.css    # Scoped CSS (lowercase filename)
 └── index.tsx            # Export barrel file
+```
+
+---
+
+## TypeScript Path Aliases
+
+```typescript
+import { Element } from "$element";
+import { Div, Span } from "$tags";
+import { CommonAndHTMLProps } from "$components/Element/constants";
+import { useClickOutside } from "$hooks/UseClickOutside";
+import { separateWrapperProps } from "$utils/propSeparation";
 ```
 
 ---
 
 ## Component Implementation Pattern
 
-Follow this exact pattern when creating components:
-
 ```tsx
-// 1. IMPORTS - Organized by category
+// REACT CORE ==========================================================================================================
 import React from "react";
 
-// Core imports
+// LOCAL COMPONENTS ====================================================================================================
+import { CommonAndHTMLProps, EmphasisTypes, ShapeTypes, SpacingTypes } from "../Element/constants";
 import { Element } from "$element";
 
-// Local imports (types, constants)
-import { CommonAndHTMLProps, SpacingTypes, ShapeTypes } from "../Element/constants";
+// STYLES ==============================================================================================================
+import "./button.css";
 
-// Styles
-import "./componentname.css";
-
-// 2. TYPE DEFINITIONS
-export interface ComponentNameCustomProps {
-    // Component-specific props only
-    variant?: "primary" | "secondary";
-    size?: SpacingTypes;
-    isLoading?: boolean;
+// TYPE DEFINITIONS ////////////////////////////////////////////////////////////////////////////////////////////////////
+export interface ButtonCustomProps {
+    kind      ? : EmphasisTypes;
+    size      ? : SpacingTypes;
+    shape     ? : ShapeTypes;
+    isLoading ? : boolean;
+    label     ? : string;
 }
 
-export type ComponentNameElementType = HTMLDivElement; // or appropriate HTML element
+export type ButtonElementType = HTMLButtonElement;
+export type ButtonProps = Omit<CommonAndHTMLProps<ButtonElementType>, keyof ButtonCustomProps> & ButtonCustomProps;
 
-export type ComponentNameProps =
-    Omit<CommonAndHTMLProps<ComponentNameElementType>, keyof ComponentNameCustomProps>
-    & ComponentNameCustomProps;
+// COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+export const Button = React.forwardRef(
+    ({ size = "medium", shape, kind, isLoading, label, ...props }: ButtonProps, ref: React.Ref<ButtonElementType>) => {
+        let classNames = [];
 
-// 3. COMPONENT with forwardRef
-export const ComponentName = React.forwardRef(
-    (
-        {
-            variant = "primary",
-            size = "medium",
-            isLoading,
-            ...props
-        }: ComponentNameProps,
-        ref: React.Ref<ComponentNameElementType>
-    ) => {
-        // Build classNames array
-        let classNames: string[] = [];
-
-        if (variant) classNames.push(variant);
+        if (kind) classNames.push(kind);
         if (size) classNames.push(`size-${size}`);
+        if (shape) classNames.push(`shape-${shape}`);
         if (isLoading) classNames.push("is-loading");
 
         return (
-            <Element<ComponentNameElementType>
-                as="div"
-                data-component-name
+            <Element<ButtonElementType>
+                as="button"
+                data-button
                 ref={ref}
                 classNames={classNames}
+                aria-label={label}
+                aria-disabled={props.disabled || isLoading}
                 aria-busy={isLoading}
                 {...props}
             />
         );
     }
 );
-
-// 4. DISPLAY NAME - Required for debugging
-ComponentName.displayName = "ComponentName";
+Button.displayName = "Button";
 ```
 
----
+### Key Patterns:
 
-## Export Pattern
+1. **The Omit Pattern** - Prevents prop conflicts:
+   ```typescript
+   type Props = Omit<CommonAndHTMLProps<ElementType>, keyof CustomProps> & CustomProps;
+   ```
 
-**index.tsx (barrel file):**
-```tsx
-export { ComponentName, type ComponentNameProps } from "./ComponentName";
-```
+2. **Always use `React.forwardRef`**
 
-**Main index.tsx (add to src/index.tsx):**
-```tsx
-export { ComponentName, type ComponentNameProps } from "./components/ComponentName";
-```
+3. **Generic type on Element**: `<Element<ButtonElementType> />`
+
+4. **Data attribute for CSS scoping**: `data-button`, `data-card`
+
+5. **Set `displayName`** after component definition
 
 ---
 
 ## CSS Styling Pattern
 
-**Technology:** Pure CSS with PostCSS (NO styled-components, NO CSS-in-JS)
-
-**Scoping:** Use data attributes for component scoping:
+**Pure CSS with data attribute scoping:**
 
 ```css
-/* componentname.css */
-[data-component-name] {
-    /* Base styles */
+[data-button] {
     position: relative;
-    font-family: var(--component-font, sans-serif);
+    cursor: pointer;
+    font-family: var(--button-font), sans-serif;
     transition: all 0.2s ease-in-out;
 }
 
-/* Variants */
-[data-component-name].primary {
-    background-color: var(--component-primary-bg);
-    color: var(--component-primary-text);
+[data-button].primary {
+    background-color: var(--button-primary-bg-default);
+    color: var(--button-primary-text-default);
+
+    &:hover {
+        background-color: var(--button-primary-bg-hover);
+    }
 }
 
-[data-component-name].secondary {
-    background-color: var(--component-secondary-bg);
-    color: var(--component-secondary-text);
-}
+[data-button].size-small { padding: 8px 16px; }
+[data-button].size-medium { padding: 12px 24px; }
 
-/* Sizes */
-[data-component-name].size-small {
-    padding: var(--spacing-small);
-}
-
-[data-component-name].size-medium {
-    padding: var(--spacing-medium);
-}
-
-[data-component-name].size-large {
-    padding: var(--spacing-large);
-}
-
-/* States */
-[data-component-name].is-loading {
-    opacity: 0.7;
-    pointer-events: none;
-}
-
-/* Nested elements */
-[data-component-name] .inner-element {
-    /* Nested styles */
-}
-```
-
----
-
-## Props Naming Conventions
-
-**CRITICAL: Use plain English, semantic names - NO abbreviations**
-
-| Correct | Incorrect |
-|---------|-----------|
-| `marginBottom` | `mb` |
-| `paddingLeft` | `pl` |
-| `bgColour` / `bgColor` | `bg` |
-| `horizontallyCentre` | `hCenter` |
-| `isLoading` | `loading` |
-| `isDisabled` | `disabled` (unless HTML native) |
-
-**Supported Spellings:** Both US and UK spellings are supported:
-- `bgColour` / `bgColor`
-- `textColour` / `textColor`
-- `horizontallyCentre` / `horizontallyCenter`
-
----
-
-## Common Props Types
-
-Use these established types from `Element/constants`:
-
-```typescript
-// Spacing
-type SpacingTypes = "none" | "nano" | "micro" | "tiny" | "small" | "medium" | "large" | "huge";
-
-// Shapes
-type ShapeTypes = "rounded" | "curved" | "circular";
-
-// Emphasis/Kind
-type EmphasisTypes = "primary" | "secondary" | "tertiary" | "custom";
-
-// Layout
-type LayoutAsFlexbox = boolean;
-type StackVertically = boolean;
-type Gap = SpacingTypes;
-```
-
----
-
-## Accessibility Requirements
-
-**MANDATORY for all components:**
-
-```tsx
-// Required ARIA attributes based on component type
-<Element
-    as="button"
-    aria-label={label}
-    aria-disabled={disabled || isLoading}
-    aria-busy={isLoading}
-    role="button"  // if not implicit
-    tabIndex={0}   // if interactive
-    {...props}
-/>
-
-// For dialogs/modals
-<Element
-    as="dialog"
-    role="dialog"
-    aria-modal="true"
-    aria-label={label || "Modal dialog"}
-    aria-describedby={descriptionId}
-/>
-
-// For expandable content
-<Element
-    as="details"
-    role="region"
-    aria-labelledby="summary-id"
->
-    <summary aria-expanded={isOpen} aria-controls="content-id">
-        {summary}
-    </summary>
-</Element>
-
-// Screen reader only text
-<span className="sr-only">{screenReaderText}</span>
+[data-button].shape-rounded { border-radius: var(--global-border-radius); }
 ```
 
 ---
 
 ## Form Components Pattern
 
-Form components require special prop separation:
+Form components use `separateWrapperProps` to split layout props:
 
 ```tsx
 import { separateWrapperProps } from "$utils/propSeparation";
+import { FormItem } from "../FormItem/FormItem";
 
-export const FormComponent = React.forwardRef((props, ref) => {
-    // Separate layout props (for wrapper) from input props
-    const { wrapperProps, inputProps } = separateWrapperProps(props);
+export const InputField = React.forwardRef((props, ref) => {
+    const { label, helpText, errorText, required, size, ...rest } = props;
+    const { wrapperProps, inputProps } = separateWrapperProps(rest);
 
     return (
-        <FormItem {...wrapperProps}>
-            <Element
+        <FormItem
+            label={label}
+            helpText={helpText}
+            errorText={errorText}
+            required={required}
+            size={size}
+            {...wrapperProps}
+        >
+            <Element<HTMLInputElement>
                 as="input"
                 ref={ref}
+                data-input-field
                 {...inputProps}
             />
         </FormItem>
@@ -284,136 +864,97 @@ export const FormComponent = React.forwardRef((props, ref) => {
 
 ## Context Provider Pattern
 
-For components with global state:
-
 ```tsx
-// 1. Create context
-const ComponentContext = createContext<ComponentContextType | undefined>(undefined);
+const NotificationsContext = createContext<ContextValue | null>(null);
 
-// 2. Create provider
-export const ComponentProvider = ({ children, ...config }: ProviderProps) => {
-    const [state, setState] = useState(initialState);
+export const NotificationsProvider = ({ children, ...config }) => {
+    const [notifications, setNotifications] = useState([]);
 
-    const actions = useMemo(() => ({
-        doSomething: (value) => setState(prev => [...prev, value]),
-    }), []);
+    const notify = useCallback((message) => {
+        const id = `notification-${Date.now()}`;
+        setNotifications(prev => [...prev, { id, message }]);
+    }, []);
 
     return (
-        <ComponentContext.Provider value={{ state, ...actions }}>
+        <NotificationsContext.Provider value={{ notify }}>
             {children}
-            <ComponentContainer>
-                {/* Render managed items */}
-            </ComponentContainer>
-        </ComponentContext.Provider>
+            <NotificationsWrapper>
+                {notifications.map(n => <NotificationItem key={n.id} {...n} />)}
+            </NotificationsWrapper>
+        </NotificationsContext.Provider>
     );
 };
 
-// 3. Create hook with error boundary
-export const useComponent = () => {
-    const context = useContext(ComponentContext);
+export const useNotifications = () => {
+    const context = useContext(NotificationsContext);
     if (!context) {
-        throw new Error("useComponent must be used within a ComponentProvider");
+        throw new Error("useNotifications must be used within NotificationsProvider");
     }
-    return context;
+    return context.notify;
 };
 ```
 
 ---
 
-## TypeScript Path Aliases
+## Export Pattern
 
-Use these aliases in imports:
-
-```typescript
-import { Element } from "$element";
-import { CommonProps } from "$components/Element/constants";
-import { useClickOutside } from "$hooks/useClickOutside";
-import { separateWrapperProps } from "$utils/propSeparation";
+**Barrel file (index.tsx):**
+```tsx
+export { Button, type ButtonProps } from "./Button";
 ```
 
----
+**Main exports (src/index.tsx):**
+```tsx
+// CSS imports first
+import "./styles/Normalize.css";
+import "./styles/theme.css";
 
-## Import Order Convention
-
-Organize imports in this order:
-
-```typescript
-// 1. React
-import React, { useState, useEffect } from "react";
-
-// 2. External libraries (if any)
-
-// 3. Core Fictoan imports
-import { Element } from "$element";
-
-// 4. Local component imports
-import { CommonAndHTMLProps } from "../Element/constants";
-
-// 5. Utilities and hooks
-import { separateWrapperProps } from "$utils/propSeparation";
-
-// 6. Styles (LAST)
-import "./componentname.css";
-```
-
----
-
-## Design Token System
-
-**Colors:** OKLCH-based with 36 colors, each with 10 shades + opacity variants
-
-**Spacing Scale:**
-- `none`: 0
-- `nano`: 4px
-- `micro`: 8px
-- `tiny`: 12px
-- `small`: 16px
-- `medium`: 24px
-- `large`: 32px
-- `huge`: 48px
-
-**Use CSS variables:**
-```css
-var(--spacing-small)
-var(--button-primary-bg-default)
-var(--global-border-radius)
+// Named exports with types
+export { Button, type ButtonProps } from "./components/Button";
 ```
 
 ---
 
 ## Checklist for New Components
 
-- [ ] Component file: `ComponentName.tsx`
-- [ ] CSS file: `componentname.css` (lowercase)
-- [ ] Barrel export: `index.tsx`
-- [ ] Uses `React.forwardRef`
-- [ ] Has `displayName` set
-- [ ] Uses `Element` wrapper with `data-*` attribute
-- [ ] Props extend `CommonAndHTMLProps<ElementType>`
-- [ ] Custom props defined with `ComponentNameCustomProps` interface
-- [ ] Uses `Omit` pattern for type composition
-- [ ] Includes appropriate ARIA attributes
-- [ ] Styles use CSS variables for theming
-- [ ] Added to main `src/index.tsx` exports
-- [ ] Plain English prop names (no abbreviations)
+- [ ] Create folder: `src/components/ComponentName/`
+- [ ] Create `ComponentName.tsx`:
+  - [ ] `ComponentNameCustomProps` interface
+  - [ ] `ComponentNameElementType` type alias
+  - [ ] `ComponentNameProps` with Omit pattern
+  - [ ] `React.forwardRef` wrapper
+  - [ ] `data-component-name` attribute
+  - [ ] ARIA attributes for accessibility
+  - [ ] `displayName` set
+- [ ] Create `componentname.css` (lowercase):
+  - [ ] `[data-component-name]` base styles
+  - [ ] CSS variables for theming
+  - [ ] Variant/size/state classes
+- [ ] Create `index.tsx` barrel export
+- [ ] Add to `src/index.tsx` exports
 
 ---
 
 ## Key Files Reference
 
-- **Base Element:** `src/components/Element/Element.tsx`
-- **Common Props:** `src/components/Element/constants.ts`
-- **Prop Separation:** `src/utils/propSeparation.ts`
-- **Theme Variables:** `src/styles/theme.css`
-- **Color Definitions:** `src/styles/colours.ts`
-- **Main Exports:** `src/index.tsx`
+| File | Purpose |
+|------|---------|
+| `src/components/Element/Element.tsx` | Base Element wrapper |
+| `src/components/Element/constants.ts` | CommonProps, types |
+| `src/components/Element/Tags.tsx` | Semantic element factories |
+| `src/utils/propSeparation.ts` | Form prop separation |
+| `src/styles/theme.css` | CSS variable definitions |
+| `src/styles/colours.ts` | OKLCH color definitions |
+| `src/index.tsx` | Main exports |
 
 ---
 
-## Examples to Reference
+## Example Components to Reference
 
-- **Simple Component:** `src/components/Button/Button.tsx`
-- **Form Component:** `src/components/Form/InputField/InputField.tsx`
-- **Context Provider:** `src/components/Notification/NotificationsProvider/`
-- **Composite Component:** `src/components/Sidebar/`
-- **Modal/Dialog:** `src/components/Modal/Modal.tsx`
+| Component | Pattern | File |
+|-----------|---------|------|
+| Button | Simple component | `src/components/Button/Button.tsx` |
+| Card | With children | `src/components/Card/Card.tsx` |
+| Modal | Dialog + popover | `src/components/Modal/Modal.tsx` |
+| InputField | Form with prop separation | `src/components/Form/InputField/InputField.tsx` |
+| NotificationsProvider | Context provider | `src/components/Notification/NotificationsProvider/` |
