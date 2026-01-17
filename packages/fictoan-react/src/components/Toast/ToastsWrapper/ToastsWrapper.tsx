@@ -3,38 +3,49 @@ import React from "react";
 
 // ELEMENT =============================================================================================================
 import { CommonAndHTMLProps } from "../../Element/constants";
-import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./toasts-wrapper.css";
 
+// OTHER ===============================================================================================================
+import { Element } from "$element";
+
 // prettier-ignore
 export interface ToastsWrapperCustomProps {
-        position ? : "top" | "bottom";
+    anchor ? : "top" | "bottom";
 }
 
 export type ToastsWrapperElementType = HTMLDivElement;
 export type ToastsWrapperProps = CommonAndHTMLProps<ToastsWrapperElementType> &
-                                 ToastsWrapperCustomProps;
+    ToastsWrapperCustomProps;
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const ToastsWrapper = React.forwardRef(
-    ({position, ...props} : ToastsWrapperProps, ref : React.Ref<ToastsWrapperElementType>) => {
-        let classNames = [];
-
-        if (position) {
-            classNames.push(position);
-        }
+    (
+        {
+            anchor = "top",
+            children,
+            ...props
+        }: ToastsWrapperProps,
+        ref: React.Ref<ToastsWrapperElementType>
+    ) => {
+        const childrenCount = React.Children.count(children);
+        if (childrenCount === 0) return null;
 
         return (
             <Element<ToastsWrapperElementType>
-                as="div"
+                as="section"
                 data-toasts-wrapper
                 ref={ref}
-                classNames={classNames}
+                classNames={[anchor]}
+                aria-label="Toasts"
+                aria-relevant="additions removals"
+                role="log"
                 {...props}
-            />
+            >
+                {children}
+            </Element>
         );
-    },
+    }
 );
 ToastsWrapper.displayName = "ToastsWrapper";

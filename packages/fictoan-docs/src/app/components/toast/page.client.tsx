@@ -9,17 +9,14 @@ import {
     Heading6,
     Text,
     Divider,
-    ToastsWrapper,
-    ToastItem,
+    ToastsProvider,
+    useToasts,
     Button,
     CodeBlock,
     RadioTabGroup,
     Range,
     InputField,
 } from "fictoan-react";
-
-// UTILS ===============================================================================================================
-import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
 import "../../../styles/fictoan-theme.css";
@@ -28,54 +25,63 @@ import "./page-toast.css";
 // OTHER ===============================================================================================================
 import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
+// DEMO COMPONENT WITH ITS OWN PROVIDER ================================================================================
+const ToastDemo = ({
+    duration,
+    toastMessage,
+}: {
+    duration: number;
+    toastMessage: string;
+}) => {
+    const toast = useToasts();
+
+    return (
+        <Button kind="primary" onClick={() => toast(toastMessage, duration)}>
+            Show Toast
+        </Button>
+    );
+};
+
+// MAIN DOCS COMPONENT =================================================================================================
 const ToastDocs = () => {
-    // Toast visibility state
-    const [showToast, setShowToast] = useState(false);
-
     // Props state
-    const [position, setPosition] = useState("top");
-    const [secondsToShowFor, setSecondsToShowFor] = useState(3);
+    const [anchor, setAnchor] = useState("top");
+    const [duration, setDuration] = useState(4);
     const [toastMessage, setToastMessage] = useState("Hello there, folks!");
-
-    // Theme configurator
-    const ToastComponent = (varName: string) => {
-        return varName.startsWith("toast-");
-    };
-
-    const {
-        interactiveElementRef,
-        componentProps: themeProps,
-        themeConfigurator,
-    } = createThemeConfigurator<HTMLDivElement>("Toast", ToastComponent);
 
     // Generate code
     const codeString = useMemo(() => {
-        const wrapperProps = [];
-        if (position !== "top") wrapperProps.push(`position="${position}"`);
-        const wrapperPropsStr = wrapperProps.length > 0 ? `\n    ${wrapperProps.join("\n    ")}\n` : "";
+        const providerProps = [];
+        if (anchor !== "top") providerProps.push(`    anchor="${anchor}"`);
+        const providerPropsStr = providerProps.length > 0 ? `\n${providerProps.join("\n")}\n` : "";
 
-        return `import { useState } from "react";
-import { ToastsWrapper, ToastItem, Button, Text } from "fictoan-react";
+        const durationArg = duration !== 4 ? `, ${duration}` : "";
 
-const [showToast, setShowToast] = useState(false);
+        return `// In your app's root layout
+import { ToastsProvider } from "fictoan-react";
 
-<Button onClick={() => setShowToast(true)}>
-    Show Toast
-</Button>
+export default function RootLayout({ children }) {
+    return (
+        <ToastsProvider${providerPropsStr}>
+            {children}
+        </ToastsProvider>
+    );
+}
 
-<ToastsWrapper${wrapperPropsStr}>
-    <ToastItem
-        showWhen={showToast}
-        secondsToShowFor={${secondsToShowFor}}
-        closeWhen={() => setShowToast(false)}
-    >
-        <Text>${toastMessage}</Text>
-    </ToastItem>
-</ToastsWrapper>`;
-    }, [position, secondsToShowFor, toastMessage]);
+-------
+
+// In any component
+import { useToasts } from "fictoan-react";
+
+const MyComponent = () => {
+    const toast = useToasts();
+
+    toast("${toastMessage}"${durationArg});
+};`;
+    }, [anchor, duration, toastMessage]);
 
     return (
-        <>
+        <ToastsProvider anchor={anchor as any}>
             <ComponentDocsLayout>
                 {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
                 <Div id="intro-header">
@@ -84,7 +90,7 @@ const [showToast, setShowToast] = useState(false);
                     </Heading6>
 
                     <Text id="component-description" weight="400">
-                        A small floating popup for notifications
+                        A small floating popup for brief messages
                     </Text>
                 </Div>
 
@@ -93,26 +99,25 @@ const [showToast, setShowToast] = useState(false);
                     <Divider kind="tertiary" verticalMargin="micro" />
 
                     <Text>
-                        Use <code>ToastsWrapper</code> to define the position, and <code>ToastItem</code> for each toast.
+                        Wrap your app with <code>ToastsProvider</code> once, then
+                        use <code>useToasts()</code> anywhere.
                     </Text>
 
                     <Text>
-                        Toasts auto-dismiss after <code>secondsToShowFor</code> or can be manually closed.
+                        Call <code>toast("message")</code> or <code>toast("message", duration)</code> to show a toast.
                     </Text>
 
                     <Text>
-                        Multiple toasts stack automatically within the wrapper.
+                        Toasts auto-dismiss after the specified duration (default 4 seconds).
                     </Text>
                 </Div>
 
                 {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
                 <Div id="demo-component">
-                    <Button
-                        kind="primary"
-                        onClick={() => setShowToast(true)}
-                    >
-                        Show Toast
-                    </Button>
+                    <ToastDemo
+                        duration={duration}
+                        toastMessage={toastMessage}
+                    />
                 </Div>
 
                 {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
@@ -123,26 +128,26 @@ const [showToast, setShowToast] = useState(false);
 
                     <Div className="doc-controls">
                         <RadioTabGroup
-                            id="prop-position"
-                            label="position"
+                            id="prop-anchor"
+                            label="anchor"
                             options={[
-                                { id: "position-top", value: "top", label: "top" },
-                                { id: "position-bottom", value: "bottom", label: "bottom" },
+                                { id: "anchor-top", value: "top", label: "top" },
+                                { id: "anchor-bottom", value: "bottom", label: "bottom" },
                             ]}
-                            value={position}
-                            onChange={(val) => setPosition(val)}
-                            helpText="Position of the toast wrapper."
+                            value={anchor}
+                            onChange={(val) => setAnchor(val)}
+                            helpText="Vertical position of the toast."
                             marginBottom="micro"
                         />
 
                         <Range
-                            id="prop-secondsToShowFor"
-                            label="secondsToShowFor"
+                            id="prop-duration"
+                            label="duration"
                             min={1}
                             max={10}
-                            value={secondsToShowFor}
-                            onChange={(val: number) => setSecondsToShowFor(val)}
-                            suffix={secondsToShowFor === 1 ? " second" : " seconds"}
+                            value={duration}
+                            onChange={(val: number) => setDuration(val)}
+                            suffix={duration === 1 ? " second" : " seconds"}
                             helpText="How long the toast stays visible."
                             marginBottom="micro" isFullWidth
                         />
@@ -158,26 +163,9 @@ const [showToast, setShowToast] = useState(false);
                 </Div>
 
                 {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
-                <Div id="theme-config">
-                    {themeConfigurator()}
-                </Div>
+                <Div id="theme-config" />
             </ComponentDocsLayout>
-
-            {/* TOAST - rendered outside layout */}
-            <ToastsWrapper
-                ref={interactiveElementRef}
-                position={position as any}
-                {...themeProps}
-            >
-                <ToastItem
-                    showWhen={showToast}
-                    secondsToShowFor={secondsToShowFor}
-                    closeWhen={() => setShowToast(false)}
-                >
-                    <Text>{toastMessage}</Text>
-                </ToastItem>
-            </ToastsWrapper>
-        </>
+        </ToastsProvider>
     );
 };
 

@@ -151,7 +151,7 @@ export { Tabs, type TabsProps } from "./Tabs";
 export { ThemeProvider, type ThemeProviderProps, useTheme } from "./ThemeProvider";
 
 // TOAST ===============================================================================================================
-export { ToastsWrapper, type ToastsWrapperProps, ToastItem, type ToastItemProps } from "./Toast";
+export { ToastsProvider, useToasts, type ToastsProviderProps, type ToastFunction } from "./Toast";
 
 // TOOLTIP =============================================================================================================
 export { Tooltip, type TooltipProps } from "./Tooltip";

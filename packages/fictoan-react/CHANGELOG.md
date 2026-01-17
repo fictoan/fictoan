@@ -40,45 +40,35 @@
     <Button onClick={() => setIsOpen(true)}>Open</Button>
     ```
 
-**Notifications now use imperative API with provider pattern**
+**Notifications and Toast now use provider pattern**
 
-- Replace declarative `NotificationsWrapper` and `NotificationItem` with `NotificationsProvider` and `useNotifications()` hook
-  - Removed: `NotificationsWrapper`, `NotificationItem`, `showWhen`, `closeWhen`, `secondsToShowFor`
-  - Added: `NotificationsProvider`, `useNotifications()` hook
+- Both components replace manual state management with context providers and hooks
+  - Removed: `NotificationsWrapper`, `NotificationItem`, `ToastsWrapper`, `ToastItem`, `showWhen`, `closeWhen`, `secondsToShowFor`
+  - Added: `NotificationsProvider`, `useNotifications()`, `ToastsProvider`, `useToasts()`
     ```tsx
-    // Before (v1.x)
+    // Before (v1.x) - manual state for each item
     const [show, setShow] = useState(false);
-    <NotificationsWrapper position="right" anchor="top">
-        <NotificationItem
-            showWhen={show}
-            closeWhen={() => setShow(false)}
-            secondsToShowFor={4}
-        >
-            <Text>Message</Text>
-        </NotificationItem>
-    </NotificationsWrapper>
+    <ToastsWrapper position="top">
+        <ToastItem showWhen={show} closeWhen={() => setShow(false)} secondsToShowFor={4}>
+            Message
+        </ToastItem>
+    </ToastsWrapper>
 
-    // After (v2.0) - wrap app once
-    <NotificationsProvider position="right" anchor="top" kind="list">
+    // After (v2.0) - wrap app once, call from anywhere
+    <ToastsProvider anchor="top">
         <App />
-    </NotificationsProvider>
+    </ToastsProvider>
 
-    // Use anywhere
+    const toast = useToasts();
+    toast("Message");
+    toast("Custom duration", 6);
+
+    // Notifications work similarly with additional options
     const notify = useNotifications();
     notify("Simple message");
     notify.success("Saved!");
-    notify.error("Failed");
-    notify({
-        content: <Text>Custom content</Text>,
-        kind: "info",
-        duration: 5,
-    });
-    notify({
-        content: ({ close }) => <Button onClick={close}>Dismiss</Button>,
-        duration: 0, // Won't auto-dismiss
-    });
+    notify({ content: <Custom />, kind: "error", duration: 5 });
     ```
-- New `kind` prop on `NotificationsProvider`: `"list"` (default) or `"stack"` (mobile-style stacked notifications)
 
 ### Build and performance improvements
 - Remove Babel transform in favour of native Vite/esbuild (75-80% faster builds)
