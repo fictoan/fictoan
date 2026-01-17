@@ -20,6 +20,7 @@ import {
     Heading2,
     Header,
     Badge,
+    CodeBlock,
 }from "fictoan-react";
 
 // LOCAL COMPONENTS ====================================================================================================
@@ -71,6 +72,25 @@ const HomePage = () => {
             {/* INTRO CODE ///////////////////////////////////////////////////////////////////////////////////////// */}
             <Section id="intro-code-section" marginBottom="small">
                 <IntroCode />
+            </Section>
+
+            {/* QUICKSTART ///////////////////////////////////////////////////////////////////////////////////////// */}
+            <Section id="quickstart-section" marginBottom="small">
+                <Row horizontalPadding="medium">
+                    <Portion desktopSpan="half">
+                        <Heading4 marginBottom="micro">Quickstart</Heading4>
+                        <CodeBlock
+                            language="bash"
+                            withSyntaxHighlighting
+                            showCopyButton
+                            source={`pnpm add fictoan-react@2.0.0-beta.1
+# or
+yarn add fictoan-react@2.0.0-beta.1
+# or
+npm install fictoan-react@2.0.0-beta.1`}
+                        />
+                    </Portion>
+                </Row>
             </Section>
 
             {/* DIFFERENTIATORS //////////////////////////////////////////////////////////////////////////////////// */}
