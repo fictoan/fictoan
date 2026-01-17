@@ -6,7 +6,7 @@ import React, { useState, useMemo } from "react";
 // UI ==================================================================================================================
 import {
     Div,
-    Heading6,
+    Heading2,
     Text,
     Divider,
     ToastsProvider,
@@ -85,9 +85,9 @@ const MyComponent = () => {
             <ComponentDocsLayout>
                 {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
                 <Div id="intro-header">
-                    <Heading6 id="component-name">
+                    <Heading2 id="component-name">
                         Toast
-                    </Heading6>
+                    </Heading2>
 
                     <Text id="component-description" weight="400">
                         A small floating popup for brief messages

@@ -4,7 +4,7 @@
 import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading6, Text, Divider, Tooltip, CodeBlock, RadioTabGroup, InputField, } from "fictoan-react";
+import { Div, Heading2, Text, Divider, Tooltip, CodeBlock, RadioTabGroup, InputField, } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -57,9 +57,9 @@ const TooltipDocs = () => {
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Tooltip
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A small helper popup to display extra information

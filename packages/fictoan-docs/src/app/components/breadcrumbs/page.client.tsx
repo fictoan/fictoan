@@ -5,7 +5,7 @@ import Link from "next/link";
 import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading6, Text, Divider, Breadcrumbs, CodeBlock, InputField, RadioTabGroup } from "fictoan-react";
+import { Div, Heading2, Text, Divider, Breadcrumbs, CodeBlock, InputField, RadioTabGroup } from "fictoan-react";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { ComponentDocsLayout } from "../ComponentDocsLayout";
@@ -31,7 +31,7 @@ const BreadcrumbsDocs = () => {
         interactiveElementRef,
         componentProps: themeProps,
         themeConfigurator,
-    } = createThemeConfigurator<HTMLElement>("Breadcrumbs", BreadcrumbsComponent);
+    } = createThemeConfigurator<HTMLDivElement>("Breadcrumbs", BreadcrumbsComponent);
 
     // Generate code
     const codeString = useMemo(() => {
@@ -51,9 +51,9 @@ const BreadcrumbsDocs = () => {
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Breadcrumbs
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A set of links to show the current page's hierarchy

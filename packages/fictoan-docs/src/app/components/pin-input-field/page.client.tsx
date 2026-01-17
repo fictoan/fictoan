@@ -7,7 +7,7 @@ import Link from "next/link";
 // UI ==================================================================================================================
 import {
     Div,
-    Heading6,
+    Heading2,
     Text,
     Divider,
     CodeBlock,
@@ -52,9 +52,9 @@ const PinInputFieldDocs = () => {
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Pin Input Field
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A set of single-character input fields for entering PINs, OTPs, and verification codes
@@ -94,7 +94,7 @@ const PinInputFieldDocs = () => {
                     <Range
                         label="numberOfFields"
                         value={numberOfFields}
-                        onChange={(value) => setNumberOfFields(value)}
+                        onChange={(value: number) => setNumberOfFields(value)}
                         min={2}
                         max={8}
                         step={1}

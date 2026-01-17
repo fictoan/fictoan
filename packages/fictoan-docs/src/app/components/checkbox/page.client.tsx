@@ -6,7 +6,7 @@ import React, { useState, useMemo } from "react";
 // UI ==================================================================================================================
 import {
     Div,
-    Heading6,
+    Heading2,
     Text,
     Divider,
     Checkbox,
@@ -106,9 +106,9 @@ const [checked, setChecked] = useState(${defaultChecked});
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Checkbox
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A click-to-toggle component to make a choice
@@ -151,6 +151,7 @@ const [checked, setChecked] = useState(${defaultChecked});
                 ) : (
                     componentType === "checkbox" ? (
                         <Checkbox
+                            {...themeProps}
                             key={`checkbox-${defaultChecked}-${disabled}`}
                             id={id}
                             label={label}
@@ -158,10 +159,10 @@ const [checked, setChecked] = useState(${defaultChecked});
                             disabled={disabled}
                             helpText={helpText || undefined}
                             errorText={errorText || undefined}
-                            {...themeProps}
                         />
                     ) : (
                         <Switch
+                            {...themeProps}
                             key={`switch-${defaultChecked}-${disabled}`}
                             id={id}
                             label={label}
@@ -169,7 +170,6 @@ const [checked, setChecked] = useState(${defaultChecked});
                             disabled={disabled}
                             helpText={helpText || undefined}
                             errorText={errorText || undefined}
-                            {...themeProps}
                         />
                     )
                 )}

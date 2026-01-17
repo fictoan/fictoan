@@ -171,16 +171,17 @@ export const InputField = React.forwardRef(
         const renderSideElement = (
             content: React.ReactNode,
             position: "left" | "right",
-            elRef: React.RefObject<HTMLDivElement>
+            elRef: React.RefObject<HTMLDivElement | null>
         ) => {
             if (!content) return null;
 
             const isText = typeof content === "string";
+            const contentProps = React.isValidElement(content) ? (content.props as Record<string, unknown>) : {};
             const isInteractive =
                 !isText &&
                 React.isValidElement(content) &&
-                (content.props.onClick ||
-                    content.props.onKeyDown ||
+                (contentProps.onClick ||
+                    contentProps.onKeyDown ||
                     content.type === "button" ||
                     content.type === "a");
 

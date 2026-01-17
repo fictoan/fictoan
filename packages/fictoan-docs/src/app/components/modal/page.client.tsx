@@ -4,7 +4,7 @@
 import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading6, Heading4, Text, Divider, Modal, Card, Button, CodeBlock, Checkbox, } from "fictoan-react";
+import { Div, Heading2, Heading4, Text, Divider, Modal, Card, Button, CodeBlock, Checkbox, } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -69,9 +69,9 @@ const [isOpen, setIsOpen] = useState(false);
             <ComponentDocsLayout>
                 {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
                 <Div id="intro-header">
-                    <Heading6 id="component-name">
+                    <Heading2 id="component-name">
                         Modal
-                    </Heading6>
+                    </Heading2>
 
                     <Text id="component-description" weight="400">
                         A popover that appears at the centre of the screen

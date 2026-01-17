@@ -6,7 +6,7 @@ import React, { useState, useMemo } from "react";
 // UI ==================================================================================================================
 import {
     Div,
-    Heading6,
+    Heading2,
     Text,
     Divider,
     Range,
@@ -58,7 +58,7 @@ const RangeDocs = () => {
         interactiveElementRef,
         componentProps: themeProps,
         themeConfigurator,
-    } = createThemeConfigurator<HTMLDivElement>("Range", RangeComponent);
+    } = createThemeConfigurator<HTMLInputElement>("Range", RangeComponent);
 
     // Generate code
     const codeString = useMemo(() => {
@@ -113,9 +113,9 @@ const [value, setValue] = useState<[number, number]>([${dualValue[0]}, ${dualVal
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Range
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A slider component for selecting a single value or a range of values
@@ -143,6 +143,7 @@ const [value, setValue] = useState<[number, number]>([${dualValue[0]}, ${dualVal
             <Div id="demo-component">
                 {mode === "single" ? (
                     <Range
+                        {...themeProps}
                         ref={interactiveElementRef}
                         id="demo-range"
                         label={showLabel ? label : undefined}
@@ -154,10 +155,10 @@ const [value, setValue] = useState<[number, number]>([${dualValue[0]}, ${dualVal
                         suffix={suffix || undefined}
                         disabled={disabled}
                         isFullWidth={isFullWidth}
-                        {...themeProps}
                     />
                 ) : (
                     <Range
+                        {...themeProps}
                         ref={interactiveElementRef}
                         id="demo-range"
                         label={showLabel ? label : undefined}
@@ -171,7 +172,6 @@ const [value, setValue] = useState<[number, number]>([${dualValue[0]}, ${dualVal
                         maxLabel="Maximum value"
                         disabled={disabled}
                         isFullWidth={isFullWidth}
-                        {...themeProps}
                     />
                 )}
 

@@ -6,7 +6,7 @@ import React, { useState, useMemo } from "react";
 // UI ==================================================================================================================
 import {
     Div,
-    Heading6,
+    Heading2,
     Text,
     Divider,
     CodeBlock,
@@ -94,9 +94,9 @@ ${skeletonProps.join("\n")}
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Skeleton
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A placeholder preview for content that is loading, with grouping capabilities
@@ -157,7 +157,7 @@ ${skeletonProps.join("\n")}
                     <Range
                         label="repeat"
                         value={repeat}
-                        onChange={(value) => setRepeat(value)}
+                        onChange={(value: number) => setRepeat(value)}
                         min={1}
                         max={10}
                         step={1}

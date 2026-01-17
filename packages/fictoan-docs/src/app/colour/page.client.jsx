@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import {
     Element,
     Card,
-    Heading6,
+    Heading2,
     Text,
     Divider,
     Portion,
@@ -57,9 +57,9 @@ const ColourDocs = () => {
             <Section id="basics" marginTop="medium" marginBottom="small">
                 <Row horizontalPadding="huge">
                     <Portion>
-                        <Heading6 id="component-name">
+                        <Heading2 id="component-name">
                             Colour
-                        </Heading6>
+                        </Heading2>
 
                         <Text
                             id="component-description"

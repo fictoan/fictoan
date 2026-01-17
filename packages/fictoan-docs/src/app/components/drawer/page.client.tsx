@@ -6,7 +6,6 @@ import React, { useState, useMemo } from "react";
 // UI ==================================================================================================================
 import {
     Div,
-    Heading6,
     Heading2,
     Text,
     Divider,
@@ -84,9 +83,9 @@ const [isOpen, setIsOpen] = useState(false);
             <ComponentDocsLayout>
                 {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
                 <Div id="intro-header">
-                    <Heading6 id="component-name">
+                    <Heading2 id="component-name">
                         Drawer
-                    </Heading6>
+                    </Heading2>
 
                     <Text id="component-description" weight="400">
                         A panel that slides in from any side of the screen

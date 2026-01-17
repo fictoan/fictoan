@@ -15,8 +15,11 @@ export const ComponentDocsLayout = ({ children }: ComponentDocsLayoutProps) => {
     const getContentById = (targetId: string) => {
         let content = null;
         Children.forEach(children, (child) => {
-            if (isValidElement(child) && child.props.id === targetId) {
-                content = child.props.children;
+            if (isValidElement(child)) {
+                const props = child.props as { id?: string; children?: ReactNode };
+                if (props.id === targetId) {
+                    content = props.children;
+                }
             }
         });
         return content;

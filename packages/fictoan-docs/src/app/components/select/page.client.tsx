@@ -6,7 +6,7 @@ import React, { useState, useMemo } from "react";
 // UI ==================================================================================================================
 import {
     Div,
-    Heading6,
+    Heading2,
     Text,
     Divider,
     Select,
@@ -83,9 +83,9 @@ const [value, setValue] = useState("${selectedValue}");
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Select
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A native select dropdown for picking a choice from a list

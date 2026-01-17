@@ -4,7 +4,7 @@
 import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading6, Text, Divider, ProgressBar, CodeBlock, InputField, Range, RadioTabGroup, } from "fictoan-react";
+import { Div, Heading2, Text, Divider, ProgressBar, CodeBlock, InputField, Range, RadioTabGroup, } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -60,9 +60,9 @@ const [progress, setProgress] = useState(${value});
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Progress bar
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A visual representation of the completion of a task

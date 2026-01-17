@@ -41,7 +41,7 @@ interface ThemeConfiguratorReturn<T extends HTMLElement = HTMLElement> {
     componentProps        : { id: string };
     handleVariableChange  : (varName: string, newValue: unknown) => void;
     themeConfigurator     : () => React.ReactNode;
-    interactiveElementRef : React.RefObject<T>;
+    interactiveElementRef : React.RefObject<T | null>;
 }
 
 const findLongestVarNameLength = (variables: Record<string, string>): number => {

@@ -6,7 +6,7 @@ import React, { useState } from "react";
 // UI ==================================================================================================================
 import {
     Div,
-    Heading1,
+    Heading2,
     Divider,
     Portion,
     Row,
@@ -35,7 +35,7 @@ const FormDocs = () => {
         <Article id="page-form">
             <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                 <Portion>
-                    <Heading1>Form</Heading1>
+                    <Heading2>Form</Heading2>
                     <Text size="large" marginBottom="small">
                         A parent wrapper for all form elements, used to space them evenly
                     </Text>

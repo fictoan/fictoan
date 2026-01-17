@@ -15,9 +15,9 @@ const PlaygroundDocs = () => {
         <Article id="playground-page">
             <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                 <Portion>
-                    <Heading4 id="component-name" marginBottom="nano">
+                    <Heading2 id="component-name" marginBottom="nano">
                         Layout playground
-                    </Heading4>
+                    </Heading2>
 
                     <Heading6
                         id="component-description"

@@ -53,9 +53,9 @@ const ThemeConfigurator = () => {
                     <Portion>
                         <Div id="intro-header" verticallyCentreItems pushItemsToEnds>
                             <Div>
-                                <Heading6 id="component-name">
+                                <Heading2 id="component-name">
                                     Theme configurator
-                                </Heading6>
+                                </Heading2>
 
                                 <Text
                                     id="component-description"
