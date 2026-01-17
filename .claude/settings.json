@@ -1,0 +1,8 @@
+{
+  "skills": {
+    "fictoan": {
+      "path": ".claude/skills/fictoan.md",
+      "description": "Create and modify Fictoan UI components following library conventions"
+    }
+  }
+}
