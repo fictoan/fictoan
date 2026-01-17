@@ -22,6 +22,8 @@ import { ListBoxProps, OptionForListBoxProps, ListBoxElementType, ListBoxCustomP
 import { Text } from "../../Typography/Text";
 import { searchOptions } from "./listBoxUtils";
 
+// TODO: Reposition if dropdown cannot fit in viewport
+
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
     (

@@ -48,7 +48,7 @@ export {
     Nav,
     Section,
     Span,
-    Hyperlink
+    Hyperlink,
 } from "./components/Element";
 
 export {
@@ -86,7 +86,7 @@ export {
     PinInputField,
     type PinInputFieldProps,
     ListBox,
-    type ListBoxProps
+    type ListBoxProps,
 } from "./components/Form";
 
 export { Meter, type MeterProps, type MeterMetaProps } from "./components/Meter";
@@ -102,8 +102,15 @@ export {
     type NotificationKind,
 } from "./components/Notification";
 
-export { OptionCard, OptionCardsGroup, type OptionCardProps, type OptionCardsGroupRef } from "./components/OptionCard";
-export { useOptionCard, useOptionCardsGroup } from "./components/OptionCard";
+export {
+    OptionCard,
+    useOptionCard,
+    useOptionCardsGroup,
+    OptionCardsGroup,
+    type OptionCardProps,
+    type OptionCardsGroupRef,
+    type TickPosition,
+} from "./components/OptionCard";
 
 export { Pagination, type PaginationProps } from "./components/Pagination";
 

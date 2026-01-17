@@ -42,7 +42,7 @@ export {
     Nav,
     Section,
     Span,
-    Hyperlink
+    Hyperlink,
 } from "./Element";
 
 // FORM ================================================================================================================
@@ -81,7 +81,7 @@ export {
     SwitchGroup,
     type SwitchProps,
     TextArea,
-    type TextareaProps
+    type TextareaProps,
 } from "./Form";
 
 // METER ===============================================================================================================
@@ -113,8 +113,15 @@ export { ProgressBar, type ProgressBarProps, type ProgressBarMetaProps } from ".
 export { Row, type RowProps } from "./Row";
 
 // OPTION CARD =========================================================================================================
-export { OptionCard, OptionCardsGroup, type OptionCardProps, type OptionCardsGroupRef } from "./OptionCard";
-export { useOptionCard, useOptionCardsGroup } from "./OptionCard";
+export {
+    OptionCard,
+    useOptionCard,
+    useOptionCardsGroup,
+    OptionCardsGroup,
+    type OptionCardProps,
+    type OptionCardsGroupRef,
+    type TickPosition,
+} from "./OptionCard";
 
 // SIDEBAR + CONTENT WRAPPER ===========================================================================================
 export {
@@ -135,7 +142,7 @@ export {
     Skeleton,
     type SkeletonProps,
     SkeletonGroup,
-    type SkeletonGroupProps
+    type SkeletonGroupProps,
 } from "./Skeleton";
 
 // SPINNER =============================================================================================================

@@ -1,323 +1,252 @@
 "use client";
 
-import React, { useState } from "react";
+// REACT CORE ==========================================================================================================
+import React, { useState, useMemo } from "react";
+
+// UI ==================================================================================================================
 import {
-    Heading1,
-    Divider,
-    Portion,
-    Row,
+    Div,
+    Heading6,
     Text,
-    Article,
-    Card,
-    Form,
-    Header,
+    Divider,
+    CodeBlock,
     RadioTabGroup,
     InputField,
-    CodeBlock,
-    Select,
+    Range,
     Skeleton,
     SkeletonGroup,
-    Div, Range,
 } from "fictoan-react";
 
+// UTILS ===============================================================================================================
+import { createThemeConfigurator } from "$utils/themeConfigurator";
+
+// STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
 import "./page-skeleton.css";
 
-import { useThemeVariables } from "../../../utils/useThemeVariables";
-import { colourOptions } from "../../colour/colours";
-import { skeletonProps } from "./config";
+// OTHER ===============================================================================================================
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
 const SkeletonDocs = () => {
-    const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(skeletonProps.variables);
-
-    // Group props
+    // SkeletonGroup props
     const [direction, setDirection] = useState("vertical");
     const [repeat, setRepeat] = useState(3);
     const [spacing, setSpacing] = useState("micro");
-    const [groupEffect, setGroupEffect] = useState("wave");
+    const [effect, setEffect] = useState("wave");
 
-    // Child Skeleton props
+    // Skeleton props
     const [width, setWidth] = useState("200px");
     const [height, setHeight] = useState("12px");
     const [variant, setVariant] = useState("line");
     const [shape, setShape] = useState("rounded");
 
-    // Add handler for variant change that updates height for circles
-    const handleVariantChange = (value) => {
-        const newVariant = value;
-        setVariant(newVariant);
+    // Theme configurator
+    const SkeletonComponent = (varName: string) => {
+        return varName.startsWith("skeleton-");
+    };
 
-        // If switching to circle variant, set height to match width
-        if (newVariant === "circle") {
+    const {
+        interactiveElementRef,
+        componentProps: themeProps,
+        themeConfigurator,
+    } = createThemeConfigurator("Skeleton", SkeletonComponent);
+
+    // Handle variant change - update height for circles
+    const handleVariantChange = (value: string) => {
+        setVariant(value);
+        if (value === "circle") {
             setHeight(width);
         }
     };
 
-    // Add handler for width change that updates height for circles
-    const handleWidthChange = (value) => {
-        const newWidth = value;
-        setWidth(newWidth);
-
-        // If circle variant, update height to match width
+    // Handle width change - update height for circles
+    const handleWidthChange = (value: string) => {
+        setWidth(value);
         if (variant === "circle") {
-            setHeight(newWidth);
+            setHeight(value);
         }
     };
 
+    // Generate code
+    const codeString = useMemo(() => {
+        const groupProps = [];
+        if (direction !== "vertical") groupProps.push(`    direction="${direction}"`);
+        if (repeat !== 1) groupProps.push(`    repeat={${repeat}}`);
+        if (spacing !== "small") groupProps.push(`    spacing="${spacing}"`);
+        if (effect !== "wave") groupProps.push(`    effect="${effect}"`);
+
+        const skeletonProps = [];
+        skeletonProps.push(`        width="${width}"`);
+        skeletonProps.push(`        height="${height}"`);
+        if (variant !== "line") skeletonProps.push(`        variant="${variant}"`);
+        if (shape !== "none") skeletonProps.push(`        shape="${shape}"`);
+
+        const groupPropsString = groupProps.length > 0 ? `\n${groupProps.join("\n")}\n` : "";
+
+        return `<SkeletonGroup${groupPropsString}>
+    <Skeleton
+${skeletonProps.join("\n")}
+    />
+</SkeletonGroup>`;
+    }, [direction, repeat, spacing, effect, width, height, variant, shape]);
+
     return (
-        <Article id="page-skeleton">
-            <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                <Portion>
-                    <Heading1>Skeleton</Heading1>
-                    <Text size="large" marginBottom="small">
-                        A placeholder preview for content that is loading, with grouping capabilities.
-                    </Text>
-                </Portion>
-            </Row>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading6 id="component-name">
+                    Skeleton
+                </Heading6>
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+                <Text id="component-description" weight="400">
+                    A placeholder preview for content that is loading, with grouping capabilities
+                </Text>
+            </Div>
 
-            <Row horizontalPadding="small" className="rendered-component">
-                {/* DEMO COMPONENT */}
-                <Portion id="component-wrapper">
-                    <Div
-                        padding="small"
-                        shape="rounded"
-                        bgColour="slate-light80"
-                        data-centered-children
-                    >
-                        <SkeletonGroup
-                            direction={direction}
-                            repeat={repeat}
-                            spacing={spacing}
-                            effect={groupEffect}
-                        >
-                            <Skeleton
-                                width={width}
-                                height={height}
-                                variant={variant}
-                                shape={shape}
-                            />
-                        </SkeletonGroup>
-                    </Div>
-                </Portion>
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-                {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Form>
-                        <Card padding="micro" shape="rounded">
-                            <Header verticallyCentreItems pushItemsToEnds marginBottom="micro">
-                                <Text size="large" weight="700" textColour="white">
-                                    Customise props
-                                </Text>
-                            </Header>
+                <Text>
+                    Use <code>SkeletonGroup</code> to repeat and animate multiple skeletons together.
+                    Supports pulse and wave effects, with configurable direction and spacing.
+                </Text>
+            </Div>
 
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton marginBottom="micro">
-                                        {[
-                                            `// Paste this in your content file`,
-                                            `<SkeletonGroup`,
-                                            `    direction="${direction}"`,
-                                            `    repeat="${repeat}"`,
-                                            `    spacing="${spacing}"`,
-                                            `    effect="${groupEffect}"`,
-                                            `>`,
-                                            `    <Skeleton`,
-                                            `        width="${width}" height="${height}"`,
-                                            `        variant="${variant}"`,
-                                            `        shape="${shape}"`,
-                                            `    />`,
-                                            `</SkeletonGroup>`,
-                                        ].filter(Boolean).join("\n")}
-                                    </CodeBlock>
-                                </Portion>
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                <SkeletonGroup
+                    // @ts-ignore
+                    ref={interactiveElementRef}
+                    direction={direction as "vertical" | "horizontal"}
+                    repeat={repeat}
+                    spacing={spacing as any}
+                    effect={effect as "pulse" | "wave" | "none"}
+                    {...themeProps}
+                >
+                    <Skeleton
+                        width={width}
+                        height={height}
+                        variant={variant as "line" | "circle" | "block"}
+                        shape={shape as any}
+                    />
+                </SkeletonGroup>
+            </Div>
 
-                                {/* GROUP CONFIGURATION */}
-                                <Portion>
-                                    <Text weight="700" marginBottom="nano">Group properties</Text>
-                                </Portion>
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                    {codeString}
+                </CodeBlock>
 
-                                <Portion desktopSpan="half">
-                                    <RadioTabGroup
-                                        id="direction"
-                                        label="Direction"
-                                        name="direction"
-                                        options={[
-                                            { id : "vertical", value : "vertical", label : "vertical" },
-                                            { id : "horizontal", value : "horizontal", label : "horizontal" },
-                                        ]}
-                                        value={direction}
-                                        onChange={(value) => setDirection(value)}
-                                    />
-                                </Portion>
+                <Div className="doc-controls">
+                    <Text weight="700" marginBottom="nano">SkeletonGroup</Text>
 
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Repeat"
-                                        value={repeat}
-                                        onChange={(value) => setRepeat(parseInt(value))}
-                                        min={1} max={10} step={1}
-                                    />
-                                </Portion>
+                    <RadioTabGroup
+                        id="prop-direction"
+                        label="direction"
+                        options={[
+                            { id: "dir-vertical", value: "vertical", label: "vertical" },
+                            { id: "dir-horizontal", value: "horizontal", label: "horizontal" },
+                        ]}
+                        value={direction}
+                        onChange={(value) => setDirection(value)}
+                        marginBottom="micro"
+                    />
 
-                                <Portion>
-                                    <RadioTabGroup
-                                        id="spacing"
-                                        label="Spacing"
-                                        name="spacing"
-                                        options={[
-                                            { id : "spacing-nano", value : "nano", label : "nano" },
-                                            { id : "spacing-micro", value : "micro", label : "micro" },
-                                            { id : "spacing-tiny", value : "tiny", label : "tiny" },
-                                            { id : "spacing-small", value : "small", label : "small" },
-                                            { id : "spacing-medium", value : "medium", label : "medium" },
-                                            { id : "spacing-large", value : "large", label : "large" },
-                                            { id : "spacing-huge", value : "huge", label : "huge" },
-                                        ]}
-                                        value={spacing}
-                                        onChange={(value) => setSpacing(value)}
-                                    />
-                                </Portion>
+                    <Range
+                        label="repeat"
+                        value={repeat}
+                        onChange={(value) => setRepeat(value)}
+                        min={1}
+                        max={10}
+                        step={1}
+                        marginBottom="micro"
+                        isFullWidth
+                    />
 
-                                <Portion>
-                                    <RadioTabGroup
-                                        id="effect"
-                                        label="Effect"
-                                        name="effect"
-                                        options={[
-                                            { id : "effect-none", value : "none", label : "none" },
-                                            { id : "effect-pulse", value : "pulse", label : "pulse" },
-                                            { id : "effect-wave", value : "wave", label : "wave" },
-                                        ]}
-                                        value={groupEffect}
-                                        onChange={(value) => setGroupEffect(value)}
-                                    />
-                                </Portion>
-                            </Row>
+                    <RadioTabGroup
+                        id="prop-spacing"
+                        label="spacing"
+                        options={[
+                            { id: "spacing-nano", value: "nano", label: "nano" },
+                            { id: "spacing-micro", value: "micro", label: "micro" },
+                            { id: "spacing-tiny", value: "tiny", label: "tiny" },
+                            { id: "spacing-small", value: "small", label: "small" },
+                            { id: "spacing-medium", value: "medium", label: "medium" },
+                        ]}
+                        value={spacing}
+                        onChange={(value) => setSpacing(value)}
+                        marginBottom="micro"
+                    />
 
-                            <Divider kind="secondary" horizontalMargin="none" verticalMargin="micro" />
+                    <RadioTabGroup
+                        id="prop-effect"
+                        label="effect"
+                        options={[
+                            { id: "effect-none", value: "none", label: "none" },
+                            { id: "effect-pulse", value: "pulse", label: "pulse" },
+                            { id: "effect-wave", value: "wave", label: "wave" },
+                        ]}
+                        value={effect}
+                        onChange={(value) => setEffect(value)}
+                        marginBottom="micro"
+                    />
 
-                            <Row marginBottom="none">
-                                {/* CHILD SKELETON CONFIGURATION */}
-                                <Portion>
-                                    <Text weight="700" marginBottom="nano">Child Skeleton Properties</Text>
-                                </Portion>
+                    <Divider kind="secondary" verticalMargin="micro" />
 
-                                <Portion desktopSpan="half">
-                                    <InputField
-                                        type="text"
-                                        label="Width"
-                                        placeholder="Width"
-                                        value={width}
-                                        onChange={handleWidthChange}
-                                    />
-                                </Portion>
+                    <Text weight="700" marginBottom="nano">Skeleton</Text>
 
-                                <Portion desktopSpan="half">
-                                    <InputField
-                                        type="text"
-                                        label="Height"
-                                        placeholder="Height"
-                                        value={height}
-                                        onChange={(value) => setHeight(value)}
-                                        disabled={variant === "circle"}
-                                        helpText={variant === "circle" ? "Height matches width for circles" : undefined}
-                                    />
-                                </Portion>
+                    <InputField
+                        label="width"
+                        value={width}
+                        onChange={handleWidthChange}
+                        marginBottom="micro"
+                        isFullWidth
+                    />
 
-                                <Portion desktopSpan="half">
-                                    <RadioTabGroup
-                                        id="variant"
-                                        label="Variant"
-                                        name="variant"
-                                        options={[
-                                            { id : "variant-line", value : "line", label : "line" },
-                                            { id : "variant-circle", value : "circle", label : "circle" },
-                                            { id : "variant-block", value : "block", label : "block" },
-                                        ]}
-                                        value={variant}
-                                        onChange={handleVariantChange}
-                                    />
-                                </Portion>
+                    <InputField
+                        label="height"
+                        value={height}
+                        onChange={(value) => setHeight(value)}
+                        disabled={variant === "circle"}
+                        helpText={variant === "circle" ? "Height matches width for circles" : undefined}
+                        marginBottom="micro"
+                        isFullWidth
+                    />
 
-                                <Portion desktopSpan="half">
-                                    <RadioTabGroup
-                                        id="shape"
-                                        label="Shape"
-                                        name="shape"
-                                        options={[
-                                            { id : "shape-none", value : "none", label : "none" },
-                                            { id : "shape-rounded", value : "rounded", label : "rounded" },
-                                        ]}
-                                        value={shape}
-                                        onChange={(value) => setShape(value)}
-                                    />
-                                </Portion>
-                            </Row>
-                        </Card>
-                    </Form>
-                </Portion>
+                    <RadioTabGroup
+                        id="prop-variant"
+                        label="variant"
+                        options={[
+                            { id: "variant-line", value: "line", label: "line" },
+                            { id: "variant-circle", value: "circle", label: "circle" },
+                            { id: "variant-block", value: "block", label: "block" },
+                        ]}
+                        value={variant}
+                        onChange={handleVariantChange}
+                        marginBottom="micro"
+                    />
 
-                {/* GLOBAL THEME /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Card padding="micro" shape="rounded">
-                        <Form>
-                            <Header verticallyCentreItems pushItemsToEnds marginBottom="micro">
-                                <Text size="large" weight="700" textColour="white">
-                                    Set global theme values
-                                </Text>
-                            </Header>
+                    <RadioTabGroup
+                        id="prop-shape"
+                        label="shape"
+                        options={[
+                            { id: "shape-none", value: "none", label: "none" },
+                            { id: "shape-rounded", value: "rounded", label: "rounded" },
+                        ]}
+                        value={shape}
+                        onChange={(value) => setShape(value)}
+                        marginBottom="micro"
+                    />
+                </Div>
+            </Div>
 
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock
-                                        withSyntaxHighlighting
-                                        source={cssVariablesList}
-                                        language="css"
-                                        showCopyButton
-                                        marginBottom="micro"
-                                    />
-                                </Portion>
-
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Background colour"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        },
-                                            ...colourOptions,
-                                        ]}
-                                        defaultValue={skeletonProps.variables["skeleton-bg"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("skeleton-bg", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Highlight colour"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        },
-                                            ...colourOptions,
-                                        ]}
-                                        defaultValue={skeletonProps.variables["skeleton-highlight"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("skeleton-highlight", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-                            </Row>
-                        </Form>
-                    </Card>
-                </Portion>
-            </Row>
-        </Article>
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

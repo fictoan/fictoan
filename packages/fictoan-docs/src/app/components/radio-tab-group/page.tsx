@@ -1,40 +1,13 @@
-// UTILS ===============================================================================================================
-import { extractComponentMetadataFromClient } from "$utils/og-utils";
-
 // OTHER ===============================================================================================================
-import UradioUtabUgroupDocs from "./page.client";
+import RadioTabGroupDocs from "./page.client";
+import { generateComponentMetadata } from "../component-metadata";
 
 export async function generateMetadata() {
-    const {componentName, description} = await extractComponentMetadataFromClient("radio-tab-group");
-
-    return {
-        title       : `${componentName} — Fictoan`,
-        description : description,
-        openGraph   : {
-            title       : `${componentName} — Fictoan`,
-            description : description,
-            url         : "https://fictoan.io/components/radio-tab-group",
-            siteName    : "Fictoan",
-            images      : [
-                {
-                    url    : "https://fictoan.io/components/radio-tab-group/opengraph-image",
-                    width  : 1200,
-                    height : 630,
-                    alt    : `${componentName} — Fictoan`,
-                },
-            ],
-            locale      : "en_US",
-            type        : "website",
-        },
-        twitter     : {
-            card        : "summary_large_image",
-            title       : `${componentName} — Fictoan`,
-            description : description,
-            images      : [ "https://fictoan.io/components/radio-tab-group/opengraph-image" ],
-        },
-    };
+    return generateComponentMetadata("radio-tab-group");
 }
 
-export default function Page() {
-    return <UradioUtabUgroupDocs />;
+const Page = () => {
+    return <RadioTabGroupDocs />;
 }
+
+export default Page;

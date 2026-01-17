@@ -48,9 +48,10 @@ export const ComponentDocsLayout = ({ children }: ComponentDocsLayoutProps) => {
                 <Row id="component-wrapper" horizontalPadding="small" className="rendered-component">
                     <Portion>
                         <Div
+                            id="interactive-component"
                             padding="small"
                             shape="rounded"
-                            bgColour="slate-light80"
+                            bgColour="grey-light90"
                             data-centered-children
                         >
                             {getContentById("demo-component")}

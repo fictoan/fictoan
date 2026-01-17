@@ -17,13 +17,13 @@
 
 /* BADGE //////////////////////////////////////////////////////////////////// */
 :root {
-    --badge-font          : var(--paragraph-font);
-    --badge-bg            : var(--blue-light60);
-    --badge-text          : var(--blue-dark20);
+    --badge-font                : var(--paragraph-font);
+    --badge-bg                  : var(--blue-light60);
+    --badge-text                : var(--blue-dark20);
 
-    --badge-border        : var(--blue);
-    --badge-border-radius : var(--global-border-radius);
-    --badge-border-width  : var(--global-border-width);
+    --badge-border              : var(--blue);
+    --badge-border-radius       : var(--global-border-radius);
+    --badge-border-width        : var(--global-border-width);
 
     --badge-action-bg           : var(--blue-light40);
     --badge-action-text         : var(--blue-dark20);
@@ -423,10 +423,10 @@
 
     --pagination-arrows-filled-stroke          : var(--slate);
 
-    --pagination-item-bg-disabled              : var(--transparent);
-    --pagination-item-text-disabled            : var(--transparent);
-    --pagination-item-border-disabled          : var(--transparent);
-    --pagination-arrows-stroke-disabled        : color-mix(in oklch, var(--slate), transparent 60%);
+    --pagination-item-bg-disabled              : var(--grey);
+    --pagination-item-text-disabled            : var(--grey);
+    --pagination-item-border-disabled          : var(--grey);
+    --pagination-arrows-stroke-disabled        : var(--grey);
 
     --pagination-input-bg                      : var(--input-bg-default);
     --pagination-input-border                  : var(--input-border-default);
@@ -619,8 +619,8 @@
 /* TEXT ///////////////////////////////////////////////////////////////////// */
 /* Typography scale configuration */
 :root {
-    --base-font-size : 1rem;   /* Body text size - browser default is 16px */
-    --type-scale     : 1.125;  /* Ratio between steps (1.067, 1.125, 1.200, 1.250, 1.333) */
+    --base-font-size : 1rem; /* Body text size - browser default is 16px */
+    --type-scale     : 1.125; /* Ratio between steps (1.067, 1.125, 1.200, 1.250, 1.333) */
 }
 
 :root {

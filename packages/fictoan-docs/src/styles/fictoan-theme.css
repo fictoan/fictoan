@@ -406,7 +406,7 @@
     --pagination-item-bg-disabled              : var(--transparent);
     --pagination-item-text-disabled            : var(--transparent);
     --pagination-item-border-disabled          : var(--transparent);
-    --pagination-arrows-stroke-disabled        : var(--slate-opacity40);
+    --pagination-arrows-stroke-disabled        : var(--slate);
 
     --pagination-input-bg                      : var(--input-bg-default);
     --pagination-input-border                  : var(--input-border-default);

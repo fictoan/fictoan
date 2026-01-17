@@ -45,11 +45,11 @@ import PaintRollerIcon from "../../assets/icons/new-icons/paint-roller.svg";
 import PinInputIcon from "../../assets/icons/pin-input.svg";
 import ProgressIcon from "../../assets/icons/new-icons/meter.svg";
 import RadioButtonIcon from "../../assets/icons/new-icons/radio.svg";
+import RadioTabGroupIcon from "../../assets/icons/new-icons/radio-tab-group.svg";
 import RangeIcon from "../../assets/icons/new-icons/range.svg";
 import SelectIcon from "../../assets/icons/new-icons/select.svg";
 import SidebarIcon from "../../assets/icons/new-icons/sidebar.svg";
 import SkeletonIcon from "../../assets/icons/new-icons/skeleton.svg";
-import TabGroupIcon from "../../assets/icons/tabs-group.svg";
 import TableIcon from "../../assets/icons/new-icons/table.svg";
 import TabsIcon from "../../assets/icons/new-icons/tabs.svg";
 import ThemeSwitchIcon from "../../assets/icons/theme.svg";
@@ -388,7 +388,7 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
 
                 <Link href="/components/radio-tab-group" className={`${pathname === "/components/radio-tab-group" ? "active" : ""}`}>
                     <SidebarItem onClick={closeMobileSidebar}>
-                        <TabGroupIcon />
+                        <RadioTabGroupIcon />
                         <Text weight="400">Radio tab group</Text>
                     </SidebarItem>
                 </Link>

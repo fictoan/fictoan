@@ -1,40 +1,13 @@
-// UTILS ===============================================================================================================
-import { extractComponentMetadataFromClient } from "$utils/og-utils";
-
 // OTHER ===============================================================================================================
-import UpaginationDocs from "./page.client";
+import PaginationDocs from "./page.client";
+import { generateComponentMetadata } from "../component-metadata";
 
 export async function generateMetadata() {
-    const {componentName, description} = await extractComponentMetadataFromClient("pagination");
-
-    return {
-        title       : `${componentName} — Fictoan`,
-        description : description,
-        openGraph   : {
-            title       : `${componentName} — Fictoan`,
-            description : description,
-            url         : "https://fictoan.io/components/pagination",
-            siteName    : "Fictoan",
-            images      : [
-                {
-                    url    : "https://fictoan.io/components/pagination/opengraph-image",
-                    width  : 1200,
-                    height : 630,
-                    alt    : `${componentName} — Fictoan`,
-                },
-            ],
-            locale      : "en_US",
-            type        : "website",
-        },
-        twitter     : {
-            card        : "summary_large_image",
-            title       : `${componentName} — Fictoan`,
-            description : description,
-            images      : [ "https://fictoan.io/components/pagination/opengraph-image" ],
-        },
-    };
+    return generateComponentMetadata("pagination");
 }
 
-export default function Page() {
-    return <UpaginationDocs />;
+const Page = () => {
+    return <PaginationDocs />;
 }
+
+export default Page;

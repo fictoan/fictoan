@@ -1,175 +1,175 @@
 "use client";
 
-
 // REACT CORE ==========================================================================================================
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import React from "react";
 
 // UI ==================================================================================================================
-import { Element, Row, Portion, Heading1, Heading4, Heading5, Text, Divider, PinInputField, Article, CodeBlock } from "fictoan-react";
+import {
+    Div,
+    Heading6,
+    Text,
+    Divider,
+    CodeBlock,
+    Checkbox,
+    RadioTabGroup,
+    Range,
+    PinInputField,
+} from "fictoan-react";
 
 // STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
 import "./pin-input-field.css";
 
 // OTHER ===============================================================================================================
-import { samplePinInput, sampleInputNumberOfFields, samplePinInputType, samplePinInputMask, samplePinInputOTP } from "./CodeSamples";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
-const PINInputFieldDocs = () => {
+const PinInputFieldDocs = () => {
+    // Props state
+    const [numberOfFields, setNumberOfFields] = useState(4);
+    const [type, setType] = useState("number");
+    const [mask, setMask] = useState(false);
+    const [isOTP, setIsOTP] = useState(false);
+    const [autoFocus, setAutoFocus] = useState(false);
+    const [pasteFromClipboard, setPasteFromClipboard] = useState("enabled");
+    const [isFullWidth, setIsFullWidth] = useState(false);
+
+    // Generate code
+    const codeString = useMemo(() => {
+        const props = [];
+        props.push(`    numberOfFields={${numberOfFields}}`);
+        if (type !== "number") props.push(`    type="${type}"`);
+        if (mask) props.push(`    mask`);
+        if (isOTP) props.push(`    isOTP`);
+        if (autoFocus) props.push(`    autoFocus`);
+        if (pasteFromClipboard !== "enabled") props.push(`    pasteFromClipboard="${pasteFromClipboard}"`);
+        if (isFullWidth) props.push(`    isFullWidth`);
+
+        return `<PinInputField\n${props.join("\n")}\n/>`;
+    }, [numberOfFields, type, mask, isOTP, autoFocus, pasteFromClipboard, isFullWidth]);
+
     return (
-        <Article id="page-input-field">
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/* INTRO */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Element as="section" id="intro" marginTop="medium" marginBottom="small">
-                <Row layout="flexbox" horizontalPadding="huge">
-                    <Portion>
-                        <Heading1 className="text-hue">Pin Input field</Heading1>
-                        <Text size="large" marginBottom="small">
-                            A set of single-character input fields that obscures data entry
-                        </Text>
-                    </Portion>
-                </Row>
-            </Element>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading6 id="component-name">
+                    Pin Input Field
+                </Heading6>
 
-            <Divider horizontalMargin="huge" verticalMargin="small" />
+                <Text id="component-description" weight="400">
+                    A set of single-character input fields for entering PINs, OTPs, and verification codes
+                </Text>
+            </Div>
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/*  BASICS  */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Element as="section" id="default">
-                <Row horizontalPadding="huge">
-                    <Portion>
-                        <Heading4 marginBottom="nano">Default</Heading4>
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-                        <Text marginBottom="micro">
-                            The <code>PinInputField</code> uses an array of <code>InputField</code> component, but added
-                            with superpowers.
-                        </Text>
+                <Text>
+                    Supports numeric and alphanumeric input, optional masking for sensitive data, and OTP auto-fill
+                    on supported devices. Arrow keys navigate between fields, and paste is supported.
+                </Text>
+            </Div>
 
-                        <Text marginBottom="micro">As the bare minimum, add the <code>numberOfFields</code> prop.</Text>
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                <PinInputField
+                    numberOfFields={numberOfFields}
+                    type={type as "number" | "alphanumeric"}
+                    mask={mask}
+                    isOTP={isOTP}
+                    autoFocus={autoFocus}
+                    pasteFromClipboard={pasteFromClipboard as "enabled" | "disabled"}
+                    isFullWidth={isFullWidth}
+                />
+            </Div>
 
-                        <CodeBlock withSyntaxHighlighting source={samplePinInput} language="jsx" marginBottom="micro" />
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                    {codeString}
+                </CodeBlock>
 
-                        <PinInputField numberOfFields={4} />
-                    </Portion>
-                </Row>
-            </Element>
+                <Div className="doc-controls">
+                    <Range
+                        label="numberOfFields"
+                        value={numberOfFields}
+                        onChange={(value) => setNumberOfFields(value)}
+                        min={2}
+                        max={8}
+                        step={1}
+                        marginBottom="micro"
+                        isFullWidth
+                    />
 
+                    <RadioTabGroup
+                        id="prop-type"
+                        label="type"
+                        options={[
+                            { id: "type-number", value: "number", label: "number" },
+                            { id: "type-alphanumeric", value: "alphanumeric", label: "alphanumeric" },
+                        ]}
+                        value={type}
+                        onChange={(value) => setType(value)}
+                        marginBottom="micro"
+                    />
 
-            <Divider horizontalMargin="huge" verticalMargin="small" />
+                    <Checkbox
+                        id="prop-mask"
+                        label="mask"
+                        checked={mask}
+                        onChange={(checked) => setMask(checked)}
+                        helpText="Hides entered characters with dots."
+                        marginBottom="micro"
+                    />
 
+                    <Checkbox
+                        id="prop-isOTP"
+                        label="isOTP"
+                        checked={isOTP}
+                        onChange={(checked) => setIsOTP(checked)}
+                        helpText="Enables OTP auto-fill on supported devices."
+                        marginBottom="micro"
+                    />
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/* PROPS */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Element as="section" id="props">
-                {/* NUMBER OF FIELDS ======================================= */}
-                <Row horizontalPadding="huge">
-                    <Portion>
-                        <Heading5 marginBottom="nano">Number of fields</Heading5>
+                    <Checkbox
+                        id="prop-autoFocus"
+                        label="autoFocus"
+                        checked={autoFocus}
+                        onChange={(checked) => setAutoFocus(checked)}
+                        helpText="Focuses the first input on mount."
+                        marginBottom="micro"
+                    />
 
-                        <Text marginBottom="micro">
-                            This decides the length of PIN you want to accept.
-                        </Text>
+                    <RadioTabGroup
+                        id="prop-pasteFromClipboard"
+                        label="pasteFromClipboard"
+                        options={[
+                            { id: "paste-enabled", value: "enabled", label: "enabled" },
+                            { id: "paste-disabled", value: "disabled", label: "disabled" },
+                        ]}
+                        value={pasteFromClipboard}
+                        onChange={(value) => setPasteFromClipboard(value)}
+                        marginBottom="micro"
+                    />
 
-                        <CodeBlock withSyntaxHighlighting source={sampleInputNumberOfFields} language="jsx" marginBottom="micro" />
+                    <Checkbox
+                        id="prop-isFullWidth"
+                        label="isFullWidth"
+                        checked={isFullWidth}
+                        onChange={(checked) => setIsFullWidth(checked)}
+                        helpText="Makes the input group span the full width."
+                        marginBottom="micro"
+                    />
+                </Div>
+            </Div>
 
-                        <PinInputField numberOfFields={3} />
-                        <PinInputField numberOfFields={5} />
-                    </Portion>
-                </Row>
-
-
-                <Divider kind="secondary" horizontalMargin="huge" verticalMargin="small" />
-
-
-                {/* TYPE =================================================== */}
-                <Row horizontalPadding="huge">
-                    <Portion>
-                        <Heading5 marginBottom="nano">Type</Heading5>
-
-                        <Text marginBottom="micro">
-                            <code>numeric</code>, <code>alphanumeric</code>
-                        </Text>
-
-                        <Text marginBottom="micro">
-                            This prop decides whether the PIN should be just digits, or accept both alphabets and
-                            digits.
-                        </Text>
-
-                        <CodeBlock withSyntaxHighlighting source={samplePinInputType} language="jsx" marginBottom="micro" />
-
-                        <Text marginBottom="nano">Numeric:</Text>
-                        <PinInputField numberOfFields={4} type="number" />
-
-                        <Text marginTop="micro" marginBottom="nano">Alphanumeric:</Text>
-                        <PinInputField numberOfFields={4} type="alphanumeric" />
-
-                        <Text marginTop="micro">
-                            The <code>numeric</code> type also brings up the numpad by default on phones, when the Pin
-                            input is in focus.
-                        </Text>
-                    </Portion>
-                </Row>
-
-
-                <Divider kind="secondary" horizontalMargin="huge" verticalMargin="small" />
-
-
-                {/* MASK =================================================== */}
-                <Row horizontalPadding="huge">
-                    <Portion>
-                        <Heading5 marginBottom="nano">Mask</Heading5>
-
-                        <Text marginBottom="micro">
-                            This hides the entered character and shows a dot instead.
-                        </Text>
-
-                        <CodeBlock withSyntaxHighlighting source={samplePinInputMask} language="jsx" marginBottom="micro" />
-
-                        <PinInputField numberOfFields={4} mask />
-                    </Portion>
-                </Row>
-
-
-                <Divider kind="secondary" horizontalMargin="huge" verticalMargin="small" />
-
-
-                {/* OTP ==================================================== */}
-                <Row horizontalPadding="huge">
-                    <Portion>
-                        <Heading5 marginBottom="nano">OTP</Heading5>
-
-                        <Text marginBottom="micro">
-                            Add the <code>isOTP</code> prop, and on supported OSes, the incoming SMS will suggested as a
-                            paste-able value.
-                        </Text>
-
-                        <CodeBlock withSyntaxHighlighting source={samplePinInputOTP} language="jsx" marginBottom="micro" />
-
-                        <PinInputField numberOfFields={4} isOTP />
-                    </Portion>
-                </Row>
-
-
-                <Divider horizontalMargin="huge" verticalMargin="small" />
-
-
-                {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-                {/* THEMING */}
-                {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-                <Element as="section" id="theming">
-                    <Row horizontalPadding="huge" marginBottom="small">
-                        <Portion>
-                            <Heading4 marginBottom="tiny">Theme</Heading4>
-
-                            <Text>Same as <Link href="/components/form/input-field">InputField</Link>.</Text>
-                        </Portion>
-                    </Row>
-                </Element>
-            </Element>
-        </Article>
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                <Text>Same as <Link href="/components/input-field">InputField</Link>.</Text>
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 
-export default PINInputFieldDocs;
+export default PinInputFieldDocs;

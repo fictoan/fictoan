@@ -1,7 +1,7 @@
 // REACT CORE ==========================================================================================================
 import React from "react";
 
-// ELEMENT =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { Div } from "../Element/Tags";
 import { Element } from "$element";
 
@@ -109,7 +109,7 @@ export const Pagination = React.forwardRef(
             isLoading = false,
             loadingText,
             emptyText,
-            itemDisplayText = "page",
+            itemDisplayText = "Page",
             ...props
         }: PaginationProps, ref: React.Ref<PaginationElementType>) => {
         const {
@@ -233,8 +233,8 @@ export const Pagination = React.forwardRef(
                 </Div>
 
                 <Div className="pagination-info">
-                    <Text size="small">
-                        Showing {itemDisplayText} {rangeStart} of {totalItems}
+                    <Text size="tiny">
+                        {itemDisplayText} {rangeStart} of {totalItems}
                     </Text>
 
                     {showGoToInput && (
