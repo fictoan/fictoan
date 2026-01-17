@@ -5,6 +5,7 @@ import React, { useMemo } from "react";
 import { Element } from "$element";
 import { FormItem } from "../FormItem/FormItem";
 import { SpacingTypes } from "../../Element/constants";
+import { separateWrapperProps } from "../../../utils/propSeparation";
 
 // STYLES ==============================================================================================================
 import "./switch.css";
@@ -52,6 +53,9 @@ export const Switch = React.forwardRef(
             onChange?.(e.target.checked);
         };
 
+        // Separate wrapper-level props (margin, padding, etc.) from input-specific props
+        const { wrapperProps, inputProps } = separateWrapperProps(props);
+
         return (
             <FormItem
                 label={label}
@@ -60,6 +64,7 @@ export const Switch = React.forwardRef(
                 errorText={errorText}
                 required={required}
                 size={size}
+                {...wrapperProps}
             >
                 <Element<SwitchElementType>
                     as="input"
@@ -72,7 +77,7 @@ export const Switch = React.forwardRef(
                     disabled={disabled}
                     required={required}
                     onChange={handleChange}
-                    {...props}
+                    {...inputProps}
                 />
                 <Element
                     as="div"

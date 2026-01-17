@@ -42,7 +42,7 @@ export {
     Nav,
     Section,
     Span,
-    Hyperlink
+    Hyperlink,
 } from "./Element";
 
 // FORM ================================================================================================================
@@ -81,7 +81,7 @@ export {
     SwitchGroup,
     type SwitchProps,
     TextArea,
-    type TextareaProps
+    type TextareaProps,
 } from "./Form";
 
 // METER ===============================================================================================================
@@ -92,10 +92,12 @@ export { Modal, type ModalProps } from "./Modal";
 
 // NOTIFICATIONS =======================================================================================================
 export {
-    NotificationsWrapper,
-    type NotificationsWrapperProps,
-    NotificationItem,
-    type NotificationItemProps,
+    NotificationsProvider,
+    useNotifications,
+    type NotificationsProviderProps,
+    type NotificationOptions,
+    type NotifyFunction,
+    type NotificationKind,
 } from "./Notification";
 
 // PAGINATION ==========================================================================================================
@@ -111,8 +113,15 @@ export { ProgressBar, type ProgressBarProps, type ProgressBarMetaProps } from ".
 export { Row, type RowProps } from "./Row";
 
 // OPTION CARD =========================================================================================================
-export { OptionCard, OptionCardsGroup, type OptionCardProps, type OptionCardsGroupRef } from "./OptionCard";
-export { useOptionCard, useOptionCardsGroup } from "./OptionCard";
+export {
+    OptionCard,
+    useOptionCard,
+    useOptionCardsGroup,
+    OptionCardsGroup,
+    type OptionCardProps,
+    type OptionCardsGroupRef,
+    type TickPosition,
+} from "./OptionCard";
 
 // SIDEBAR + CONTENT WRAPPER ===========================================================================================
 export {
@@ -133,7 +142,7 @@ export {
     Skeleton,
     type SkeletonProps,
     SkeletonGroup,
-    type SkeletonGroupProps
+    type SkeletonGroupProps,
 } from "./Skeleton";
 
 // SPINNER =============================================================================================================
@@ -149,7 +158,7 @@ export { Tabs, type TabsProps } from "./Tabs";
 export { ThemeProvider, type ThemeProviderProps, useTheme } from "./ThemeProvider";
 
 // TOAST ===============================================================================================================
-export { ToastsWrapper, type ToastsWrapperProps, ToastItem, type ToastItemProps } from "./Toast";
+export { ToastsProvider, useToasts, type ToastsProviderProps, type ToastFunction } from "./Toast";
 
 // TOOLTIP =============================================================================================================
 export { Tooltip, type TooltipProps } from "./Tooltip";

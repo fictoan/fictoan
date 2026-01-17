@@ -33,11 +33,41 @@
     // Before (v1.x)
     <Modal id="my-modal">Content</Modal>
     <Button onClick={() => showModal("my-modal")}>Open</Button>
-    
+
     // After (v2.0)
     const [isOpen, setIsOpen] = useState(false);
     <Modal id="my-modal" isOpen={isOpen} onClose={() => setIsOpen(false)}>Content</Modal>
     <Button onClick={() => setIsOpen(true)}>Open</Button>
+    ```
+
+**Notifications and Toast now use provider pattern**
+
+- Both components replace manual state management with context providers and hooks
+  - Removed: `NotificationsWrapper`, `NotificationItem`, `ToastsWrapper`, `ToastItem`, `showWhen`, `closeWhen`, `secondsToShowFor`
+  - Added: `NotificationsProvider`, `useNotifications()`, `ToastsProvider`, `useToasts()`
+    ```tsx
+    // Before (v1.x) - manual state for each item
+    const [show, setShow] = useState(false);
+    <ToastsWrapper position="top">
+        <ToastItem showWhen={show} closeWhen={() => setShow(false)} secondsToShowFor={4}>
+            Message
+        </ToastItem>
+    </ToastsWrapper>
+
+    // After (v2.0) - wrap app once, call from anywhere
+    <ToastsProvider anchor="top">
+        <App />
+    </ToastsProvider>
+
+    const toast = useToasts();
+    toast("Message");
+    toast("Custom duration", 6);
+
+    // Notifications work similarly with additional options
+    const notify = useNotifications();
+    notify("Simple message");
+    notify.success("Saved!");
+    notify({ content: <Custom />, kind: "error", duration: 5 });
     ```
 
 ### Build and performance improvements
@@ -94,6 +124,17 @@
   - Only one tooltip DOM element exists regardless of how many `<Tooltip>` components are used
   - Uses event delegation instead of per-element listeners
   - Eliminates DOM pollution from multiple hidden tooltip elements
+- Add `SidebarItemGroup` for grouping sidebar items
+
+### Bug fixes
+- Fix `Tabs` component losing state of controlled inputs (checkboxes, text fields, etc.) when parent re-renders
+  - Previously, only the active tab's content was rendered, causing React to lose component identity on re-renders
+  - Now all tab contents are rendered but inactive tabs are hidden with the `hidden` attribute
+  - This preserves component state when switching between tabs or when parent state changes
+- Fix form components applying wrapper props (margin, padding, etc.) to inner input element instead of outer wrapper
+  - Props like `marginBottom`, `padding`, `shadow`, etc. now correctly apply to the FormItem wrapper
+  - Affected components: `TextArea`, `InputField`, `Checkbox`, `Switch`, `Select`, `RadioButton`, `ListBox`
+  - Added `separateWrapperProps` utility in `propSeparation.ts` to handle prop separation consistently
 
 ## 1.12.0
 - `ThemeProvider` now uses unique key based on hostname for local storage, instead of default `fictoan-theme`

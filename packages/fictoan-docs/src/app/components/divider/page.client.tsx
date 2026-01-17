@@ -1,10 +1,10 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React from "react";
+import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading4, Divider, Portion, Row, Text, Article, Section, Div } from "fictoan-react";
+import { Div, Heading6, Text, Divider, CodeBlock, InputField, RadioTabGroup } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -14,82 +14,112 @@ import "../../../styles/fictoan-theme.css";
 import "./page-divider.css";
 
 // OTHER ===============================================================================================================
-import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
 const DividerDocs = () => {
-    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
+    // Props state
+    const [kind, setKind] = useState("primary");
+    const [height, setHeight] = useState("");
 
-    const DividerComponent = (varName : string) => {
+    // Theme configurator
+    const DividerComponent = (varName: string) => {
         return varName.startsWith("divider-");
     };
 
     const {
         interactiveElementRef,
-        componentProps : themeConfig,
+        componentProps: themeProps,
         themeConfigurator,
-    } = createThemeConfigurator("Divider", DividerComponent);
+    } = createThemeConfigurator<HTMLHRElement>("Divider", DividerComponent);
+
+    // Generate code
+    const codeString = useMemo(() => {
+        const props = [];
+        if (kind) props.push(`kind="${kind}"`);
+        if (height) props.push(`height="${height}"`);
+
+        const propsString = props.length > 0 ? ` ${props.join(" ")}` : "";
+        return `import { Divider } from "fictoan-react";
+
+<Divider${propsString} />`;
+    }, [kind, height]);
 
     return (
-        <Article id="page-divider">
-            {/*  INTRO ///////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                    <Portion>
-                        <Heading4 id="component-name">
-                            Divider
-                        </Heading4>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading6 id="component-name">
+                    Divider
+                </Heading6>
 
-                        <Heading4
-                            id="component-description"
-                            weight="400" marginBottom="small"
-                        >
-                            A horizontal line to separate content
-                        </Heading4>
-                    </Portion>
+                <Text id="component-description" weight="400">
+                    A horizontal line to separate content
+                </Text>
+            </Div>
 
-                    <Portion>
-                        <ul>
-                            <li>Is a self-closing element</li>
-                        </ul>
-                    </Portion>
-                </Row>
-            </Section>
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+                <Text>
+                    Is a self-closing element.
+                </Text>
 
-            {/* INTERACTIVE COMPONENT ////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                {/* DEMO COMPONENT ================================================================================= */}
-                <Row id="component-wrapper" horizontalPadding="small" className="rendered-component">
-                    <Portion>
-                        <Div
-                            padding="small"
-                            shape="rounded"
-                            bgColour="slate-light80"
-                            data-centered-children
-                        >
-                            <Divider
-                                ref={interactiveElementRef}
-                                {...props}
-                                {...themeConfig}
-                            />
-                        </Div>
-                    </Portion>
-                </Row>
+                <Text>
+                    Use the <code>kind</code> prop to set the visual weight of the divider.
+                </Text>
 
-                <Row horizontalPadding="small">
-                    {/* PROPS CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        <PropsConfigurator componentName="Divider" onPropsChange={setProps} />
-                    </Portion>
+                <Text>
+                    The <code>label</code> prop sets an accessible aria-label for screen readers.
+                </Text>
+            </Div>
 
-                    {/* THEME CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        {themeConfigurator()}
-                    </Portion>
-                </Row>
-            </Section>
-        </Article>
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                <Divider
+                    ref={interactiveElementRef}
+                    kind={kind as any}
+                    height={height || undefined}
+                    {...themeProps}
+                />
+            </Div>
+
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                    {codeString}
+                </CodeBlock>
+
+                <Div className="doc-controls">
+                    <RadioTabGroup
+                        id="prop-kind"
+                        label="kind"
+                        options={[
+                            { id: "kind-primary", value: "primary", label: "primary" },
+                            { id: "kind-secondary", value: "secondary", label: "secondary" },
+                            { id: "kind-tertiary", value: "tertiary", label: "tertiary" },
+                        ]}
+                        value={kind}
+                        onChange={(value) => setKind(value)}
+                        helpText="Sets the visual weight of the divider."
+                        marginBottom="micro"
+                    />
+
+                    <InputField
+                        label="height"
+                        value={height}
+                        onChange={(value) => setHeight(value)}
+                        helpText="Custom height for the divider (e.g., '2px', '4px')."
+                        marginBottom="micro" isFullWidth
+                    />
+                </Div>
+            </Div>
+
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

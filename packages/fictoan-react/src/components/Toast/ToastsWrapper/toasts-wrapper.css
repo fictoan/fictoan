@@ -1,15 +1,19 @@
 [data-toasts-wrapper] {
-    position      : fixed;
-    display       : grid;
-    z-index       : 5000000;
-    width         : 100%;
-    justify-items : center;
+    display : none;
+}
 
-    [data-sidebar-wrapper] + [data-content-wrapper] & {
-        width : calc(100% - 240px);
-    }
+[data-toasts-wrapper]:has([data-toast-item]) {
+    position       : fixed;
+    left           : 50%;
+    transform      : translateX(-50%);
+    display        : flex;
+    flex-direction : column;
+    width          : fit-content;
+    z-index        : 5000000;
+    padding        : 3vh;
+    gap            : 1rem;
 
-    &.top { top : -4vh; }
+    &.top { top : 0; }
 
-    &.bottom { bottom : -4vh; }
+    &.bottom { bottom : 0; }
 }

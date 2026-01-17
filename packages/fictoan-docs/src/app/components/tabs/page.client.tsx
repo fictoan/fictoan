@@ -1,10 +1,10 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React from "react";
+import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading4, Divider, Portion, Row, Article, Tabs, Section, Heading6, Text } from "fictoan-react";
+import { Div, Heading6, Text, Divider, Tabs, CodeBlock, RadioTabGroup, Checkbox, } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -14,105 +14,152 @@ import "../../../styles/fictoan-theme.css";
 import "./page-tabs.css";
 
 // OTHER ===============================================================================================================
-import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
 const TabsDocs = () => {
-    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
+    // Props state
+    const [align, setAlign] = useState("left");
+    const [isFullWidth, setIsFullWidth] = useState(false);
+    const [alertTabIndex, setAlertTabIndex] = useState<number | null>(null);
 
-    const TabsComponent = (varName : string) => {
+    // Theme configurator
+    const TabsComponent = (varName: string) => {
         return varName.startsWith("tabs-") || varName.startsWith("tab-");
     };
 
     const {
         interactiveElementRef,
-        componentProps : themeConfig,
+        componentProps: themeProps,
         themeConfigurator,
-    } = createThemeConfigurator("Tabs", TabsComponent);
+    } = createThemeConfigurator<HTMLDivElement>("Tabs", TabsComponent);
 
-    // Default tabs data for the demo
-    const defaultTabs = [
-        {
-            key      : "tab1",
-            label    : "Tab 1",
-            hasAlert : false,
-            content  : <Text>Content for tab 1</Text>
-        },
-        {
-            key      : "tab2", 
-            label    : "Tab 2",
-            hasAlert : false,
-            content  : <Text>Content for tab 2</Text>
-        },
-        {
-            key      : "tab3",
-            label    : "Tab 3", 
-            hasAlert : false,
-            content  : <Text>Content for tab 3</Text>
-        },
+    // Sample tabs data
+    const baseTabs = [
+        { key: "overview", label: "Overview", content: <Text>This is the overview content. Add any React nodes here.</Text> },
+        { key: "features", label: "Features", content: <Text>Features content goes here. Each tab can have different content.</Text> },
+        { key: "settings", label: "Settings", content: <Text>Settings and configuration options would appear in this tab.</Text> },
     ];
 
-    // Merge default tabs with any tabs from props
-    const tabsData = props.tabs || defaultTabs;
+    const tabs = useMemo(() => baseTabs.map((tab, index) => ({
+        ...tab,
+        hasAlert: alertTabIndex === index,
+    })), [alertTabIndex]);
+
+    // Generate code
+    const codeString = useMemo(() => {
+        const tabsCode = baseTabs.map((tab, index) => {
+            const hasAlertStr = alertTabIndex === index ? ", hasAlert: true" : "";
+            return `        { key: "${tab.key}", label: "${tab.label}", content: <Text>...</Text>${hasAlertStr} }`;
+        }).join(",\n");
+
+        const props = [];
+        props.push(`tabs={[\n${tabsCode},\n    ]}`);
+        if (align !== "left") props.push(`align="${align}"`);
+        if (isFullWidth) props.push(`isFullWidth`);
+
+        return `import { Tabs, Text } from "fictoan-react";
+
+<Tabs
+    ${props.join("\n    ")}
+/>`;
+    }, [align, isFullWidth, alertTabIndex]);
 
     return (
-        <Article id="page-tabs">
-            {/*  INTRO ///////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                    <Portion>
-                        <Heading4 id="component-name">
-                            Tabs
-                        </Heading4>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading6 id="component-name">
+                    Tabs
+                </Heading6>
 
-                        <Heading6
-                            id="component-description"
-                            weight="400" marginBottom="small"
-                        >
-                            A way to display multiple blocks of content, one at a time
-                        </Heading6>
-                    </Portion>
+                <Text id="component-description" weight="400">
+                    A way to display multiple blocks of content, one at a time
+                </Text>
+            </Div>
 
-                    <Portion>
-                        <Text>&bull; </Text>
-                    </Portion>
-                </Row>
-            </Section>
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+                <Text>
+                    Pass an array of <code>{`{ key, label, content }`}</code> objects to the <code>tabs</code> prop.
+                </Text>
 
-            {/* INTERACTIVE COMPONENT ////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                {/* DEMO COMPONENT ================================================================================= */}
-                <Row id="component-wrapper" horizontalPadding="small" className="rendered-component">
-                    <Portion>
-                        <Div
-                            padding="small"
-                            shape="rounded"
-                            bgColour="slate-light80"
-                        >
-                            <Tabs
-                                ref={interactiveElementRef}
-                                {...props}
-                                {...themeConfig}
-                                tabs={tabsData}
-                            />
-                        </Div>
-                    </Portion>
-                </Row>
+                <Text>
+                    Use <code>hasAlert</code> on individual tabs to show a notification indicator.
+                </Text>
 
-                <Row horizontalPadding="small">
-                    {/* PROPS CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        <PropsConfigurator componentName="Tabs" onPropsChange={setProps} />
-                    </Portion>
+                <Text>
+                    Fully accessible with keyboard navigation (Arrow keys, Home/End).
+                </Text>
+            </Div>
 
-                    {/* THEME CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        {themeConfigurator()}
-                    </Portion>
-                </Row>
-            </Section>
-        </Article>
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                <Tabs
+                    ref={interactiveElementRef}
+                    tabs={tabs}
+                    align={align as any}
+                    isFullWidth={isFullWidth}
+                    {...themeProps}
+                />
+            </Div>
+
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                    {codeString}
+                </CodeBlock>
+
+                <Div className="doc-controls">
+                    <RadioTabGroup
+                        id="prop-align"
+                        label="align"
+                        options={[
+                            { id: "align-left", value: "left", label: "left" },
+                            { id: "align-centre", value: "centre", label: "centre" },
+                            { id: "align-right", value: "right", label: "right" },
+                        ]}
+                        value={align}
+                        onChange={(val) => setAlign(val)}
+                        helpText="Alignment of the tab labels."
+                        marginBottom="micro"
+                    />
+
+                    <Checkbox
+                        id="prop-isFullWidth"
+                        label="isFullWidth"
+                        checked={isFullWidth}
+                        onChange={() => setIsFullWidth(!isFullWidth)}
+                        helpText="Makes tabs stretch to fill the container width."
+                        marginBottom="micro"
+                    />
+
+                    <Checkbox
+                        id="prop-hasAlert"
+                        label={alertTabIndex !== null
+                            ? `hasAlert (${baseTabs[alertTabIndex].label})`
+                            : "hasAlert"}
+                        checked={alertTabIndex !== null}
+                        onChange={() => {
+                            if (alertTabIndex !== null) {
+                                setAlertTabIndex(null);
+                            } else {
+                                const randomIndex = Math.floor(Math.random() * baseTabs.length);
+                                setAlertTabIndex(randomIndex);
+                            }
+                        }}
+                        helpText="Shows a notification indicator on a tab."
+                        marginBottom="micro"
+                    />
+                </Div>
+            </Div>
+
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

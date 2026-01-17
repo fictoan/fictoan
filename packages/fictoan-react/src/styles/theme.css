@@ -17,13 +17,13 @@
 
 /* BADGE //////////////////////////////////////////////////////////////////// */
 :root {
-    --badge-font          : var(--paragraph-font);
-    --badge-bg            : var(--blue-light60);
-    --badge-text          : var(--blue-dark20);
+    --badge-font                : var(--paragraph-font);
+    --badge-bg                  : var(--blue-light60);
+    --badge-text                : var(--blue-dark20);
 
-    --badge-border        : var(--blue);
-    --badge-border-radius : var(--global-border-radius);
-    --badge-border-width  : var(--global-border-width);
+    --badge-border              : var(--blue);
+    --badge-border-radius       : var(--global-border-radius);
+    --badge-border-width        : var(--global-border-width);
 
     --badge-action-bg           : var(--blue-light40);
     --badge-action-text         : var(--blue-dark20);
@@ -219,7 +219,7 @@
     --file-upload-area-border-default    : var(--input-border-default);
     --file-upload-area-main-text-default : var(--input-label-default);
 
-    --file-upload-area-bg-hover          : var(--blue-light20-opacity30);
+    --file-upload-area-bg-hover          : color-mix(in oklch, var(--blue-light20), transparent 70%);
     --file-upload-area-border-hover      : var(--blue-light20);
     --file-upload-area-main-text-hover   : var(--blue);
 }
@@ -354,9 +354,9 @@
 
     --option-card-focus              : var(--global-focus-colour);
 
-    --option-card-bg-hover           : var(--green-light70-opacity40);
+    --option-card-bg-hover           : color-mix(in oklch, var(--green-light70), transparent 60%);
     --option-card-border-hover       : var(--green-light40);
-    --option-card-tick-bg-hover      : var(--green-light60-opacity30);
+    --option-card-tick-bg-hover      : color-mix(in oklch, var(--green-light60), transparent 70%);
     --option-card-tick-line-hover    : var(--green);
 
     --option-card-bg-selected        : var(--green-light60);
@@ -423,10 +423,10 @@
 
     --pagination-arrows-filled-stroke          : var(--slate);
 
-    --pagination-item-bg-disabled              : var(--transparent);
-    --pagination-item-text-disabled            : var(--transparent);
-    --pagination-item-border-disabled          : var(--transparent);
-    --pagination-arrows-stroke-disabled        : var(--slate-opacity40);
+    --pagination-item-bg-disabled              : var(--grey);
+    --pagination-item-text-disabled            : var(--grey);
+    --pagination-item-border-disabled          : var(--grey);
+    --pagination-arrows-stroke-disabled        : var(--grey);
 
     --pagination-input-bg                      : var(--input-bg-default);
     --pagination-input-border                  : var(--input-border-default);
@@ -462,14 +462,14 @@
     --radio-tabs-label-text-default    : var(--input-text-default);
 
     --radio-tabs-label-text-hover      : var(--slate-dark80);
-    --radio-tabs-label-bg-hover        : var(--slate-light90-opacity40);
+    --radio-tabs-label-bg-hover        : color-mix(in oklch, var(--slate-light90), transparent 60%);
 
     --radio-tabs-label-bg-active       : var(--white);
     --radio-tabs-label-text-active     : var(--black);
 
     --radio-tabs-label-focus-border    : var(--blue);
 
-    --radio-tabs-scroll-button-default : var(--slate-light10-opacity30);
+    --radio-tabs-scroll-button-default : color-mix(in oklch, var(--slate-light10), transparent 70%);
     --radio-tabs-scroll-arrow-default  : var(--white);
 
     --radio-tabs-scroll-button-hover   : var(--white);
@@ -533,6 +533,15 @@
     --sidebar-item-text-weight               : 400;
 
     --sidebar-item-alert-bg                  : var(--red);
+
+    --sidebar-items-padding                  : var(--nano);
+    --sidebar-items-gap                      : 2px;
+    --sidebar-item-border-radius             : var(--global-border-radius);
+
+    --sidebar-group-title-margin             : 4px 8px;
+    --sidebar-group-title-weight             : 600;
+    --sidebar-group-title-scale              : 72%;
+    --sidebar-group-title-text               : var(--slate);
 
     --sidebar-footer-height                  : 40px;
     --sidebar-footer-bg                      : var(--white);
@@ -610,8 +619,8 @@
 /* TEXT ///////////////////////////////////////////////////////////////////// */
 /* Typography scale configuration */
 :root {
-    --base-font-size : 1rem;   /* Body text size - browser default is 16px */
-    --type-scale     : 1.125;  /* Ratio between steps (1.067, 1.125, 1.200, 1.250, 1.333) */
+    --base-font-size : 1rem; /* Body text size - browser default is 16px */
+    --type-scale     : 1.125; /* Ratio between steps (1.067, 1.125, 1.200, 1.250, 1.333) */
 }
 
 :root {

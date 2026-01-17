@@ -37,14 +37,6 @@ export const RootLayoutClient = ({children} : { children : ReactNode }) => {
 
         <body>
         <ThemeProvider themeList={listOfThemes} currentTheme="theme-light">
-            {/* <LoadingBar */}
-            {/*     ref={loadingBarRef} */}
-            {/*     height="4px" */}
-            {/*     bgColour="blue" */}
-            {/*     minimum={10} */}
-            {/*     position="top" */}
-            {/* /> */}
-
             <Sidebar
                 sidebarState={sidebarState}
                 setSidebarState={setSidebarState}

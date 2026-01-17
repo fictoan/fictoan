@@ -1,469 +1,357 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React, { useEffect, useState } from "react";
+import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Divider, Portion, Row, Text, Article, Card, Form, Header, RadioTabGroup, Select, Button, Range, NotificationsWrapper, NotificationItem, CodeBlock } from "fictoan-react";
-
-// UTILS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
+import {
+    Div,
+    Heading6,
+    Text,
+    Button,
+    Divider,
+    CodeBlock,
+    RadioTabGroup,
+    Range,
+    NotificationsProvider,
+    useNotifications,
+} from "fictoan-react";
 
 // STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
 import "./page-notifications.css";
 
 // OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
-import { toastProps } from "./config";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
-const NotificationsDocs = () => {
-    const [notifications, setNotifications] = useState([]);
+// DEMO COMPONENT WITH ITS OWN PROVIDER ================================================================================
+const NotificationsDemo = ({
+    position,
+    anchor,
+    order,
+    kind,
+    duration,
+    usageStyle,
+    notificationKind,
+}: {
+    position: string;
+    anchor: string;
+    order: string;
+    kind: string;
+    duration: number;
+    usageStyle: string;
+    notificationKind: string;
+}) => {
+    const notify = useNotifications();
 
-    const [selectedPosition, setSelectedPosition] = useState("right");
-    const [selectedAnchor, setSelectedAnchor] = useState("top");
-    const [selectedOrder, setSelectedOrder] = useState("new-on-top");
-
-    const [secondsToShowFor, setSecondsToShowFor] = useState(1000);
-
-    const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(toastProps.variables);
-
-    const handleShowNotification = (type) => {
-        const id = Date.now();
-        const count = notifications.filter(notification => notification.type === type).length + 1;
-
-        const newNotification = {
-            id,
-            type,
-            count,
-            message : `I’m ${type} notification #${count}`,
-        };
-
-        setNotifications(prevNotifications => [...prevNotifications, newNotification]);
+    const handleNotify = () => {
+        switch (usageStyle) {
+            case "simple":
+                notify("Hello there!");
+                break;
+            case "shorthand":
+                if (notificationKind === "success") notify.success("Saved successfully!");
+                else if (notificationKind === "error") notify.error("Something went wrong");
+                else if (notificationKind === "warning") notify.warning("Please check your input");
+                else notify.info("Here's some information");
+                break;
+            case "options":
+                notify({
+                    content: "Notification with options",
+                    kind: notificationKind as any,
+                    duration,
+                    isDismissible: true,
+                });
+                break;
+            case "react-node":
+                notify({
+                    content: (
+                        <Div>
+                            <Text weight="600" marginBottom="nano">Custom content</Text>
+                            <Text>With React nodes inside!</Text>
+                        </Div>
+                    ),
+                    kind: notificationKind as any,
+                    duration,
+                });
+                break;
+            case "close-handler":
+                notify({
+                    content: ({ close }) => (
+                        <Div>
+                            <Text marginBottom="nano">Click the button to dismiss</Text>
+                            <Button size="small" kind="primary" onClick={close}>
+                                Got it!
+                            </Button>
+                        </Div>
+                    ),
+                    kind: notificationKind as any,
+                    duration: 0,
+                });
+                break;
+        }
     };
 
     return (
-        <Article id="page-component">
-            <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                <Portion>
-                    <Heading1>Notifications</Heading1>
-                    <Text size="large" marginBottom="small">
-                        A small popup that shows up in one of the four corners of the screen for a set period
+        <Button kind="primary" onClick={handleNotify}>
+            Show notification
+        </Button>
+    );
+};
+
+// MAIN DOCS COMPONENT =================================================================================================
+const NotificationsDocs = () => {
+    // Props state
+    const [position, setPosition] = useState("right");
+    const [anchor, setAnchor] = useState("top");
+    const [order, setOrder] = useState("new-on-top");
+    const [kind, setKind] = useState("list");
+    const [duration, setDuration] = useState(4);
+    const [usageStyle, setUsageStyle] = useState("simple");
+    const [notificationKind, setNotificationKind] = useState("info");
+
+    // Generate code based on selections
+    const codeString = useMemo(() => {
+        const providerProps = [];
+        if (position !== "right") providerProps.push(`    position="${position}"`);
+        if (anchor !== "top") providerProps.push(`    anchor="${anchor}"`);
+        if (order !== "new-on-top") providerProps.push(`    order="${order}"`);
+        if (kind !== "list") providerProps.push(`    kind="${kind}"`);
+        const providerPropsStr = providerProps.length > 0 ? `\n${providerProps.join("\n")}\n` : "";
+
+        let usageCode = "";
+        switch (usageStyle) {
+            case "simple":
+                usageCode = `notify("Hello there!");`;
+                break;
+            case "shorthand":
+                usageCode = `notify.${notificationKind}("Your message here");`;
+                break;
+            case "options":
+                usageCode = `notify({
+        content: "Your message here",
+        kind: "${notificationKind}",
+        duration: ${duration},
+        isDismissible: true,
+    });`;
+                break;
+            case "react-node":
+                usageCode = `notify({
+        content: (
+            <Div>
+                <Text weight="600">Title</Text>
+                <Text>Description text</Text>
+            </Div>
+        ),
+        kind: "${notificationKind}",
+        duration: ${duration},
+    });`;
+                break;
+            case "close-handler":
+                usageCode = `notify({
+        content: ({ close }) => (
+            <Div>
+                <Text>Your message</Text>
+                <Button onClick={close}>Dismiss</Button>
+            </Div>
+        ),
+        kind: "${notificationKind}",
+        duration: 0, // Won't auto-dismiss
+    });`;
+                break;
+        }
+
+        return `// In your app's root layout (e.g., layout.tsx or App.tsx)
+import { NotificationsProvider } from "fictoan-react";
+
+export default function RootLayout({ children }) {
+    return (
+        <NotificationsProvider${providerPropsStr}>
+            {children}
+        </NotificationsProvider>
+    );
+}
+
+-------
+
+// In any component
+import { useNotifications } from "fictoan-react";
+
+const MyComponent = () => {
+    const notify = useNotifications();
+
+    ${usageCode}
+};`;
+    }, [position, anchor, order, kind, duration, usageStyle, notificationKind]);
+
+    return (
+        <NotificationsProvider
+            position={position as any}
+            anchor={anchor as any}
+            order={order as any}
+            kind={kind as any}
+        >
+            <ComponentDocsLayout>
+                {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+                <Div id="intro-header">
+                    <Heading6 id="component-name">
+                        Notifications
+                    </Heading6>
+
+                    <Text id="component-description" weight="400">
+                        Imperative notifications that can be triggered from anywhere
                     </Text>
-                </Portion>
+                </Div>
 
-                <Portion>
-                    
-                    <ul>
-                        <li>
-                            The <code>NotificationsWrapper</code> is a single parent, with any number
-                            of <code>NotificationsItem</code> children inside it.
-                        </li>
+                {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+                <Div id="intro-notes">
+                    <Divider kind="tertiary" verticalMargin="micro" />
 
-                        <li>
-                            Some props such as <code>position</code> and <code>anchor</code> are
-                            applied to the <code>NotificationsWrapper</code>, while others such as
-                            <code>secondsToShowFor</code> can be applied to individual <code>NotificationsItem</code>
-                            elements
-                        </li>
-                    </ul>
-                </Portion>
-            </Row>
+                    <Text>
+                        Wrap your app with <code>NotificationsProvider</code> once, then
+                        use <code>useNotifications()</code> anywhere.
+                    </Text>
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+                    <Text>
+                        Shorthand methods: <code>notify.success()</code>, <code>notify.error()</code>, <code>notify.warning()</code>, <code>notify.info()</code>.
+                    </Text>
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/*  CONFIGURATOR */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Row horizontalPadding="small" className="rendered-component">
-                {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////// */}
-                <Portion id="component-wrapper">
-                    <Element
-                        as="div" padding="small" shape="rounded" bgColour="slate-light80"
-                        data-centered-children
-                    >
-                        <Button
-                            kind="custom" bgColour="slate-light90" textColour="slate"
-                            shape="rounded" shadow="mild"
-                            marginBottom="nano" marginRight="nano"
-                            onClick={() => handleShowNotification("generic")}
-                        >
-                            Show generic notification
-                        </Button>
+                    <Text>
+                        Pass a render function to access the <code>close</code> handler for custom dismiss buttons.
+                    </Text>
+                </Div>
 
-                        <Button
-                            kind="custom" bgColour="blue-20" textColour="blue"
-                            shape="rounded" shadow="mild"
-                            marginBottom="nano" marginRight="nano"
-                            onClick={() => handleShowNotification("info")}
-                        >
-                            Show info notification
-                        </Button>
+                {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+                <Div id="demo-component">
+                    <NotificationsDemo
+                        position={position}
+                        anchor={anchor}
+                        order={order}
+                        kind={kind}
+                        duration={duration}
+                        usageStyle={usageStyle}
+                        notificationKind={notificationKind}
+                    />
+                </Div>
 
-                        <Button
-                            kind="custom" bgColour="amber-20" textColour="amber"
-                            shape="rounded" shadow="mild"
-                            marginBottom="nano" marginRight="nano"
-                            onClick={() => handleShowNotification("warning")}
-                        >
-                            Show warning notification
-                        </Button>
+                {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+                <Div id="props-config">
+                    <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                        {codeString}
+                    </CodeBlock>
 
-                        <Button
-                            kind="custom" bgColour="red-20" textColour="red"
-                            shape="rounded" shadow="mild"
-                            marginBottom="nano" marginRight="nano"
-                            onClick={() => handleShowNotification("error")}
-                        >
-                            Show error notification
-                        </Button>
+                    <Div className="doc-controls">
+                        <Text weight="700" marginBottom="nano">NotificationsProvider</Text>
 
-                        <Button
-                            kind="custom" bgColour="green-20" textColour="green"
-                            shape="rounded" shadow="mild"
-                            marginBottom="nano" marginRight="nano"
-                            onClick={() => handleShowNotification("success")}
-                        >
-                            Show success notification
-                        </Button>
-                    </Element>
-                </Portion>
+                        <RadioTabGroup
+                            id="prop-usage-style"
+                            label="notify()"
+                            options={[
+                                { id: "usage-simple", value: "simple", label: "string" },
+                                { id: "usage-shorthand", value: "shorthand", label: "shorthand" },
+                                { id: "usage-options", value: "options", label: "options" },
+                                { id: "usage-react-node", value: "react-node", label: "React node" },
+                                { id: "usage-close-handler", value: "close-handler", label: "close handler" },
+                            ]}
+                            value={usageStyle}
+                            onChange={(val) => setUsageStyle(val)}
+                            helpText="Different ways to call notify()."
+                            marginBottom="micro"
+                        />
 
-                {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Form spacing="none">
-                        <Card padding="micro" shape="rounded">
-                            <Header verticallyCentreItems pushItemsToEnds marginBottom="micro">
-                                <Text size="large" weight="700" textColour="white">
-                                    Configure props
-                                </Text>
-                            </Header>
+                        <RadioTabGroup
+                            id="prop-position"
+                            label="position"
+                            options={[
+                                { id: "position-left", value: "left", label: "left" },
+                                { id: "position-right", value: "right", label: "right" },
+                            ]}
+                            value={position}
+                            onChange={(val) => setPosition(val)}
+                            helpText="Horizontal position of the stack."
+                            marginBottom="micro"
+                        />
 
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton marginBottom="micro">
-                                        {[
-                                            `// Paste this in your content file`,
-                                            `const [showSampleNotification, setShowSampleNotification] = useState(false); \n`,
-                                            `<NotificationsWrapper`,
-                                            selectedPosition ? `    position="${selectedPosition}"` : null,
-                                            selectedAnchor ? `    anchor="${selectedAnchor}"` : null,
-                                            selectedOrder ? `    order="${selectedOrder}"` : null,
-                                            `>`,
-                                            `    <NotificationItem`,
-                                            `        showWhen={showSampleNotification}`,
-                                            `        secondsToShowFor={${secondsToShowFor}}`,
-                                            `        closeWhen={() => setShowSampleNotification(false)}`,
-                                            `    >`,
-                                            `        <Text>Just a basic notification</Text>`,
-                                            `    </NotificationItem>`,
-                                            `</NotificationsWrapper>`,
-                                        ].filter(Boolean).join("\n")}
-                                    </CodeBlock>
-                                </Portion>
+                        <RadioTabGroup
+                            id="prop-anchor"
+                            label="anchor"
+                            options={[
+                                { id: "anchor-top", value: "top", label: "top" },
+                                { id: "anchor-bottom", value: "bottom", label: "bottom" },
+                            ]}
+                            value={anchor}
+                            onChange={(val) => setAnchor(val)}
+                            helpText="Vertical anchor point."
+                            marginBottom="micro"
+                        />
 
-                                <Portion>
-                                    <Text size="large" weight="700">For NotificationWrapper</Text>
-                                </Portion>
+                        <RadioTabGroup
+                            id="prop-order"
+                            label="order"
+                            options={[
+                                { id: "order-new-on-top", value: "new-on-top", label: "new-on-top" },
+                                { id: "order-new-on-bottom", value: "new-on-bottom", label: "new-on-bottom" },
+                            ]}
+                            value={order}
+                            onChange={(val) => setOrder(val)}
+                            helpText="Where new notifications appear."
+                            marginBottom="micro"
+                        />
 
-                                {/* POSITION ======================================================================= */}
-                                <Portion>
-                                    <RadioTabGroup
-                                        id="position" label="Position" name="position"
-                                        options={[
-                                            { id : "position-opt-0", value : "left", label : "left" },
-                                            { id : "position-opt-1", value : "right", label : "right" },
-                                        ]}
-                                        value={selectedPosition || "right"}
-                                        onChange={(value) => setSelectedPosition(value)}
-                                    />
+                        <RadioTabGroup
+                            id="prop-kind-display"
+                            label="kind"
+                            options={[
+                                { id: "kind-list", value: "list", label: "list" },
+                                { id: "kind-stack", value: "stack", label: "stack" },
+                            ]}
+                            value={kind}
+                            onChange={(val) => setKind(val)}
+                            helpText="List shows all, stack shows top with others behind."
+                            marginBottom="micro"
+                        />
 
-                                    <Divider kind="secondary" horizontalMargin="none" marginTop="micro" />
-                                </Portion>
+                        <Divider kind="tertiary" verticalMargin="micro" />
 
-                                {/* ANCHOR ========================================================================= */}
-                                <Portion>
-                                    <RadioTabGroup
-                                        id="anchor" label="Anchor" name="anchor"
-                                        options={[
-                                            { id : "anchor-opt-0", value : "top", label : "top" },
-                                            { id : "anchor-opt-1", value : "bottom", label : "bottom" },
-                                        ]}
-                                        value={selectedAnchor || "right"}
-                                        onChange={(value) => setSelectedAnchor(value)}
-                                    />
+                        <Text weight="700" marginBottom="nano">Notification options</Text>
 
-                                    <Divider kind="secondary" horizontalMargin="none" marginTop="micro" />
-                                </Portion>
+                        {usageStyle !== "simple" && (
+                            <RadioTabGroup
+                                id="prop-kind"
+                                label="kind (notification)"
+                                options={[
+                                    { id: "kind-info", value: "info", label: "info" },
+                                    { id: "kind-success", value: "success", label: "success" },
+                                    { id: "kind-warning", value: "warning", label: "warning" },
+                                    { id: "kind-error", value: "error", label: "error" },
+                                ]}
+                                value={notificationKind}
+                                onChange={(val) => setNotificationKind(val)}
+                                helpText="Visual style of the notification."
+                                marginBottom="micro"
+                            />
+                        )}
 
-                                {/* ANCHOR ========================================================================= */}
-                                <Portion>
-                                    <RadioTabGroup
-                                        id="order" label="Order" name="order"
-                                        options={[
-                                            { id : "order-opt-0", value : "new-on-top", label : "new-on-top" },
-                                            { id : "order-opt-1", value : "new-on-bottom", label : "new-on-bottom" },
-                                        ]}
-                                        value={selectedOrder || "right"}
-                                        onChange={(value) => setSelectedOrder(value)}
-                                    />
-                                </Portion>
+                        {usageStyle !== "close-handler" && (
+                            <Range
+                                id="prop-duration"
+                                label="duration"
+                                min={1}
+                                max={10}
+                                value={duration}
+                                onChange={(val: number) => setDuration(val)}
+                                suffix={duration === 1 ? " second" : " seconds"}
+                                helpText="Auto-dismiss delay."
+                                marginBottom="micro" isFullWidth
+                            />
+                        )}
+                    </Div>
+                </Div>
 
-
-                                <Portion>
-                                    <Text size="large" weight="700" marginTop="tiny">For NotificationItem</Text>
-                                </Portion>
-
-                                {/* SHOW FOR ======================================================================= */}
-                                <Portion>
-                                    <Range
-                                        label="Show toast for"
-                                        value={secondsToShowFor}
-                                        onChange={(value) => setSecondsToShowFor(value)}
-                                        suffix={secondsToShowFor > 1 ? " seconds" : " second"}
-                                        min={1} max={50} step={1}
-                                    />
-                                </Portion>
-                            </Row>
-                        </Card>
-                    </Form>
-                </Portion>
-
-                {/* GLOBAL THEME /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Card padding="micro" shape="rounded">
-                        <Form>
-                            <Header verticallyCentreItems pushItemsToEnds>
-                                <Text size="large" weight="700" textColour="white" marginBottom="nano">
-                                    Set global theme values
-                                </Text>
-                            </Header>
-
-                            <Row marginBottom="micro">
-                                <Portion>
-                                    <CodeBlock
-                                        withSyntaxHighlighting
-                                        source={cssVariablesList}
-                                        language="css"
-                                        showCopyButton
-                                    />
-                                </Portion>
-                            </Row>
-
-                            {/* GENERIC NOTIFICATION /////////////////////////////////////////////////////////////// */}
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <Text weight="700">Generic notification</Text>
-                                </Portion>
-
-                                {/* BG COLOUR ====================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Background"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["notification-item-generic-bg"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("notification-item-generic-bg", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* BG COLOUR ====================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Border"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["notification-item-generic-border"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("notification-item-generic-border", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* TEXT COLOUR ==================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Text colour"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["notification-item-generic-text"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("notification-item-generic-text", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* BORDER RADIUS ================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Border radius"
-                                        value={componentVariables["notification-item-border-radius"].value}
-                                        onChange={(value) => handleVariableChange("notification-item-border-radius", value)}
-                                        suffix={componentVariables["notification-item-border-radius"].unit}
-                                        min={0} max={50} step={1}
-                                    />
-                                </Portion>
-                            </Row>
-
-                            <Divider kind="secondary" verticalMargin="micro" />
-
-                            {/* INFO NOTIFICATION ////////////////////////////////////////////////////////////////// */}
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <Text weight="700">Info notification</Text>
-                                </Portion>
-
-                                {/* BACKGROUND ===================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Background"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["notification-item-info-bg"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("notification-item-info-bg", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* BORDER ====================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Border"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["notification-item-info-border"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("notification-item-info-border", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-                            </Row>
-
-                            <Divider kind="secondary" verticalMargin="micro" />
-
-                            {/* ERROR NOTIFICATION ///////////////////////////////////////////////////////////////// */}
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <Text weight="700">Error notification</Text>
-                                </Portion>
-
-                                {/* BACKGROUND ===================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Background"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["notification-item-error-bg"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("notification-item-error-bg", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* BORDER ====================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Border"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["notification-item-error-border"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("notification-item-error-border", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-                            </Row>
-
-                            <Divider kind="secondary" verticalMargin="micro" />
-
-                            {/* SUCCESS NOTIFICATION /////////////////////////////////////////////////////////////// */}
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <Text weight="700">Success notification</Text>
-                                </Portion>
-
-                                {/* BACKGROUND ===================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Background"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["notification-item-success-bg"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("notification-item-success-bg", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* BORDER ====================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Border"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["notification-item-success-border"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("notification-item-success-border", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-                            </Row>
-                        </Form>
-                    </Card>
-                </Portion>
-            </Row>
-
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/* ACTUAL COMPONENT INSTANCE */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <NotificationsWrapper
-                position={selectedPosition}
-                anchor={selectedAnchor}
-                order={selectedOrder}
-            >
-                {notifications.map(({ id, type, message }) => (
-                    <NotificationItem
-                        key={id}
-                        kind={type}
-                        showWhen={true}
-                        closeWhen={() => setNotifications(prevNotifications => prevNotifications.filter(notification => notification.id !== id))}
-                        secondsToShowFor={secondsToShowFor}
-                        isDismissible
-                    >
-                        <Text>{message}</Text>
-                    </NotificationItem>
-                ))}
-            </NotificationsWrapper>
-        </Article>
+                {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+                <Div id="theme-config" />
+            </ComponentDocsLayout>
+        </NotificationsProvider>
     );
 };
 

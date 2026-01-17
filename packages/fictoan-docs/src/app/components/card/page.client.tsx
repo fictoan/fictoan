@@ -1,15 +1,10 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React from "react";
+import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading6, Text, Divider, Card } from "fictoan-react";
-
-// LOCAL COMPONENTS ====================================================================================================
-import { PropsConfiguratorNew } from "$components/PropsConfigurator/PropsConfiguratorNew";
-import { ComponentDocsLayout } from "../ComponentDocsLayout";
-import { cardRegistry } from "./props.registry";
+import { Div, Heading6, Text, Divider, Card, CodeBlock, TextArea } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -18,18 +13,28 @@ import { createThemeConfigurator } from "$utils/themeConfigurator";
 import "../../../styles/fictoan-theme.css";
 import "./page-card.css";
 
-const CardDocs = () => {
-    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
+// OTHER ===============================================================================================================
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
-    const CardComponent = (varName : string) => {
+const CardDocs = () => {
+    // Props state
+    const [children, setChildren] = useState("Content shows up here");
+
+    // Theme configurator
+    const CardComponent = (varName: string) => {
         return varName.startsWith("card-");
     };
 
     const {
         interactiveElementRef,
-        componentProps : themeConfig,
+        componentProps: themeProps,
         themeConfigurator,
-    } = createThemeConfigurator("Card", CardComponent);
+    } = createThemeConfigurator<HTMLDivElement>("Card", CardComponent);
+
+    // Generate code
+    const codeString = useMemo(() => {
+        return `<Card>\n    ${children}\n</Card>`;
+    }, [children]);
 
     return (
         <ComponentDocsLayout>
@@ -39,10 +44,7 @@ const CardDocs = () => {
                     Card
                 </Heading6>
 
-                <Text
-                    id="component-description"
-                    weight="400"
-                >
+                <Text id="component-description" weight="400">
                     A box to put all sorts of content inside
                 </Text>
             </Div>
@@ -68,16 +70,28 @@ const CardDocs = () => {
             <Div id="demo-component">
                 <Card
                     ref={interactiveElementRef}
-                    {...props}
-                    {...themeConfig}
+                    {...themeProps}
                 >
-                    {props.children || "Content shows up here"}
+                    {children}
                 </Card>
             </Div>
 
             {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="props-config">
-                <PropsConfiguratorNew registry={cardRegistry} onPropsChange={setProps} />
+                <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                    {codeString}
+                </CodeBlock>
+
+                <Div className="doc-controls">
+                    <TextArea
+                        label="children"
+                        value={children}
+                        onChange={(value) => setChildren(value)}
+                        helpText="The main content of the card."
+                        rows={3}
+                        marginBottom="micro" isFullWidth
+                    />
+                </Div>
             </Div>
 
             {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}

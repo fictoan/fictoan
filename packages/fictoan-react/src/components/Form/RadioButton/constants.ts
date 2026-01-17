@@ -1,6 +1,6 @@
 import React from "react";
 
-import { SpacingTypes } from "$components/Element/constants";
+import { SpacingTypes, CommonProps } from "$components/Element/constants";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 
 // Value handler type
@@ -54,4 +54,6 @@ export interface RadioTabGroupInternalProps {
     optionsWrapperRef: React.RefObject<HTMLDivElement>;
 }
 
-export type RadioTabGroupProps = Omit<RadioGroupProps, keyof RadioTabGroupCustomProps> & RadioTabGroupCustomProps;
+export type RadioTabGroupProps = Omit<RadioGroupProps, keyof RadioTabGroupCustomProps | "name"> & RadioTabGroupCustomProps & CommonProps & {
+    name?: string;  // Optional - derived from id if not provided
+};

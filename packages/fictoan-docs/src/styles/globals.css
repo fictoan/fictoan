@@ -74,26 +74,39 @@ img { width : auto; }
 
 li { color : var(--paragraph-text-colour); }
 
+.doc-controls {
+    display        : flex;
+    flex-direction : column;
+    margin-top     : var(--micro);
+}
+
 
 @keyframes gradient {
-    0% { background-position : 0 50%; scale: 1; }
-    50% { background-position : 100% 50%; scale: 0.72; }
-    100% { background-position : 0 50%; scale: 1; }
+    0% { background-position : 0 50%; scale : 1; }
+    50% { background-position : 100% 50%; scale : 0.72; }
+    100% { background-position : 0 50%; scale : 1; }
 }
 
 /* Airplane =========================================== */
 @keyframes animateAirplane {
-    0% { transform: translateX(-102vw) translateY(50px) rotate(12deg); } /* Source, facing right */
-    5% { transform: translateX(-102vw) translateY(50px) rotate(12deg); } /* Source, facing right */
+    0% { transform : translateX(-102vw) translateY(50px) rotate(12deg); }
+    /* Source, facing right */
+    5% { transform : translateX(-102vw) translateY(50px) rotate(12deg); }
+    /* Source, facing right */
 
 
-    49% { transform : translateX(102vw) translateY(50px) rotate(12deg); } /* Destination, facing right */
-    51% { transform : translateX(102vw) translateY(50px) scaleX(-1) rotate(12deg); } /* Destination, facing left */
+    49% { transform : translateX(102vw) translateY(50px) rotate(12deg); }
+    /* Destination, facing right */
+    51% { transform : translateX(102vw) translateY(50px) scaleX(-1) rotate(12deg); }
+    /* Destination, facing left */
 
 
-    95% { transform : translateX(-102vw) translateY(50px) scaleX(-1) rotate(12deg); } /* Source, facing left */
-    99% { transform : translateX(-102vw) translateY(50px) scaleX(-1) rotate(12deg); } /* Source, facing left */
-    100% { transform : translateX(-102vw) translateY(50px) rotate(12deg); } /* Source, facing right */
+    95% { transform : translateX(-102vw) translateY(50px) scaleX(-1) rotate(12deg); }
+    /* Source, facing left */
+    99% { transform : translateX(-102vw) translateY(50px) scaleX(-1) rotate(12deg); }
+    /* Source, facing left */
+    100% { transform : translateX(-102vw) translateY(50px) rotate(12deg); }
+    /* Source, facing right */
 }
 
 /* Blinking light of the airplane =========================================== */
@@ -106,11 +119,11 @@ li { color : var(--paragraph-text-colour); }
 
 @keyframes lightColor {
     0%, 49% {
-        background: var(--green);
-        box-shadow: 0 0 2px 1px var(--green-light10);
+        background : var(--green);
+        box-shadow : 0 0 2px 1px var(--green-light10);
     }
     50%, 100% {
-        background: var(--red);
-        box-shadow: 0 0 2px 1px var(--red-light10);
+        background : var(--red);
+        box-shadow : 0 0 2px 1px var(--red-light10);
     }
 }

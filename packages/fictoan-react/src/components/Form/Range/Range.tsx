@@ -2,58 +2,65 @@
 import React, { useCallback, useRef, useState, useEffect } from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
-import { CommonAndHTMLProps } from "../../Element/constants";
+import { CommonAndHTMLProps, CommonProps } from "../../Element/constants";
 import { Div } from "../../Element/Tags";
-import { FormItem } from "../FormItem/FormItem";
-import { InputLabel } from "../InputLabel/InputLabel";
-import { Text } from "../../Typography/Text";
+
+// UTILS ===============================================================================================================
+import { separateWrapperProps } from "../../../utils/propSeparation";
 
 // STYLES ==============================================================================================================
 import "./range.css";
 
+// OTHER ===============================================================================================================
+import { FormItem } from "../FormItem/FormItem";
+import { InputLabel } from "../InputLabel/InputLabel";
+import { Text } from "../../Typography/Text";
+
 // Single-thumb range
 export interface SingleRangeCustomProps {
-    min?: number;
-    max?: number;
-    step?: number;
-    suffix?: string;
-    value?: number;
-    onChange?: (value: number) => void;
+    min      ? : number;
+    max      ? : number;
+    step     ? : number;
+    suffix   ? : string;
+    value    ? : number;
+    onChange ? : (value : number) => void;
 }
 
 // Dual-thumb range
 export interface DualRangeCustomProps {
-    min?: number;
-    max?: number;
-    step?: number;
-    suffix?: string;
-    value?: [number, number];
-    onChange?: (value: [number, number]) => void;
-    minLabel?: string;
-    maxLabel?: string;
+    min      ? : number;
+    max      ? : number;
+    step     ? : number;
+    suffix   ? : string;
+    value    ? : [ number, number ];
+    onChange ? : (value : [ number, number ]) => void;
+    minLabel ? : string;
+    maxLabel ? : string;
 }
 
 export type RangeElementType = HTMLInputElement;
 
 // Separate prop types for each mode
 export type SingleRangeProps = Omit<CommonAndHTMLProps<RangeElementType>, "onChange" | "value"> &
-    SingleRangeCustomProps & {
-        label?: string;
-        helpText?: string;
-        errorText?: string;
-    };
+                               SingleRangeCustomProps &
+                               CommonProps & {
+    label     ? : string;
+    helpText  ? : string;
+    errorText ? : string;
+};
 
 export type DualRangeProps = Omit<CommonAndHTMLProps<RangeElementType>, "onChange" | "value"> &
-    DualRangeCustomProps & {
-        label?: string;
-        helpText?: string;
-        errorText?: string;
-    };
+                             DualRangeCustomProps &
+                             CommonProps & {
+    label     ? : string;
+    helpText  ? : string;
+    errorText ? : string;
+};
 
 export type RangeProps = SingleRangeProps | DualRangeProps;
 
 // Type guard to check if props are for dual-thumb mode
-function isDualRangeProps(props: RangeProps): props is DualRangeProps {
+function isDualRangeProps(props : RangeProps) : props is DualRangeProps {
     return Array.isArray(props.value);
 }
 
@@ -64,16 +71,16 @@ export const Range = React.forwardRef<RangeElementType, RangeProps>(
             return <DualThumbRange {...props} forwardedRef={ref} />;
         }
         return <SingleThumbRange {...props} forwardedRef={ref} />;
-    }
+    },
 );
 Range.displayName = "Range";
 
 // SINGLE THUMB COMPONENT //////////////////////////////////////////////////////////////////////////////////////////////
 interface SingleThumbRangeInternalProps extends SingleRangeProps {
-    forwardedRef?: React.Ref<RangeElementType>;
+    forwardedRef ? : React.Ref<RangeElementType>;
 }
 
-const SingleThumbRange: React.FC<SingleThumbRangeInternalProps> = ({
+const SingleThumbRange : React.FC<SingleThumbRangeInternalProps> = ({
     label,
     helpText,
     errorText,
@@ -87,23 +94,26 @@ const SingleThumbRange: React.FC<SingleThumbRangeInternalProps> = ({
     disabled,
     ...props
 }) => {
+    // Separate wrapper-level props (margin, padding, etc.) from component-specific props
+    const {wrapperProps} = separateWrapperProps(props);
+
     const thumbRef = useRef<HTMLButtonElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
-    const [isDragging, setIsDragging] = useState(false);
-    const [isActive, setIsActive] = useState(false);
+    const [ isDragging, setIsDragging ] = useState(false);
+    const [ isActive, setIsActive ] = useState(false);
 
     // Clamp value to valid range
     const clampedValue = Math.max(min, Math.min(max, value));
 
     // Convert value to percentage position
-    const getPercent = useCallback((val: number) => {
+    const getPercent = useCallback((val : number) => {
         if (max <= min) return 0;
         const clamped = Math.max(min, Math.min(max, val));
         return ((clamped - min) / (max - min)) * 100;
-    }, [min, max]);
+    }, [ min, max ]);
 
     // Convert mouse/touch position to value
-    const getValueFromPosition = useCallback((clientX: number) => {
+    const getValueFromPosition = useCallback((clientX : number) => {
         if (!trackRef.current) return min;
 
         const rect = trackRef.current.getBoundingClientRect();
@@ -113,27 +123,27 @@ const SingleThumbRange: React.FC<SingleThumbRangeInternalProps> = ({
         // Snap to step
         const steppedValue = Math.round(rawValue / step) * step;
         return Math.max(min, Math.min(max, steppedValue));
-    }, [min, max, step]);
+    }, [ min, max, step ]);
 
     // Handle drag
-    const handleDrag = useCallback((clientX: number) => {
+    const handleDrag = useCallback((clientX : number) => {
         const newValue = getValueFromPosition(clientX);
         onChange?.(newValue);
-    }, [getValueFromPosition, onChange]);
+    }, [ getValueFromPosition, onChange ]);
 
     // Mouse events
-    const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    const handleMouseDown = useCallback((e : React.MouseEvent) => {
         if (disabled) return;
         e.preventDefault();
         setIsDragging(true);
         setIsActive(true);
         handleDrag(e.clientX);
-    }, [disabled, handleDrag]);
+    }, [ disabled, handleDrag ]);
 
     useEffect(() => {
         if (!isDragging) return;
 
-        const handleMouseMove = (e: MouseEvent) => {
+        const handleMouseMove = (e : MouseEvent) => {
             handleDrag(e.clientX);
         };
 
@@ -148,20 +158,20 @@ const SingleThumbRange: React.FC<SingleThumbRangeInternalProps> = ({
             document.removeEventListener("mousemove", handleMouseMove);
             document.removeEventListener("mouseup", handleMouseUp);
         };
-    }, [isDragging, handleDrag]);
+    }, [ isDragging, handleDrag ]);
 
     // Touch events
-    const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const handleTouchStart = useCallback((e : React.TouchEvent) => {
         if (disabled) return;
         setIsDragging(true);
         setIsActive(true);
         handleDrag(e.touches[0].clientX);
-    }, [disabled, handleDrag]);
+    }, [ disabled, handleDrag ]);
 
     useEffect(() => {
         if (!isDragging) return;
 
-        const handleTouchMove = (e: TouchEvent) => {
+        const handleTouchMove = (e : TouchEvent) => {
             e.preventDefault();
             handleDrag(e.touches[0].clientX);
         };
@@ -170,17 +180,17 @@ const SingleThumbRange: React.FC<SingleThumbRangeInternalProps> = ({
             setIsDragging(false);
         };
 
-        document.addEventListener("touchmove", handleTouchMove, { passive: false });
+        document.addEventListener("touchmove", handleTouchMove, {passive : false});
         document.addEventListener("touchend", handleTouchEnd);
 
         return () => {
             document.removeEventListener("touchmove", handleTouchMove);
             document.removeEventListener("touchend", handleTouchEnd);
         };
-    }, [isDragging, handleDrag]);
+    }, [ isDragging, handleDrag ]);
 
     // Keyboard navigation
-    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    const handleKeyDown = useCallback((e : React.KeyboardEvent) => {
         if (disabled) return;
 
         let newValue = clampedValue;
@@ -217,7 +227,7 @@ const SingleThumbRange: React.FC<SingleThumbRangeInternalProps> = ({
         }
 
         onChange?.(newValue);
-    }, [disabled, clampedValue, min, max, step, onChange]);
+    }, [ disabled, clampedValue, min, max, step, onChange ]);
 
     const percent = getPercent(clampedValue);
 
@@ -237,6 +247,7 @@ const SingleThumbRange: React.FC<SingleThumbRangeInternalProps> = ({
             )}
             helpText={helpText}
             errorText={errorText}
+            {...wrapperProps}
         >
             <Div
                 ref={trackRef}
@@ -252,8 +263,8 @@ const SingleThumbRange: React.FC<SingleThumbRangeInternalProps> = ({
                 <Div
                     className="range-track-fill"
                     style={{
-                        left: "0%",
-                        right: `${100 - percent}%`,
+                        left  : "0%",
+                        right : `${100 - percent}%`,
                     }}
                     aria-hidden="true"
                 />
@@ -264,7 +275,7 @@ const SingleThumbRange: React.FC<SingleThumbRangeInternalProps> = ({
                     id={id}
                     type="button"
                     className="range-thumb"
-                    style={{ left: `${percent}%` }}
+                    style={{left : `${percent}%`}}
                     disabled={disabled}
                     onMouseDown={handleMouseDown}
                     onTouchStart={handleTouchStart}
@@ -288,14 +299,14 @@ SingleThumbRange.displayName = "SingleThumbRange";
 
 // DUAL THUMB COMPONENT ////////////////////////////////////////////////////////////////////////////////////////////////
 interface DualThumbRangeInternalProps extends DualRangeProps {
-    forwardedRef?: React.Ref<RangeElementType>;
+    forwardedRef ? : React.Ref<RangeElementType>;
 }
 
-const DualThumbRange: React.FC<DualThumbRangeInternalProps> = ({
+const DualThumbRange : React.FC<DualThumbRangeInternalProps> = ({
     label,
     helpText,
     errorText,
-    value = [0, 100],
+    value = [ 0, 100 ],
     suffix,
     onChange,
     min = 0,
@@ -307,7 +318,10 @@ const DualThumbRange: React.FC<DualThumbRangeInternalProps> = ({
     disabled,
     ...props
 }) => {
-    const [rawMinValue, rawMaxValue] = value;
+    // Separate wrapper-level props (margin, padding, etc.) from component-specific props
+    const {wrapperProps} = separateWrapperProps(props);
+
+    const [ rawMinValue, rawMaxValue ] = value;
     // Clamp values to valid range
     const minValue = Math.max(min, Math.min(max, rawMinValue));
     const maxValue = Math.max(min, Math.min(max, rawMaxValue));
@@ -315,18 +329,18 @@ const DualThumbRange: React.FC<DualThumbRangeInternalProps> = ({
     const minThumbRef = useRef<HTMLButtonElement>(null);
     const maxThumbRef = useRef<HTMLButtonElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
-    const [isDragging, setIsDragging] = useState<"min" | "max" | null>(null);
-    const [activeThumb, setActiveThumb] = useState<"min" | "max" | null>(null);
+    const [ isDragging, setIsDragging ] = useState<"min" | "max" | null>(null);
+    const [ activeThumb, setActiveThumb ] = useState<"min" | "max" | null>(null);
 
     // Convert value to percentage position
-    const getPercent = useCallback((val: number) => {
+    const getPercent = useCallback((val : number) => {
         if (max <= min) return 0;
         const clamped = Math.max(min, Math.min(max, val));
         return ((clamped - min) / (max - min)) * 100;
-    }, [min, max]);
+    }, [ min, max ]);
 
     // Convert mouse/touch position to value
-    const getValueFromPosition = useCallback((clientX: number) => {
+    const getValueFromPosition = useCallback((clientX : number) => {
         if (!trackRef.current) return min;
 
         const rect = trackRef.current.getBoundingClientRect();
@@ -336,34 +350,34 @@ const DualThumbRange: React.FC<DualThumbRangeInternalProps> = ({
         // Snap to step
         const steppedValue = Math.round(rawValue / step) * step;
         return Math.max(min, Math.min(max, steppedValue));
-    }, [min, max, step]);
+    }, [ min, max, step ]);
 
     // Handle drag for either thumb
-    const handleDrag = useCallback((clientX: number, thumb: "min" | "max") => {
+    const handleDrag = useCallback((clientX : number, thumb : "min" | "max") => {
         const newValue = getValueFromPosition(clientX);
 
         if (thumb === "min") {
             const clampedMin = Math.min(newValue, maxValue - step);
-            onChange?.([clampedMin, maxValue]);
+            onChange?.([ clampedMin, maxValue ]);
         } else {
             const clampedMax = Math.max(newValue, minValue + step);
-            onChange?.([minValue, clampedMax]);
+            onChange?.([ minValue, clampedMax ]);
         }
-    }, [getValueFromPosition, minValue, maxValue, step, onChange]);
+    }, [ getValueFromPosition, minValue, maxValue, step, onChange ]);
 
     // Mouse events
-    const handleMouseDown = useCallback((thumb: "min" | "max") => (e: React.MouseEvent) => {
+    const handleMouseDown = useCallback((thumb : "min" | "max") => (e : React.MouseEvent) => {
         if (disabled) return;
         e.preventDefault();
         setIsDragging(thumb);
         setActiveThumb(thumb);
         handleDrag(e.clientX, thumb);
-    }, [disabled, handleDrag]);
+    }, [ disabled, handleDrag ]);
 
     useEffect(() => {
         if (!isDragging) return;
 
-        const handleMouseMove = (e: MouseEvent) => {
+        const handleMouseMove = (e : MouseEvent) => {
             handleDrag(e.clientX, isDragging);
         };
 
@@ -378,20 +392,20 @@ const DualThumbRange: React.FC<DualThumbRangeInternalProps> = ({
             document.removeEventListener("mousemove", handleMouseMove);
             document.removeEventListener("mouseup", handleMouseUp);
         };
-    }, [isDragging, handleDrag]);
+    }, [ isDragging, handleDrag ]);
 
     // Touch events
-    const handleTouchStart = useCallback((thumb: "min" | "max") => (e: React.TouchEvent) => {
+    const handleTouchStart = useCallback((thumb : "min" | "max") => (e : React.TouchEvent) => {
         if (disabled) return;
         setIsDragging(thumb);
         setActiveThumb(thumb);
         handleDrag(e.touches[0].clientX, thumb);
-    }, [disabled, handleDrag]);
+    }, [ disabled, handleDrag ]);
 
     useEffect(() => {
         if (!isDragging) return;
 
-        const handleTouchMove = (e: TouchEvent) => {
+        const handleTouchMove = (e : TouchEvent) => {
             e.preventDefault();
             handleDrag(e.touches[0].clientX, isDragging);
         };
@@ -400,17 +414,17 @@ const DualThumbRange: React.FC<DualThumbRangeInternalProps> = ({
             setIsDragging(null);
         };
 
-        document.addEventListener("touchmove", handleTouchMove, { passive: false });
+        document.addEventListener("touchmove", handleTouchMove, {passive : false});
         document.addEventListener("touchend", handleTouchEnd);
 
         return () => {
             document.removeEventListener("touchmove", handleTouchMove);
             document.removeEventListener("touchend", handleTouchEnd);
         };
-    }, [isDragging, handleDrag]);
+    }, [ isDragging, handleDrag ]);
 
     // Keyboard navigation
-    const handleKeyDown = useCallback((thumb: "min" | "max") => (e: React.KeyboardEvent) => {
+    const handleKeyDown = useCallback((thumb : "min" | "max") => (e : React.KeyboardEvent) => {
         if (disabled) return;
 
         const currentValue = thumb === "min" ? minValue : maxValue;
@@ -449,12 +463,12 @@ const DualThumbRange: React.FC<DualThumbRangeInternalProps> = ({
 
         if (thumb === "min") {
             const clampedMin = Math.min(newValue, maxValue - step);
-            onChange?.([clampedMin, maxValue]);
+            onChange?.([ clampedMin, maxValue ]);
         } else {
             const clampedMax = Math.max(newValue, minValue + step);
-            onChange?.([minValue, clampedMax]);
+            onChange?.([ minValue, clampedMax ]);
         }
-    }, [disabled, minValue, maxValue, min, max, step, onChange]);
+    }, [ disabled, minValue, maxValue, min, max, step, onChange ]);
 
     const minPercent = getPercent(minValue);
     const maxPercent = getPercent(maxValue);
@@ -475,6 +489,7 @@ const DualThumbRange: React.FC<DualThumbRangeInternalProps> = ({
             )}
             helpText={helpText}
             errorText={errorText}
+            {...wrapperProps}
         >
             <Div
                 ref={trackRef}
@@ -490,8 +505,8 @@ const DualThumbRange: React.FC<DualThumbRangeInternalProps> = ({
                 <Div
                     className="range-track-fill"
                     style={{
-                        left: `${minPercent}%`,
-                        right: `${100 - maxPercent}%`,
+                        left  : `${minPercent}%`,
+                        right : `${100 - maxPercent}%`,
                     }}
                     aria-hidden="true"
                 />
@@ -502,7 +517,7 @@ const DualThumbRange: React.FC<DualThumbRangeInternalProps> = ({
                     id={`${id}-min`}
                     type="button"
                     className="range-thumb range-thumb-min"
-                    style={{ left: `${minPercent}%` }}
+                    style={{left : `${minPercent}%`}}
                     disabled={disabled}
                     onMouseDown={handleMouseDown("min")}
                     onTouchStart={handleTouchStart("min")}
@@ -525,7 +540,7 @@ const DualThumbRange: React.FC<DualThumbRangeInternalProps> = ({
                     id={`${id}-max`}
                     type="button"
                     className="range-thumb range-thumb-max"
-                    style={{ left: `${maxPercent}%` }}
+                    style={{left : `${maxPercent}%`}}
                     disabled={disabled}
                     onMouseDown={handleMouseDown("max")}
                     onTouchStart={handleTouchStart("max")}

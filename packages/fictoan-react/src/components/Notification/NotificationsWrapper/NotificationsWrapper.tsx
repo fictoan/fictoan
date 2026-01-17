@@ -15,6 +15,7 @@ export interface NotificationsWrapperCustomProps {
         position ? : "left" | "right";
         anchor   ? : "top" | "bottom";
         order    ? : "new-on-top" | "new-on-bottom";
+        kind     ? : "list" | "stack";
         label    ? : string;
 }
 
@@ -29,6 +30,7 @@ export const NotificationsWrapper = React.forwardRef(
             position = "right",
             anchor = "top",
             order = "new-on-top",
+            kind = "list",
             children,
             label,
             ...props
@@ -39,6 +41,7 @@ export const NotificationsWrapper = React.forwardRef(
         if (position) classNames.push(position);
         if (anchor) classNames.push(anchor);
         if (order) classNames.push(order);
+        if (kind) classNames.push(kind);
 
         const childrenCount = React.Children.count(children);
         if (childrenCount === 0) return null;

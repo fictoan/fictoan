@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 // LOCAL COMPONENTS ====================================================================================================
 import { Element } from "$element";
 import { FormItem } from "../FormItem/FormItem";
+import { separateWrapperProps } from "../../../utils/propSeparation";
 
 // STYLES ==============================================================================================================
 import "./radio-button.css";
@@ -37,6 +38,9 @@ export const RadioButton = React.forwardRef(
             }
         };
 
+        // Separate wrapper-level props (margin, padding, etc.) from input-specific props
+        const { wrapperProps, inputProps } = separateWrapperProps(props);
+
         return (
             <Element<RadioButtonElementType>
                 as="div"
@@ -45,6 +49,7 @@ export const RadioButton = React.forwardRef(
                 role="radio"
                 aria-checked={checked}
                 aria-disabled={disabled}
+                {...wrapperProps}
             >
                 <FormItem
                     label={label}
@@ -63,7 +68,7 @@ export const RadioButton = React.forwardRef(
                         disabled={disabled}
                         required={required}
                         onChange={handleChange}
-                        {...props}
+                        {...inputProps}
                     />
                 </FormItem>
             </Element>

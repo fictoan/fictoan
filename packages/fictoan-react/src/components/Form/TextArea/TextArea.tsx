@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 // LOCAL COMPONENTS ====================================================================================================
 import { Element } from "$element";
 import { FormItem } from "../FormItem/FormItem";
+import { separateWrapperProps } from "../../../utils/propSeparation";
 
 // STYLES ==============================================================================================================
 import "./textarea.css";
@@ -157,6 +158,9 @@ export const TextArea = React.forwardRef(
             }
         };
 
+        // Separate wrapper-level props (margin, padding, etc.) from input-specific props
+        const { wrapperProps, inputProps } = separateWrapperProps(props);
+
         return (
             <FormItem
                 label={label}
@@ -165,6 +169,7 @@ export const TextArea = React.forwardRef(
                 errorText={errorText}
                 required={required}
                 size={size}
+                {...wrapperProps}
             >
                 <Element<TextareaElementType>
                     as="textarea"
@@ -183,7 +188,7 @@ export const TextArea = React.forwardRef(
                     required={required}
                     autoComplete={autoComplete}
                     onChange={handleChange}
-                    {...props}
+                    {...inputProps}
                 />
             </FormItem>
         );

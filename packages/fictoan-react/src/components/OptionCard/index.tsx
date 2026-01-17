@@ -1,2 +1,9 @@
-export { OptionCard, OptionCardsGroup, type OptionCardProps, type OptionCardsGroupRef } from "./OptionCard";
-export { useOptionCard, useOptionCardsGroup } from "./OptionCard";
+export {
+    OptionCard,
+    useOptionCard,
+    useOptionCardsGroup,
+    OptionCardsGroup,
+    type OptionCardProps,
+    type OptionCardsGroupRef,
+    type TickPosition,
+} from "./OptionCard";

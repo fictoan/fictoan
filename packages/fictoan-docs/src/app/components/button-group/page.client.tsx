@@ -1,13 +1,13 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React from "react";
+import React, { useState, useMemo, useEffect } from "react";
 
 // UI ==================================================================================================================
-import { Button, ButtonGroup, Heading6, Div, Text, Divider } from "fictoan-react";
+import { Button, ButtonGroup, Heading6, Div, Text, Divider, CodeBlock, Checkbox, RadioTabGroup } from "fictoan-react";
 
 // LOCAL COMPONENTS ====================================================================================================
-import { PropsConfiguratorNew } from "$components/PropsConfigurator/PropsConfiguratorNew";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -16,22 +16,46 @@ import { createThemeConfigurator } from "$utils/themeConfigurator";
 import "../../../styles/fictoan-theme.css";
 import "./page-button-group.css";
 
-// OTHER ===============================================================================================================
-import { ComponentDocsLayout } from "../ComponentDocsLayout";
-import { buttonGroupRegistry } from "./props.registry";
-
 const ButtonGroupDocs = () => {
-    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
+    // Props state
+    const [isJoint, setIsJoint] = useState(true);
+    const [spacing, setSpacing] = useState("");
+    const [equaliseWidth, setEqualiseWidth] = useState(false);
+    const [stackVertically, setStackVertically] = useState(false);
 
-    const ButtonGroupComponent = (varName : string) => {
+    // Notify sidebar when stackVertically changes
+    useEffect(() => {
+        window.dispatchEvent(new CustomEvent("buttonGroupOrientationChange", {
+            detail: { isVertical: stackVertically }
+        }));
+    }, [stackVertically]);
+
+    // Theme configurator
+    const ButtonGroupComponent = (varName: string) => {
         return varName.startsWith("button-group-");
     };
 
     const {
         interactiveElementRef,
-        componentProps : themeConfig,
+        componentProps: themeProps,
         themeConfigurator,
-    } = createThemeConfigurator("ButtonGroup", ButtonGroupComponent);
+    } = createThemeConfigurator<HTMLDivElement>("ButtonGroup", ButtonGroupComponent);
+
+    // Generate code
+    const codeString = useMemo(() => {
+        const props = [];
+        if (!isJoint) props.push(`    isJoint={false}`);
+        if (!isJoint && spacing) props.push(`    spacing="${spacing}"`);
+        if (equaliseWidth) props.push(`    equaliseWidth`);
+        if (stackVertically) props.push(`    stackVertically`);
+
+        const propsString = props.length > 0 ? `\n${props.join("\n")}\n` : "";
+        return `<ButtonGroup${propsString}>
+    <Button kind="tertiary">Left</Button>
+    <Button kind="tertiary">Middle</Button>
+    <Button kind="tertiary">Right</Button>
+</ButtonGroup>`;
+    }, [isJoint, spacing, equaliseWidth, stackVertically]);
 
     return (
         <ComponentDocsLayout>
@@ -41,10 +65,7 @@ const ButtonGroupDocs = () => {
                     ButtonGroup
                 </Heading6>
 
-                <Text
-                    id="component-description"
-                    weight="400"
-                >
+                <Text id="component-description" weight="400">
                     A wrapper to group multiple buttons together with seamless borders
                 </Text>
             </Div>
@@ -64,8 +85,11 @@ const ButtonGroupDocs = () => {
             <Div id="demo-component">
                 <ButtonGroup
                     ref={interactiveElementRef}
-                    {...props}
-                    {...themeConfig}
+                    isJoint={isJoint}
+                    spacing={!isJoint && spacing ? spacing as any : undefined}
+                    equaliseWidth={equaliseWidth}
+                    stackVertically={stackVertically}
+                    {...themeProps}
                 >
                     <Button kind="tertiary">Left</Button>
                     <Button kind="tertiary">Middle with long text</Button>
@@ -75,7 +99,59 @@ const ButtonGroupDocs = () => {
 
             {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="props-config">
-                <PropsConfiguratorNew registry={buttonGroupRegistry} onPropsChange={setProps} />
+                <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                    {codeString}
+                </CodeBlock>
+
+                <Div className="doc-controls">
+                    <Checkbox
+                        id="prop-isJoint"
+                        label="isJoint"
+                        checked={isJoint}
+                        onChange={(checked) => setIsJoint(checked)}
+                        helpText="Joins buttons seamlessly with collapsed borders."
+                        marginBottom="micro"
+                    />
+
+                    {!isJoint && (
+                        <RadioTabGroup
+                            id="prop-spacing"
+                            label="spacing"
+                            options={[
+                                { id: "spacing-none", value: "none", label: "none" },
+                                { id: "spacing-nano", value: "nano", label: "nano" },
+                                { id: "spacing-micro", value: "micro", label: "micro" },
+                                { id: "spacing-tiny", value: "tiny", label: "tiny" },
+                                { id: "spacing-small", value: "small", label: "small" },
+                                { id: "spacing-medium", value: "medium", label: "medium" },
+                                { id: "spacing-large", value: "large", label: "large" },
+                                { id: "spacing-huge", value: "huge", label: "huge" },
+                            ]}
+                            value={spacing}
+                            onChange={(value) => setSpacing(value)}
+                            helpText="Gap between buttons (only applies when isJoint is false)."
+                            marginBottom="micro"
+                        />
+                    )}
+
+                    <Checkbox
+                        id="prop-equaliseWidth"
+                        label="equaliseWidth"
+                        checked={equaliseWidth}
+                        onChange={(checked) => setEqualiseWidth(checked)}
+                        helpText="Makes all buttons take equal width."
+                        marginBottom="micro"
+                    />
+
+                    <Checkbox
+                        id="prop-stackVertically"
+                        label="stackVertically"
+                        checked={stackVertically}
+                        onChange={(checked) => setStackVertically(checked)}
+                        helpText="Stack buttons vertically instead of horizontally."
+                        marginBottom="micro"
+                    />
+                </Div>
             </Div>
 
             {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}

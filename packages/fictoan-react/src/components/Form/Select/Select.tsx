@@ -5,6 +5,7 @@ import React, { useMemo } from "react";
 import { Div } from "$tags";
 import { Element } from "$element";
 import { FormItem } from "../FormItem/FormItem";
+import { separateWrapperProps } from "../../../utils/propSeparation";
 
 // STYLES ==============================================================================================================
 import "./select.css";
@@ -59,6 +60,9 @@ export const Select = React.forwardRef(
             onChange?.(e.target.value);
         };
 
+        // Separate wrapper-level props (margin, padding, etc.) from input-specific props
+        const { wrapperProps, inputProps } = separateWrapperProps(props);
+
         return (
             <FormItem
                 label={label}
@@ -66,6 +70,7 @@ export const Select = React.forwardRef(
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
+                {...wrapperProps}
             >
                 <Div data-select className={className} disabled={disabled}>
                     <Element<SelectElementType>
@@ -76,7 +81,7 @@ export const Select = React.forwardRef(
                         disabled={disabled}
                         required={required}
                         onChange={handleChange}
-                        {...props}
+                        {...inputProps}
                     >
                         {options.map((option) =>
                             "options" in option ? renderOptGroup(option) : renderOption(option)

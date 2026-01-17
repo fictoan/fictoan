@@ -1,69 +1,72 @@
 // REACT CORE ==========================================================================================================
 import React, { useState, useEffect } from "react";
 
-// ELEMENT =============================================================================================================
-import { CommonAndHTMLProps } from "../../Element/constants";
-
 // STYLES ==============================================================================================================
 import "./toast-item.css";
 
 // OTHER ===============================================================================================================
 import { Element } from "$element";
 
-// prettier-ignore
-export interface ToastItemCustomProps {
-        showWhen         ? : boolean;
-        secondsToShowFor ? : number;
-        closeWhen        ? : () => void;
+// TYPES ===============================================================================================================
+export interface ToastItemProps {
+    id         : string;
+    duration ? : number;
+    onClose    : () => void;
+    children   : React.ReactNode;
 }
 
 export type ToastItemElementType = HTMLDivElement;
-export type ToastItemProps = Omit<CommonAndHTMLProps<ToastItemElementType>, keyof ToastItemCustomProps> &
-    ToastItemCustomProps;
 
-// COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-export const ToastItem = React.forwardRef(
-    ({ showWhen, children, secondsToShowFor, closeWhen, ...props }: ToastItemProps, ref: React.Ref<ToastItemElementType>) => {
-        let classNames: string[]          = [];
-        const [ isVisible, setIsVisible ] = useState<boolean>(showWhen ?? false);
+// COMPONENT ===========================================================================================================
+export const ToastItem = ({
+    id,
+    duration = 4,
+    onClose,
+    children,
+}: ToastItemProps) => {
+    const [isExiting, setIsExiting] = useState(false);
 
-        useEffect(() => {
-            if (showWhen) {
-                setIsVisible(true);
-            }
+    useEffect(() => {
+        if (duration === 0) return;
 
-            const timer = showWhen
-                ? setTimeout(() => {
-                    closeWhen?.();
-                }, (secondsToShowFor ?? 4) * 1000) // Default value is 4 seconds
-                : undefined;
+        const timer = setTimeout(() => {
+            setIsExiting(true);
+        }, duration * 1000);
 
-            return () => {
-                timer && clearTimeout(timer);
-            };
-        }, [showWhen, secondsToShowFor, closeWhen]);
+        return () => clearTimeout(timer);
+    }, [duration]);
 
-        const onTransitionEnd = () => {
-            if (!showWhen) setIsVisible(false);
-        };
+    // Fallback: if transition doesn't fire, remove after animation duration
+    useEffect(() => {
+        if (!isExiting) return;
 
-        return (
-            isVisible && (
-                <Element<ToastItemElementType>
-                    as="div"
-                    data-toast-item
-                    role="status"
-                    aria-live="polite"
-                    aria-atomic="true"
-                    classNames={[ ...classNames, showWhen ? "visible" : "" ]}
-                    onTransitionEnd={onTransitionEnd}
-                    shadow="soft"
-                    {...props}
-                >
-                    {children}
-                </Element>
-            )
-        );
-    },
-);
+        const fallbackTimer = setTimeout(() => {
+            onClose();
+        }, 500);
+
+        return () => clearTimeout(fallbackTimer);
+    }, [isExiting, onClose]);
+
+    const handleTransitionEnd = () => {
+        if (isExiting) {
+            onClose();
+        }
+    };
+
+    return (
+        <Element<ToastItemElementType>
+            as="div"
+            data-toast-item
+            id={id}
+            classNames={isExiting ? ["dismissed"] : []}
+            onTransitionEnd={handleTransitionEnd}
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            shadow="soft"
+        >
+            {children}
+        </Element>
+    );
+};
 ToastItem.displayName = "ToastItem";

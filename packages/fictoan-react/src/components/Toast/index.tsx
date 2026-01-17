@@ -1,2 +1,6 @@
-export { ToastsWrapper, type ToastsWrapperProps } from "./ToastsWrapper/ToastsWrapper";
-export { ToastItem, type ToastItemProps } from "./ToastItem/ToastItem";
+export {
+    ToastsProvider,
+    useToasts,
+    type ToastsProviderProps,
+    type ToastFunction,
+} from "./ToastsProvider/ToastsProvider";

@@ -5,10 +5,10 @@ import Link from "next/link";
 import React from "react";
 
 // UI ==================================================================================================================
-import { Footer, Row, Portion, Text, Heading6, Divider } from "fictoan-react";
+import { Footer, Row, Portion, Text, Heading4, Heading6, Divider, Div } from "fictoan-react";
 
 // ASSETS ==============================================================================================================
-import FictoanLogo from "../../assets/images/fictoan-logo.svg";
+import FictoanLogo from "../../assets/images/fictoan-logo-new.svg";
 import GithubIcon from "../../assets/icons/github.svg";
 
 // STYLES ==============================================================================================================
@@ -21,26 +21,18 @@ export const SiteFooter = () => {
     const currentYear = new Date().getFullYear();
 
     return (
-        <Footer id="site-footer" paddingTop="small" paddingBottom="huge">
-            {/* BACKGROUND PATTERN ///////////////////////////////////////////////////////////////////////////////// */}
-            <DensityGridPattern
-                fadeDirection="to-top"
-                color="var(--footer-pattern-color)"
-                dotSize={12} gap={24}
-                height="80%"
-                className="footer-bg-pattern"
-            />
-
+        <Footer id="site-footer" paddingTop="large" paddingBottom="huge">
             {/* MAIN FOOTER CONTENT //////////////////////////////////////////////////////////////////////////////// */}
             <Row horizontalPadding="medium" marginBottom="none">
                 {/* BRANDING */}
                 <Portion desktopSpan="half">
-                    <div className="footer-logo">
+                    <Div className="footer-logo">
                         <FictoanLogo />
-                    </div>
-                    <Text marginTop="nano" size="small">
+                    </Div>
+
+                    <Heading4 marginTop="nano">
                         A design-centric UI framework with plain-English props
-                    </Text>
+                    </Heading4>
                 </Portion>
 
                 {/* DOCUMENTATION LINKS //////////////////////////////////////////////////////////////////////////// */}
@@ -140,6 +132,15 @@ export const SiteFooter = () => {
                     </Link>
                 </Portion>
             </Row>
+
+            {/* BACKGROUND PATTERN ///////////////////////////////////////////////////////////////////////////////// */}
+            <DensityGridPattern
+                fadeDirection="to-top"
+                color="var(--footer-pattern-color)"
+                dotSize={12} gap={24}
+                height="80%"
+                className="footer-bg-pattern"
+            />
         </Footer>
     );
 };
