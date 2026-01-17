@@ -6,7 +6,7 @@ import React, { useState, useMemo } from "react";
 // UI ==================================================================================================================
 import {
     Div,
-    Heading6,
+    Heading2,
     Text,
     Divider,
     CodeBlock,
@@ -76,9 +76,9 @@ const RadioTabGroupDocs = () => {
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Radio Tab Group
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A radio button group styled as a horizontal tab-like selector
@@ -98,6 +98,7 @@ const RadioTabGroupDocs = () => {
             {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="demo-component">
                 <RadioTabGroup
+                    {...themeProps}
                     // @ts-ignore
                     ref={interactiveElementRef}
                     id="interactive-component"
@@ -107,7 +108,6 @@ const RadioTabGroupDocs = () => {
                     options={options}
                     value={selectedValue}
                     onChange={(value) => setSelectedValue(value)}
-                    {...themeProps}
                 />
             </Div>
 

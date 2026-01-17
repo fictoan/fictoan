@@ -4,7 +4,7 @@
 import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading6, Text, Divider, Card, CodeBlock, TextArea } from "fictoan-react";
+import { Div, Heading2, Text, Divider, Card, CodeBlock, TextArea } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -40,9 +40,9 @@ const CardDocs = () => {
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Card
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A box to put all sorts of content inside

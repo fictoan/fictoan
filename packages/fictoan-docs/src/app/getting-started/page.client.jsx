@@ -5,7 +5,7 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
 // UI ==================================================================================================================
-import { Element, Row, Portion, Heading1, Heading4, Heading5, Heading6, Text, Divider, Drawer, Tabs, CodeBlock, Accordion, Section, Span, Article } from "fictoan-react";
+import { Element, Row, Portion, Heading2, Heading4, Heading5, Heading6, Text, Divider, Drawer, Tabs, CodeBlock, Accordion, Section, Span, Article } from "fictoan-react";
 
 // ASSETS ==============================================================================================================
 import AppleIcon from "../../assets/icons/logo-apple.svg";
@@ -48,7 +48,7 @@ const GettingStarted = () => {
                 marginBottom="small"
             >
                 <Portion>
-                    <Heading1 className="text-hue">Getting started</Heading1>
+                    <Heading2 className="text-hue">Getting started</Heading2>
                 </Portion>
             </Row>
 

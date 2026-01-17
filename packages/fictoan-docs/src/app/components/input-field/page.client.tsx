@@ -4,7 +4,7 @@
 import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading6, Text, Divider, InputField, CodeBlock, RadioTabGroup, Checkbox, } from "fictoan-react";
+import { Div, Heading2, Text, Divider, InputField, CodeBlock, RadioTabGroup, Checkbox, } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -84,9 +84,9 @@ const [value, setValue] = useState("");
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Input field
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A text box to enter information

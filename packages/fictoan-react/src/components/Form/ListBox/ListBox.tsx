@@ -66,7 +66,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
             return [...options];
         }, [options]);
 
-        const dropdownRef = useRef() as MutableRefObject<HTMLSelectElement>;
+        const dropdownRef = useRef<HTMLSelectElement>(null) as MutableRefObject<HTMLSelectElement>;
         const searchInputRef = useRef<HTMLInputElement>(null);
 
         const listboxId = id || `listbox-${Math.random().toString(36).substring(2, 9)}`;

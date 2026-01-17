@@ -217,7 +217,7 @@ export const RadioTabGroup = React.forwardRef<HTMLDivElement, RadioTabGroupProps
                                             onChange={handleChange}
                                         />
                                         <label
-                                            ref={el => labelsRef.current[index] = el}
+                                            ref={el => { labelsRef.current[index] = el; }}
                                             htmlFor={finalId}
                                         >
                                             {option.label}

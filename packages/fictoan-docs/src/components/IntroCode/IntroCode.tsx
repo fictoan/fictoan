@@ -21,7 +21,7 @@ import {
     type SpanTypes,
     type ColourPropTypes,
     type EmphasisTypes,
-} from "fictoan-react";
+}from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./intro-code.css";
@@ -159,6 +159,12 @@ export const IntroCode = () => {
 
     return (
         <Div id="intro-code">
+            <Row horizontalPadding="medium" gutters="large" verticalMargin="micro">
+                <Portion>
+                    <Heading4>Try it out</Heading4>
+                </Portion>
+            </Row>
+
             {/* ROW VISUALISATION ================================================================================== */}
             <Div id="viz-row-wrapper">
                 {vizMode && (

@@ -62,7 +62,7 @@ const LayoutDocs = () => {
             <article id="page-layout">
                 <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                     <Portion>
-                        <Heading1>Row and Portion</Heading1>
+                        <Heading2>Row and Portion</Heading2>
                         <Text size="large" marginBottom="small">
                             These two components form the layout scaffolding for all your UI needs
                         </Text>

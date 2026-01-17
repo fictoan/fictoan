@@ -5,7 +5,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading1, Heading4, Heading6, Divider, Portion, Row, Text, Article, Card, Header, Select, Range, SidebarWrapper, SidebarHeader, SidebarItem, SidebarFooter, CodeBlock, Section, Div, Footer } from "fictoan-react";
+import { Element, Heading2, Heading4, Heading6, Divider, Portion, Row, Text, Article, Card, Header, Select, Range, SidebarWrapper, SidebarHeader, SidebarItem, SidebarFooter, CodeBlock, Section, Div, Footer } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { useThemeVariables } from "$utils/useThemeVariables";
@@ -24,7 +24,11 @@ import { colourOptions } from "../../colour/colours";
 import { sidebarProps } from "./config";
 
 const SidebarDocs = () => {
-    const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(sidebarProps.variables);
+    const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(sidebarProps.variables) as {
+        componentVariables: Record<string, { value: number | string; defaultValue?: string; unit?: string }>;
+        handleVariableChange: (varName: string, value: string | number) => void;
+        cssVariablesList: string;
+    };
 
     const [sidebarState, setSidebarState] = useState("");
     const headerOnClick = () => {
@@ -35,7 +39,7 @@ const SidebarDocs = () => {
         <Article id="page-sidebar">
             <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                 <Portion>
-                    <Heading1>Sidebar</Heading1>
+                    <Heading2>Sidebar</Heading2>
                     <Text size="large" marginBottom="small">
                         A list of links inside a vertical container
                     </Text>
@@ -196,8 +200,8 @@ const SidebarDocs = () => {
                             <Portion desktopSpan="half">
                                 <Range
                                     label="Width — default"
-                                    value={componentVariables["sidebar-width-default"].value}
-                                    onChange={(value) => handleVariableChange("sidebar-width-default", value)}
+                                    value={componentVariables["sidebar-width-default"].value as number}
+                                    onChange={(value: number) => handleVariableChange("sidebar-width-default", value)}
                                     suffix={componentVariables["sidebar-width-default"].unit}
                                     min={48} max={320} step={1}
                                 />
@@ -207,8 +211,8 @@ const SidebarDocs = () => {
                             <Portion desktopSpan="half">
                                 <Range
                                     label="Width — collapsed"
-                                    value={componentVariables["sidebar-width-default"].value}
-                                    onChange={(value) => handleVariableChange("sidebar-width-default", value)}
+                                    value={componentVariables["sidebar-width-default"].value as number}
+                                    onChange={(value: number) => handleVariableChange("sidebar-width-default", value)}
                                     min={0} max={50} step={1}
                                     suffix={componentVariables["sidebar-width-default"].unit}
                                 />

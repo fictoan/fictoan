@@ -6,7 +6,7 @@ import React, { useState, useMemo } from "react";
 // UI ==================================================================================================================
 import {
     Div,
-    Heading6,
+    Heading2,
     Text,
     Divider,
     CodeBlock,
@@ -83,9 +83,9 @@ const PaginationDocs = () => {
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Pagination
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A component to help traverse a long list of pages

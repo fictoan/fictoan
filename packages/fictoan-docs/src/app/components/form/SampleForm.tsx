@@ -273,7 +273,6 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                     { label : "Canada", value : "ca" },
                                 ]}
                                 isFullWidth
-                                size="small"
                             />
 
                             <Select
@@ -307,7 +306,6 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             allowCustomEntries
                             selectionLimit={2}
                             helpText="Select from the list, or add your own"
-                            size="tiny"
                         />
 
                         {/* FILE UPLOAD ============================================================================ */}

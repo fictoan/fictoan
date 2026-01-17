@@ -4,7 +4,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 
 // UI ==================================================================================================================
-import { Button, ButtonGroup, Heading6, Div, Text, Divider, CodeBlock, Checkbox, RadioTabGroup } from "fictoan-react";
+import { Button, ButtonGroup, Heading2, Div, Text, Divider, CodeBlock, Checkbox, RadioTabGroup } from "fictoan-react";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { ComponentDocsLayout } from "../ComponentDocsLayout";
@@ -61,9 +61,9 @@ const ButtonGroupDocs = () => {
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     ButtonGroup
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A wrapper to group multiple buttons together with seamless borders

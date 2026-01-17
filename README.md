@@ -1,11 +1,16 @@
-<p align="center" style="color: #343a40">
-    <a href="https://fictoan.io"><img src="https://raw.githubusercontent.com/fictoan/fictoan-react/main/fictoan-icon.svg" alt="Fictoan Framework" height="150" width="150"></a>
+<p align="center">
+    <a href="https://fictoan.io">
+        <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/fictoan/fictoan-react/main/fictoan-logo-dark.svg">
+            <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/fictoan/fictoan-react/main/fictoan-logo.svg">
+            <img src="https://raw.githubusercontent.com/fictoan/fictoan-react/main/fictoan-logo.svg" alt="Fictoan" height="80">
+        </picture>
+    </a>
 </p>
 
-<h1 align="center">Fictoan</h1>
-<p align="center" style="font-size: 1rem;">
-    React UI in plain English<br>
-    Components so obvious, anyone can ship them.
+<p align="center">
+    Make UI code readable again.<br/>
+    Props that read like prose. Pure CSS, zero runtime.
 </p>
 
 <p align="center">
@@ -13,7 +18,7 @@
         <img src="https://img.shields.io/npm/v/fictoan-react"/>
     </a>
     <a href="https://www.npmjs.com/package/fictoan-react">
-        <img src="https://img.shields.io/bundlephobia/min/fictoan-react"/>
+        <img src="https://img.shields.io/bundlephobia/minzip/fictoan-react"/>
     </a>
     <a href="LICENSE">
         <img src="https://img.shields.io/github/license/fictoan/fictoan-react"/>
@@ -22,18 +27,20 @@
 
 ---
 
-## What makes Fictoan different
+## What makes FictoanUI different
 
-- **No cryptic class names** — Semantic props like `bgColour` and `marginBottom`, not abbreviated utility classes to memorise.
+- **No cryptic class names** — Semantic props like `bgColour` and `marginBottom`, not abbreviated utility classes to memorise. And yes, both British and American spellings work.
 - **No runtime CSS** — Pure CSS variables. No style injection, no hydration mismatch, no flash of unstyled content.
 - **No assembly required** — Components are styled and ready to use. No building your own design system from primitives.
 - **No copy-paste to maintain** — An actual library with updates. You don't own (and maintain) hundreds of component files.
+
+**The bonus?** Code this obvious can be read by anyone—including designers. That margin that's 2px off? They can just fix it.
 
 ---
 
 ## See the difference
 
-A simple card — same output, different syntax:
+A simple card—same output, different syntax:
 
 ```jsx
 // Utility classes
@@ -65,66 +72,78 @@ A simple card — same output, different syntax:
 
 ## Getting started
 
-1. Add Fictoan to your project:
+Install Fictoan:
 ```bash
+npm install fictoan-react
+# or
 pnpm add fictoan-react
 # or
-npm install fictoan-react
+yarn add fictoan-react
 ```
 
-2. Import and use components:
+Import and use:
 ```jsx
 import { Card, Text, Heading4 } from "fictoan-react";
 
-export const MyComponent = () => {
-    return (
-        <Card shape="rounded" padding="medium" bgColour="white" shadow="soft">
-            <Heading4 weight="600" marginBottom="nano">
-                Simple, intuitive syntax
-            </Heading4>
-            <Text textColour="slate-light40">
-                Props that make sense at first glance
-            </Text>
-        </Card>
-    );
-}
+export const MyComponent = () => (
+    <Card shape="rounded" padding="medium" bgColour="white" shadow="soft">
+        <Heading4 weight="600" marginBottom="nano">
+            Simple, intuitive syntax
+        </Heading4>
+        <Text textColour="slate-light40">
+            Props that make sense at first glance
+        </Text>
+    </Card>
+);
 ```
 
 ---
 
 ## Ship faster
 
-- **Props that make sense** — `bgColour`, `shadow`, `shape`, `marginBottom`, `weight` — no documentation diving required.
+- **Props that make sense** — `bgColour`, `shadow`, `shape`, `marginBottom`, `weight`—no documentation diving required.
 - **Rapid iteration** — Change properties as easily as you would in a design tool.
 - **Accessible by default** — Components ship with proper ARIA attributes and keyboard navigation.
 
 ## Ship lighter
 
-- **~14kb gzipped** — [Check the bundle size](https://bundlephobia.com/package/fictoan-react) with zero dependencies.
+- **~14kb gzipped** — Zero runtime dependencies. [Check the bundle size](https://bundlephobia.com/package/fictoan-react).
 - **Pure CSS** — No runtime overhead, no JS-based styling.
 - **One theme file** — ~500 CSS variables to control every aspect of the UI.
 
 ---
 
+## What's new in v2
+
+- **OKLCH colour system** — 36 perceptually uniform colours with flexible opacity via `bgOpacity` and `borderOpacity` props
+- **Simplified APIs** — Modal and Drawer now use declarative `isOpen`/`onClose` props
+- **Provider pattern** — Notifications and Toast use context providers for cleaner usage
+- **Consistent form handling** — All form components use value-based `onChange`
+- **Better DX** — Display names for all 52 components, improved TypeScript support
+
+Read the full [changelog](https://github.com/fictoan/fictoan-react/blob/main/CHANGELOG.md).
+
+---
+
 ## Documentation
 
-Read our [documentation](https://fictoan.io) to explore:
+Explore the full [documentation](https://fictoan.io):
 - Component library and props
-- Theming and customisation with ~500 CSS variables
-- Guides and examples
+- Theming and customisation
+- [Manifesto](https://fictoan.io/manifesto) — why we built this
 
 ---
 
 ## Community and support
 
-- [GitHub Issues](https://github.com/fictoan/fictoan-react/issues) for bugs and feature requests
+- [GitHub issues](https://github.com/fictoan/fictoan-react/issues) for bugs and feature requests
 - [Discussions](https://github.com/fictoan/fictoan-react/discussions) for questions and community interaction
 
 ---
 
-## License
+## Licence
 
-[MIT License](LICENSE)
+[MIT Licence](LICENSE)
 
 ---
 
@@ -132,50 +151,24 @@ Read our [documentation](https://fictoan.io) to explore:
 Good tools don't gatekeep. They invite everyone in.
 </h4>
 
-
 ---
 
-# Fictoan Turborepo
+# Development (monorepo)
 
-A simple monorepo setup for Fictoan React component library and documentation site.
-
-## What's included
-
-- `packages/fictoan-react`: The Fictoan React component library
-- `packages/fictoan-docs`: The documentation site for Fictoan
-
-## Development workflow
-
-This monorepo is set up with a minimal, no-frills workflow for developing the Fictoan component library and documentation together.
+This turborepo contains:
+- `packages/fictoan-react` — The component library
+- `packages/fictoan-docs` — The documentation site
 
 ### Commands
 
-- `pnpm dev` - Run the documentation site on localhost
-- `pnpm rebuild` - Build the component library and update it in the docs site automatically
-
-### Getting started
-
-1. Clone this repository
-2. Run `pnpm install` at the root
-3. Run `pnpm dev` to start developing
-
-### Working on the component library
-
-When making changes to the component library:
-
-1. Make your changes in `packages/fictoan-react`
-2. Run `pnpm rebuild` to build the library and copy the files to the docs site
-3. The docs site will now use your latest changes
-
-## Repository Structure
-
+```bash
+pnpm install        # Install dependencies
+pnpm dev            # Run the docs site locally
+pnpm rebuild        # Build the library and update docs
 ```
-fictoan-turborepo/
-├── packages/
-│   ├── fictoan-react/     # Component library
-│   └── fictoan-docs/      # Documentation site
-├── scripts/
-│   └── copy-lib.js        # Script to copy built files to docs
-├── turbo.json             # Turborepo configuration
-└── package.json           # Root package.json with workspace config
-```
+
+### Working on the library
+
+1. Make changes in `packages/fictoan-react`
+2. Run `pnpm rebuild` to build and copy files to docs
+3. The docs site will reflect your changes

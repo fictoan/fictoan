@@ -4,7 +4,7 @@
 import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Button, Heading6, Div, Text, Divider, CodeBlock, InputField, RadioTabGroup, Checkbox, ListBox } from "fictoan-react";
+import { Button, Heading2, Div, Text, Divider, CodeBlock, InputField, RadioTabGroup, Checkbox, ListBox } from "fictoan-react";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { ComponentDocsLayout } from "../ComponentDocsLayout";
@@ -66,9 +66,9 @@ const ButtonDocs = () => {
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Button
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A clickable component to trigger an action or an event

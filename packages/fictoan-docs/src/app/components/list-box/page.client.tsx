@@ -6,7 +6,7 @@ import React, { useState, useMemo } from "react";
 // UI ==================================================================================================================
 import {
     Div,
-    Heading6,
+    Heading2,
     Text,
     Divider,
     ListBox,
@@ -104,9 +104,9 @@ const [value, setValue] = useState<${stateType}>(${stateDefault});
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     List box
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A customisable dropdown with single and multi-select support
@@ -133,6 +133,7 @@ const [value, setValue] = useState<${stateType}>(${stateDefault});
             {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="demo-component">
                 <ListBox
+                    {...themeProps}
                     ref={interactiveElementRef}
                     id="demo-listbox"
                     options={sampleOptions}
@@ -146,7 +147,6 @@ const [value, setValue] = useState<${stateType}>(${stateDefault});
                     isFullWidth={isFullWidth}
                     onChange={handleSelectionChange}
                     value={selectedValues}
-                    {...themeProps}
                 />
 
                 <Div marginTop="nano">

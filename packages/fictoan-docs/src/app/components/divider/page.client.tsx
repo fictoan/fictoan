@@ -4,7 +4,7 @@
 import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading6, Text, Divider, CodeBlock, InputField, RadioTabGroup } from "fictoan-react";
+import { Div, Heading2, Text, Divider, CodeBlock, InputField, RadioTabGroup } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -48,9 +48,9 @@ const DividerDocs = () => {
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Divider
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     A horizontal line to separate content

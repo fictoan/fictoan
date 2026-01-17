@@ -77,8 +77,8 @@ export const Breadcrumbs = React.forwardRef<HTMLDivElement, BreadcrumbsProps>(
 
             let breadcrumbItem: React.ReactNode;
             if (child.type === BreadcrumbItem) {
-                breadcrumbItem = React.cloneElement(child, {
-                    ...child.props,
+                const typedChild = child as React.ReactElement<BreadcrumbItemProps>;
+                breadcrumbItem = React.cloneElement(typedChild, {
                     current: isLast
                 });
             } else {

@@ -106,7 +106,7 @@ const TypographyDocs = () => {
             {/* INTRO ////////////////////////////////////////////////////////////////////////////////////////////// */}
             <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                 <Portion>
-                    <Heading1 className="test-heading">Typography</Heading1>
+                    <Heading2 className="test-heading">Typography</Heading2>
                 </Portion>
             </Row>
 

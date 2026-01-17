@@ -1,13 +1,14 @@
-// REACT CORE ==========================================================================================================
-import { NextRequest } from "next/server";
-
 // UTILS ===============================================================================================================
-import { createOGImageResponse, extractComponentMetadata } from "$utils/og-utils";
+import { createOGImageResponse, extractComponentMetadataFromClient } from "$utils/og-utils";
 
 export const runtime = "nodejs";
 
-export async function GET(request : NextRequest) {
-    const {componentName, description} = await extractComponentMetadata(request);
+export async function GET(
+    _request: Request,
+    { params }: { params: Promise<{ component: string }> }
+) {
+    const { component } = await params;
+    const { componentName, description } = await extractComponentMetadataFromClient(component);
 
     return createOGImageResponse({
         componentName,

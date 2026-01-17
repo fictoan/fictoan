@@ -1,7 +1,7 @@
 import { RefObject, useCallback, useEffect } from "react";
 
 export const useClickOutside = <T extends HTMLElement = HTMLElement>(
-    ref : RefObject<T>, handler : (e : Event) => void) => {
+    ref : RefObject<T | null>, handler : (e : Event) => void) => {
     const memoizedHandler = useCallback(handler, [handler]);
 
     useEffect(() => {

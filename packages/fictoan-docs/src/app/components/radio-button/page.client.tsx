@@ -6,7 +6,7 @@ import React, { useState, useMemo } from "react";
 // UI ==================================================================================================================
 import {
     Div,
-    Heading6,
+    Heading2,
     Text,
     Divider,
     RadioGroup,
@@ -132,9 +132,9 @@ const [value, setValue] = useState("option-1");
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Radio button
-                </Heading6>
+                </Heading2>
 
                 <Text id="component-description" weight="400">
                     An input to select one of many options
