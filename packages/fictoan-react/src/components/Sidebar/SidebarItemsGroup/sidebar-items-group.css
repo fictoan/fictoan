@@ -1,0 +1,19 @@
+[data-sidebar-items-group] {
+    display        : flex;
+    flex-direction : column;
+    gap            : var(--sidebar-items-gap);
+    padding        : var(--sidebar-items-padding);
+
+    .group-title {
+        margin         : var(--sidebar-group-title-margin);
+        font-weight    : var(--sidebar-group-title-weight);
+        font-size      : var(--sidebar-group-title-scale);
+        color          : var(--sidebar-group-title-text);
+        text-transform : uppercase;
+        letter-spacing : 0.5px;
+    }
+}
+
+[data-sidebar-wrapper].collapsed [data-sidebar-items-group] {
+    padding : 0;
+}

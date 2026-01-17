@@ -109,10 +109,16 @@ export const SearchBar = () => {
     }, [ selectedIndex ]);
 
     // HANDLE KEYBOARD SHORTCUTS ///////////////////////////////////////////////////////////////////////////////////////
-    // Open search modal when "/" is pressed
+    // Open search modal when "/" is pressed (but not when typing in an input)
     useEffect(() => {
         const handleKeyDown = (e : KeyboardEvent) => {
-            if (e.key === "/") {
+            // Don't trigger if user is typing in an input, textarea, or contenteditable
+            const activeElement = document.activeElement;
+            const isTyping = activeElement instanceof HTMLInputElement ||
+                             activeElement instanceof HTMLTextAreaElement ||
+                             activeElement?.getAttribute("contenteditable") === "true";
+
+            if (e.key === "/" && !isTyping) {
                 e.preventDefault();
                 setIsSearchModalOpen(true);
             }

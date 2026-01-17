@@ -3,7 +3,7 @@ import React from "react";
 
 // INTERNAL DEPS =======================================================================================================
 import {
-    Heading1, Heading4, Divider, Portion, Row, Text, Article, CodeBlock
+    Heading2, Heading4, Divider, Portion, Row, Text, Article, CodeBlock
 } from "fictoan-react";
 
 // COMPONENTS ==========================================================================================================
@@ -53,7 +53,7 @@ const BaseElementDocs = () => {
             {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
             <Row horizontalPadding="huge" marginTop="medium">
                 <Portion>
-                    <Heading1 marginBottom="micro">Base element</Heading1>
+                    <Heading2 marginBottom="micro">Base element</Heading2>
                     <Text marginBottom="micro">
                         This is a common wrapper tag that lets you use the Fictoan props, such as <code>marginTop</code>,
                         or <code>horizontallyCentreThis</code> etc.

@@ -4,20 +4,25 @@ import React, { useState, useRef, useEffect, MutableRefObject, KeyboardEvent } f
 // LOCAL COMPONENTS ====================================================================================================
 import { Div } from "$tags";
 import { Element } from "$element";
-import { FormItem } from "../FormItem/FormItem";
-import { Badge } from "../../Badge/Badge";
-import { InputField } from "../InputField/InputField";
-import { Text } from "../../Typography/Text";
 
 // HOOKS ===============================================================================================================
 import { useClickOutside } from "$hooks/UseClickOutside";
+
+// UTILS ===============================================================================================================
+import { separateWrapperProps } from "$utils/propSeparation";
 
 // STYLES ==============================================================================================================
 import "./list-box.css";
 
 // OTHER ===============================================================================================================
+import { Badge } from "../../Badge/Badge";
+import { FormItem } from "../FormItem/FormItem";
+import { InputField } from "../InputField/InputField";
 import { ListBoxProps, OptionForListBoxProps, ListBoxElementType, ListBoxCustomProps } from "./constants";
+import { Text } from "../../Typography/Text";
 import { searchOptions } from "./listBoxUtils";
+
+// TODO: Reposition if dropdown cannot fit in viewport
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
@@ -61,7 +66,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
             return [...options];
         }, [options]);
 
-        const dropdownRef = useRef() as MutableRefObject<HTMLSelectElement>;
+        const dropdownRef = useRef<HTMLSelectElement>(null) as MutableRefObject<HTMLSelectElement>;
         const searchInputRef = useRef<HTMLInputElement>(null);
 
         const listboxId = id || `listbox-${Math.random().toString(36).substring(2, 9)}`;
@@ -224,6 +229,9 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
             }
         }, [activeIndex]);
 
+        // Separate wrapper-level props (margin, padding, etc.) from input-specific props
+        const { wrapperProps, inputProps } = separateWrapperProps(props);
+
         return (
             <FormItem
                 label={label}
@@ -231,6 +239,8 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
+                isFullWidth={isFullWidth}
+                {...wrapperProps}
             >
                 {/* PARENT */}
                 <Element
@@ -238,7 +248,8 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                     data-list-box
                     classNames={["list-box-wrapper", disabled ? "disabled" : "", className || ""]}
                     ref={dropdownRef}
-                    {...props}
+                    isFullWidth={isFullWidth}
+                    {...inputProps}
                 >
                     <Div
                         className="list-box-input-wrapper"
@@ -269,7 +280,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                                             ))}
                                         </Div>
                                         {selectionLimit && selectedOptions.length >= selectionLimit && (
-                                            <Text className="options-limit-warning" textColour="red" size="small">
+                                            <Text className="options-limit-warning" textColour="red" size="tiny">
                                                 You can choose only {selectionLimit} option{selectionLimit === 1 ? "" : "s"}
                                             </Text>
                                         )}
@@ -320,6 +331,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                                     onKeyDown={handleKeyDown}
                                     aria-controls={`${listboxId}-listbox`}
                                     aria-label="Search options"
+                                    isFullWidth
                                 />
                                 {allowCustomEntries && searchValue.trim() && !selectedOptions.some(opt =>
                                     opt.label.toLowerCase() === searchValue.trim().toLowerCase()) && (

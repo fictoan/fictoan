@@ -1,8 +1,7 @@
 // REACT CORE ==========================================================================================================
-import React, { useState, useEffect, SyntheticEvent } from "react";
+import React, { useState, useEffect } from "react";
 
 // ELEMENT =============================================================================================================
-import { CommonAndHTMLProps } from "../../Element/constants";
 import { Div } from "../../Element/Tags";
 
 // STYLES ==============================================================================================================
@@ -11,122 +10,110 @@ import "./notification-item.css";
 // OTHER ===============================================================================================================
 import { Element } from "$element";
 
-// prettier-ignore
-export interface NotificationItemCustomProps {
-        kind             ? : "info" | "warning" | "error" | "success";
-        showWhen           : boolean;
-        isDismissible    ? : boolean;
-        closeWhen          : () => void;
-        secondsToShowFor ? : number;
-        title            ? : string;
-        description      ? : string;
+// TYPES ===============================================================================================================
+export type NotificationKind = "generic" | "info" | "warning" | "error" | "success";
+
+export interface NotificationItemProps {
+    id              : string;
+    kind          ? : NotificationKind;
+    duration      ? : number;
+    isDismissible ? : boolean;
+    onClose         : () => void;
+    children        : React.ReactNode;
 }
 
 export type NotificationItemElementType = HTMLDivElement;
-export type NotificationItemProps =
-    Omit<CommonAndHTMLProps<NotificationItemElementType>, keyof NotificationItemCustomProps>
-    & NotificationItemCustomProps;
 
-// COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-export const NotificationItem = React.forwardRef(
-    (
-        {
-            showWhen,
-            closeWhen,
-            kind = "info",
-            children,
-            isDismissible,
-            secondsToShowFor,
-            title,
-            description,
-            ...props
-        }: NotificationItemProps,
-        ref: React.Ref<NotificationItemElementType>,
-    ) => {
-        let classNames: string[]          = [];
-        const [ isVisible, setIsVisible ] = useState<boolean>(showWhen);
+// Map notification types to ARIA roles
+const roleMap: Record<NotificationKind, string> = {
+    generic : "status",
+    info    : "status",
+    warning : "alert",
+    error   : "alert",
+    success : "status",
+};
 
-        useEffect(() => {
-            if (showWhen) {
-                setIsVisible(true);
-            }
+// COMPONENT ===========================================================================================================
+export const NotificationItem = ({
+    id,
+    kind = "generic",
+    duration = 4,
+    isDismissible = true,
+    onClose,
+    children,
+}: NotificationItemProps) => {
+    const [isExiting, setIsExiting] = useState(false);
 
-            const timer = showWhen
-                ? setTimeout(() => {
-                    closeWhen();
-                }, (secondsToShowFor ?? 8) * 1000) // Default value is 8 seconds
-                : undefined;
+    useEffect(() => {
+        if (duration === 0) return; // No auto-dismiss
 
-            return () => {
-                timer && clearTimeout(timer);
-            };
-        }, [ showWhen, secondsToShowFor, closeWhen ]);
+        const timer = setTimeout(() => {
+            setIsExiting(true);
+        }, duration * 1000);
 
-        if (kind) {
-            classNames.push(kind);
-        }
+        return () => clearTimeout(timer);
+    }, [duration]);
 
-        if (isDismissible) {
-            classNames.push("dismissible");
-        }
+    // Fallback: if transition doesn't fire, remove after animation duration
+    useEffect(() => {
+        if (!isExiting) return;
 
-        const onDismissClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        const fallbackTimer = setTimeout(() => {
+            onClose();
+        }, 500); // slightly longer than the 0.4s transition
+
+        return () => clearTimeout(fallbackTimer);
+    }, [isExiting, onClose]);
+
+    const handleDismissClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        setIsExiting(true);
+    };
+
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
-            closeWhen();
-        };
+            setIsExiting(true);
+        }
+    };
 
-        const handleKeyDown = (event: React.KeyboardEvent) => {
-            if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                closeWhen();
-            }
-        };
+    const handleTransitionEnd = () => {
+        if (isExiting) {
+            onClose();
+        }
+    };
 
-        const onTransitionEnd = () => {
-            if (!showWhen) setIsVisible(false);
-        };
+    const classNames: string[] = [kind];
+    if (isDismissible) classNames.push("dismissible");
+    if (isExiting) classNames.push("dismissed");
 
-        // Map notification types to ARIA roles
-        const roleMap = {
-            info    : "status",
-            warning : "alert",
-            error   : "alert",
-            success : "status",
-        };
+    return (
+        <Element<NotificationItemElementType>
+            as="div"
+            data-notification-item
+            id={id}
+            classNames={classNames}
+            onTransitionEnd={handleTransitionEnd}
+            role={roleMap[kind]}
+            aria-live={kind === "error" || kind === "warning" ? "assertive" : "polite"}
+            aria-atomic="true"
+        >
+            <div className="notification-content">
+                {children}
+            </div>
 
-        return (
-            isVisible && (
-                <Element<NotificationItemElementType>
-                    as="div"
-                    data-notification-item
-                    ref={ref}
-                    classNames={[ ...classNames, !showWhen ? "dismissed" : "" ]}
-                    onTransitionEnd={onTransitionEnd}
-                    role={roleMap[kind]}
-                    aria-live={kind === "error" || kind === "warning" ? "assertive" : "polite"}
-                    aria-atomic="true"
-                    aria-label={title}
-                    {...props}
+            {isDismissible && (
+                <Div
+                    className="dismiss-button"
+                    onClick={handleDismissClick}
+                    onKeyDown={handleKeyDown}
+                    aria-label="Dismiss notification"
+                    tabIndex={0}
                 >
-                    <div id={`notification-content-${props.id}`}>
-                        {children}
-                        {description && <span className="sr-only">{description}</span>}
-                    </div>
-
-                    {isDismissible && (
-                        <Div
-                            className="dismiss-button"
-                            onClick={onDismissClick}
-                            onKeyDown={handleKeyDown}
-                            aria-label="Dismiss notification"
-                            tabIndex={0}
-                        >
-                            <span className="sr-only">Close notification</span>
-                        </Div>
-                    )}
-                </Element>
-            )
-        );
-    },
-);
+                    <span className="sr-only">Close notification</span>
+                </Div>
+            )}
+        </Element>
+    );
+};
 NotificationItem.displayName = "NotificationItem";

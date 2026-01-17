@@ -72,6 +72,12 @@
     [data-form-wrapper].spacing-huge & { margin-bottom : 48px; }
 }
 
+/* When there’s an explainer text, it should appear below the checkbox */
+[data-form-item]:has([data-checkbox]):has( > .info-section) {
+    flex-direction : column;
+    align-items    : flex-start;
+    gap            : 2px;
+}
 
 /* HOVER ==================================================================== */
 [data-form-item]:has(> [data-input-wrapper] > input[type="checkbox"]:hover) > [data-label-wrapper] > label::before {
@@ -85,4 +91,5 @@
 
 /* CHECKED ================================================================== */
 [data-form-item]:has(> [data-input-wrapper] > input[type="checkbox"]:checked) > [data-label-wrapper] > label::before { background : var(--checkbox-square-bg-checked); }
+
 [data-form-item]:has(> [data-input-wrapper] > input[type="checkbox"]:checked) > [data-label-wrapper] > label::after { opacity : 1; }

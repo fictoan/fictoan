@@ -140,10 +140,8 @@
     --sidebar-footer-border-top          : var(--grey-dark60);
 
     /* SKELETON ///////////////////////////////////////////////////////////// */
-    :root {
-        --skeleton-bg        : var(--slate-light40);
-        --skeleton-highlight : var(--slate-light60);
-    }
+    --skeleton-bg                        : var(--slate-light40);
+    --skeleton-highlight                 : var(--slate-light60);
 
     /* SWITCH /////////////////////////////////////////////////////////////// */
     --switch-bg-default                  : var(--slate-dark40);
@@ -178,19 +176,24 @@
     --font-serif                         : "Mondwest", serif;
     --font-monospace                     : "Geist Mono", monospace;
 
+    --heading-font                       : var(--font-serif, serif);
+    --heading-text-colour                : var(--white);
+    --heading-line-height                : 1.2;
+
+    --type-scale                         : 1.2;
+
     --paragraph-font-size                : var(--text-medium);
     --paragraph-line-height              : 1.6;
     --paragraph-text-colour              : var(--slate);
-
-    --heading-text-colour                : var(--white);
-    --heading-size-multiplier            : 1.2;
-    --heading-line-height                : 1.2;
 
     --code-font                          : var(--font-monospace);
 
     /* ////////////////////////////////////////////////////////////////////// */
     /* CUSTOM COMPONENTS */
     /* ////////////////////////////////////////////////////////////////////// */
+    /* INTRO CODE /////////////////////////////////////////////////////////// */
+    --viz-row-bg                         : color-mix(in oklch, var(--red-dark60) 60%, transparent);
+
     /* COMPONENT GRID /////////////////////////////////////////////////////// */
 
     --component-card-bg                  : color-mix(in oklch, var(--slate-dark80) 40%, transparent);
@@ -202,8 +205,8 @@
     --site-header-border                 : var(--grey-dark60);
 
     /* SITE FOOTER ////////////////////////////////////////////////////////// */
-    --footer-border                      : var(--grey-dark60);
-    --footer-pattern-color               : var(--slate-light40);
+    --footer-bg                          : linear-gradient(180deg, var(--body-bg) 0%, var(--grey-dark90) 40%, var(--grey-dark80) 100%);
+    --footer-pattern-color               : var(--black);
 
     /* USP CARDS //////////////////////////////////////////////////////////// */
     /*--usp-section-bg                          : var(--grey-dark90);*/
@@ -219,4 +222,6 @@
     --search-result-item-bg-default      : var(--slate-dark80);
     --search-result-item-bg-hover        : var(--blue-dark80);
     --search-result-item-border-hover    : var(--blue-dark20);
+
+    --sidebar-width-default              : 220px;
 }

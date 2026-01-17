@@ -72,8 +72,11 @@ export const Table = React.forwardRef(
             if (!children || !React.isValidElement(children)) return undefined;
 
             const firstRow = React.Children.toArray(children)[0];
-            if (React.isValidElement(firstRow) && firstRow.props.children) {
-                return React.Children.count(firstRow.props.children);
+            if (React.isValidElement(firstRow)) {
+                const rowProps = firstRow.props as { children?: React.ReactNode };
+                if (rowProps.children) {
+                    return React.Children.count(rowProps.children);
+                }
             }
             return undefined;
         };

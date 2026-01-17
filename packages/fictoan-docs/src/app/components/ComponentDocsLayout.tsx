@@ -15,8 +15,11 @@ export const ComponentDocsLayout = ({ children }: ComponentDocsLayoutProps) => {
     const getContentById = (targetId: string) => {
         let content = null;
         Children.forEach(children, (child) => {
-            if (isValidElement(child) && child.props.id === targetId) {
-                content = child.props.children;
+            if (isValidElement(child)) {
+                const props = child.props as { id?: string; children?: ReactNode };
+                if (props.id === targetId) {
+                    content = props.children;
+                }
             }
         });
         return content;
@@ -48,9 +51,10 @@ export const ComponentDocsLayout = ({ children }: ComponentDocsLayoutProps) => {
                 <Row id="component-wrapper" horizontalPadding="small" className="rendered-component">
                     <Portion>
                         <Div
+                            id="interactive-component"
                             padding="small"
                             shape="rounded"
-                            bgColour="slate-light80"
+                            bgColour="grey-light90"
                             data-centered-children
                         >
                             {getContentById("demo-component")}

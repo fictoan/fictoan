@@ -2,7 +2,7 @@
 import React from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
-import { CommonAndHTMLProps } from "../Element/constants";
+import { CommonAndHTMLProps, CommonProps } from "../Element/constants";
 import { Element } from "$element";
 
 // STYLES ==============================================================================================================
@@ -10,13 +10,14 @@ import "./meter.css";
 
 // OTHER ===============================================================================================================
 import { Text } from "../Typography/Text";
+import { separateWrapperProps } from "../../utils/propSeparation";
 
 export interface MeterLabelCustomProps {
         suffix ? : string;
 }
 
 // prettier-ignore
-export interface MeterCustomProps extends Omit<CommonAndHTMLProps<HTMLMeterElement>, "value"> {
+export interface MeterCustomProps {
         min                 : number;
         max                 : number;
         low                 : number;
@@ -26,12 +27,13 @@ export interface MeterCustomProps extends Omit<CommonAndHTMLProps<HTMLMeterEleme
         showOptimumMarker ? : boolean;
         suffix            ? : string;
         height            ? : string;
+        label             ? : string;
         ariaLabel         ? : string;
         description       ? : string;
 }
 
 export type MeterElementType = HTMLMeterElement;
-export type MeterProps = MeterCustomProps;
+export type MeterProps = MeterCustomProps & CommonProps;
 export type MeterMetaProps = Omit<CommonAndHTMLProps<HTMLDivElement>, keyof MeterLabelCustomProps> &
                              MeterLabelCustomProps;
 
@@ -73,10 +75,15 @@ export const Meter = React.forwardRef(
             return `Current value is ${value}${suffix || ""} (${percentage.toFixed(1)}%). Status: ${status}`;
         };
 
+        // Separate wrapper-level props (margin, padding, etc.) from meter-specific props
+        const { wrapperProps, inputProps } = separateWrapperProps(props);
+
         return (
-            <div
+            <Element<HTMLDivElement>
+                as="div"
                 role="region"
                 aria-label={ariaLabel || "Meter indicator"}
+                {...wrapperProps}
             >
                 {label && (
                     <Element<HTMLDivElement>
@@ -106,7 +113,7 @@ export const Meter = React.forwardRef(
                         low={low}
                         high={high}
                         optimum={optimum}
-                        {...props}
+                        {...inputProps}
                         style={{ height }}
                         aria-label={label || ariaLabel || "Progress meter"}
                         aria-valuemin={min}
@@ -136,7 +143,7 @@ export const Meter = React.forwardRef(
                         {description}
                     </div>
                 )}
-            </div>
+            </Element>
         );
     },
 );

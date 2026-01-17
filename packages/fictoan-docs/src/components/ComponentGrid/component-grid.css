@@ -88,11 +88,12 @@
         place-content : center;
         border        : none;
         background    : linear-gradient(180deg,
-        rgba(255, 201, 0, 1) 0%,
-        rgba(230, 65, 65, 1) 25%,
-        rgba(241, 105, 236, 1) 50%,
-        rgba(87, 116, 255, 1) 75%,
-        rgba(95, 246, 247, 1) 100%);
+        var(--amber-light40) 0%,
+        var(--cerise) 20%,
+        var(--emerald-light40) 40%,
+        var(--royal-light40) 60%,
+        var(--cobalt-light40) 80%,
+        var(--violet-light40) 100%);
     }
 
     #callout-card { grid-area : callout; }

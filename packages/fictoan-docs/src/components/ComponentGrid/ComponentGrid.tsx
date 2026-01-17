@@ -15,7 +15,6 @@ import {
     Checkbox,
     Div,
     InputField,
-    NotificationItem,
     Portion,
     ProgressBar,
     RadioButton,
@@ -26,19 +25,35 @@ import {
     Text,
     Heading1,
     Heading4,
-    NotificationsWrapper,
     CodeBlock,
     OptionCard,
     OptionCardsGroup,
     Modal,
     PinInputField,
-} from "fictoan-react";
+    NotificationsProvider,
+    useNotifications,
+}from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./component-grid.css";
 
+// Separate component to use the notifications hook (must be inside provider)
+const NotificationButton = () => {
+    const notify = useNotifications();
+
+    return (
+        <Button
+            kind="custom" bgColour="blue-light70" textColour="blue"
+            shape="rounded" shadow="mild"
+            marginBottom="nano" marginRight="nano"
+            onClick={() => notify.info("I am here to notify you that...um, wait, I forgot.")}
+        >
+            Wanna know something?
+        </Button>
+    );
+};
+
 export const ComponentGrid = () => {
-    const [ showNotification1, setShowNotification1 ] = useState(false);
     const [ isModalOpen, setIsModalOpen ] = useState(false);
 
     const cardComponentSample = `const clickHere = () => {
@@ -52,36 +67,37 @@ export const ComponentGrid = () => {
     ];
 
     return (
-        <Div id="grid-wrapper">
-            {/* BUTTON ============================================================================================= */}
-            <Div id="button-card" className="grid-item">
-                <Card shape="rounded" className="component-wrapper" isFullHeight>
-                    <Div className="component-card">
-                        <Button
-                            shape="rounded"
-                            bgColour="violet-dark20" textColour="white"
-                            marginBottom="nano"
-                            isFullWidth
-                        >
-                            Click me
-                        </Button>
+        <NotificationsProvider position="right" anchor="top">
+            <Div id="grid-wrapper">
+                {/* BUTTON ============================================================================================= */}
+                <Div id="button-card" className="grid-item">
+                    <Card shape="rounded" className="component-wrapper" isFullHeight>
+                        <Div className="component-card">
+                            <Button
+                                shape="rounded"
+                                bgColour="violet-dark20" textColour="white"
+                                marginBottom="nano"
+                                isFullWidth
+                            >
+                                Click me
+                            </Button>
 
-                        <Button
-                            kind="custom" shape="rounded"
-                            bgColour="amber" textColour="amber"
-                            isLoading isFullWidth
-                        >
-                            Load
-                        </Button>
+                            <Button
+                                kind="custom" shape="rounded"
+                                bgColour="amber" textColour="amber"
+                                isLoading isFullWidth
+                            >
+                                Load
+                            </Button>
 
-                        <Element as="footer" className="footer-bottom">
-                            <Link href="/components/button">
-                                Button &rarr;
-                            </Link>
-                        </Element>
-                    </Div>
-                </Card>
-            </Div>
+                            <Element as="footer" className="footer-bottom">
+                                <Link href="/components/button">
+                                    Button &rarr;
+                                </Link>
+                            </Element>
+                        </Div>
+                    </Card>
+                </Div>
 
             {/* TYPOGRAPHY ========================================================================================= */}
             <Div id="type-card" className="grid-item">
@@ -103,14 +119,7 @@ export const ComponentGrid = () => {
             <Div id="notification-card" className="grid-item">
                 <Card shape="rounded" className="component-wrapper" isFullHeight>
                     <Div className="component-card">
-                        <Button
-                            kind="custom" bgColour="blue-light70" textColour="blue"
-                            shape="rounded" shadow="mild"
-                            marginBottom="nano" marginRight="nano"
-                            onClick={() => setShowNotification1(true)}
-                        >
-                            Wanna know something?
-                        </Button>
+                        <NotificationButton />
 
                         <Element as="footer" className="footer-bottom">
                             <Link href="/components/notifications">
@@ -120,20 +129,6 @@ export const ComponentGrid = () => {
                     </Div>
                 </Card>
             </Div>
-
-            <NotificationsWrapper position="right" anchor="top">
-                <NotificationItem
-                    kind="info"
-                    showWhen={showNotification1}
-                    closeWhen={() => setShowNotification1(false)}
-                    secondsToShowFor={5}
-                    isDismissible
-                >
-                    <Text textColour="blue">
-                        I am here to notify you that...um, wait, I forgot.
-                    </Text>
-                </NotificationItem>
-            </NotificationsWrapper>
 
             {/* PROGRESS =========================================================================================== */}
             <Div id="progress-card" className="grid-item">
@@ -511,20 +506,21 @@ export const ComponentGrid = () => {
                 </Card>
             </Modal>
 
-            {/* PIN INPUT ========================================================================================== */}
-            <Div id="pin-input-card" className="grid-item">
-                <Card shape="rounded" className="component-wrapper" isFullHeight>
-                    <Div className="component-card">
-                        <PinInputField numberOfFields={4} />
+                {/* PIN INPUT ========================================================================================== */}
+                <Div id="pin-input-card" className="grid-item">
+                    <Card shape="rounded" className="component-wrapper" isFullHeight>
+                        <Div className="component-card">
+                            <PinInputField numberOfFields={4} />
 
-                        <Element as="footer" className="footer-bottom">
-                            <Link href="/components/pin-input-field">
-                                PIN input &rarr;
-                            </Link>
-                        </Element>
-                    </Div>
-                </Card>
+                            <Element as="footer" className="footer-bottom">
+                                <Link href="/components/pin-input-field">
+                                    PIN input &rarr;
+                                </Link>
+                            </Element>
+                        </Div>
+                    </Card>
+                </Div>
             </Div>
-        </Div>
+        </NotificationsProvider>
     );
 };

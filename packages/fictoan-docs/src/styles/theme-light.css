@@ -2,6 +2,8 @@
     /* BADGE //////////////////////////////////////////////////////////////// */
     --badge-border                       : var(--transparent);
 
+    --badge-action-bg                    : var(--blue-light60);
+
     /* BODY ///////////////////////////////////////////////////////////////// */
     --body-bg                            : var(--white);
 
@@ -20,8 +22,8 @@
     --callout-info-bg                    : var(--sky-light60);
     --callout-info-border                : var(--sky-dark30);
 
-    --callout-success-bg                 : var(--green-light40);
-    --callout-success-border             : var(--green-dark40);
+    --callout-success-bg                 : var(--green-light80);
+    --callout-success-border             : var(--green-light40);
 
     --callout-warning-bg                 : var(--amber-light40);
     --callout-warning-border             : var(--amber-dark40);
@@ -42,6 +44,8 @@
     --code-block-font-size               : 0.98rem;
     --code-block-bg                      : var(--slate-light90);
 
+    --token-string                       : var(--grey);
+
     /* DIVIDER ////////////////////////////////////////////////////////////// */
     --divider-height                     : 1px;
 
@@ -59,7 +63,7 @@
     --drawer-border                      : var(--grey-dark40);
 
     /* INPUT FIELD ////////////////////////////////////////////////////////// */
-    --input-bg-default                   : var(--grey-light90);
+    --input-bg-default                   : color-mix(in oklch, var(--grey-light90), transparent 40%);
     --input-border-default               : var(--grey-light60);
     --input-border-radius-default        : var(--global-border-radius);
     --input-label-default                : var(--black);
@@ -92,7 +96,7 @@
 
     --input-required-indicator           : var(--red);
 
-    --input-helptext                     : var(--paragraph-subtext-colour);
+    --input-helptext                     : var(--grey-light40);
     --input-helptext-scale               : 92%;
 
     --input-icon-default                 : var(--slate-light40);
@@ -100,13 +104,15 @@
     --input-icon-valid                   : var(--green-dark30);
 
     /* KEYBOARD ///////////////////////////////////////////////////////////// */
-    --kbd-bg                             : var(--grey-light40);
     --kbd-text                           : var(--black);
-    --kbd-shadow                         : var(--grey);
+    --kbd-bg                             : var(--grey-light70);
+    --kbd-shadow                         : var(--grey-light40);
 
     /* LIST BOX ///////////////////////////////////////////////////////////// */
-    --list-box-badge-bg                  : var(--slate-dark40);
-    --list-box-badge-text                : var(--slate-light70);
+    --list-box-dropdown-bg               : var(--white);
+    --list-box-badge-bg                  : var(--slate-light70);
+    --list-box-badge-text                : var(--slate);
+
 
     /* MODAL //////////////////////////////////////////////////////////////// */
     --modal-backdrop-bg                  : var(--amber);
@@ -118,9 +124,9 @@
 
     --option-card-focus                  : var(--global-focus-colour);
 
-    --option-card-bg-hover               : color-mix(in oklch, var(--green-light70) 40%, transparent);
+    --option-card-bg-hover               : color-mix(in oklch, var(--green-light70), transparent 40%);
     --option-card-border-hover           : var(--green-light40);
-    --option-card-tick-bg-hover          : color-mix(in oklch, var(--green-light60) 30%, transparent);
+    --option-card-tick-bg-hover          : color-mix(in oklch, var(--green-light60), transparent 30%);
     --option-card-tick-line-hover        : var(--green);
 
     --option-card-bg-selected            : var(--green-light60);
@@ -140,7 +146,7 @@
 
     --sidebar-item-icon-stroke-default   : var(--grey-light40);
 
-    --sidebar-item-bg-hover              : var(--grey-light40);
+    --sidebar-item-bg-hover              : var(--grey-light90);
 
     --sidebar-footer-bg                  : var(--grey-dark90);
     --sidebar-footer-border-top          : var(--grey-dark60);
@@ -150,8 +156,8 @@
     --skeleton-highlight                 : var(--slate-light60);
 
     /* SWITCH /////////////////////////////////////////////////////////////// */
-    --switch-bg-default                  : var(--slate-dark40);
-    --switch-bg-hover                    : var(--slate-dark20);
+    --switch-bg-default                  : var(--slate-light60);
+    --switch-bg-hover                    : var(--slate-light40);
     --switch-bg-checked                  : var(--hue);
     --switch-bg-disabled                 : var(--slate-light90);
 
@@ -161,13 +167,13 @@
     --switch-slider-bg-disabled          : var(--slate-light40);
 
     /* TABLE //////////////////////////////////////////////////////////////// */
-    --table-bg                           : var(--slate-dark80);
-    --table-border                       : var(--slate-dark60);
+    --table-bg                           : var(--slate-light90);
+    --table-border                       : var(--slate-light40);
     --table-font-family                  : var(--paragraph-font);
     --table-text                         : var(--paragraph-text-colour);
 
-    --table-striped-header-bg            : var(--slate-dark70);
-    --table-striped-cell-bg              : var(--slate-dark50);
+    --table-striped-header-bg            : var(--blue-light50);
+    --table-striped-cell-bg              : var(--slate-light70);
 
     --table-bg-hover                     : var(--amber-light20);
     --table-text-hover                   : var(--paragraph-text-colour);
@@ -189,34 +195,37 @@
     --heading-font                       : var(--font-serif, serif);
     --heading-text-colour                : var(--black);
 
-    --base-font-size                     : 1.2rem;
     --type-scale                         : 1.2;
 
     --code-font                          : var(--font-monospace);
+    --code-block-text                    : var(--slate);
 
     --token-plain                        : var(--black);
 
     /* ////////////////////////////////////////////////////////////////////// */
     /* CUSTOM COMPONENTS */
     /* ////////////////////////////////////////////////////////////////////// */
-    /* COMPONENT GRID /////////////////////////////////////////////////////// */
+    /* INTRO CODE /////////////////////////////////////////////////////////// */
+    --viz-row-bg                         : color-mix(in oklch, var(--red-light70), transparent 40%);
 
-    --component-card-bg                  : color-mix(in oklch, var(--slate-dark80) 40%, transparent);
-    --component-card-border              : var(--slate-dark60);
-    --component-card-footer-border       : var(--slate-dark60);
+    /* COMPONENT GRID /////////////////////////////////////////////////////// */
+    --component-card-bg                  : color-mix(in oklch, var(--blue-light90), transparent 80%);
+    --component-card-border              : var(--slate-light90);
+    --component-card-footer-border       : var(--slate-light90);
 
     /* SITE HEADER ////////////////////////////////////////////////////////// */
-    --site-header-bg                     : color-mix(in oklch, var(--white) 20%, transparent);
+    --site-header-bg                     : color-mix(in oklch, var(--white), transparent 20%);
     --site-header-border                 : var(--grey-light40);
 
     /* SITE FOOTER ////////////////////////////////////////////////////////// */
-    --footer-pattern-color               : var(--blue);
+    --footer-bg                          : linear-gradient(180deg, var(--body-bg) 0%, var(--navy-light90) 40%, var(--navy-light50) 100%);
+    --footer-pattern-color               : var(--blue-light60);
 
     /* USP CARDS //////////////////////////////////////////////////////////// */
     /*--usp-section-bg                          : var(--grey-dark90);*/
 
-    --usp-card-gradient-top              : color-mix(in oklch, var(--green-dark80) 40%, transparent);
-    --usp-card-gradient-bottom           : color-mix(in oklch, var(--grey-dark80) 40%, transparent);
+    --usp-card-gradient-top              : color-mix(in oklch, var(--green-dark80), transparent 40%);
+    --usp-card-gradient-bottom           : color-mix(in oklch, var(--grey-dark80), transparent 40%);
 
     /* SEARCH /////////////////////////////////////////////////////////////// */
     --search-input-bg                    : var(--input-bg-default);
@@ -224,4 +233,6 @@
     --search-result-item-bg-default      : var(--slate-dark80);
     --search-result-item-bg-hover        : var(--blue-dark80);
     --search-result-item-border-hover    : var(--blue-dark20);
+
+    --sidebar-width-default              : 220px;
 }

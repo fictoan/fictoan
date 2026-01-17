@@ -1,13 +1,10 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React from "react";
+import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading4, Divider, Portion, Row, Article, Meter, Section, Heading6, Text, Range, Card } from "fictoan-react";
-
-// LOCAL COMPONENTS ====================================================================================================
-import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
+import { Div, Heading2, Text, Divider, Meter, CodeBlock, InputField, Range, Checkbox, } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -16,205 +13,217 @@ import { createThemeConfigurator } from "$utils/themeConfigurator";
 import "../../../styles/fictoan-theme.css";
 import "./page-meter.css";
 
-const MeterDocs = () => {
-    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
-    
-    // Interactive controls for numeric values
-    const [ minValue, setMinValue ] = React.useState(0);
-    const [ maxValue, setMaxValue ] = React.useState(100);
-    const [ lowValue, setLowValue ] = React.useState(25);
-    const [ highValue, setHighValue ] = React.useState(75);
-    const [ optimumValue, setOptimumValue ] = React.useState(90);
-    const [ currentValue, setCurrentValue ] = React.useState(50);
-    const [ heightValue, setHeightValue ] = React.useState(24);
+// OTHER ===============================================================================================================
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
-    const MeterComponent = (varName : string) => {
+const MeterDocs = () => {
+    // Props state
+    const [label, setLabel] = useState("Progress");
+    const [suffix, setSuffix] = useState("%");
+    const [min, setMin] = useState(0);
+    const [max, setMax] = useState(100);
+    const [low, setLow] = useState(25);
+    const [high, setHigh] = useState(75);
+    const [optimum, setOptimum] = useState(90);
+    const [value, setValue] = useState(50);
+    const [height, setHeight] = useState(24);
+    const [showOptimumMarker, setShowOptimumMarker] = useState(false);
+
+    // Theme configurator
+    const MeterComponent = (varName: string) => {
         return varName.startsWith("meter-");
     };
 
     const {
         interactiveElementRef,
-        componentProps : themeConfig,
+        componentProps: themeProps,
         themeConfigurator,
-    } = createThemeConfigurator("Meter", MeterComponent);
+    } = createThemeConfigurator<HTMLMeterElement>("Meter", MeterComponent);
+
+    // Generate code
+    const codeString = useMemo(() => {
+        const props = [];
+        if (label) props.push(`label="${label}"`);
+        props.push(`min={${min}}`);
+        props.push(`max={${max}}`);
+        props.push(`low={${low}}`);
+        props.push(`high={${high}}`);
+        props.push(`value={meterValue}`);
+        if (optimum) props.push(`optimum={${optimum}}`);
+        if (showOptimumMarker) props.push(`showOptimumMarker`);
+        if (suffix) props.push(`suffix="${suffix}"`);
+        if (height !== 24) props.push(`height="${height}px"`);
+
+        return `import { useState } from "react";
+import { Meter } from "fictoan-react";
+
+const [meterValue, setMeterValue] = useState(${value});
+
+<Meter
+    ${props.join("\n    ")}
+/>`;
+    }, [label, min, max, low, high, value, optimum, showOptimumMarker, suffix, height]);
 
     return (
-        <Article id="page-meter">
-            {/*  INTRO ///////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                    <Portion>
-                        <Heading4 id="component-name">
-                            Meter
-                        </Heading4>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading2 id="component-name">
+                    Meter
+                </Heading2>
 
-                        <Heading6
-                            id="component-description"
-                            weight="400" marginBottom="small"
-                        >
-                            A bar to measure a scalar value within a known range, usually used to measure percentages
-                        </Heading6>
-                    </Portion>
+                <Text id="component-description" weight="400">
+                    A bar to measure a scalar value within a known range
+                </Text>
+            </Div>
 
-                    <Portion>
-                        <ul>
-                            <li>Always takes up 100% width of its parent</li>
-                            <li>
-                                The range of values containing the <code>optimum</code> value gets
-                                the <code>high</code> colour, currently set to green
-                            </li>
-                            <li>
-                                The next range of values gets the <code>low</code> threshold colour, currently set to
-                                amber
-                            </li>
-                            <li>
-                                The range of values furthest from that gets the <code>low</code> threshold colour,
-                                currently set to red
-                            </li>
-                        </ul>
-                    </Portion>
-                </Row>
-            </Section>
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+                <Text>
+                    Always takes up 100% width of its parent.
+                </Text>
 
-            {/* INTERACTIVE COMPONENT ////////////////////////////////////////////////////////////////////////////// */}
-            <Section>
-                {/* DEMO COMPONENT ================================================================================= */}
-                <Row id="component-wrapper" horizontalPadding="small" className="rendered-component">
-                    <Portion>
-                        <Div
-                            padding="small"
-                            shape="rounded"
-                            bgColour="slate-light80"
-                        >
-                            <Meter
-                                ref={interactiveElementRef}
-                                min={minValue}
-                                max={maxValue}
-                                low={lowValue}
-                                high={highValue}
-                                value={currentValue}
-                                optimum={optimumValue}
-                                height={`${heightValue}px`}
-                                label={props.label || "Sample meter"}
-                                suffix={props.suffix || "%"}
-                                {...props}
-                                {...themeConfig}
-                            />
-                        </Div>
-                    </Portion>
-                </Row>
+                <Text>
+                    The range containing the <code>optimum</code> value shows green, the next range shows amber, and the furthest range shows red.
+                </Text>
 
-                <Row horizontalPadding="small">
-                    {/* INTERACTIVE CONFIGURATOR ================================================================== */}
-                    <Portion desktopSpan="half">
-                        <Card padding="micro" shape="rounded">
-                            <Text size="large" weight="700" textColour="white" marginBottom="micro">
-                                Configure props
-                            </Text>
+                <Text>
+                    Use <code>showOptimumMarker</code> to display a visual marker at the optimum position.
+                </Text>
+            </Div>
 
-                            {/* MIN/MAX VALUES */}
-                            <Row marginBottom="micro">
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Min value"
-                                        value={minValue}
-                                        onChange={(value) => setMinValue(Number(value))}
-                                        min={0}
-                                        max={50}
-                                        step={1}
-                                    />
-                                </Portion>
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Max value"
-                                        value={maxValue}
-                                        onChange={(value) => setMaxValue(Number(value))}
-                                        min={50}
-                                        max={200}
-                                        step={1}
-                                    />
-                                </Portion>
-                            </Row>
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                <Meter
+                    ref={interactiveElementRef}
+                    label={label || undefined}
+                    min={min}
+                    max={max}
+                    low={low}
+                    high={high}
+                    value={value}
+                    optimum={optimum}
+                    showOptimumMarker={showOptimumMarker}
+                    suffix={suffix || undefined}
+                    isFullWidth
+                    height={`${height}px`}
+                    {...themeProps}
+                />
+            </Div>
 
-                            {/* LOW/HIGH THRESHOLDS */}
-                            <Row marginBottom="micro">
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Low threshold"
-                                        value={lowValue}
-                                        onChange={(value) => setLowValue(Number(value))}
-                                        min={minValue}
-                                        max={maxValue}
-                                        step={1}
-                                    />
-                                </Portion>
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="High threshold"
-                                        value={highValue}
-                                        onChange={(value) => setHighValue(Number(value))}
-                                        min={minValue}
-                                        max={maxValue}
-                                        step={1}
-                                    />
-                                </Portion>
-                            </Row>
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                    {codeString}
+                </CodeBlock>
 
-                            {/* OPTIMUM/CURRENT VALUES */}
-                            <Row marginBottom="micro">
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Optimum value"
-                                        value={optimumValue}
-                                        onChange={(value) => setOptimumValue(Number(value))}
-                                        min={minValue}
-                                        max={maxValue}
-                                        step={1}
-                                    />
-                                </Portion>
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Current value"
-                                        value={currentValue}
-                                        onChange={(value) => setCurrentValue(Number(value))}
-                                        min={minValue}
-                                        max={maxValue}
-                                        step={1}
-                                        suffix={props.suffix || "%"}
-                                    />
-                                </Portion>
-                            </Row>
+                <Div className="doc-controls">
+                    <InputField
+                        label="label"
+                        value={label}
+                        onChange={(val) => setLabel(val)}
+                        helpText="Label text displayed above the meter."
+                        marginBottom="micro" isFullWidth
+                    />
 
-                            {/* HEIGHT VALUE */}
-                            <Row marginBottom="micro">
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Height"
-                                        value={heightValue}
-                                        onChange={(value) => setHeightValue(Number(value))}
-                                        min={8}
-                                        max={100}
-                                        step={1}
-                                        suffix="px"
-                                    />
-                                </Portion>
-                            </Row>
+                    <InputField
+                        label="suffix"
+                        value={suffix}
+                        onChange={(val) => setSuffix(val)}
+                        helpText="Suffix shown after the value (e.g., %, px)."
+                        marginBottom="micro" isFullWidth
+                    />
 
-                            {/* OTHER PROPS CONFIGURATOR */}
-                            <PropsConfigurator componentName="Meter" onPropsChange={setProps} />
-                        </Card>
-                    </Portion>
+                    <Range
+                        label="value"
+                        min={min}
+                        max={max}
+                        value={value}
+                        onChange={(val : number) => setValue(Number(val))}
+                        suffix={suffix}
+                        helpText="Current value of the meter."
+                        marginBottom="micro" isFullWidth
+                    />
 
-                    {/* THEME CONFIGURATOR ========================================================================= */}
-                    <Portion desktopSpan="half">
-                        {themeConfigurator()}
-                    </Portion>
-                </Row>
-            </Section>
+                    <Range
+                        label="min"
+                        min={0}
+                        max={50}
+                        value={min}
+                        onChange={(val : number) => setMin(Number(val))}
+                        helpText="Minimum value of the range."
+                        marginBottom="micro" isFullWidth
+                    />
 
-        </Article>
+                    <Range
+                        label="max"
+                        min={50}
+                        max={200}
+                        value={max}
+                        onChange={(val : number) => setMax(Number(val))}
+                        helpText="Maximum value of the range."
+                        marginBottom="micro" isFullWidth
+                    />
+
+                    <Range
+                        label="low"
+                        min={min}
+                        max={max}
+                        value={low}
+                        onChange={(val : number) => setLow(Number(val))}
+                        helpText="Low threshold value."
+                        marginBottom="micro" isFullWidth
+                    />
+
+                    <Range
+                        label="high"
+                        min={min}
+                        max={max}
+                        value={high}
+                        onChange={(val : number) => setHigh(Number(val))}
+                        helpText="High threshold value."
+                        marginBottom="micro" isFullWidth
+                    />
+
+                    <Range
+                        label="optimum"
+                        min={min}
+                        max={max}
+                        value={optimum}
+                        onChange={(val : number) => setOptimum(Number(val))}
+                        helpText="Optimum value for the meter."
+                        marginBottom="micro" isFullWidth
+                    />
+
+                    <Range
+                        label="height"
+                        min={8}
+                        max={64}
+                        value={height}
+                        onChange={(val : number) => setHeight(Number(val))}
+                        suffix="px"
+                        helpText="Height of the meter bar."
+                        marginBottom="micro" isFullWidth
+                    />
+
+                    <Checkbox
+                        id="prop-showOptimumMarker"
+                        label="showOptimumMarker"
+                        checked={showOptimumMarker}
+                        onChange={() => setShowOptimumMarker(!showOptimumMarker)}
+                        helpText="Shows a marker at the optimum position."
+                        marginBottom="micro"
+                    />
+                </Div>
+            </Div>
+
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

@@ -1,6 +1,6 @@
 {
     "name"                 : "fictoan-react",
-    "version"              : "2.0.0-alpha.3",
+    "version"              : "2.0.0-beta.1",
     "description"          : "A full-featured, designer-friendly, yet performant framework with plain-English props and focus on rapid iteration.",
     "repository"           : {
         "type" : "git",
@@ -67,10 +67,10 @@
     "devDependencies"      : {
         "@csstools/postcss-color-mix-function" : "^3.0.12",
         "@fullhuman/postcss-purgecss"          : "^7.0.2",
-        "@types/node"                          : "^20.11.0",
+        "@types/node"                          : "^22",
         "@types/prismjs"                       : "^1.26.4",
-        "@types/react"                         : "^18.3.27",
-        "@types/react-dom"                     : "^18.3.7",
+        "@types/react"                         : "^19",
+        "@types/react-dom"                     : "^19",
         "@vitejs/plugin-react"                 : "^5.1.2",
         "agadoo"                               : "^3.0.0",
         "autoprefixer"                         : "^10.4.14",
@@ -79,9 +79,9 @@
         "postcss"                              : "^8.4.30",
         "postcss-nesting"                      : "^12.0.1",
         "prismjs"                              : "^1.29.0",
-        "react"                                : "^18.3.1",
+        "react"                                : "^19",
         "react-docgen-typescript"              : "^2.4.0",
-        "react-dom"                            : "^18.3.1",
+        "react-dom"                            : "^19",
         "rollup-plugin-visualizer"             : "^5.11.0",
         "ts-node"                              : "^10.9.2",
         "tsx"                                  : "^4.19.2",

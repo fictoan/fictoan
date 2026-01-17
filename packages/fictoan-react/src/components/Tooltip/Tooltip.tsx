@@ -13,6 +13,7 @@ interface TooltipConfig {
     content  : ReactNode;
     position : Position;
     showOn   : ShowOn;
+    zIndex   : number;
 }
 
 export interface TooltipProps {
@@ -20,6 +21,7 @@ export interface TooltipProps {
     isTooltipFor : string;
     showOn     ? : ShowOn;
     position   ? : Position;
+    zIndex     ? : number;
 }
 
 // CONSTANTS ===========================================================================================================
@@ -104,16 +106,17 @@ interface TooltipContentProps {
     content   : ReactNode;
     isVisible : boolean;
     position  : { top: number; left: number };
+    zIndex    : number;
 }
 
-const TooltipContent = ({ content, isVisible, position }: TooltipContentProps) => (
+const TooltipContent = ({ content, isVisible, position, zIndex }: TooltipContentProps) => (
     <div
         data-tooltip
         className={isVisible ? "visible" : ""}
         role="tooltip"
         style={{
             position : "fixed",
-            zIndex   : 1000,
+            zIndex   : zIndex,
             top      : `${position.top}px`,
             left     : `${position.left}px`,
         }}
@@ -128,14 +131,14 @@ const renderTooltip = (config: TooltipConfig | null, target: HTMLElement | null)
 
     if (!config || !target) {
         singletonRoot.render(
-            <TooltipContent content={null} isVisible={false} position={{ top: -9999, left: -9999 }} />
+            <TooltipContent content={null} isVisible={false} position={{ top: -9999, left: -9999 }} zIndex={100000} />
         );
         return;
     }
 
     // First render hidden to measure
     singletonRoot.render(
-        <TooltipContent content={config.content} isVisible={false} position={{ top: -9999, left: -9999 }} />
+        <TooltipContent content={config.content} isVisible={false} position={{ top: -9999, left: -9999 }} zIndex={config.zIndex} />
     );
 
     // Calculate position after render
@@ -146,7 +149,7 @@ const renderTooltip = (config: TooltipConfig | null, target: HTMLElement | null)
 
         const { top, left } = calculatePosition(tooltipEl, target, config.position);
         singletonRoot?.render(
-            <TooltipContent content={config.content} isVisible={true} position={{ top, left }} />
+            <TooltipContent content={config.content} isVisible={true} position={{ top, left }} zIndex={config.zIndex} />
         );
     });
 };
@@ -228,7 +231,19 @@ const handleClick = (e: MouseEvent) => {
 
 // INITIALIZATION ======================================================================================================
 const initializeSingleton = () => {
-    if (isInitialized || typeof document === "undefined") return;
+    if (typeof document === "undefined") return;
+
+    // Check if container still exists in DOM (might be removed after navigation)
+    const existingContainer = document.getElementById("fictoan-tooltip-singleton");
+    if (existingContainer && isInitialized) {
+        singletonContainer = existingContainer as HTMLDivElement;
+        return;
+    }
+
+    // Reset if container was removed or never created
+    isInitialized = false;
+    singletonContainer = null;
+    singletonRoot = null;
 
     // Create container
     singletonContainer = document.createElement("div");
@@ -240,7 +255,7 @@ const initializeSingleton = () => {
 
     // Initial render (hidden)
     singletonRoot.render(
-        <TooltipContent content={null} isVisible={false} position={{ top: -9999, left: -9999 }} />
+        <TooltipContent content={null} isVisible={false} position={{ top: -9999, left: -9999 }} zIndex={100000} />
     );
 
     // Set up event delegation
@@ -259,11 +274,12 @@ export const Tooltip = ({
     isTooltipFor,
     showOn = "hover",
     position = "top",
+    zIndex = 100000,
 }: TooltipProps) => {
-    const configRef = useRef<TooltipConfig>({ content: children, position, showOn });
+    const configRef = useRef<TooltipConfig>({ content: children, position, showOn, zIndex });
 
     // Update ref when props change
-    configRef.current = { content: children, position, showOn };
+    configRef.current = { content: children, position, showOn, zIndex };
 
     useEffect(() => {
         // Initialize singleton on first mount
@@ -286,7 +302,7 @@ export const Tooltip = ({
         };
     }, [isTooltipFor]);
 
-    // Update registry when content/position/showOn changes
+    // Update registry when content/position/showOn/zIndex changes
     useEffect(() => {
         registry.set(isTooltipFor, configRef.current);
 
@@ -294,7 +310,7 @@ export const Tooltip = ({
         if (activeTargetId === isTooltipFor && activeTarget) {
             renderTooltip(configRef.current, activeTarget);
         }
-    }, [children, position, showOn, isTooltipFor]);
+    }, [children, position, showOn, zIndex, isTooltipFor]);
 
     // Renders nothing - the singleton renders the actual tooltip
     return null;

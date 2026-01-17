@@ -5,7 +5,7 @@ import React from "react";
 
 // INTERNAL DEPS =======================================================================================================
 import {
-    Heading1,
+    Heading2,
     Heading4, Divider, Portion, Row, Text, Article, CodeBlock, Heading6, Button, useTheme, Callout,
 } from "fictoan-react";
 
@@ -30,7 +30,7 @@ const ThemeDocs = () => {
             {/* INTRO ////////////////////////////////////////////////////////////////////////////////////////////// */}
             <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                 <Portion>
-                    <Heading1 marginBottom="micro">Theme</Heading1>
+                    <Heading2 marginBottom="micro">Theme</Heading2>
                     <Text size="large">
                         A comprehensive list of variables to change the look and feel of your app from a single
                         place.

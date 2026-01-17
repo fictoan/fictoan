@@ -2,7 +2,7 @@
     position         : fixed;
     top              : -9999px; /* Initial position off-screen */
     left             : -9999px;
-    z-index          : 1000;
+    z-index          : 100000;
     width            : auto;
     height           : auto;
     padding          : 8px 12px;

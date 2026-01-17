@@ -1,7 +1,8 @@
 /* FLUID TYPOGRAPHY ///////////////////////////////////////////////////////// */
 :root {
     /* Fluid factor: 0 at 320px, 1 at 1600px, clamped */
-    --_fluid : clamp(0, (100vw - 20rem) / 80rem, 1);
+    /* tan(atan2(a, b)) = a / b, allows dividing lengths to get unitless ratio */
+    --_fluid : clamp(0, tan(atan2(100vw - 20rem, 80rem)), 1);
 
     /* Scale ratio grows with viewport (tighter on mobile, more dramatic on desktop) */
     /* At mobile: type-scale - 0.04, at desktop: type-scale + 0.04 */

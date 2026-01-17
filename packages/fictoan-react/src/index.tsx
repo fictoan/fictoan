@@ -48,7 +48,7 @@ export {
     Nav,
     Section,
     Span,
-    Hyperlink
+    Hyperlink,
 } from "./components/Element";
 
 export {
@@ -86,7 +86,7 @@ export {
     PinInputField,
     type PinInputFieldProps,
     ListBox,
-    type ListBoxProps
+    type ListBoxProps,
 } from "./components/Form";
 
 export { Meter, type MeterProps, type MeterMetaProps } from "./components/Meter";
@@ -94,14 +94,23 @@ export { Meter, type MeterProps, type MeterMetaProps } from "./components/Meter"
 export { Modal, type ModalProps } from "./components/Modal";
 
 export {
-    NotificationsWrapper,
-    type NotificationsWrapperProps,
-    NotificationItem,
-    type NotificationItemProps,
+    NotificationsProvider,
+    useNotifications,
+    type NotificationsProviderProps,
+    type NotificationOptions,
+    type NotifyFunction,
+    type NotificationKind,
 } from "./components/Notification";
 
-export { OptionCard, OptionCardsGroup, type OptionCardProps, type OptionCardsGroupRef } from "./components/OptionCard";
-export { useOptionCard, useOptionCardsGroup } from "./components/OptionCard";
+export {
+    OptionCard,
+    useOptionCard,
+    useOptionCardsGroup,
+    OptionCardsGroup,
+    type OptionCardProps,
+    type OptionCardsGroupRef,
+    type TickPosition,
+} from "./components/OptionCard";
 
 export { Pagination, type PaginationProps } from "./components/Pagination";
 
@@ -118,6 +127,8 @@ export {
     type ContentWrapperProps,
     SidebarHeader,
     type SidebarHeaderNewProps,
+    SidebarItemsGroup,
+    type SidebarItemsGroupNewProps,
     SidebarItem,
     type SidebarItemNewProps,
     SidebarFooter,
@@ -139,7 +150,7 @@ export { Tabs, type TabsProps } from "./components/Tabs";
 
 export { ThemeProvider, type ThemeProviderProps, useTheme } from "./components/ThemeProvider";
 
-export { ToastsWrapper, type ToastsWrapperProps, ToastItem, type ToastItemProps } from "./components/Toast";
+export { ToastsProvider, useToasts, type ToastsProviderProps, type ToastFunction } from "./components/Toast";
 
 export { Tooltip, type TooltipProps } from "./components/Tooltip";
 

@@ -4,10 +4,14 @@
         display     : flex;
         align-items : center;
         background  : var(--tabs-bg);
+    }
 
-        &.align-centre,
-        &.align-center { justify-content : center; }
-        &.align-right { justify-content : flex-end; }
+    &[data-align="centre"] nav,
+    &[data-align="center"] nav { justify-content : center; }
+
+    &[data-align="right"] nav { justify-content : flex-end; }
+
+    nav {
 
         /* TAB LABELS ======================================================= */
         ul.tab-labels-list {
@@ -70,11 +74,11 @@
             /* HAS ALERT BADGE ---------------------------------------------- */
             .tab-label.has-alert::before {
                 position         : absolute;
-                top              : 12px;
-                left             : 94%;
+                top              : -4px;
+                right            : -8px;
                 border           : 3px solid var(--tab-alert-badge-border);
-                width            : 14px;
-                height           : 14px;
+                width            : 8px;
+                height           : 8px;
                 background-color : var(--tab-alert-badge-bg);
                 border-radius    : 50%;
                 content          : "";

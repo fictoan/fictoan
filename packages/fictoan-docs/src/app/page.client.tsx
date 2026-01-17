@@ -20,7 +20,8 @@ import {
     Heading2,
     Header,
     Badge,
-} from "fictoan-react";
+    CodeBlock,
+}from "fictoan-react";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { CodeComparison } from "$components/CodeComparison/CodeComparison";
@@ -37,9 +38,6 @@ import LightingIcon from "../assets/icons/pictograms/lightning-bolt.svg";
 // STYLES ==============================================================================================================
 import "./home.css";
 
-// OTHER ===============================================================================================================
-import { PenLine, Zap, Palette, Gauge, Layers, Minimize2, FileCode, Feather, Package, RefreshCw } from "lucide-react";
-
 const HomePage = () => {
     return (
         <Article id="home-page">
@@ -47,21 +45,21 @@ const HomePage = () => {
             <Section id="hero-section" verticalPadding="tiny">
                 <Row horizontalPadding="medium" marginBottom="none">
                     <Portion>
-                        <Card id="hero-card" padding="large">
+                        <Card id="hero-card" padding="large" shape="rounded" shadow="soft">
                             <Row marginBottom="none">
                                 <Portion desktopSpan="two-third">
                                     <Heading1 textColour="white">
-                                        Build React UI in plain English
+                                        Make UI code readable again.
                                     </Heading1>
 
-                                    <Heading4 weight="400" textColour="white" marginBottom="tiny">
+                                    <Heading4 textColour="white" marginBottom="tiny">
                                         Components so obvious, and props that read like prose.
                                     </Heading4>
 
-                                    <Heading6 weight="400" textColour="white" marginBottom="small">
+                                    <Heading4 weight="400" textColour="white" marginBottom="small">
                                         Pure CSS, zero runtime. A library so simple, and UI code that can be
                                         maintained by designers.
-                                    </Heading6>
+                                    </Heading4>
                                 </Portion>
                             </Row>
 
@@ -74,6 +72,25 @@ const HomePage = () => {
             {/* INTRO CODE ///////////////////////////////////////////////////////////////////////////////////////// */}
             <Section id="intro-code-section" marginBottom="small">
                 <IntroCode />
+            </Section>
+
+            {/* QUICKSTART ///////////////////////////////////////////////////////////////////////////////////////// */}
+            <Section id="quickstart-section" marginBottom="small">
+                <Row horizontalPadding="medium">
+                    <Portion desktopSpan="half">
+                        <Heading4 marginBottom="micro">Quickstart</Heading4>
+                        <CodeBlock
+                            language="bash"
+                            withSyntaxHighlighting
+                            showCopyButton
+                            source={`pnpm add fictoan-react@2.0.0-beta.1
+# or
+yarn add fictoan-react@2.0.0-beta.1
+# or
+npm install fictoan-react@2.0.0-beta.1`}
+                        />
+                    </Portion>
+                </Row>
             </Section>
 
             {/* DIFFERENTIATORS //////////////////////////////////////////////////////////////////////////////////// */}
@@ -168,6 +185,24 @@ const HomePage = () => {
             {/* COMPARISON ///////////////////////////////////////////////////////////////////////////////////////// */}
             <Section id="comparison-section">
                 <CodeComparison />
+            </Section>
+
+            {/* COMPONENT GRID ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Section id="component-grid" verticalPadding="medium">
+                <Row horizontalPadding="medium">
+                    <Portion>
+                        <Heading4 fontStyle="serif" weight="400" marginBottom="nano">
+                            Some components
+                        </Heading4>
+                    </Portion>
+
+                    <Portion>
+                        <ComponentGrid />
+                        <Heading4 fontStyle="serif" weight="400" marginTop="micro">...and many more.</Heading4>
+                    </Portion>
+                </Row>
+
+                {/* <Div id="component-grid-bg" /> */}
             </Section>
         </Article>
     );

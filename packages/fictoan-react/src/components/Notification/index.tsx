@@ -1,7 +1,9 @@
 export {
-    NotificationsWrapper, type NotificationsWrapperProps,
-} from "./NotificationsWrapper/NotificationsWrapper";
+    NotificationsProvider,
+    useNotifications,
+    type NotificationsProviderProps,
+    type NotificationOptions,
+    type NotifyFunction,
+} from "./NotificationsProvider/NotificationsProvider";
 
-export {
-    NotificationItem, type NotificationItemProps,
-} from "./NotificationItem/NotificationItem";
+export { type NotificationKind } from "./NotificationItem/NotificationItem";

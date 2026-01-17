@@ -6,7 +6,7 @@ import svgr from "vite-plugin-svgr";
 import react from "@vitejs/plugin-react";
 import { execSync } from "child_process";
 import path from "path";
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import ts from "typescript";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -66,6 +66,25 @@ function createVisualizer() {
     };
 }
 
+// Strip trailing newlines from CSS to fix Turbopack "Invalid empty selector" error
+function stripCssTrailingNewlines() {
+    return {
+        name: "strip-css-trailing-newlines",
+        writeBundle: {
+            sequential: true,
+            handler() {
+                const cssPath = path.resolve(__dirname, "dist/index.css");
+                try {
+                    const css = readFileSync(cssPath, "utf-8");
+                    writeFileSync(cssPath, css.trimEnd());
+                } catch (e) {
+                    // CSS file might not exist yet
+                }
+            },
+        },
+    };
+}
+
 export default defineConfig({
     resolve : {
         alias : {
@@ -99,7 +118,12 @@ export default defineConfig({
                     banner         : `"use client;"`,
                 },
             ],
-            external : [...Object.keys(pkg.peerDependencies)],
+            external : [
+                ...Object.keys(pkg.peerDependencies),
+                "react/jsx-runtime",
+                "react/jsx-dev-runtime",
+                "react-dom/client",
+            ],
         },
     },
     plugins : [
@@ -107,6 +131,7 @@ export default defineConfig({
         svgr(),
         preserveUseClient(),
         createVisualizer(),
+        stripCssTrailingNewlines(),
         react(),
         dts({
             insertTypesEntry : true,

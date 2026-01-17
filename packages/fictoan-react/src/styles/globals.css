@@ -8,9 +8,9 @@
     --global-border-color  : var(--grey-light40);
 
     /* FOCUS ================================================================ */
-    --global-focus-colour  : var(--blue);
+    --global-focus-colour  : color-mix(in oklch, var(--blue), transparent 40%);
     --global-focus-width   : 2px;
-    --global-focus-offset  : 2px;
+    --global-focus-offset  : 1px;
 }
 
 :root {

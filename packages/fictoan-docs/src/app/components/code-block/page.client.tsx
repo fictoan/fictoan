@@ -1,37 +1,20 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import {
-    Div,
-    Heading1,
-    Divider,
-    Portion,
-    Row,
-    Text,
-    Article,
-    Card,
-    Form,
-    Header,
-    Select,
-    InputField,
-    Range,
-    CodeBlock,
-} from "fictoan-react";
-
-// LOCAL COMPONENTS ====================================================================================================
-import { PropsConfigurator } from "$components/PropsConfigurator/PropsConfigurator";
+import { Div, Heading2, Text, Divider, CodeBlock, RadioTabGroup, Checkbox } from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { useThemeVariables } from "$utils/useThemeVariables";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
 import "./page-code-block.css";
 
 // OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 import {
     sampleBashCode,
     sampleRustCode,
@@ -45,437 +28,169 @@ import {
     samplePythonCode,
     sampleSwiftCode,
 } from "./CodeSamples";
-import { toastProps } from "./config";
+
+const languageSamples: Record<string, string> = {
+    jsx: sampleJSXCode,
+    bash: sampleBashCode,
+    css: sampleCSSCode,
+    html: sampleHTMLCode,
+    python: samplePythonCode,
+    rust: sampleRustCode,
+    swift: sampleSwiftCode,
+    kotlin: sampleKotlinCode,
+    csharp: sampleCSharpCode,
+    objectivec: sampleObjectiveCCode,
+    markdown: sampleMarkdownCode,
+};
 
 const CodeBlockDocs = () => {
-    const [props, setProps] = useState<{ [key: string]: any }>({});
-    const [selectedLanguage, setSelectedLanguage] = useState("jsx");
-    const [selectedSampleCode, setSelectedSampleCode] = useState(sampleJSXCode);
+    // Props state
+    const [language, setLanguage] = useState("jsx");
+    const [withSyntaxHighlighting, setWithSyntaxHighlighting] = useState(true);
+    const [showLineNumbers, setShowLineNumbers] = useState(false);
+    const [showCopyButton, setShowCopyButton] = useState(true);
 
-    // Update sample code when language changes from props
-    useEffect(() => {
-        if (props.language && props.language !== selectedLanguage) {
-            setSelectedLanguage(props.language);
-            showSelectedLanguageCode(props.language);
-        }
-    }, [props.language]);
-
-    const showSelectedLanguageCode = (language: string) => {
-        switch (language) {
-            case "bash":
-                setSelectedSampleCode(sampleBashCode);
-                break;
-            case "csharp":
-                setSelectedSampleCode(sampleCSharpCode);
-                break;
-            case "html":
-                setSelectedSampleCode(sampleHTMLCode);
-                break;
-            case "css":
-                setSelectedSampleCode(sampleCSSCode);
-                break;
-            case "swift":
-                setSelectedSampleCode(sampleSwiftCode);
-                break;
-            case "rust":
-                setSelectedSampleCode(sampleRustCode);
-                break;
-            case "python":
-                setSelectedSampleCode(samplePythonCode);
-                break;
-            case "kotlin":
-                setSelectedSampleCode(sampleKotlinCode);
-                break;
-            case "jsx":
-                setSelectedSampleCode(sampleJSXCode);
-                break;
-            case "objectivec":
-                setSelectedSampleCode(sampleObjectiveCCode);
-                break;
-            case "markdown":
-                setSelectedSampleCode(sampleMarkdownCode);
-                break;
-            default:
-                setSelectedSampleCode(sampleJSXCode);
-        }
+    // Theme configurator
+    const CodeBlockComponent = (varName: string) => {
+        return varName.startsWith("code-");
     };
 
-    const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(toastProps.variables) as {
-        componentVariables: Record<string, { defaultValue?: string; value?: number; unit?: string }>;
-        handleVariableChange: (varName: string, value: string | number) => void;
-        cssVariablesList: string;
-    };
+    const {
+        interactiveElementRef,
+        componentProps: themeProps,
+        themeConfigurator,
+    } = createThemeConfigurator<HTMLPreElement>("CodeBlock", CodeBlockComponent);
+
+    // Get sample code for selected language
+    const sampleCode = languageSamples[language] || sampleJSXCode;
+
+    // Generate code
+    const codeString = useMemo(() => {
+        const props = [];
+        props.push(`    language="${language}"`);
+        if (withSyntaxHighlighting) props.push(`    withSyntaxHighlighting`);
+        if (showLineNumbers) props.push(`    showLineNumbers`);
+        if (showCopyButton) props.push(`    showCopyButton`);
+
+        return `<CodeBlock\n${props.join("\n")}\n>\n    {code}\n</CodeBlock>`;
+    }, [language, withSyntaxHighlighting, showLineNumbers, showCopyButton]);
 
     return (
-        <Article id="page-code-block">
-            <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                <Portion>
-                    <Heading1>Code block</Heading1>
-                    <Text size="large" marginBottom="small">
-                        A box to display multiple lines of code, with syntax highlighting
-                    </Text>
-                </Portion>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading2 id="component-name">
+                    CodeBlock
+                </Heading2>
 
-                <Portion>
-                    <ul>
-                        <li>
-                            For embedded code block usage, wrap your code in <code>{"{[]}"}</code> for it to work
-                        </li>
-                        <li>
-                            For some languages such as JSX, you might need to wrap individual lines
-                            with <code>``</code> backticks as well, and then do a <code>.join("\n")</code> at the end.
-                        </li>
-                    </ul>
+                <Text id="component-description" weight="400">
+                    A box to display multiple lines of code, with syntax highlighting
+                </Text>
+            </Div>
 
-                    <ul>
-                        <li>
-                            For inline code block usage, wrap with tags <code>{"<code></code>"}</code> for it to work
-                        </li>
-                    </ul>
-                </Portion>
-            </Row>
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+                <Text>
+                    For embedded code block usage, wrap your code in <code>{"{[]}"}</code> for it to work.
+                </Text>
 
-            {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////////// */}
-            <Row horizontalPadding="small" className="rendered-component">
-                {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////// */}
-                <Portion id="component-wrapper">
-                    <Div
-                        padding="micro"
-                        shape="rounded"
-                        bgColour="slate-light80"
-                        data-centered-children
-                    >
-                        <CodeBlock
-                            id="interactive-component"
-                            source={selectedSampleCode}
-                            language={props.language || "jsx"}
-                            showCopyButton={props.showCopyButton}
-                            showLineNumbers={props.showLineNumbers}
-                            withSyntaxHighlighting={props.withSyntaxHighlighting}
-                            makeEditable={props.makeEditable}
-                        />
-                    </Div>
-                </Portion>
+                <Text>
+                    For some languages such as JSX, you might need to wrap individual lines
+                    with <code>``</code> backticks as well, and then do a <code>.join("\n")</code> at the end.
+                </Text>
 
-                {/* PROPS CONFIGURATOR ///////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <PropsConfigurator componentName="CodeBlock" onPropsChange={setProps} />
-                </Portion>
+                <Text>
+                    For inline code block usage, wrap with <code>{"<code></code>"}</code> tags.
+                </Text>
+            </Div>
 
-                {/* THEME CONFIGURATOR ///////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Card padding="micro" shape="rounded">
-                        <Form>
-                            <Header verticallyCentreItems pushItemsToEnds>
-                                <Text size="large" weight="700" textColour="white" marginBottom="nano">
-                                    Set global theme values
-                                </Text>
-                            </Header>
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                <CodeBlock
+                    ref={interactiveElementRef}
+                    source={sampleCode}
+                    language={language}
+                    withSyntaxHighlighting={withSyntaxHighlighting}
+                    showLineNumbers={showLineNumbers}
+                    showCopyButton={showCopyButton}
+                    {...themeProps}
+                />
+            </Div>
 
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock
-                                        withSyntaxHighlighting
-                                        source={cssVariablesList}
-                                        language="css"
-                                        showCopyButton
-                                        marginBottom="micro"
-                                    />
-                                </Portion>
-                            </Row>
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                    {codeString}
+                </CodeBlock>
 
-                            {/* COMMON ///////////////////////////////////////////////////////////////////////////// */}
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <Text weight="700" size="large">Common</Text>
-                                </Portion>
+                <Div className="doc-controls">
+                    <RadioTabGroup
+                        id="prop-language"
+                        label="language"
+                        options={[
+                            { id: "lang-jsx", value: "jsx", label: "jsx" },
+                            { id: "lang-html", value: "html", label: "html" },
+                            { id: "lang-css", value: "css", label: "css" },
+                            { id: "lang-bash", value: "bash", label: "bash" },
+                            { id: "lang-python", value: "python", label: "python" },
+                            { id: "lang-rust", value: "rust", label: "rust" },
+                        ]}
+                        value={language}
+                        onChange={(value) => setLanguage(value)}
+                        marginBottom="micro"
+                    />
 
-                                {/* FONT =========================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <InputField
-                                        label="Font"
-                                        defaultValue={componentVariables["code-font"]?.defaultValue}
-                                        onChange={(value) => handleVariableChange("code-font", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-                            </Row>
+                    <RadioTabGroup
+                        id="prop-language-more"
+                        label="more languages"
+                        options={[
+                            { id: "lang-swift", value: "swift", label: "swift" },
+                            { id: "lang-kotlin", value: "kotlin", label: "kotlin" },
+                            { id: "lang-csharp", value: "csharp", label: "csharp" },
+                            { id: "lang-objc", value: "objectivec", label: "objc" },
+                            { id: "lang-markdown", value: "markdown", label: "markdown" },
+                        ]}
+                        value={language}
+                        onChange={(value) => setLanguage(value)}
+                        marginBottom="micro"
+                    />
 
-                            <Divider kind="secondary" verticalMargin="micro" />
+                    <Checkbox
+                        id="prop-withSyntaxHighlighting"
+                        label="withSyntaxHighlighting"
+                        checked={withSyntaxHighlighting}
+                        onChange={(checked) => setWithSyntaxHighlighting(checked)}
+                        helpText="Enable syntax highlighting for the code."
+                        marginBottom="micro"
+                    />
 
-                            {/* INLINE ///////////////////////////////////////////////////////////////////////////// */}
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <Text weight="700" size="large">Inline</Text>
-                                </Portion>
+                    <Checkbox
+                        id="prop-showLineNumbers"
+                        label="showLineNumbers"
+                        checked={showLineNumbers}
+                        onChange={(checked) => setShowLineNumbers(checked)}
+                        helpText="Display line numbers."
+                        marginBottom="micro"
+                    />
 
-                                {/* BACKGROUND ===================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Background"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-inline-bg"]?.defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("code-inline-bg", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
+                    <Checkbox
+                        id="prop-showCopyButton"
+                        label="showCopyButton"
+                        checked={showCopyButton}
+                        onChange={(checked) => setShowCopyButton(checked)}
+                        helpText="Show a button to copy the code."
+                        marginBottom="micro"
+                    />
+                </Div>
+            </Div>
 
-                                {/* TEXT =========================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Text"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-inline-text"]?.defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("code-inline-text", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* FONT SIZE ====================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Font size"
-                                        value={componentVariables["code-inline-font-size"]?.value}
-                                        onChange={(value: number) => handleVariableChange("code-inline-font-size", value)}
-                                        suffix={componentVariables["code-inline-font-size"]?.unit}
-                                        min={0} max={20} step={0.1}
-                                    />
-                                </Portion>
-
-                                {/* BORDER RADIUS ================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Border radius"
-                                        value={componentVariables["code-inline-border-radius"]?.value}
-                                        onChange={(value: number) => handleVariableChange("code-inline-border-radius", value)}
-                                        suffix={componentVariables["code-inline-border-radius"]?.unit}
-                                        min={0} max={20} step={0.1}
-                                    />
-                                </Portion>
-                            </Row>
-
-                            <Divider kind="secondary" verticalMargin="micro" />
-
-                            {/* BLOCK ////////////////////////////////////////////////////////////////////////////// */}
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <Text weight="700" size="large">Block</Text>
-                                </Portion>
-
-                                {/* BACKGROUND ===================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Background"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-bg"]?.defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("code-block-bg", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* TEXT =========================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Text"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-text"]?.defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("code-block-text", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* FONT SIZE ====================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Font size"
-                                        value={componentVariables["code-block-font-size"]?.value}
-                                        onChange={(value: number) => handleVariableChange("code-block-font-size", value)}
-                                        suffix={componentVariables["code-block-font-size"]?.unit}
-                                        min={0} max={20} step={0.1}
-                                    />
-                                </Portion>
-
-                                {/* LINE HEIGHT ==================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Line height"
-                                        value={componentVariables["code-block-line-height"]?.value}
-                                        onChange={(value: number) => handleVariableChange("code-block-line-height", value)}
-                                        min={1} max={3} step={0.1}
-                                    />
-                                </Portion>
-
-                                {/* BORDER RADIUS ================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Range
-                                        label="Border radius"
-                                        value={componentVariables["code-block-border-radius"]?.value}
-                                        onChange={(value: number) => handleVariableChange("code-block-border-radius", value)}
-                                        suffix={componentVariables["code-block-border-radius"]?.unit}
-                                        min={0} max={20} step={0.1}
-                                    />
-                                </Portion>
-
-                                {/* LINE NUMBERS =================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Line numbers"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-line-numbers"]?.defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("code-block-line-numbers", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-                            </Row>
-
-                            <Divider kind="secondary" verticalMargin="micro" />
-
-                            {/* COPY BUTTON //////////////////////////////////////////////////////////////////////// */}
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <Text weight="700" size="large">Copy button</Text>
-                                </Portion>
-
-                                {/* COPY BUTTON BACKGROUND ======================================================= */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Copy button background"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-copy-button-bg"]?.defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("code-block-copy-button-bg", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* COPY BUTTON TEXT ============================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Copy button text"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-copy-button-text"]?.defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("code-block-copy-button-text", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* COPY BUTTON BORDER ============================================================ */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Copy button border"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-copy-button-border"]?.defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("code-block-copy-button-border", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                <Portion desktopSpan="half" />
-
-                                {/* COPIED BADGE BACKGROUND ====================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Copied badge background"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-copied-badge-bg"]?.defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("code-block-copied-badge-bg", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* COPIED BADGE TEXT ============================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Copied badge text"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-copied-badge-text"]?.defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("code-block-copied-badge-text", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* COPIED BADGE BORDER =========================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Copied badge border"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["code-block-copied-badge-border"]?.defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("code-block-copied-badge-border", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-                            </Row>
-
-                            <Divider kind="secondary" verticalMargin="micro" />
-
-                            {/* TOKENS ///////////////////////////////////////////////////////////////////////////// */}
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <Text weight="700" size="large">Tokens</Text>
-                                    <Text>Did you really expect 45 dropdowns here?</Text>
-                                </Portion>
-                            </Row>
-                        </Form>
-                    </Card>
-                </Portion>
-            </Row>
-        </Article>
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

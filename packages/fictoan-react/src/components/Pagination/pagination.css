@@ -124,15 +124,19 @@
 [data-pagination] .pagination-item svg {
     width           : 16px;
     height          : 16px;
-    fill            : none;
     stroke          : var(--pagination-arrows-stroke);
+    fill            : none;
     stroke-width    : 2px;
     stroke-linecap  : round;
     stroke-linejoin : round;
 }
 
 [data-pagination] .pagination-item:disabled svg {
-    stroke : var(--pagination-arrows-stroke-disabled);
+    stroke          : var(--pagination-arrows-stroke-disabled);
+    fill            : none;
+    stroke-width    : 2px;
+    stroke-linecap  : round;
+    stroke-linejoin : round;
 }
 
 /* ELLIPSIS ///////////////////////////////////////////////////////////////// */

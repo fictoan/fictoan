@@ -1,492 +1,333 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
 import {
-    Element,
-    Heading1,
-    Heading4,
-    Divider,
-    Portion,
-    Row,
+    Div,
+    Heading2,
     Text,
-    Article,
-    Card,
-    Form,
-    Header,
-    Checkbox,
+    Divider,
     Range,
-    Select,
     CodeBlock,
     InputField,
+    RadioTabGroup,
+    Checkbox,
 } from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { useThemeVariables } from "$utils/useThemeVariables";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
 import "./page-range.css";
 
 // OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
-import { rangeProps } from "./config";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
 const RangeDocs = () => {
-    const {componentVariables, handleVariableChange, cssVariablesList} = useThemeVariables(rangeProps.variables);
+    // Mode toggle
+    const [mode, setMode] = useState<"single" | "dual">("single");
 
-    // Single-thumb range state
-    const [ rangeValue, setRangeValue ] = useState(50);
-    const [ selectedMin, setSelectedMin ] = useState(0);
-    const [ selectedMax, setSelectedMax ] = useState(100);
-    const [ selectedStep, setSelectedStep ] = useState(1);
-    const [ selectedSuffix, setSelectedSuffix ] = useState("px");
-    const [ showLabel, setShowLabel ] = useState(true);
-    const [ rangeLabel, setRangeLabel ] = useState("Label");
+    // Single-thumb state
+    const [singleValue, setSingleValue] = useState(50);
+    const [singleMin, setSingleMin] = useState(0);
+    const [singleMax, setSingleMax] = useState(100);
+    const [singleStep, setSingleStep] = useState(1);
 
-    // Dual-thumb range state
-    const [ dualRangeValue, setDualRangeValue ] = useState<[ number, number ]>([ 25, 75 ]);
-    const [ dualMin, setDualMin ] = useState(0);
-    const [ dualMax, setDualMax ] = useState(100);
-    const [ dualStep, setDualStep ] = useState(5);
-    const [ dualSuffix, setDualSuffix ] = useState("USD");
-    const [ showDualLabel, setShowDualLabel ] = useState(true);
-    const [ dualRangeLabel, setDualRangeLabel ] = useState("Price range");
+    // Dual-thumb state
+    const [dualValue, setDualValue] = useState<[number, number]>([25, 75]);
+    const [dualMin, setDualMin] = useState(0);
+    const [dualMax, setDualMax] = useState(100);
+    const [dualStep, setDualStep] = useState(5);
+
+    // Common props
+    const [label, setLabel] = useState("Select a value");
+    const [suffix, setSuffix] = useState("");
+    const [showLabel, setShowLabel] = useState(true);
+    const [disabled, setDisabled] = useState(false);
+    const [isFullWidth, setIsFullWidth] = useState(true);
+
+    // Theme configurator
+    const RangeComponent = (varName: string) => {
+        return varName.startsWith("range-");
+    };
+
+    const {
+        interactiveElementRef,
+        componentProps: themeProps,
+        themeConfigurator,
+    } = createThemeConfigurator<HTMLInputElement>("Range", RangeComponent);
+
+    // Generate code
+    const codeString = useMemo(() => {
+        if (mode === "single") {
+            const props = [];
+            props.push(`id="my-range"`);
+            if (showLabel && label) props.push(`label="${label}"`);
+            props.push(`value={value}`);
+            props.push(`onChange={(val) => setValue(val)}`);
+            if (singleMin !== 0) props.push(`min={${singleMin}}`);
+            if (singleMax !== 100) props.push(`max={${singleMax}}`);
+            if (singleStep !== 1) props.push(`step={${singleStep}}`);
+            if (suffix) props.push(`suffix="${suffix}"`);
+            if (disabled) props.push(`disabled`);
+            if (isFullWidth) props.push(`isFullWidth`);
+
+            return `import { useState } from "react";
+import { Range } from "fictoan-react";
+
+const [value, setValue] = useState(${singleValue});
+
+<Range
+    ${props.join("\n    ")}
+/>`;
+        } else {
+            const props = [];
+            props.push(`id="my-range"`);
+            if (showLabel && label) props.push(`label="${label}"`);
+            props.push(`value={value}`);
+            props.push(`onChange={(val) => setValue(val)}`);
+            if (dualMin !== 0) props.push(`min={${dualMin}}`);
+            if (dualMax !== 100) props.push(`max={${dualMax}}`);
+            if (dualStep !== 1) props.push(`step={${dualStep}}`);
+            if (suffix) props.push(`suffix="${suffix}"`);
+            props.push(`minLabel="Minimum value"`);
+            props.push(`maxLabel="Maximum value"`);
+            if (disabled) props.push(`disabled`);
+            if (isFullWidth) props.push(`isFullWidth`);
+
+            return `import { useState } from "react";
+import { Range } from "fictoan-react";
+
+const [value, setValue] = useState<[number, number]>([${dualValue[0]}, ${dualValue[1]}]);
+
+<Range
+    ${props.join("\n    ")}
+/>`;
+        }
+    }, [mode, label, showLabel, suffix, disabled, isFullWidth, singleValue, singleMin, singleMax, singleStep, dualValue, dualMin, dualMax, dualStep]);
 
     return (
-        <Article id="page-range">
-            <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                <Portion>
-                    <Heading1>Range</Heading1>
-                    <Text size="large" marginBottom="small">
-                        A fully custom slider component that allows users to select a single value or a range of values.
-                        Built with the same architecture as modern frameworks like Material-UI, shadcn/ui, and Radix UI.
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading2 id="component-name">
+                    Range
+                </Heading2>
+
+                <Text id="component-description" weight="400">
+                    A slider component for selecting a single value or a range of values
+                </Text>
+            </Div>
+
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
+
+                <Text>
+                    Pass a <code>number</code> for single-thumb mode, or <code>[min, max]</code> array for dual-thumb mode.
+                </Text>
+
+                <Text>
+                    Fully accessible with keyboard navigation (Arrow keys, Home/End, PageUp/Down).
+                </Text>
+
+                <Text>
+                    In dual-thumb mode, handles can't pass each other (collision prevention).
+                </Text>
+            </Div>
+
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                {mode === "single" ? (
+                    <Range
+                        {...themeProps}
+                        ref={interactiveElementRef}
+                        id="demo-range"
+                        label={showLabel ? label : undefined}
+                        value={singleValue}
+                        onChange={(val: number) => setSingleValue(val)}
+                        min={singleMin}
+                        max={singleMax}
+                        step={singleStep}
+                        suffix={suffix || undefined}
+                        disabled={disabled}
+                        isFullWidth={isFullWidth}
+                    />
+                ) : (
+                    <Range
+                        {...themeProps}
+                        ref={interactiveElementRef}
+                        id="demo-range"
+                        label={showLabel ? label : undefined}
+                        value={dualValue}
+                        onChange={(val: [number, number]) => setDualValue(val)}
+                        min={dualMin}
+                        max={dualMax}
+                        step={dualStep}
+                        suffix={suffix || undefined}
+                        minLabel="Minimum value"
+                        maxLabel="Maximum value"
+                        disabled={disabled}
+                        isFullWidth={isFullWidth}
+                    />
+                )}
+
+                <Div marginTop="nano">
+                    <Text size="small">
+                        {mode === "single"
+                            ? `Value: ${singleValue}`
+                            : `Range: ${dualValue[0]} – ${dualValue[1]}`
+                        }
                     </Text>
-                </Portion>
+                </Div>
+            </Div>
 
-                <Portion>
-                    <Heading4 marginTop="micro">Features</Heading4>
-                    <ul>
-                        <li><strong>Single-thumb mode</strong> – Select one value (pass a number)</li>
-                        <li><strong>Dual-thumb mode</strong> – Select a range (pass an array <code>[min, max]</code>)
-                        </li>
-                        <li><strong>Custom implementation</strong> – Full styling control, no browser inconsistencies
-                        </li>
-                        <li><strong>Fully accessible</strong> – Keyboard navigation (Arrow keys, Home/End, PageUp/Down)
-                        </li>
-                        <li><strong>Touch-friendly</strong> – Mouse, touch, and pointer events</li>
-                        <li><strong>ARIA compliant</strong> – Proper roles and labels for screen readers</li>
-                        <li><strong>Collision prevention</strong> – Dual-thumb handles can't pass each other</li>
-                        <li><strong>Step snapping</strong> – Values snap to defined increments</li>
-                    </ul>
-                </Portion>
-            </Row>
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                    {codeString}
+                </CodeBlock>
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+                <Div className="doc-controls">
+                    <RadioTabGroup
+                        id="prop-mode"
+                        label="Mode"
+                        options={[
+                            { id: "mode-single", value: "single", label: "Single thumb" },
+                            { id: "mode-dual", value: "dual", label: "Dual thumb" },
+                        ]}
+                        value={mode}
+                        onChange={(val) => setMode(val as "single" | "dual")}
+                        helpText="Single thumb for one value, dual thumb for a range."
+                        marginBottom="micro"
+                    />
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/*  SINGLE-THUMB CONFIGURATOR */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Row horizontalPadding="huge" marginTop="medium" marginBottom="tiny">
-                <Portion>
-                    <Heading4>Single-Thumb Range</Heading4>
-                    <Text marginBottom="micro">
-                        Select a single value by passing a number to the <code>value</code> prop.
-                        The <code>onChange</code> handler receives the value directly (not an event).
-                    </Text>
-                </Portion>
-            </Row>
+                    <Checkbox
+                        id="prop-showLabel"
+                        label="Show label"
+                        checked={showLabel}
+                        onChange={() => setShowLabel(!showLabel)}
+                        marginBottom="micro"
+                    />
 
-            <Row horizontalPadding="small" className="rendered-component">
-                {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////// */}
-                <Portion id="component-wrapper">
-                    <Element
-                        as="div" padding="small" shape="rounded" bgColour="slate-light80"
-                        data-centered-children
-                    >
-                        <Range
-                            label={showLabel ? rangeLabel : undefined}
-                            value={rangeValue}
-                            onChange={(value : React.SetStateAction<number>) => setRangeValue(value)}
-                            min={selectedMin}
-                            max={selectedMax}
-                            step={selectedStep}
-                            suffix={selectedSuffix}
+                    {showLabel && (
+                        <InputField
+                            label="label"
+                            value={label}
+                            onChange={(val) => setLabel(val)}
+                            helpText="Label text displayed above the range."
+                            marginBottom="micro" isFullWidth
                         />
-                    </Element>
-                </Portion>
+                    )}
 
-                {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Form>
-                        <Card padding="micro" shape="rounded">
-                            <Header verticallyCentreItems pushItemsToEnds marginBottom="micro">
-                                <Text size="large" weight="700" textColour="white">
-                                    Configure props
-                                </Text>
-                            </Header>
+                    {mode === "single" ? (
+                        <>
+                            <Range
+                                id="prop-min"
+                                label="min"
+                                min={-100}
+                                max={singleMax - 1}
+                                value={singleMin}
+                                onChange={(val: number) => setSingleMin(val)}
+                                helpText="Minimum value."
+                                marginBottom="micro" isFullWidth
+                            />
 
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton
-                                               marginBottom="micro">
-                                        {[
-                                            `// Paste this in your content file`,
-                                            `const [value, setValue] = useState(${rangeValue});`,
-                                            ` `,
-                                            `<Range`,
-                                            showLabel ? `    label="${rangeLabel}"` : null,
-                                            `    value={value}`,
-                                            `    onChange={(value) => setValue(value)}`,
-                                            `    min={${selectedMin}}`,
-                                            `    max={${selectedMax}}`,
-                                            `    step={${selectedStep}}`,
-                                            selectedSuffix ? `    suffix="${selectedSuffix}"` : null,
-                                            `/>`,
-                                        ].filter(Boolean).join("\n")}
-                                    </CodeBlock>
-                                </Portion>
+                            <Range
+                                id="prop-max"
+                                label="max"
+                                min={singleMin + 1}
+                                max={200}
+                                value={singleMax}
+                                onChange={(val: number) => setSingleMax(val)}
+                                helpText="Maximum value."
+                                marginBottom="micro" isFullWidth
+                            />
 
-                                {/* SHOW LABEL ===================================================================== */}
-                                <Portion>
-                                    <Checkbox
-                                        id="checkbox-label"
-                                        name="checkbox-label"
-                                        label="Show label"
-                                        checked={showLabel}
-                                        onChange={() => setShowLabel(!showLabel)}
-                                    />
+                            <Range
+                                id="prop-step"
+                                label="step"
+                                min={1}
+                                max={20}
+                                value={singleStep}
+                                onChange={(val: number) => setSingleStep(val)}
+                                helpText="Step increment."
+                                marginBottom="micro" isFullWidth
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <Range
+                                id="prop-min-dual"
+                                label="min"
+                                min={-100}
+                                max={dualMax - 1}
+                                value={dualMin}
+                                onChange={(val: number) => setDualMin(val)}
+                                helpText="Minimum value."
+                                marginBottom="micro" isFullWidth
+                            />
 
-                                    <Divider kind="secondary" horizontalMargin="none" verticalMargin="nano" />
-                                </Portion>
+                            <Range
+                                id="prop-max-dual"
+                                label="max"
+                                min={dualMin + 1}
+                                max={200}
+                                value={dualMax}
+                                onChange={(val: number) => setDualMax(val)}
+                                helpText="Maximum value."
+                                marginBottom="micro" isFullWidth
+                            />
 
-                                {/* LABEL TEXT ==================================================================== */}
-                                {showLabel && (
-                                    <Portion>
-                                        <InputField
-                                            type="text"
-                                            value={rangeLabel}
-                                            onChange={(value : React.SetStateAction<string>) => setRangeLabel(value)}
-                                            placeholder="Enter label text"
-                                        />
+                            <Range
+                                id="prop-step-dual"
+                                label="step"
+                                min={1}
+                                max={20}
+                                value={dualStep}
+                                onChange={(val: number) => setDualStep(val)}
+                                helpText="Step increment."
+                                marginBottom="micro" isFullWidth
+                            />
+                        </>
+                    )}
 
-                                        <Divider kind="secondary" horizontalMargin="none" verticalMargin="nano" />
-                                    </Portion>
-                                )}
+                    <InputField
+                        label="suffix"
+                        value={suffix}
+                        onChange={(val) => setSuffix(val)}
+                        helpText="Suffix shown after the value (e.g., px, %, USD)."
+                        marginBottom="micro" isFullWidth
+                    />
 
-                                {/* MIN VALUE ===================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <InputField
-                                        type="number"
-                                        label="Min value"
-                                        value={selectedMin}
-                                        onChange={(value : React.SetStateAction<string>) => setSelectedMin(Number(value))}
-                                    />
-                                </Portion>
+                    <Checkbox
+                        id="prop-disabled"
+                        label="disabled"
+                        checked={disabled}
+                        onChange={() => setDisabled(!disabled)}
+                        helpText="Disables the range input."
+                        marginBottom="micro"
+                    />
 
-                                {/* MAX VALUE ===================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <InputField
-                                        type="number"
-                                        label="Max value"
-                                        value={selectedMax}
-                                        onChange={(value : React.SetStateAction<string>) => setSelectedMax(Number(value))}
-                                    />
-                                </Portion>
+                    <Checkbox
+                        id="prop-isFullWidth"
+                        label="isFullWidth"
+                        checked={isFullWidth}
+                        onChange={() => setIsFullWidth(!isFullWidth)}
+                        helpText="Makes the range take full width of its container."
+                        marginBottom="micro"
+                    />
+                </Div>
+            </Div>
 
-                                {/* STEP VALUE ==================================================================== */}
-                                <Portion>
-                                    <InputField
-                                        type="number"
-                                        label="Step size"
-                                        value={selectedStep}
-                                        onChange={(value : React.SetStateAction<string>) => setSelectedStep(Number(value))}
-                                    />
-
-                                    <Divider kind="secondary" horizontalMargin="none" verticalMargin="nano" />
-                                </Portion>
-
-                                {/* SUFFIX ======================================================================== */}
-                                <Portion>
-                                    <InputField
-                                        type="text"
-                                        label="Suffix"
-                                        value={selectedSuffix}
-                                        onChange={(value : React.SetStateAction<string>) => setSelectedSuffix((value))}
-                                    />
-                                </Portion>
-                            </Row>
-                        </Card>
-                    </Form>
-                </Portion>
-
-                {/* GLOBAL THEME /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Card padding="micro" shape="rounded">
-                        <Form>
-                            <Header verticallyCentreItems pushItemsToEnds>
-                                <Text size="large" weight="700" textColour="white" marginBottom="nano">
-                                    Set global theme values
-                                </Text>
-                            </Header>
-
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock
-                                        withSyntaxHighlighting
-                                        source={cssVariablesList}
-                                        language="css"
-                                        showCopyButton
-                                        marginBottom="micro"
-                                    />
-                                </Portion>
-
-                                {/* TRACK BACKGROUND ============================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Track background"
-                                        options={[ {
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        },
-                                            ...colourOptions ]}
-                                        defaultValue={componentVariables["range-track-bg"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("range-track-bg", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* THUMB BACKGROUND ============================================================= */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Thumb background"
-                                        options={[ {
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        },
-                                            ...colourOptions ]}
-                                        defaultValue={componentVariables["range-thumb-bg"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("range-thumb-bg", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* THUMB BORDER ================================================================ */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Thumb border"
-                                        options={[ {
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        },
-                                            ...colourOptions ]}
-                                        defaultValue={componentVariables["range-thumb-border"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("range-thumb-border", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* FOCUS BORDER ================================================================= */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Focus border"
-                                        options={[ {
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        },
-                                            ...colourOptions ]}
-                                        defaultValue={componentVariables["range-border-focus"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("range-border-focus", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                {/* FOCUS OUTLINE ================================================================ */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Focus outline"
-                                        options={[ {
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        },
-                                            ...colourOptions ]}
-                                        defaultValue={componentVariables["range-outline-focus"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("range-outline-focus", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-                            </Row>
-                        </Form>
-                    </Card>
-                </Portion>
-            </Row>
-
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="medium" />
-
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/*  DUAL-THUMB CONFIGURATOR */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Row horizontalPadding="huge" marginTop="medium" marginBottom="tiny">
-                <Portion>
-                    <Heading4>Dual-Thumb Range</Heading4>
-                    <Text marginBottom="micro">
-                        Select a range of values by passing an array <code>[min, max]</code> to
-                        the <code>value</code> prop.
-                        The <code>onChange</code> handler receives the updated array with both values.
-                    </Text>
-                </Portion>
-            </Row>
-
-            <Row horizontalPadding="small" className="rendered-component">
-                {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////// */}
-                <Portion id="component-wrapper">
-                    <Element
-                        as="div" padding="small" shape="rounded" bgColour="slate-light80"
-                        data-centered-children
-                    >
-                        <Range
-                            id="dual-range"
-                            label={showDualLabel ? dualRangeLabel : undefined}
-                            value={dualRangeValue}
-                            onChange={(value: React.SetStateAction<[number, number]>) => setDualRangeValue(value)}
-                            min={dualMin}
-                            max={dualMax}
-                            step={dualStep}
-                            suffix={dualSuffix}
-                            minLabel="Minimum value"
-                            maxLabel="Maximum value"
-                        />
-                    </Element>
-                </Portion>
-
-                {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Form>
-                        <Card padding="micro" shape="rounded">
-                            <Header verticallyCentreItems pushItemsToEnds marginBottom="micro">
-                                <Text size="large" weight="700" textColour="white">
-                                    Configure props
-                                </Text>
-                            </Header>
-
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton
-                                               marginBottom="micro">
-                                        {[
-                                            `// Paste this in your content file`,
-                                            `const [value, setValue] = useState<[number, number]>([${dualRangeValue[0]}, ${dualRangeValue[1]}]);`,
-                                            ` `,
-                                            `<Range`,
-                                            `    id="dual-range"`,
-                                            showDualLabel ? `    label="${dualRangeLabel}"` : null,
-                                            `    value={value}`,
-                                            `    onChange={(value) => setValue(value)}`,
-                                            `    min={${dualMin}}`,
-                                            `    max={${dualMax}}`,
-                                            `    step={${dualStep}}`,
-                                            dualSuffix ? `    suffix="${dualSuffix}"` : null,
-                                            `    minLabel="Minimum value"`,
-                                            `    maxLabel="Maximum value"`,
-                                            `/>`,
-                                        ].filter(Boolean).join("\n")}
-                                    </CodeBlock>
-                                </Portion>
-
-                                {/* SHOW LABEL ===================================================================== */}
-                                <Portion>
-                                    <Checkbox
-                                        id="checkbox-dual-label"
-                                        name="checkbox-dual-label"
-                                        label="Show label"
-                                        checked={showDualLabel}
-                                        onChange={() => setShowDualLabel(!showDualLabel)}
-                                    />
-
-                                    <Divider kind="secondary" horizontalMargin="none" verticalMargin="nano" />
-                                </Portion>
-
-                                {/* LABEL TEXT ==================================================================== */}
-                                {showDualLabel && (
-                                    <Portion>
-                                        <InputField
-                                            type="text"
-                                            label="Label text"
-                                            value={dualRangeLabel}
-                                            onChange={(value) => setDualRangeLabel(value)}
-                                            placeholder="Enter label text"
-                                        />
-
-                                        <Divider kind="secondary" horizontalMargin="none" verticalMargin="nano" />
-                                    </Portion>
-                                )}
-
-                                {/* MIN VALUE ===================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <InputField
-                                        type="number"
-                                        label="Min value"
-                                        value={dualMin}
-                                        onChange={(value) => setDualMin(Number(value))}
-                                    />
-                                </Portion>
-
-                                {/* MAX VALUE ===================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <InputField
-                                        type="number"
-                                        label="Max value"
-                                        value={dualMax}
-                                        onChange={(value) => setDualMax(Number(value))}
-                                    />
-                                </Portion>
-
-                                {/* STEP VALUE ==================================================================== */}
-                                <Portion>
-                                    <InputField
-                                        type="number"
-                                        label="Step size"
-                                        value={dualStep}
-                                        onChange={(value) => setDualStep(Number(value))}
-                                    />
-
-                                    <Divider kind="secondary" horizontalMargin="none" verticalMargin="nano" />
-                                </Portion>
-
-                                {/* SUFFIX ======================================================================== */}
-                                <Portion>
-                                    <InputField
-                                        type="text"
-                                        label="Suffix"
-                                        value={dualSuffix}
-                                        onChange={(value) => setDualSuffix(value)}
-                                    />
-                                </Portion>
-
-                                {/* CURRENT VALUES ================================================================ */}
-                                <Portion>
-                                    <Divider kind="secondary" horizontalMargin="none" verticalMargin="nano" />
-                                    <Text size="small" marginTop="nano">
-                                        <strong>Current range:</strong> {dualRangeValue[0]} – {dualRangeValue[1]}
-                                    </Text>
-                                </Portion>
-                            </Row>
-                        </Card>
-                    </Form>
-                </Portion>
-            </Row>
-        </Article>
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 

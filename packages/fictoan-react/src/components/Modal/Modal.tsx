@@ -78,17 +78,23 @@ export const Modal = React.forwardRef(
             }
         }, [isOpen, modalId]);
 
-        // Handle Escape key
+        // Listen for popover toggle events to sync React state when closed externally
+        // (e.g., clicking outside with popover="auto", or pressing Escape)
         useEffect(() => {
-            const handleEscape = (e: KeyboardEvent) => {
-                if (e.key === "Escape" && isDismissible && isOpen && onClose) {
+            const modal = document.querySelector(`#${modalId}[data-modal]`);
+            if (!modal || !(modal instanceof HTMLElement)) return;
+
+            const handleToggle = (e: Event) => {
+                const toggleEvent = e as ToggleEvent;
+                // If popover was closed externally and React still thinks it's open, sync state
+                if (toggleEvent.newState === "closed" && isOpen && onClose) {
                     onClose();
                 }
             };
 
-            document.addEventListener("keydown", handleEscape);
-            return () => document.removeEventListener("keydown", handleEscape);
-        }, [isDismissible, isOpen, onClose]);
+            modal.addEventListener("toggle", handleToggle);
+            return () => modal.removeEventListener("toggle", handleToggle);
+        }, [modalId, isOpen, onClose]);
 
         return (
             <Element<ModalElementType>

@@ -1,15 +1,10 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React from "react";
+import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Div, Heading6, Text, Divider, Callout } from "fictoan-react";
-
-// LOCAL COMPONENTS ====================================================================================================
-import { PropsConfiguratorNew } from "$components/PropsConfigurator/PropsConfiguratorNew";
-import { ComponentDocsLayout } from "../ComponentDocsLayout";
-import { calloutRegistry } from "./props.registry";
+import { Div, Heading2, Text, Divider, Callout, CodeBlock, InputField, TextArea, RadioTabGroup } from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -18,31 +13,43 @@ import { createThemeConfigurator } from "$utils/themeConfigurator";
 import "../../../styles/fictoan-theme.css";
 import "./page-callout.css";
 
-const CalloutDocs = () => {
-    const [ props, setProps ] = React.useState<{ [key: string]: any }>({});
+// OTHER ===============================================================================================================
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
-    const CalloutComponent = (varName : string) => {
+const CalloutDocs = () => {
+    // Props state
+    const [kind, setKind] = useState("info");
+    const [children, setChildren] = useState("Content goes here");
+
+    // Theme configurator
+    const CalloutComponent = (varName: string) => {
         return varName.startsWith("callout-");
     };
 
     const {
         interactiveElementRef,
-        componentProps : themeConfig,
+        componentProps: themeProps,
         themeConfigurator,
-    } = createThemeConfigurator("Callout", CalloutComponent);
+    } = createThemeConfigurator<HTMLDivElement>("Callout", CalloutComponent);
+
+    // Generate code
+    const codeString = useMemo(() => {
+        const props = [];
+        if (kind && kind !== "info") props.push(`    kind="${kind}"`);
+
+        const propsString = props.length > 0 ? `\n${props.join("\n")}\n` : "";
+        return `<Callout${propsString}>\n    ${children}\n</Callout>`;
+    }, [kind, children]);
 
     return (
         <ComponentDocsLayout>
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
-                <Heading6 id="component-name">
+                <Heading2 id="component-name">
                     Callout
-                </Heading6>
+                </Heading2>
 
-                <Text
-                    id="component-description"
-                    weight="400"
-                >
+                <Text id="component-description" weight="400">
                     A box that can be used to highlight important information. It comes in four variants.
                 </Text>
             </Div>
@@ -64,16 +71,43 @@ const CalloutDocs = () => {
             <Div id="demo-component">
                 <Callout
                     ref={interactiveElementRef}
-                    {...props}
-                    {...themeConfig}
+                    kind={kind as any}
+                    {...themeProps}
                 >
-                    {props.children || "Content goes here"}
+                    {children}
                 </Callout>
             </Div>
 
             {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="props-config">
-                <PropsConfiguratorNew registry={calloutRegistry} onPropsChange={setProps} />
+                <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                    {codeString}
+                </CodeBlock>
+
+                <Div className="doc-controls">
+                    <RadioTabGroup
+                        id="prop-kind"
+                        label="kind"
+                        options={[
+                            { id: "kind-info", value: "info", label: "info" },
+                            { id: "kind-success", value: "success", label: "success" },
+                            { id: "kind-warning", value: "warning", label: "warning" },
+                            { id: "kind-error", value: "error", label: "error" },
+                        ]}
+                        value={kind}
+                        onChange={(value) => setKind(value)}
+                        marginBottom="micro"
+                    />
+
+                    <TextArea
+                        label="children"
+                        value={children}
+                        onChange={(value) => setChildren(value)}
+                        helpText="The main content of the callout."
+                        rows={3}
+                        marginBottom="micro" isFullWidth
+                    />
+                </Div>
             </Div>
 
             {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}

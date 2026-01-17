@@ -1,248 +1,200 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React, { useEffect, useState } from "react";
+import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Callout, Element, Heading1, Heading4, Divider, Portion, Row, Select, Text, Article, Button, Form, Card, Header, InputField, Checkbox, RadioButton, Div, CodeBlock } from "fictoan-react";
+import {
+    Div,
+    Heading2,
+    Text,
+    Divider,
+    Select,
+    CodeBlock,
+    InputField,
+    Checkbox,
+    RadioTabGroup,
+} from "fictoan-react";
 
 // UTILS ===============================================================================================================
-import { useThemeVariables } from "../../../utils/useThemeVariables";
+import { createThemeConfigurator } from "$utils/themeConfigurator";
 
 // STYLES ==============================================================================================================
+import "../../../styles/fictoan-theme.css";
 import "./page-select.css";
 
 // OTHER ===============================================================================================================
-import { colourOptions } from "../../colour/colours";
-import { selectProps } from "./config";
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
 const SelectDocs = () => {
-    const [label, setLabel] = useState("Select an option");
-    const [options, setOptions] = useState([
-        { label : "Option 1", value : "1" },
-    ]);
-    const [selectedDefaultValue, setSelectedDefaultValue] = useState("");
+    // Props state
+    const [label, setLabel] = useState("Choose a fruit");
+    const [helpText, setHelpText] = useState("");
+    const [selectedValue, setSelectedValue] = useState("");
+    const [disabled, setDisabled] = useState(false);
     const [isFullWidth, setIsFullWidth] = useState(false);
 
-    // Function to handle adding a new option
-    const addOption = () => {
-        setOptions([...options, { label : "", value : "" }]);
+    // Sample options
+    const options = [
+        { label: "Apple", value: "apple" },
+        { label: "Banana", value: "banana" },
+        { label: "Cherry", value: "cherry" },
+        { label: "Dragon fruit", value: "dragon-fruit" },
+        { label: "Elderberry", value: "elderberry" },
+    ];
+
+    // Theme configurator
+    const SelectComponent = (varName: string) => {
+        return varName.startsWith("select-") || varName.startsWith("input-field-");
     };
 
-    // Function to handle updating an option
-    const updateOption = (index, newLabel, newValue) => {
-        const newOptions = [...options];
-        newOptions[index] = { label : newLabel, value : newValue };
-        setOptions(newOptions);
-    };
+    const {
+        interactiveElementRef,
+        componentProps: themeProps,
+        themeConfigurator,
+    } = createThemeConfigurator<HTMLSelectElement>("Select", SelectComponent);
 
-    const { componentVariables, handleVariableChange, cssVariablesList } = useThemeVariables(selectProps.variables);
+    // Generate code
+    const codeString = useMemo(() => {
+        const props = [];
+        if (label) props.push(`label="${label}"`);
+        props.push(`options={[
+        { label: "Apple", value: "apple" },
+        { label: "Banana", value: "banana" },
+        { label: "Cherry", value: "cherry" },
+    ]}`);
+        props.push(`value={value}`);
+        props.push(`onChange={(val) => setValue(val)}`);
+        if (helpText) props.push(`helpText="${helpText}"`);
+        if (disabled) props.push(`disabled`);
+        if (isFullWidth) props.push(`isFullWidth`);
+
+        return `import { useState } from "react";
+import { Select } from "fictoan-react";
+
+const [value, setValue] = useState("${selectedValue}");
+
+<Select
+    ${props.join("\n    ")}
+/>`;
+    }, [label, helpText, selectedValue, disabled, isFullWidth]);
 
     return (
-        <Article id="page-select">
-            <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
-                <Portion>
-                    <Heading1>Select dropdown</Heading1>
-                    <Text size="large" marginBottom="small">
-                        A native select dropdown for picking a choice from a long list
-                    </Text>
-                </Portion>
+        <ComponentDocsLayout>
+            {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-header">
+                <Heading2 id="component-name">
+                    Select
+                </Heading2>
 
-                <Portion>
-                    
-                    <ul>
-                        <li>
-                            It takes the width of the longest option, use <code>isFullWidth</code> to make it take the
-                            width of the parent container
-                        </li>
-                    </ul>
-                </Portion>
-            </Row>
+                <Text id="component-description" weight="400">
+                    A native select dropdown for picking a choice from a list
+                </Text>
+            </Div>
 
-            <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+            {/* INTRO NOTES //////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="intro-notes">
+                <Divider kind="tertiary" verticalMargin="micro" />
 
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            {/*  CONFIGURATOR */}
-            {/* //////////////////////////////////////////////////////////////////////////////////////////////////// */}
-            <Row horizontalPadding="small" className="rendered-component">
-                {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////// */}
-                <Portion id="component-wrapper">
-                    <Element
-                        as="div" padding="small" shape="rounded" bgColour="slate-light80"
-                        data-centered-children
-                    >
-                        <Select
-                            label={label}
-                            options={options}
-                            defaultValue={selectedDefaultValue}
-                            isFullWidth={isFullWidth}
-                        />
-                    </Element>
-                </Portion>
+                <Text>
+                    Uses the native <code>&lt;select&gt;</code> element for best accessibility and mobile support.
+                </Text>
 
-                {/* CONFIGURATOR /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Form spacing="none">
-                        <Card padding="micro" shape="rounded">
-                            <Header verticallyCentreItems pushItemsToEnds marginBottom="micro">
-                                <Text size="large" weight="700" textColour="white">
-                                    Configure props
-                                </Text>
-                            </Header>
+                <Text>
+                    Width adapts to the longest option. Use <code>isFullWidth</code> to fill the container.
+                </Text>
 
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton marginBottom="micro">
-                                        {[
-                                            `// Paste this in your content file`,
-                                            `<Select`,
-                                            `    label="${label}"`,
-                                            `    options={[`,
-                                            ...options.map((option) => `        { label: "${option.label}", value: "${option.value}" },`),
-                                            `    ]}`,
-                                            selectedDefaultValue ? `    defaultValue="${selectedDefaultValue}"` : null,
-                                            isFullWidth ? `    isFullWidth` : null,
-                                            `/>`,
-                                        ].filter(Boolean).join("\n")}
-                                    </CodeBlock>
-                                </Portion>
+                <Text>
+                    Theming inherits from InputField, with <code>select-chevron</code> for the dropdown arrow.
+                </Text>
+            </Div>
 
-                                {/* LABEL ========================================================================== */}
-                                <Portion>
-                                    <InputField
-                                        label="Label"
-                                        onChange={(value) => setLabel(value)}
-                                    />
-                                </Portion>
-                            </Row>
+            {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="demo-component">
+                <Select
+                    ref={interactiveElementRef}
+                    label={label || undefined}
+                    options={options}
+                    value={selectedValue || undefined}
+                    onChange={(value) => setSelectedValue(value)}
+                    helpText={helpText || undefined}
+                    disabled={disabled}
+                    isFullWidth={isFullWidth}
+                    {...themeProps}
+                />
 
-                            <Divider kind="secondary" horizontalMargin="none" verticalMargin="micro" />
+                {selectedValue && (
+                    <Div marginTop="nano">
+                        <Text size="small">
+                            Selected: {selectedValue}
+                        </Text>
+                    </Div>
+                )}
+            </Div>
 
-                            {/* OPTION ============================================================================= */}
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <Div verticallyCentreItems pushItemsToEnds>
-                                        <Text weight="700" size="large">List of options</Text>
+            {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="props-config">
+                <CodeBlock language="tsx" withSyntaxHighlighting showCopyButton>
+                    {codeString}
+                </CodeBlock>
 
-                                        <Button
-                                            kind="tertiary" size="small" type="button"
-                                            onClick={addOption}
-                                        >
-                                            Add another option
-                                        </Button>
-                                    </Div>
-                                </Portion>
+                <Div className="doc-controls">
+                    <InputField
+                        label="label"
+                        value={label}
+                        onChange={(val) => setLabel(val)}
+                        helpText="Label text displayed above the select."
+                        marginBottom="micro" isFullWidth
+                    />
 
-                                {options.map((option, index) => (
-                                    <React.Fragment key={index}>
-                                        <Portion desktopSpan="half">
-                                            <InputField
-                                                placeholder="Label"
-                                                value={option.label}
-                                                onChange={(value) => updateOption(index, value, option.value)}
-                                            />
-                                        </Portion>
-                                        <Portion desktopSpan="half">
-                                            <InputField
-                                                placeholder="Value"
-                                                value={option.value}
-                                                onChange={(value) => updateOption(index, option.label, value)}
-                                            />
-                                        </Portion>
-                                    </React.Fragment>
-                                ))}
-                            </Row>
+                    <InputField
+                        label="helpText"
+                        value={helpText}
+                        onChange={(val) => setHelpText(val)}
+                        helpText="Helper text shown below the select."
+                        marginBottom="micro" isFullWidth
+                    />
 
-                            <Divider kind="secondary" horizontalMargin="none" verticalMargin="micro" />
+                    <RadioTabGroup
+                        id="prop-value"
+                        label="value"
+                        options={[
+                            { id: "value-none", value: "", label: "None" },
+                            { id: "value-apple", value: "apple", label: "Apple" },
+                            { id: "value-banana", value: "banana", label: "Banana" },
+                            { id: "value-cherry", value: "cherry", label: "Cherry" },
+                        ]}
+                        value={selectedValue}
+                        onChange={(val) => setSelectedValue(val)}
+                        helpText="Currently selected value."
+                        marginBottom="micro"
+                    />
 
-                            <Row marginBottom="none">
-                                <Portion>
-                                    {options.map((option, index) => (
-                                        <RadioButton
-                                            key={index}
-                                            id={`default-option-${index}`}
-                                            name="set-default-option"
-                                            label={`Set ${option.label} as default`}
-                                            value={option.value}
-                                            checked={selectedDefaultValue === option.value}
-                                            onChange={(value) => setSelectedDefaultValue(value)}
-                                        />
-                                    ))}
-                                </Portion>
+                    <Checkbox
+                        id="prop-disabled"
+                        label="disabled"
+                        checked={disabled}
+                        onChange={() => setDisabled(!disabled)}
+                        helpText="Disables the select input."
+                        marginBottom="micro"
+                    />
 
-                                <Portion>
-                                    <Button
-                                        kind="tertiary" size="small" type="button"
-                                        onClick={() => setSelectedDefaultValue("")}
-                                    >
-                                        Clear default option
-                                    </Button>
-                                </Portion>
-                            </Row>
+                    <Checkbox
+                        id="prop-isFullWidth"
+                        label="isFullWidth"
+                        checked={isFullWidth}
+                        onChange={() => setIsFullWidth(!isFullWidth)}
+                        helpText="Makes the select take full width of its container."
+                        marginBottom="micro"
+                    />
+                </Div>
+            </Div>
 
-                            <Divider kind="secondary" horizontalMargin="none" verticalMargin="micro" />
-
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <Checkbox
-                                        id="is-full-width"
-                                        name="is-full-width"
-                                        label="Full width"
-                                        checked={isFullWidth}
-                                        onChange={() => setIsFullWidth(!isFullWidth)}
-                                    />
-                                </Portion>
-                            </Row>
-                        </Card>
-                    </Form>
-                </Portion>
-
-                {/* GLOBAL THEME /////////////////////////////////////////////////////////////////////////////////// */}
-                <Portion desktopSpan="half">
-                    <Card padding="micro" shape="rounded">
-                        <Form>
-                            <Header verticallyCentreItems pushItemsToEnds marginBottom="micro">
-                                <Text size="large" weight="700" textColour="white">
-                                    Set global theme values
-                                </Text>
-                            </Header>
-
-                            <Row marginBottom="none">
-                                <Portion>
-                                    <CodeBlock
-                                        withSyntaxHighlighting
-                                        source={cssVariablesList}
-                                        language="css"
-                                        showCopyButton
-                                        marginBottom="micro"
-                                    />
-                                </Portion>
-
-                                {/* CHEVRON ======================================================================== */}
-                                <Portion desktopSpan="half">
-                                    <Select
-                                        label="Select chevron"
-                                        options={[{
-                                            label    : "Select a colour",
-                                            value    : "select-a-colour",
-                                            disabled : true,
-                                            selected : true,
-                                        }, ...colourOptions]}
-                                        defaultValue={componentVariables["select-chevron"].defaultValue || "select-a-colour"}
-                                        onChange={(value) => handleVariableChange("select-chevron", value)}
-                                        isFullWidth
-                                    />
-                                </Portion>
-
-                                <Portion>
-                                    <Text>All other theming options are inherited from the InputField.</Text>
-                                </Portion>
-                            </Row>
-                        </Form>
-                    </Card>
-                </Portion>
-            </Row>
-        </Article>
+            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="theme-config">
+                {themeConfigurator()}
+            </Div>
+        </ComponentDocsLayout>
     );
 };
 
