@@ -83,11 +83,11 @@ const HomePage = () => {
                             language="bash"
                             withSyntaxHighlighting
                             showCopyButton
-                            source={`pnpm add fictoan-react@2.0.0-beta.1
+                            source={`pnpm add fictoan-react@2.0.0-beta.2
 # or
-yarn add fictoan-react@2.0.0-beta.1
+yarn add fictoan-react@2.0.0-beta.2
 # or
-npm install fictoan-react@2.0.0-beta.1`}
+npm install fictoan-react@2.0.0-beta.2`}
                         />
                     </Portion>
 
