@@ -12,7 +12,7 @@ import { useThemeVariables } from "$utils/useThemeVariables";
 
 // ASSETS ==============================================================================================================
 import FictoanIcon from "../../../assets/images/fictoan-icon.svg";
-import FictoanLogo from "../../../assets/images/fictoan-logo.svg";
+import FictoanLogo from "../../../assets/images/fictoan-logo-new.svg";
 import HomeIcon from "../../../assets/icons/home.svg";
 import ThemeSwitchIcon from "../../../assets/icons/theme.svg";
 
