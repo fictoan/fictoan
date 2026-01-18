@@ -129,7 +129,7 @@ const [value, setValue] = useState("option-1");
     }, [mode, label, helpText, align, disabled, disabledOptionIndex]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-radio-button">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

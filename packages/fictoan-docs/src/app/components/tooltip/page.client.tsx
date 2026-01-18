@@ -54,7 +54,7 @@ const TooltipDocs = () => {
     }, [position, showOn, tooltipContent]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-tooltip">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

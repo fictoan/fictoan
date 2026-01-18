@@ -11,7 +11,7 @@ import EyeClosedIcon from "../../../assets/icons/eye-closed.svg";
 import EyeOpenIcon from "../../../assets/icons/eye-open.svg";
 
 // @ts-ignore
-export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
+export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
     const [ formData, setFormData ] = useState({
         // Text inputs
         firstName   : "",
@@ -173,7 +173,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 value={formData.firstName}
                                 onChange={handleInputChange("firstName")}
                                 placeholder="John"
-                                size="small"
+                                size={size}
                                 required
                             />
 
@@ -183,6 +183,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 value={formData.lastName}
                                 onChange={handleInputChange("lastName")}
                                 placeholder="Doe"
+                                size={size}
                                 required
                             />
                         </FormItemGroup>
@@ -195,6 +196,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             value={formData.email}
                             onChange={handleInputChange("email")}
                             placeholder="john@example.com"
+                            size={size}
                             required
                         />
 
@@ -216,7 +218,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             value={formData.password}
                             onChange={handleInputChange("password")}
                             helpText="At least 8 characters"
-                            size="small"
+                            size={size}
                             innerIconRight={
                                 <div
                                     onClick={(e) => {
@@ -238,6 +240,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 value={formData.phoneNumber}
                                 onChange={handleInputChange("phoneNumber")}
                                 placeholder="+1 (234) 567-8900"
+                                size={size}
                             />
 
                             <InputField
@@ -247,6 +250,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 value={formData.website}
                                 onChange={handleInputChange("website")}
                                 placeholder="https://example.com"
+                                size={size}
                             />
                         </FormItemGroup>
 
@@ -255,6 +259,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                             label="About you"
                             characterLimit={50}
                             wordLimit={10}
+                            size={size}
                             // @ts-ignore
                             onChange={handleInputChange("about")}
                             value={formData.about}
@@ -361,7 +366,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 { id : "pigeon", label : "Pigeon", value : "pigeon", disabled : true },
                             ]}
                             onChange={handleRadioChange("contactPreference")}
-                            size="small"
+                            size={size}
                         />
 
                         {/* GENDER ================================================================================ */}
@@ -386,6 +391,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 label="Technology"
                                 checked={formData.interests.includes("tech")}
                                 onChange={handleCheckboxChange("interests", "tech")}
+                                size={size}
                             />
 
                             <Checkbox
@@ -394,6 +400,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 label="Books"
                                 checked={formData.interests.includes("books")}
                                 onChange={handleCheckboxChange("interests", "books")}
+                                size={size}
                             />
 
                             <Checkbox
@@ -402,6 +409,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 label="Movies"
                                 checked={formData.interests.includes("movies")}
                                 onChange={handleCheckboxChange("interests", "movies")}
+                                size={size}
                             />
 
                             <Checkbox
@@ -410,6 +418,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 label="Business"
                                 checked={formData.interests.includes("business")}
                                 onChange={handleCheckboxChange("interests", "business")}
+                                size={size}
                             />
 
                             <Checkbox
@@ -418,6 +427,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 label="Travel"
                                 checked={formData.interests.includes("travel")}
                                 onChange={handleCheckboxChange("interests", "travel")}
+                                size={size}
                             />
                         </FormItemGroup>
 
@@ -458,6 +468,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 label="Enable notifications"
                                 checked={formData.notifications}
                                 onChange={handleCheckboxChange("notifications")}
+                                size={size}
                             />
 
                             {/* NEWSLETTER ========================================================================= */}
@@ -467,7 +478,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 label="Subscribe to newsletter"
                                 checked={formData.newsletter}
                                 onChange={handleCheckboxChange("newsletter")}
-                                size="tiny"
+                                size={size}
                             />
                         </FormItemGroup>
 
@@ -481,6 +492,7 @@ export const SampleForm = ({ spacing, isJoint, isButtonFullWidth }) => {
                                 label="I accept the terms and conditions"
                                 checked={formData.termsAccepted}
                                 onChange={handleCheckboxChange("termsAccepted")}
+                                size={size}
                             />
 
                             {/* SUBMIT BUTTON ====================================================================== */}

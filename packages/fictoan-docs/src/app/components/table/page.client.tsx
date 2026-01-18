@@ -82,7 +82,7 @@ const TableDocs = () => {
     }, [bordersFor, alignText, padding, isStriped, highlightRowOnHover, isFullWidth, caption]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-table">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

@@ -65,7 +65,7 @@ const [meterValue, setMeterValue] = useState(${value});
     }, [label, min, max, low, high, value, optimum, showOptimumMarker, suffix, height]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-meter">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

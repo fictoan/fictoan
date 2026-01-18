@@ -73,7 +73,7 @@ const RadioTabGroupDocs = () => {
     }, [label, helpText, required, options]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-radio-tab-group">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

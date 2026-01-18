@@ -103,7 +103,7 @@ const [checked, setChecked] = useState(${defaultChecked});
     }, [componentType, showGroup, id, label, defaultChecked, disabled, helpText, errorText]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-checkbox">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

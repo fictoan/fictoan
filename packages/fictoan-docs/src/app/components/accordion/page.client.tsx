@@ -39,7 +39,7 @@ const AccordionDocs = () => {
     }, [summary, children, isOpen]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-accordion">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

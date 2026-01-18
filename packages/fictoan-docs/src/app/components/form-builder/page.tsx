@@ -1,40 +1,11 @@
-// UTILS ===============================================================================================================
-import { extractComponentMetadataFromClient } from "$utils/og-utils";
-
 // OTHER ===============================================================================================================
-import UformUbuilderDocs from "./page.client";
+import FormBuilderDocs from "./page.client";
+import { generateComponentMetadata } from "../component-metadata";
 
 export async function generateMetadata() {
-    const {componentName, description} = await extractComponentMetadataFromClient("form-builder");
-
-    return {
-        title       : `${componentName} — Fictoan`,
-        description : description,
-        openGraph   : {
-            title       : `${componentName} — Fictoan`,
-            description : description,
-            url         : "https://fictoan.io/components/form-builder",
-            siteName    : "Fictoan",
-            images      : [
-                {
-                    url    : "https://fictoan.io/components/form-builder/opengraph-image",
-                    width  : 1200,
-                    height : 630,
-                    alt    : `${componentName} — Fictoan`,
-                },
-            ],
-            locale      : "en_US",
-            type        : "website",
-        },
-        twitter     : {
-            card        : "summary_large_image",
-            title       : `${componentName} — Fictoan`,
-            description : description,
-            images      : [ "https://fictoan.io/components/form-builder/opengraph-image" ],
-        },
-    };
+    return generateComponentMetadata("form-builder");
 }
 
 export default function Page() {
-    return <UformUbuilderDocs />;
+    return <FormBuilderDocs />;
 }

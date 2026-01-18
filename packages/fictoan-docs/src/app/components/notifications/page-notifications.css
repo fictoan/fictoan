@@ -1,6 +1,8 @@
-.notification-buttons {
-    display        : flex;
-    flex-wrap      : wrap;
-    gap            : 8px;
-    justify-content: center;
+#page-notifications {
+    .notification-buttons {
+        display         : flex;
+        flex-wrap       : wrap;
+        gap             : 8px;
+        justify-content : center;
+    }
 }

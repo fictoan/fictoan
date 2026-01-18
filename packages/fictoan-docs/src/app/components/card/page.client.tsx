@@ -37,7 +37,7 @@ const CardDocs = () => {
     }, [children]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-card">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

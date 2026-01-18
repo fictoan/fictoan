@@ -91,7 +91,7 @@ ${skeletonProps.join("\n")}
     }, [direction, repeat, spacing, effect, width, height, variant, shape]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-skeleton">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

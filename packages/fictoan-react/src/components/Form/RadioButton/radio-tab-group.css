@@ -50,6 +50,10 @@
             transition-timing-function : ease-in-out;
             white-space                : nowrap;
             z-index                    : 5;
+
+            &::after {
+                display : none;
+            }
         }
 
         input:checked + label {
@@ -62,7 +66,7 @@
             border-radius : calc(var(--global-border-radius) - var(--radio-tabs-vertical-gap));
         }
 
-        /* Active indicator ///////////////////////////////////////////////////// */
+        /* Active indicator ///////////////////////////////////////////////// */
         .indicator {
             position       : absolute;
             height         : 100%;

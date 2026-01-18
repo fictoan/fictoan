@@ -2,19 +2,19 @@
 import ManifestoPage from "./page.client";
 
 export const metadata = {
-    title       : "Manifesto — Fictoan UI",
+    title       : "Manifesto — FictoanUI",
     description : "UI code has become needlessly complex. It doesn't have to be.",
     openGraph   : {
-        title       : "Manifesto — Fictoan UI",
+        title       : "Manifesto — FictoanUI",
         description : "UI code has become needlessly complex. It doesn't have to be.",
         url         : "https://fictoan.io/manifesto",
-        siteName    : "Fictoan UI",
+        siteName    : "FictoanUI",
         images      : [
             {
-                url    : "https://fictoan.io/components/option-card/opengraph-image",
+                url    : "https://fictoan.io/opengraph-image",
                 width  : 1200,
                 height : 630,
-                alt    : "Manifesto — Fictoan UI",
+                alt    : "Manifesto — FictoanUI",
             },
         ],
         locale      : "en_US",
@@ -22,9 +22,9 @@ export const metadata = {
     },
     twitter     : {
         card        : "summary_large_image",
-        title       : "Manifesto — Fictoan UI",
+        title       : "Manifesto — FictoanUI",
         description : "UI code has become needlessly complex. It doesn't have to be.",
-        images      : ["https://fictoan.io/components/option-card/opengraph-image"],
+        images      : ["https://fictoan.io/opengraph-image"],
     },
 };
 

@@ -66,7 +66,7 @@ const [isOpen, setIsOpen] = useState(false);
 
     return (
         <>
-            <ComponentDocsLayout>
+            <ComponentDocsLayout pageId="page-modal">
                 {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
                 <Div id="intro-header">
                     <Heading2 id="component-name">

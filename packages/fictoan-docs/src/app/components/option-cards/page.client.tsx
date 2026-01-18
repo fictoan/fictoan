@@ -75,7 +75,7 @@ const OptionCardsDocs = () => {
     }, [allowMultipleSelections, showTickIcon, tickPosition]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-option-cards">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

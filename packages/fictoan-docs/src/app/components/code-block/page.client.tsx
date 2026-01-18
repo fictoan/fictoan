@@ -76,7 +76,7 @@ const CodeBlockDocs = () => {
     }, [language, withSyntaxHighlighting, showLineNumbers, showCopyButton]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-code-block">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

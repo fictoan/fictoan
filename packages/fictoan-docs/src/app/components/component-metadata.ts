@@ -15,7 +15,7 @@ export async function generateComponentMetadata(componentSlug: string): Promise<
             title       : `${componentName} — Fictoan`,
             description : description,
             url         : `https://fictoan.io/components/${componentSlug}`,
-            siteName    : "Fictoan",
+            siteName    : "FictoanUI",
             images      : [
                 {
                     url    : `https://fictoan.io/components/${componentSlug}/opengraph-image`,

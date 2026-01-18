@@ -80,7 +80,7 @@ const [isOpen, setIsOpen] = useState(false);
 
     return (
         <>
-            <ComponentDocsLayout>
+            <ComponentDocsLayout pageId="page-drawer">
                 {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
                 <Div id="intro-header">
                     <Heading2 id="component-name">

@@ -57,7 +57,7 @@ const [progress, setProgress] = useState(${value});
     }, [label, value, max, suffix, height, shape]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-progress-bar">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

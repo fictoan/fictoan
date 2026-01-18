@@ -110,7 +110,7 @@ const [value, setValue] = useState<[number, number]>([${dualValue[0]}, ${dualVal
     }, [mode, label, showLabel, suffix, disabled, isFullWidth, singleValue, singleMin, singleMax, singleStep, dualValue, dualMin, dualMax, dualStep]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-range">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

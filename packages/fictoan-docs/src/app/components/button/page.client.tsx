@@ -63,7 +63,7 @@ const ButtonDocs = () => {
     }, [children, kind, size, shape, isLoading, label, bgColour, borderColour, textColour]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-button">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

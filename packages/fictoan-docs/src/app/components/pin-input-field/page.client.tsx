@@ -49,7 +49,7 @@ const PinInputFieldDocs = () => {
     }, [numberOfFields, type, mask, isOTP, autoFocus, pasteFromClipboard, isFullWidth]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-pin-input-field">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

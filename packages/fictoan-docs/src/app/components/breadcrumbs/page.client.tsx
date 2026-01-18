@@ -48,7 +48,7 @@ const BreadcrumbsDocs = () => {
     }, [separator, spacing]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-breadcrumbs">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">
