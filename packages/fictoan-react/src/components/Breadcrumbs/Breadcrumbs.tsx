@@ -1,7 +1,7 @@
 // REACT CORE ==========================================================================================================
 import React from "react";
 
-// ELEMENT =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps, SpacingTypes } from "../Element/constants";
 import { Element } from "$element";
 
@@ -12,25 +12,27 @@ import "./breadcrumbs.css";
 import { Text } from "$/components";
 
 export type BreadcrumbsElementType = HTMLDivElement;
+
 export interface BreadcrumbsProps extends CommonAndHTMLProps<BreadcrumbsElementType> {
-        children    : React.ReactNode;
-        separator ? : string;
-        spacing   ? : SpacingTypes;
+    children    : React.ReactNode;
+    separator ? : string;
+    spacing   ? : SpacingTypes;
 }
 
 export type BreadcrumbItemElementType = HTMLLIElement;
+
 export interface BreadcrumbItemProps extends CommonAndHTMLProps<BreadcrumbItemElementType> {
-        children   : React.ReactNode;
-        current  ? : boolean;
+    children   : React.ReactNode;
+    current  ? : boolean;
 }
 
 interface SeparatorProps {
-        separator : string;
+    separator : string;
 }
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 const BreadcrumbItem = React.forwardRef<HTMLLIElement, BreadcrumbItemProps>(
-    ({ children, current, ...props }, ref) => {
+    ({children, current, ...props}, ref) => {
         return (
             <Element
                 as="li"
@@ -46,10 +48,10 @@ const BreadcrumbItem = React.forwardRef<HTMLLIElement, BreadcrumbItemProps>(
                 </span>
             </Element>
         );
-    }
+    },
 );
 
-const Separator: React.FC<SeparatorProps> = ({ separator }) => (
+const Separator : React.FC<SeparatorProps> = ({separator}) => (
     <Text
         className="breadcrumb-separator"
         aria-hidden="true"
@@ -61,7 +63,7 @@ const Separator: React.FC<SeparatorProps> = ({ separator }) => (
 );
 
 export const Breadcrumbs = React.forwardRef<HTMLDivElement, BreadcrumbsProps>(
-    ({ children, separator = "/", spacing = "micro", ...props }, ref) => {
+    ({children, separator = "/", spacing = "micro", ...props}, ref) => {
         let classNames = [];
 
         if (spacing) {
@@ -75,11 +77,11 @@ export const Breadcrumbs = React.forwardRef<HTMLDivElement, BreadcrumbsProps>(
 
             const isLast = index === childrenArray.length - 1;
 
-            let breadcrumbItem: React.ReactNode;
+            let breadcrumbItem : React.ReactNode;
             if (child.type === BreadcrumbItem) {
                 const typedChild = child as React.ReactElement<BreadcrumbItemProps>;
                 breadcrumbItem = React.cloneElement(typedChild, {
-                    current: isLast
+                    current : isLast,
                 });
             } else {
                 breadcrumbItem = (
@@ -93,7 +95,7 @@ export const Breadcrumbs = React.forwardRef<HTMLDivElement, BreadcrumbsProps>(
 
             if (!isLast) {
                 acc.push(
-                    <Separator key={`sep-${index}`} separator={separator} />
+                    <Separator key={`sep-${index}`} separator={separator} />,
                 );
             }
 
@@ -112,6 +114,6 @@ export const Breadcrumbs = React.forwardRef<HTMLDivElement, BreadcrumbsProps>(
                 </Element>
             </nav>
         );
-    }
+    },
 );
 Breadcrumbs.displayName = "Breadcrumbs";

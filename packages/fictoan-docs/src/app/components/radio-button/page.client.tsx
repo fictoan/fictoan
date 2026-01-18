@@ -15,7 +15,7 @@ import {
     InputField,
     RadioTabGroup,
     Checkbox,
-}from "fictoan-react";
+} from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
@@ -40,6 +40,9 @@ const RadioButtonDocs = () => {
     const [align, setAlign] = useState("vertical");
     const [disabled, setDisabled] = useState(false);
     const [disabledOptionIndex, setDisabledOptionIndex] = useState<number | null>(null);
+    const [labelFirst, setLabelFirst] = useState(false);
+    const [size, setSize] = useState<"tiny" | "small" | "medium" | "large">("medium");
+    const [columns, setColumns] = useState<number | undefined>(undefined);
 
     // Theme configurator
     const RadioButtonComponent = (varName: string) => {
@@ -84,6 +87,9 @@ const RadioButtonDocs = () => {
             props.push(`value={value}`);
             props.push(`onChange={(val) => setValue(val)}`);
             if (align !== "vertical") props.push(`align="${align}"`);
+            if (labelFirst) props.push(`labelFirst`);
+            if (size !== "medium") props.push(`size="${size}"`);
+            if (columns) props.push(`columns={${columns}}`);
 
             return `import { useState } from "react";
 import { RadioGroup } from "fictoan-react";
@@ -94,6 +100,11 @@ const [value, setValue] = useState("option-1");
     ${props.join("\n    ")}
 />`;
         } else {
+            const extraProps = [];
+            if (disabled) extraProps.push(`disabled`);
+            if (labelFirst) extraProps.push(`labelFirst`);
+            const extraPropsStr = extraProps.length > 0 ? `\n    ${extraProps.join("\n    ")}` : "";
+
             return `import { useState } from "react";
 import { RadioButton } from "fictoan-react";
 
@@ -105,7 +116,7 @@ const [value, setValue] = useState("option-1");
     value="option-1"
     label="Option 1"
     checked={value === "option-1"}
-    onChange={(val) => setValue(val)}${disabled ? `\n    disabled` : ""}
+    onChange={(val) => setValue(val)}${extraPropsStr}
 />
 
 <RadioButton
@@ -114,7 +125,7 @@ const [value, setValue] = useState("option-1");
     value="option-2"
     label="Option 2"
     checked={value === "option-2"}
-    onChange={(val) => setValue(val)}${disabled ? `\n    disabled` : ""}
+    onChange={(val) => setValue(val)}${extraPropsStr}
 />
 
 <RadioButton
@@ -123,13 +134,13 @@ const [value, setValue] = useState("option-1");
     value="option-3"
     label="Option 3"
     checked={value === "option-3"}
-    onChange={(val) => setValue(val)}${disabled ? `\n    disabled` : ""}
+    onChange={(val) => setValue(val)}${extraPropsStr}
 />`;
         }
-    }, [mode, label, helpText, align, disabled, disabledOptionIndex]);
+    }, [mode, label, helpText, align, disabled, disabledOptionIndex, labelFirst, size, columns]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-radio-button">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">
@@ -170,6 +181,9 @@ const [value, setValue] = useState("option-1");
                         value={selectedValue}
                         onChange={(value) => setSelectedValue(value)}
                         align={align as any}
+                        labelFirst={labelFirst}
+                        size={size}
+                        columns={columns}
                         {...themeProps}
                     />
                 ) : (
@@ -182,6 +196,7 @@ const [value, setValue] = useState("option-1");
                             checked={selectedValue === "option-1"}
                             onChange={(value) => setSelectedValue(value)}
                             disabled={disabled}
+                            labelFirst={labelFirst}
                         />
                         <RadioButton
                             id="radio-2"
@@ -191,6 +206,7 @@ const [value, setValue] = useState("option-1");
                             checked={selectedValue === "option-2"}
                             onChange={(value) => setSelectedValue(value)}
                             disabled={disabled}
+                            labelFirst={labelFirst}
                         />
                         <RadioButton
                             id="radio-3"
@@ -200,6 +216,7 @@ const [value, setValue] = useState("option-1");
                             checked={selectedValue === "option-3"}
                             onChange={(value) => setSelectedValue(value)}
                             disabled={disabled}
+                            labelFirst={labelFirst}
                         />
                     </Div>
                 )}
@@ -261,6 +278,38 @@ const [value, setValue] = useState("option-1");
                                 helpText="Layout direction of the options."
                                 marginBottom="micro"
                             />
+
+                            <Checkbox
+                                id="prop-labelFirst-group"
+                                label="labelFirst"
+                                checked={labelFirst}
+                                onChange={(checked) => setLabelFirst(checked)}
+                                helpText="Place labels before each radio button."
+                                marginBottom="micro"
+                            />
+
+                            <RadioTabGroup
+                                id="prop-size-group"
+                                label="size"
+                                options={[
+                                    { id: "size-tiny", value: "tiny", label: "tiny" },
+                                    { id: "size-small", value: "small", label: "small" },
+                                    { id: "size-medium", value: "medium", label: "medium" },
+                                    { id: "size-large", value: "large", label: "large" },
+                                ]}
+                                value={size}
+                                onChange={(val) => setSize(val as "tiny" | "small" | "medium" | "large")}
+                                helpText="Size of each radio button."
+                                marginBottom="micro"
+                            />
+
+                            <InputField
+                                label="columns"
+                                value={columns?.toString() || ""}
+                                onChange={(value) => setColumns(value ? parseInt(value) : undefined)}
+                                helpText="Number of columns for grid layout."
+                                marginBottom="micro" isFullWidth
+                            />
                         </>
                     )}
 
@@ -283,14 +332,25 @@ const [value, setValue] = useState("option-1");
                             marginBottom="micro"
                         />
                     ) : (
-                        <Checkbox
-                            id="prop-disabled"
-                            label="disabled"
-                            checked={disabled}
-                            onChange={() => setDisabled(!disabled)}
-                            helpText="Disables all radio buttons."
-                            marginBottom="micro"
-                        />
+                        <>
+                            <Checkbox
+                                id="prop-disabled"
+                                label="disabled"
+                                checked={disabled}
+                                onChange={() => setDisabled(!disabled)}
+                                helpText="Disables all radio buttons."
+                                marginBottom="micro"
+                            />
+
+                            <Checkbox
+                                id="prop-labelFirst"
+                                label="labelFirst"
+                                checked={labelFirst}
+                                onChange={(checked) => setLabelFirst(checked)}
+                                helpText="Place the label before the radio button."
+                                marginBottom="micro"
+                            />
+                        </>
                     )}
                 </Div>
             </Div>

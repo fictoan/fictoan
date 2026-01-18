@@ -22,6 +22,7 @@ export const Select = React.forwardRef(
             helpText,
             errorText,
             required,
+            size,
             // Select props
             id,
             name,
@@ -70,6 +71,7 @@ export const Select = React.forwardRef(
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
+                size={size}
                 {...wrapperProps}
             >
                 <Div data-select className={className} disabled={disabled}>

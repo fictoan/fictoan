@@ -1,7 +1,7 @@
 // REACT CORE ==========================================================================================================
 import React from "react";
 
-// ELEMENT =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps } from "../Element/constants";
 import { Element } from "$element";
 
@@ -9,13 +9,16 @@ import { Element } from "$element";
 import "./card.css";
 
 export type CardElementType = HTMLDivElement;
+
 export interface CardCustomProps {
     heading ? : string;
 }
+
 export type CardProps = CommonAndHTMLProps<CardElementType> & CardCustomProps;
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-export const Card = React.forwardRef(({ shape, heading, children, ...props }: CardProps, ref: React.Ref<CardElementType>) => {
+export const Card = React.forwardRef((
+    {shape, heading, children, ...props} : CardProps, ref : React.Ref<CardElementType>) => {
     let classNames = [];
 
     if (shape) {

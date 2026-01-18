@@ -65,7 +65,7 @@ const TabsDocs = () => {
     }, [align, isFullWidth, alertTabIndex]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-tabs">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

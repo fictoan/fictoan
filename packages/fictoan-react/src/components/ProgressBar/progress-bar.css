@@ -3,11 +3,12 @@
     align-items     : baseline;
     justify-content : space-between;
     margin-bottom   : 8px;
+    width           : 100%;
 
     p:first-of-type {
-        display     : inline-flex;
-        margin      : 0;
-        color       : var(--progress-bar-label);
+        display : inline-flex;
+        margin  : 0;
+        color   : var(--progress-bar-label);
     }
 
     p:last-of-type {

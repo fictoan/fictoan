@@ -39,8 +39,8 @@ const SidebarDocs = () => {
         <Article id="page-sidebar">
             <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">
                 <Portion>
-                    <Heading2>Sidebar</Heading2>
-                    <Text size="large" marginBottom="small">
+                    <Heading2 id="component-name">Sidebar</Heading2>
+                    <Text id="component-description" size="large" marginBottom="small">
                         A list of links inside a vertical container
                     </Text>
                 </Portion>

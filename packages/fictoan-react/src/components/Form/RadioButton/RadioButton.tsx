@@ -26,6 +26,7 @@ export const RadioButton = React.forwardRef(
             checked,
             disabled,
             required,
+            labelFirst,
             ...props
         }: RadioButtonProps,
         ref: React.Ref<RadioButtonElementType>
@@ -49,6 +50,7 @@ export const RadioButton = React.forwardRef(
                 role="radio"
                 aria-checked={checked}
                 aria-disabled={disabled}
+                className={labelFirst ? "label-first" : undefined}
                 {...wrapperProps}
             >
                 <FormItem
@@ -57,6 +59,7 @@ export const RadioButton = React.forwardRef(
                     helpText={helpText}
                     errorText={errorText}
                     required={required}
+                    labelFirst={labelFirst}
                 >
                     <Element
                         as="input"
@@ -69,6 +72,11 @@ export const RadioButton = React.forwardRef(
                         required={required}
                         onChange={handleChange}
                         {...inputProps}
+                    />
+                    <Element
+                        as={labelFirst ? "label" : "div"}
+                        htmlFor={labelFirst ? id : undefined}
+                        data-radio
                     />
                 </FormItem>
             </Element>

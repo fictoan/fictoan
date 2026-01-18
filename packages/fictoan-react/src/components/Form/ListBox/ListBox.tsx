@@ -45,6 +45,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
             isFullWidth,
             className,
             required,
+            size,
             ...props
         },
         ref
@@ -240,6 +241,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                 errorText={errorText}
                 required={required}
                 isFullWidth={isFullWidth}
+                size={size}
                 {...wrapperProps}
             >
                 {/* PARENT */}

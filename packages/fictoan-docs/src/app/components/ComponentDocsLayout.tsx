@@ -8,9 +8,10 @@ import { Article, Divider, Portion, Row, Section, Div, Tabs } from "fictoan-reac
 
 interface ComponentDocsLayoutProps {
     children : ReactNode;
+    pageId   : string;
 }
 
-export const ComponentDocsLayout = ({ children }: ComponentDocsLayoutProps) => {
+export const ComponentDocsLayout = ({ children, pageId }: ComponentDocsLayoutProps) => {
     // Extract content by ID
     const getContentById = (targetId: string) => {
         let content = null;
@@ -26,7 +27,7 @@ export const ComponentDocsLayout = ({ children }: ComponentDocsLayoutProps) => {
     };
 
     return (
-        <Article id="component-docs-page">
+        <Article id={pageId}>
             {/* INTRO SECTION ////////////////////////////////////////////////////////////////////////////////////// */}
             <Section>
                 <Row horizontalPadding="huge" marginTop="medium" marginBottom="small">

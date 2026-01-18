@@ -7,7 +7,6 @@ import React, { useState } from "react";
 import {
     Div,
     Heading2,
-    Heading5,
     Portion,
     Row,
     Text,
@@ -44,7 +43,10 @@ const FormBuilderDocs = () => {
             {/* INTRO ////////////////////////////////////////////////////////////////////////////////////////////// */}
             <Row horizontalPadding="huge" marginTop="micro" marginBottom="small">
                 <Portion>
-                    <Heading5>Form builder</Heading5>
+                    <Heading2 id="component-name">Form builder</Heading2>
+                    <Text id="component-description" size="large" marginBottom="small">
+                        A visual tool to build and customise forms with drag-and-drop elements
+                    </Text>
                 </Portion>
             </Row>
 

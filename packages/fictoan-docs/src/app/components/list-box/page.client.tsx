@@ -101,7 +101,7 @@ const [value, setValue] = useState<${stateType}>(${stateDefault});
     }, [label, placeholder, helpText, allowMultiSelect, selectionLimit, allowCustomEntries, disabled, isFullWidth]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-list-box">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

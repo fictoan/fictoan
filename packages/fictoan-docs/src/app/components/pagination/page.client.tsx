@@ -80,7 +80,7 @@ const PaginationDocs = () => {
     }, [totalItems, itemsToShowEachSide, kind, showGoToFirstItemButton, showGoToLastItemButton, showPreviousButton, showNextButton, showGoToInput, disabled, hideDisabledButtons, isLoading]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-pagination">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

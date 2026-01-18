@@ -53,7 +53,7 @@ const BadgeDocs = () => {
     }, [children, size, shape, actionIcon, actionAriaLabel]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-badge">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

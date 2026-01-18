@@ -1,7 +1,7 @@
 // REACT CORE ==========================================================================================================
 import React, { ReactNode } from "react";
 
-// ELEMENT =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps } from "../Element/constants";
 import { Element } from "$element";
 
@@ -20,12 +20,12 @@ export type CalloutProps = Omit<CommonAndHTMLProps<CalloutElementType>, keyof Ca
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const Callout = React.forwardRef(
-    ({ kind, children, title, ...props }: CalloutProps, ref: React.Ref<CalloutElementType>) => {
+    ({kind, children, title, ...props} : CalloutProps, ref : React.Ref<CalloutElementType>) => {
         const roleMap = {
             info    : "status",
             success : "status",
             warning : "alert",
-            error   : "alert"
+            error   : "alert",
         };
 
         return (
@@ -42,6 +42,6 @@ export const Callout = React.forwardRef(
                 {children}
             </Element>
         );
-    }
+    },
 );
 Callout.displayName = "Callout";

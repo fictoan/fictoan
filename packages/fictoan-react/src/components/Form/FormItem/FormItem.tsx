@@ -27,6 +27,8 @@ export interface FormItemProps extends CommonAndHTMLProps<FormItemElementType> {
     // Form semantics
     required?: boolean;
     size?: Exclude<SpacingTypes, "nano" | "huge">;
+    // Layout
+    labelFirst?: boolean;
 }
 
 // VALIDATION ICON /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,6 +97,7 @@ export const FormItem = React.forwardRef(
             validationState,
             required,
             size,
+            labelFirst,
             children,
             ...props
         }: FormItemProps,
@@ -110,7 +113,7 @@ export const FormItem = React.forwardRef(
                 ref={ref}
                 role="group"
                 required={required}
-                className={size ? `size-${size}` : undefined}
+                className={[size ? `size-${size}` : "", labelFirst ? "label-first" : ""].filter(Boolean).join(" ") || undefined}
                 {...props}
             >
                 {/* LABEL ////////////////////////////////////////////////////////////////////////////////////// */}

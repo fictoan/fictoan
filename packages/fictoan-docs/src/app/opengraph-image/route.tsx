@@ -5,8 +5,8 @@ export const runtime = "nodejs";
 
 export async function GET() {
     return createOGImageResponse({
-        componentName: "FICTOAN",
-        description: "React UI library for rapid prototyping",
+        componentName: "FictoanUI",
+        description: "Make UI code readable again. Components so obvious, and props that read like prose.",
         type: "root"
     });
 }

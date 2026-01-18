@@ -2,19 +2,19 @@
 import PlaygroundDocs from "./page.client";
 
 export const metadata = {
-    title       : "Layout playground — Fictoan UI",
+    title       : "Layout playground — FictoanUI",
     description : "Simple props to align and lay elements out on a page",
     openGraph   : {
-        title       : "Layout playground — Fictoan UI",
+        title       : "Layout playground — FictoanUI",
         description : "Simple props to align and lay elements out on a page",
-        url         : "https://fictoan.io/layout",
-        siteName    : "Fictoan UI",
+        url         : "https://fictoan.io/layout/playground",
+        siteName    : "FictoanUI",
         images      : [
             {
-                url    : "https://fictoan.io/components/option-card/opengraph-image",
+                url    : "https://fictoan.io/opengraph-image",
                 width  : 1200,
                 height : 630,
-                alt    : "Layout playground — Fictoan UI",
+                alt    : "Layout playground — FictoanUI",
             },
         ],
         locale      : "en_US",
@@ -22,9 +22,9 @@ export const metadata = {
     },
     twitter     : {
         card        : "summary_large_image",
-        title       : "Layout playground — Fictoan UI",
+        title       : "Layout playground — FictoanUI",
         description : "Simple props to align and lay elements out on a page",
-        images      : ["https://fictoan.io/components/option-card/opengraph-image"],
+        images      : ["https://fictoan.io/opengraph-image"],
     },
 };
 

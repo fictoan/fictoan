@@ -45,7 +45,7 @@ const DividerDocs = () => {
     }, [kind, height]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-divider">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

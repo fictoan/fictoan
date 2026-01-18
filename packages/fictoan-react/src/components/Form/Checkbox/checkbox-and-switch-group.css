@@ -6,14 +6,26 @@
     flex-wrap      : wrap;
 }
 
-[data-checkbox-group].equalise-width > [data-checkbox],
-[data-switch-group].equalise-width > [data-switch] {
+[data-checkbox-group].align-horizontal [data-form-item],
+[data-switch-group].align-horizontal [data-form-item] {
+    width : fit-content;
+}
+
+[data-checkbox-group].equalise-width > [data-form-item],
+[data-switch-group].equalise-width > [data-form-item] {
     flex : 1 1;
 }
 
 [data-checkbox-group].align-vertical,
 [data-switch-group].align-vertical {
     flex-direction : column;
+}
+
+/* COLUMNS GRID LAYOUT ====================================================== */
+[data-checkbox-group].with-columns,
+[data-switch-group].with-columns {
+    display : grid;
+    gap     : 16px 24px;
 }
 
 [data-checkbox-group] [data-form-item],
@@ -38,4 +50,21 @@
 [data-form-item]:has([data-switch-group]) > [data-label-wrapper] > label::before,
 [data-form-item]:has([data-switch-group]) > [data-label-wrapper] > label::after {
     display : none !important;
+}
+
+/* LABEL FIRST ============================================================== */
+[data-form-item]:has([data-checkbox-group].label-first) > [data-input-wrapper],
+[data-form-item]:has([data-switch-group].label-first) > [data-input-wrapper] {
+    width : 100%;
+}
+
+[data-checkbox-group].label-first,
+[data-switch-group].label-first {
+    flex-direction : column;
+    width          : 100%;
+}
+
+[data-checkbox-group].label-first > [data-form-item],
+[data-switch-group].label-first > [data-form-item] {
+    width : 100% !important;
 }

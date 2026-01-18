@@ -1,7 +1,9 @@
-.tooltip-demo-target {
-    display          : inline-block;
-    padding          : 12px 24px;
-    background-color : var(--slate-light70);
-    border-radius    : var(--global-border-radius);
-    cursor           : pointer;
+#page-tooltip {
+    .tooltip-demo-target {
+        display          : inline-block;
+        padding          : 12px 24px;
+        background-color : var(--slate-light70);
+        border-radius    : var(--global-border-radius);
+        cursor           : pointer;
+    }
 }

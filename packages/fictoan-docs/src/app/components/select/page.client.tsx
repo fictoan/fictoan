@@ -80,7 +80,7 @@ const [value, setValue] = useState("${selectedValue}");
     }, [label, helpText, selectedValue, disabled, isFullWidth]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-select">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

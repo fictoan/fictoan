@@ -1,40 +1,11 @@
-// UTILS ===============================================================================================================
-import { extractComponentMetadataFromClient } from "$utils/og-utils";
-
 // OTHER ===============================================================================================================
-import UcalloutDocs from "./page.client";
+import CalloutDocs from "./page.client";
+import { generateComponentMetadata } from "../component-metadata";
 
 export async function generateMetadata() {
-    const {componentName, description} = await extractComponentMetadataFromClient("callout");
-
-    return {
-        title       : `${componentName} — Fictoan`,
-        description : description,
-        openGraph   : {
-            title       : `${componentName} — Fictoan`,
-            description : description,
-            url         : "https://fictoan.io/components/callout",
-            siteName    : "Fictoan",
-            images      : [
-                {
-                    url    : "https://fictoan.io/components/callout/opengraph-image",
-                    width  : 1200,
-                    height : 630,
-                    alt    : `${componentName} — Fictoan`,
-                },
-            ],
-            locale      : "en_US",
-            type        : "website",
-        },
-        twitter     : {
-            card        : "summary_large_image",
-            title       : `${componentName} — Fictoan`,
-            description : description,
-            images      : [ "https://fictoan.io/components/callout/opengraph-image" ],
-        },
-    };
+    return generateComponentMetadata("callout");
 }
 
 export default function Page() {
-    return <UcalloutDocs />;
+    return <CalloutDocs />;
 }

@@ -2,7 +2,7 @@
 import React from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
-import { CommonAndHTMLProps } from "$components/Element/constants";
+import { CommonAndHTMLProps, SpacingTypes } from "$components/Element/constants";
 
 // Value handler type
 export type ValueChangeHandler<T = string> = (value: T) => void;
@@ -33,8 +33,9 @@ export interface ListBoxCustomProps {
     onChange           ? : ValueChangeHandler<string | string[]>;
     value              ? : string | string[];
     isFullWidth        ? : boolean;
+    size               ? : Exclude<SpacingTypes, "nano" | "huge">;
 }
 
 export type ListBoxProps =
-    Omit<CommonAndHTMLProps<ListBoxElementType>, keyof ListBoxCustomProps>
+    Omit<CommonAndHTMLProps<ListBoxElementType>, keyof ListBoxCustomProps | "size">
     & ListBoxCustomProps;

@@ -30,6 +30,9 @@ export const RadioGroup = React.forwardRef(
             equalizeWidth,
             required,
             disabled,
+            size,
+            columns,
+            labelFirst,
             ...props
         }: RadioGroupProps,
         ref: React.Ref<HTMLDivElement>
@@ -50,6 +53,14 @@ export const RadioGroup = React.forwardRef(
             classNames.push(`equalise-width`);
         }
 
+        if (columns) {
+            classNames.push(`with-columns`);
+        }
+
+        if (labelFirst) {
+            classNames.push(`label-first`);
+        }
+
         return (
             <FormItem
                 label={label}
@@ -57,6 +68,7 @@ export const RadioGroup = React.forwardRef(
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
+                size={size}
             >
                 <Element
                     as="div"
@@ -65,6 +77,7 @@ export const RadioGroup = React.forwardRef(
                     classNames={classNames}
                     role="radiogroup"
                     aria-label={label}
+                    style={columns ? { gridTemplateColumns: `repeat(${columns}, 1fr)` } : undefined}
                     {...props}
                 >
                     {options.map((option, index) => {
@@ -78,6 +91,7 @@ export const RadioGroup = React.forwardRef(
                                 data-radio-button
                                 role="radio"
                                 aria-checked={isChecked}
+                                className={labelFirst ? "label-first" : undefined}
                             >
                                 <input
                                     type="radio"
@@ -90,6 +104,11 @@ export const RadioGroup = React.forwardRef(
                                     {...optionProps}
                                 />
                                 <label htmlFor={finalId}>{optionLabel}</label>
+                                {labelFirst ? (
+                                    <label htmlFor={finalId} data-radio />
+                                ) : (
+                                    <Div data-radio />
+                                )}
                             </Div>
                         );
                     })}

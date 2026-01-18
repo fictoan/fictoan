@@ -1,32 +1,30 @@
 // REACT CORE ==========================================================================================================
 import React, { useEffect, useRef } from "react";
 
+// LOCAL COMPONENTS ====================================================================================================
+import { CommonAndHTMLProps, SpacingTypes } from "../Element/constants";
+import { Div } from "$tags";
+import { Element } from "$element";
+
 // HOOKS ===============================================================================================================
 import { useClickOutside } from "$hooks/UseClickOutside";
-
-// ELEMENT =============================================================================================================
-import { CommonAndHTMLProps, SpacingTypes } from "../Element/constants";
-import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./drawer.css";
 
-// OTHER ===============================================================================================================
-import { Div } from "$tags";
-
 export interface DrawerCustomProps {
-        id                    : string;
-        isOpen              ? : boolean;
-        onClose             ? : () => void;
-        position            ? : "top" | "right" | "bottom" | "left";
-        size                ? : SpacingTypes;
-        isDismissible       ? : boolean;
-        showOverlay         ? : boolean;
-        blurOverlay         ? : boolean;
-        closeOnClickOutside ? : boolean;
-        label               ? : string;
-        description         ? : string;
-        zIndex              ? : number;
+    id                    : string;
+    isOpen              ? : boolean;
+    onClose             ? : () => void;
+    position            ? : "top" | "right" | "bottom" | "left";
+    size                ? : SpacingTypes;
+    isDismissible       ? : boolean;
+    showOverlay         ? : boolean;
+    blurOverlay         ? : boolean;
+    closeOnClickOutside ? : boolean;
+    label               ? : string;
+    description         ? : string;
+    zIndex              ? : number;
 }
 
 export type DrawerElementType = HTMLDivElement;
@@ -111,7 +109,7 @@ export const Drawer = React.forwardRef(
             return () => {
                 document.body.style.overflow = "";
             };
-        }, [isOpen, drawerId, effectiveRef]);
+        }, [ isOpen, drawerId, effectiveRef ]);
 
         // Handle Escape key
         useEffect(() => {
@@ -123,7 +121,7 @@ export const Drawer = React.forwardRef(
 
             document.addEventListener("keydown", handleEscape);
             return () => document.removeEventListener("keydown", handleEscape);
-        }, [isDismissible, isOpen, onClose]);
+        }, [ isDismissible, isOpen, onClose ]);
 
         // Handle click outside
         useClickOutside(effectiveRef, () => {
@@ -148,7 +146,7 @@ export const Drawer = React.forwardRef(
                         data-drawer-overlay-for={id}
                         aria-hidden="true"
                         onClick={closeOnClickOutside && isDismissible && onClose ? onClose : undefined}
-                        style={{ zIndex: zIndex ?? 10000 - 1 }}
+                        style={{zIndex : zIndex ?? 10000 - 1}}
                     />
                 )}
 
@@ -165,7 +163,7 @@ export const Drawer = React.forwardRef(
                     aria-label={label || "Drawer"}
                     aria-describedby={descriptionId}
                     tabIndex={-1}
-                    style={{ zIndex: zIndex ?? 10000 }}
+                    style={{zIndex : zIndex ?? 10000}}
                     {...props}
                 >
                     {/* DISMISS BUTTON */}
@@ -205,4 +203,3 @@ export const Drawer = React.forwardRef(
     },
 );
 Drawer.displayName = "Drawer";
-

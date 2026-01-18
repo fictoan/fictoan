@@ -3,17 +3,15 @@ import HomePage from "./page.client";
 
 export const metadata = {
     title       : "Fictoan — A React UI framework",
-    description : "A full-featured, designer-friendly, yet performant framework with plain-English props and focus" +
-        " on rapid iteration",
+    description : "A full-featured, designer-friendly, yet performant framework with plain-English props and focus on rapid iteration",
     openGraph   : {
         title       : "Fictoan — A React UI framework",
-        description : "A full-featured, designer-friendly, yet performant framework with plain-English props and" +
-            " focus on rapid iteration",
-        url         : "https://fictoan.io/components/badge",
-        siteName    : "Fictoan UI",
+        description : "A full-featured, designer-friendly, yet performant framework with plain-English props and focus on rapid iteration",
+        url         : "https://fictoan.io",
+        siteName    : "FictoanUI",
         images      : [
             {
-                url    : "https://fictoan.s3.ap-south-1.amazonaws.com/open-graph/badge-fictoan-og.png",
+                url    : "https://fictoan.io/opengraph-image",
                 width  : 1200,
                 height : 630,
                 alt    : "Fictoan — A React UI framework",
@@ -25,9 +23,8 @@ export const metadata = {
     twitter     : {
         card        : "summary_large_image",
         title       : "Fictoan — A React UI framework",
-        description : "A full-featured, designer-friendly, yet performant framework with plain-English props and" +
-            " focus on rapid iteration",
-        images      : ["https://fictoan.s3.ap-south-1.amazonaws.com/open-graph/badge-fictoan-og.png"],
+        description : "A full-featured, designer-friendly, yet performant framework with plain-English props and focus on rapid iteration",
+        images      : ["https://fictoan.io/opengraph-image"],
     },
 };
 

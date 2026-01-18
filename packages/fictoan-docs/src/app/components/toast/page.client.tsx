@@ -82,7 +82,7 @@ const MyComponent = () => {
 
     return (
         <ToastsProvider anchor={anchor as any}>
-            <ComponentDocsLayout>
+            <ComponentDocsLayout pageId="page-toast">
                 {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
                 <Div id="intro-header">
                     <Heading2 id="component-name">

@@ -191,7 +191,7 @@ const MyComponent = () => {
             order={order as any}
             kind={kind as any}
         >
-            <ComponentDocsLayout>
+            <ComponentDocsLayout pageId="page-notifications">
                 {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
                 <Div id="intro-header">
                     <Heading2 id="component-name">

@@ -81,7 +81,7 @@ const [value, setValue] = useState("");
     }, [label, placeholder, helpText, errorText, type, size, innerTextLeft, innerTextRight, innerIconLeft, innerIconRight, required, disabled, validateThis]);
 
     return (
-        <ComponentDocsLayout>
+        <ComponentDocsLayout pageId="page-input-field">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">

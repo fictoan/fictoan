@@ -50,6 +50,10 @@
             transition-timing-function : ease-in-out;
             white-space                : nowrap;
             z-index                    : 5;
+
+            &::after {
+                display : none;
+            }
         }
 
         input:checked + label {
@@ -62,7 +66,7 @@
             border-radius : calc(var(--global-border-radius) - var(--radio-tabs-vertical-gap));
         }
 
-        /* Active indicator ///////////////////////////////////////////////////// */
+        /* Active indicator ///////////////////////////////////////////////// */
         .indicator {
             position       : absolute;
             height         : 100%;
@@ -125,14 +129,40 @@
     padding : 0 12px
 }
 
-[data-form-item].size-tiny [data-radio-tab-group] label {
-    font-size : calc(var(--paragraph-font-size) * 0.72);
-    padding   : 0 4px
+[data-form-item].size-tiny {
+    --radio-tabs-height : 24px;
+
+    [data-radio-tab-group] label {
+        font-size : calc(var(--paragraph-font-size) * 0.72);
+        padding   : 0 6px;
+    }
+
+    [data-radio-tab-group] .scroll-button {
+        width : 16px;
+    }
+
+    [data-radio-tab-group] .scroll-button svg {
+        width  : 12px;
+        height : 12px;
+    }
 }
 
-[data-form-item].size-small [data-radio-tab-group] label {
-    font-size : calc(var(--paragraph-font-size) * 0.88);
-    padding   : 0 4px
+[data-form-item].size-small {
+    --radio-tabs-height : 32px;
+
+    [data-radio-tab-group] label {
+        font-size : calc(var(--paragraph-font-size) * 0.88);
+        padding   : 0 8px;
+    }
+
+    [data-radio-tab-group] .scroll-button {
+        width : 20px;
+    }
+
+    [data-radio-tab-group] .scroll-button svg {
+        width  : 14px;
+        height : 14px;
+    }
 }
 
 [data-form-item].size-large {
@@ -140,6 +170,15 @@
 
     [data-radio-tab-group] label {
         font-size : calc(var(--paragraph-font-size) * 1.2);
-        padding   : 8px 16px
+        padding   : 0 16px;
+    }
+
+    [data-radio-tab-group] .scroll-button {
+        width : 32px;
+    }
+
+    [data-radio-tab-group] .scroll-button svg {
+        width  : 20px;
+        height : 20px;
     }
 }

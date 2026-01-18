@@ -1,4 +1,4 @@
-import { CommonAndHTMLProps } from "$components/Element/constants";
+import { CommonAndHTMLProps, SpacingTypes } from "$components/Element/constants";
 
 export type SelectElementType = HTMLSelectElement;
 
@@ -22,6 +22,7 @@ export interface SelectCustomProps {
     helpText  ? : string;
     errorText ? : string;
     onChange  ? : (value: string) => void;
+    size      ? : Exclude<SpacingTypes, "nano" | "huge">;
 }
 
-export type SelectProps = Omit<CommonAndHTMLProps<SelectElementType>, keyof SelectCustomProps> & SelectCustomProps;
+export type SelectProps = Omit<CommonAndHTMLProps<SelectElementType>, keyof SelectCustomProps | "size"> & SelectCustomProps;
