@@ -474,7 +474,7 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                             value={formData.food}
                             onChange={(values: any) => setFormData({ ...formData, food : values })}
                             size={size}
-                            align="horizontal" equaliseWidth columns={3}
+                            labelFirst columns={2}
                         />
 
                         <SwitchGroup
@@ -525,7 +525,7 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                                 label="I accept the terms and conditions"
                                 checked={formData.termsAccepted}
                                 onChange={handleCheckboxChange("termsAccepted")}
-                                size={size}
+                                size={size} labelFirst
                             />
 
                             {/* SUBMIT BUTTON ====================================================================== */}

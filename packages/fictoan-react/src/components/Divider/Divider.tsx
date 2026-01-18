@@ -1,7 +1,7 @@
 // REACT CORE ==========================================================================================================
 import React from "react";
 
-// ELEMENT =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps } from "../Element/constants";
 import { Element } from "$element";
 
@@ -10,9 +10,9 @@ import "./divider.css";
 
 // prettier-ignore
 export interface DividerCustomProps {
-        kind   ? : "primary" | "secondary" | "tertiary";
-        height ? : string;
-        label  ? : string;
+    kind   ? : "primary" | "secondary" | "tertiary";
+    height ? : string;
+    label  ? : string;
 }
 
 export type DividerElementType = HTMLHRElement;
@@ -21,7 +21,7 @@ export type DividerProps = Omit<CommonAndHTMLProps<DividerElementType>, keyof Di
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const Divider = React.forwardRef(
     (
-        { kind, height, label, ...props }: DividerProps, ref: React.Ref<DividerElementType>) => {
+        {kind, height, label, ...props} : DividerProps, ref : React.Ref<DividerElementType>) => {
         let classNames = [];
 
         if (kind) {
@@ -38,7 +38,7 @@ export const Divider = React.forwardRef(
                 aria-orientation="horizontal"
                 aria-label={label}
                 {...props}
-                style={{ height : height }}
+                style={{height : height}}
             />
         );
     },

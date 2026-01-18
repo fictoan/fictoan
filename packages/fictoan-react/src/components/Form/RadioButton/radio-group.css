@@ -74,3 +74,72 @@
     }
 }
 
+/* LABEL FIRST ============================================================== */
+[data-form-item]:has([data-radio-group].label-first) > [data-input-wrapper] {
+    width : 100%;
+}
+
+[data-radio-group].label-first {
+    flex-direction : column;
+    width          : 100%;
+}
+
+[data-radio-group].label-first > [data-radio-button] {
+    width : 100% !important;
+}
+
+/* LABEL FIRST + SIZES ====================================================== */
+/* TINY --------------------------------------------------------------------- */
+[data-form-item].size-tiny [data-radio-button].label-first [data-radio] {
+    width  : 10px;
+    height : 10px;
+}
+
+[data-form-item].size-tiny [data-radio-button].label-first [data-radio]::before {
+    width  : 10px;
+    height : 10px;
+}
+
+[data-form-item].size-tiny [data-radio-button].label-first [data-radio]::after {
+    width  : 4px;
+    height : 4px;
+    left   : 3px;
+    top    : 3px;
+}
+
+/* SMALL -------------------------------------------------------------------- */
+[data-form-item].size-small [data-radio-button].label-first [data-radio] {
+    width  : 12px;
+    height : 12px;
+}
+
+[data-form-item].size-small [data-radio-button].label-first [data-radio]::before {
+    width  : 12px;
+    height : 12px;
+}
+
+[data-form-item].size-small [data-radio-button].label-first [data-radio]::after {
+    width  : 6px;
+    height : 6px;
+    left   : 3px;
+    top    : 3px;
+}
+
+/* LARGE -------------------------------------------------------------------- */
+[data-form-item].size-large [data-radio-button].label-first [data-radio] {
+    width  : 24px;
+    height : 24px;
+}
+
+[data-form-item].size-large [data-radio-button].label-first [data-radio]::before {
+    width  : 24px;
+    height : 24px;
+}
+
+[data-form-item].size-large [data-radio-button].label-first [data-radio]::after {
+    width  : 12px;
+    height : 12px;
+    left   : 6px;
+    top    : 6px;
+}
+

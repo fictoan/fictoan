@@ -148,3 +148,144 @@
     top           : 6px;
     border-width  : 3px;
 }
+
+/* LABEL FIRST ============================================================== */
+/* Container layout */
+[data-form-item].label-first:has([data-checkbox]) {
+    width           : 100%;
+    display         : flex;
+    justify-content : space-between;
+    align-items     : center;
+}
+
+/* Remove padding from label - no longer needs space for pseudo-elements */
+[data-form-item].label-first:has([data-checkbox]) label {
+    padding-left  : 0;
+    padding-right : 0;
+}
+
+/* Hide label pseudo-elements (only the text label, not the control) */
+[data-form-item].label-first:has([data-checkbox]) > [data-label-wrapper] > label::before,
+[data-form-item].label-first:has([data-checkbox]) > [data-label-wrapper] > label::after {
+    display : none;
+}
+
+/* Style [data-checkbox] to render the visual control */
+[data-form-item].label-first [data-checkbox] {
+    position   : relative;
+    width      : 16px;
+    height     : 16px;
+    flex-shrink: 0;
+    cursor     : pointer;
+}
+
+[data-form-item].label-first [data-checkbox]::before,
+[data-form-item].label-first [data-checkbox]::after {
+    display    : inline-flex;
+    content    : "";
+    transition : all 0.1s ease-out;
+    position   : absolute;
+}
+
+/* The grey square */
+[data-form-item].label-first [data-checkbox]::before {
+    user-select    : none;
+    pointer-events : none;
+    background     : var(--checkbox-square-bg-default);
+    box-shadow     : 0 2px 4px -2px hsla(0, 0%, 0%, 0.24) inset;
+    height         : 16px;
+    width          : 16px;
+    top            : 0;
+    left           : 0;
+    border-radius  : var(--checkbox-square-border-radius);
+}
+
+/* The white tick inside */
+[data-form-item].label-first [data-checkbox]::after {
+    height        : 6px;
+    width         : 12px;
+    left          : 2px;
+    top           : 4px;
+    opacity       : 0;
+    border-left   : 2px solid var(--checkbox-tick);
+    border-bottom : 2px solid var(--checkbox-tick);
+    transform     : rotate(-45deg);
+}
+
+/* LABEL FIRST STATES ======================================================= */
+/* Hover */
+[data-form-item].label-first:has(> [data-input-wrapper] > input[type="checkbox"]:hover) [data-checkbox]::before {
+    background : var(--checkbox-square-bg-hover);
+}
+
+/* Focus */
+[data-form-item].label-first:has(> [data-input-wrapper] > input[type="checkbox"]:focus) [data-checkbox]::before {
+    outline : solid 2px var(--checkbox-square-bg-disabled);
+}
+
+/* Checked */
+[data-form-item].label-first:has(> [data-input-wrapper] > input[type="checkbox"]:checked) [data-checkbox]::before {
+    background : var(--checkbox-square-bg-checked);
+}
+
+[data-form-item].label-first:has(> [data-input-wrapper] > input[type="checkbox"]:checked) [data-checkbox]::after {
+    opacity : 1;
+}
+
+/* LABEL FIRST + SIZES ====================================================== */
+/* TINY --------------------------------------------------------------------- */
+[data-form-item].label-first.size-tiny [data-checkbox] {
+    width  : 10px;
+    height : 10px;
+}
+
+[data-form-item].label-first.size-tiny [data-checkbox]::before {
+    width  : 10px;
+    height : 10px;
+}
+
+[data-form-item].label-first.size-tiny [data-checkbox]::after {
+    width        : 6px;
+    height       : 3px;
+    left         : 2px;
+    top          : 3px;
+    border-width : 1.5px;
+}
+
+/* SMALL -------------------------------------------------------------------- */
+[data-form-item].label-first.size-small [data-checkbox] {
+    width  : 12px;
+    height : 12px;
+}
+
+[data-form-item].label-first.size-small [data-checkbox]::before {
+    width  : 12px;
+    height : 12px;
+}
+
+[data-form-item].label-first.size-small [data-checkbox]::after {
+    width        : 8px;
+    height       : 4px;
+    left         : 2px;
+    top          : 3px;
+    border-width : 1.5px;
+}
+
+/* LARGE -------------------------------------------------------------------- */
+[data-form-item].label-first.size-large [data-checkbox] {
+    width  : 24px;
+    height : 24px;
+}
+
+[data-form-item].label-first.size-large [data-checkbox]::before {
+    width  : 24px;
+    height : 24px;
+}
+
+[data-form-item].label-first.size-large [data-checkbox]::after {
+    width        : 16px;
+    height       : 8px;
+    left         : 4px;
+    top          : 6px;
+    border-width : 3px;
+}

@@ -43,7 +43,7 @@
 
 - Both components replace manual state management with context providers and hooks
   - Removed: `NotificationsWrapper`, `NotificationItem`, `ToastsWrapper`, `ToastItem`, `showWhen`, `closeWhen`, `secondsToShowFor`
-  - Added: `NotificationsProvider`, `useNotifications()`, `ToastsProvider`, `useToasts()`
+  - Add: `NotificationsProvider`, `useNotifications()`, `ToastsProvider`, `useToasts()`
     ```tsx
     // Before (v1.x) - manual state for each item
     const [show, setShow] = useState(false);
@@ -84,7 +84,7 @@
 ### Developer experience improvements
 **Standardized value-based `onChange` across all form components**
 - All form components now use value-based `onChange` (modern component library standard)
-  - Removed `onValueChange` prop - use `onChange` for all value updates
+  - Remove `onValueChange` prop - use `onChange` for all value updates
   - `onChange` now receives extracted value directly: `onChange={(value) => setValue(value)}`
   - Affected components: `InputField`, `TextArea`, `Select`, `ListBox`, `Checkbox`, `Switch`, `RadioButton`, 
     `RadioGroup`, `RadioTabGroup`, `Range`
@@ -125,8 +125,9 @@
   - Eliminates DOM pollution from multiple hidden tooltip elements
 - Add `SidebarItemGroup` for grouping sidebar items
 - Fixed `equaliseWidth` CSS selector for CheckboxGroup and SwitchGroup
-- Added `size` prop to Input elements
-- Added `columns` prop to `CheckboxGroup`, `SwitchGroup`, and `RadioGroup` for grid layout
+- Add `size` prop to Input elements
+- Add `columns` prop to `CheckboxGroup`, `SwitchGroup`, and `RadioGroup` for grid layout
+- Add `columns` prop to `CheckboxGroup`, `SwitchGroup`, and `RadioGroup` for grid layout
 
 ### Bug fixes
 - Fix `Tabs` component losing state of controlled inputs (checkboxes, text fields, etc.) when parent re-renders
@@ -136,7 +137,7 @@
 - Fix form components applying wrapper props (margin, padding, etc.) to inner input element instead of outer wrapper
   - Props like `marginBottom`, `padding`, `shadow`, etc. now correctly apply to the FormItem wrapper
   - Affected components: `TextArea`, `InputField`, `Checkbox`, `Switch`, `Select`, `RadioButton`, `ListBox`
-  - Added `separateWrapperProps` utility in `propSeparation.ts` to handle prop separation consistently
+  - Add `separateWrapperProps` utility in `propSeparation.ts` to handle prop separation consistently
 
 ## 1.12.0
 - `ThemeProvider` now uses unique key based on hostname for local storage, instead of default `fictoan-theme`
@@ -954,15 +955,8 @@
 ### v0.21.0
 - Code cleanup
 
-
-- TODO: Make Fictoan more accessible
 - TODO: ⚠️ Remove style tag in CodeBlock
-- TODO: Fix Dismiss Button in NotificationItem
-- TODO: Add mask design to PinInputField
-- TODO: Fix Sidebar scrolling issue
-- TODO: Drag and drop file upload component
 - TODO: Date picker
-- TODO: Button size medium padding value
 
 ~~- TODO: Add Tooltip component~~
 ~~TODO: ⚠️ Fix TS issue in Select and SWS~~

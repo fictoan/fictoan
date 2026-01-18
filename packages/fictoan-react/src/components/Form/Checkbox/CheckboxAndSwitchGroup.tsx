@@ -3,46 +3,47 @@ import React, { useMemo } from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { Element } from "$element";
-import { FormItem } from "../FormItem/FormItem";
-import { Checkbox, CheckboxProps } from "./Checkbox";
-import { Switch, SwitchProps } from "./Switch";
 import { SpacingTypes } from "../../Element/constants";
 
 // STYLES ==============================================================================================================
 import "./checkbox-and-switch-group.css";
 
-// TYPES ===============================================================================================================
+// OTHER ===============================================================================================================
+import { Checkbox, } from "./Checkbox";
+import { FormItem } from "../FormItem/FormItem";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
+import { Switch } from "./Switch";
 
 // COMMON GROUP OPTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 interface BaseGroupOptionProps {
-    id: string;
-    label: string;
-    value: string;
-    disabled?: boolean;
+    id         : string;
+    label      : string;
+    value      : string;
+    disabled ? : boolean;
 }
 
 // Props specific to the group functionality
 interface GroupCustomProps {
-    id?: string;
-    name: string;
-    options: BaseGroupOptionProps[];
-    value?: string[];
-    defaultValue?: string[];
-    onChange?: (values: string[]) => void;
-    align?: "horizontal" | "vertical";
-    equaliseWidth?: boolean;
-    equalizeWidth?: boolean;
-    size?: Exclude<SpacingTypes, "nano" | "huge">;
-    columns?: number;
+    id            ? : string;
+    name            : string;
+    options         : BaseGroupOptionProps[];
+    value         ? : string[];
+    defaultValue  ? : string[];
+    onChange      ? : (values : string[]) => void;
+    align         ? : "horizontal" | "vertical";
+    equaliseWidth ? : boolean;
+    equalizeWidth ? : boolean;
+    size          ? : Exclude<SpacingTypes, "nano" | "huge">;
+    columns       ? : number;
+    labelFirst    ? : boolean;
 }
 
 // Combined props for the group component
 export type InputGroupProps = InputLabelCustomProps & GroupCustomProps & {
-    helpText?: string;
-    errorText?: string;
-    required?: boolean;
-    disabled?: boolean;
+    helpText  ? : string;
+    errorText ? : string;
+    required  ? : boolean;
+    disabled  ? : boolean;
 };
 
 // CHECKBOX GROUP //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,27 +66,28 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
             disabled,
             size,
             columns,
+            labelFirst,
             ...props
         },
-        ref
+        ref,
     ) => {
-        const derivedName = useMemo(() => name || id, [name, id]);
+        const derivedName = useMemo(() => name || id, [ name, id ]);
 
-        const [selectedValues, setSelectedValues] = React.useState<string[]>(
-            value || defaultValue || []
+        const [ selectedValues, setSelectedValues ] = React.useState<string[]>(
+            value || defaultValue || [],
         );
 
         React.useEffect(() => {
             if (value !== undefined) {
                 setSelectedValues(value);
             }
-        }, [value]);
+        }, [ value ]);
 
-        const handleChange = (optionValue: string, checked: boolean) => {
-            let newValues: string[];
+        const handleChange = (optionValue : string, checked : boolean) => {
+            let newValues : string[];
 
             if (checked) {
-                newValues = [...selectedValues, optionValue];
+                newValues = [ ...selectedValues, optionValue ];
             } else {
                 newValues = selectedValues.filter(v => v !== optionValue);
             }
@@ -98,7 +100,7 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
             onChange?.(newValues);
         };
 
-        let classNames: string[] = [];
+        let classNames : string[] = [];
 
         if (align) {
             classNames.push(`align-${align}`);
@@ -110,6 +112,10 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
 
         if (columns) {
             classNames.push(`with-columns`);
+        }
+
+        if (labelFirst) {
+            classNames.push(`label-first`);
         }
 
         return (
@@ -127,11 +133,11 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
                     classNames={classNames}
                     role="group"
                     aria-label={label}
-                    style={columns ? { gridTemplateColumns: `repeat(${columns}, 1fr)` } : undefined}
+                    style={columns ? {gridTemplateColumns : `repeat(${columns}, 1fr)`} : undefined}
                     {...props}
                 >
                     {options.map((option, index) => {
-                        const { id: optionId, value: optionValue, label: optionLabel, ...optionProps } = option;
+                        const {id : optionId, value : optionValue, label : optionLabel, ...optionProps} = option;
                         const finalId = optionId || `${id}-option-${index}`;
                         const isChecked = selectedValues.includes(optionValue);
 
@@ -144,7 +150,8 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
                                 checked={isChecked}
                                 disabled={disabled || option.disabled}
                                 size={size}
-                                onChange={(checked: boolean) => handleChange(optionValue, checked)}
+                                labelFirst={labelFirst}
+                                onChange={(checked : boolean) => handleChange(optionValue, checked)}
                                 {...optionProps}
                             />
                         );
@@ -152,7 +159,7 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
                 </Element>
             </FormItem>
         );
-    }
+    },
 );
 CheckboxGroup.displayName = "CheckboxGroup";
 
@@ -176,27 +183,28 @@ export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
             disabled,
             size,
             columns,
+            labelFirst,
             ...props
         },
-        ref
+        ref,
     ) => {
-        const derivedName = useMemo(() => name || id, [name, id]);
+        const derivedName = useMemo(() => name || id, [ name, id ]);
 
-        const [selectedValues, setSelectedValues] = React.useState<string[]>(
-            value || defaultValue || []
+        const [ selectedValues, setSelectedValues ] = React.useState<string[]>(
+            value || defaultValue || [],
         );
 
         React.useEffect(() => {
             if (value !== undefined) {
                 setSelectedValues(value);
             }
-        }, [value]);
+        }, [ value ]);
 
-        const handleChange = (optionValue: string, checked: boolean) => {
-            let newValues: string[];
+        const handleChange = (optionValue : string, checked : boolean) => {
+            let newValues : string[];
 
             if (checked) {
-                newValues = [...selectedValues, optionValue];
+                newValues = [ ...selectedValues, optionValue ];
             } else {
                 newValues = selectedValues.filter(v => v !== optionValue);
             }
@@ -209,7 +217,7 @@ export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
             onChange?.(newValues);
         };
 
-        let classNames: string[] = [];
+        let classNames : string[] = [];
 
         if (align) {
             classNames.push(`align-${align}`);
@@ -221,6 +229,10 @@ export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
 
         if (columns) {
             classNames.push(`with-columns`);
+        }
+
+        if (labelFirst) {
+            classNames.push(`label-first`);
         }
 
         return (
@@ -238,11 +250,11 @@ export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
                     classNames={classNames}
                     role="group"
                     aria-label={label}
-                    style={columns ? { gridTemplateColumns: `repeat(${columns}, 1fr)` } : undefined}
+                    style={columns ? {gridTemplateColumns : `repeat(${columns}, 1fr)`} : undefined}
                     {...props}
                 >
                     {options.map((option, index) => {
-                        const { id: optionId, value: optionValue, label: optionLabel, ...optionProps } = option;
+                        const {id : optionId, value : optionValue, label : optionLabel, ...optionProps} = option;
                         const finalId = optionId || `${id}-option-${index}`;
                         const isChecked = selectedValues.includes(optionValue);
 
@@ -255,7 +267,8 @@ export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
                                 checked={isChecked}
                                 disabled={disabled || option.disabled}
                                 size={size}
-                                onChange={(checked: boolean) => handleChange(optionValue, checked)}
+                                labelFirst={labelFirst}
+                                onChange={(checked : boolean) => handleChange(optionValue, checked)}
                                 {...optionProps}
                             />
                         );
@@ -263,6 +276,6 @@ export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
                 </Element>
             </FormItem>
         );
-    }
+    },
 );
 SwitchGroup.displayName = "SwitchGroup";

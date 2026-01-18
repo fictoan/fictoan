@@ -1,4 +1,7 @@
+// REACT CORE ==========================================================================================================
 import React from "react";
+
+// OTHER ===============================================================================================================
 import { Element } from "./Element";
 import { ElementProps } from "./constants";
 
@@ -11,20 +14,20 @@ interface HyperlinkCustomProps {
 
 // Helper type for components that might have custom props
 type CustomProps<T extends React.ElementType, P = {}> = ElementProps<{}> &
-    React.HTMLAttributes<HTMLElement> & P;
+                                                        React.HTMLAttributes<HTMLElement> & P;
 
 const createComponentWithElement = <T extends React.ElementType, P = {}>(
-    tagName: T,
-    defaultProps?: Partial<P>
+    tagName : T,
+    defaultProps? : Partial<P>,
 ) => {
     return React.forwardRef<HTMLElement, CustomProps<T, P>>(
         (props, ref) => {
             // Merge default props with provided props
-            const finalProps = { ...defaultProps, ...props };
+            const finalProps = {...defaultProps, ...props};
 
             // Handle external links for Hyperlink component
             if (tagName === "a" && "external" in finalProps) {
-                const { external, ...restProps } = finalProps;
+                const {external, ...restProps} = finalProps;
                 if (external) {
                     finalProps.target = "_blank";
                     finalProps.rel = "noopener noreferrer";
@@ -32,7 +35,7 @@ const createComponentWithElement = <T extends React.ElementType, P = {}>(
             }
 
             return <Element as={tagName} ref={ref} {...finalProps} />;
-        }
+        },
     );
 };
 
@@ -47,5 +50,5 @@ export const Nav = createComponentWithElement("nav");
 export const Section = createComponentWithElement("section");
 export const Span = createComponentWithElement("span");
 export const Hyperlink = createComponentWithElement<"a", HyperlinkCustomProps>("a", {
-    rel: "noopener noreferrer" // Default props for Hyperlink
+    rel : "noopener noreferrer", // Default props for Hyperlink
 });

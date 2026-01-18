@@ -51,3 +51,20 @@
 [data-form-item]:has([data-switch-group]) > [data-label-wrapper] > label::after {
     display : none !important;
 }
+
+/* LABEL FIRST ============================================================== */
+[data-form-item]:has([data-checkbox-group].label-first) > [data-input-wrapper],
+[data-form-item]:has([data-switch-group].label-first) > [data-input-wrapper] {
+    width : 100%;
+}
+
+[data-checkbox-group].label-first,
+[data-switch-group].label-first {
+    flex-direction : column;
+    width          : 100%;
+}
+
+[data-checkbox-group].label-first > [data-form-item],
+[data-switch-group].label-first > [data-form-item] {
+    width : 100% !important;
+}

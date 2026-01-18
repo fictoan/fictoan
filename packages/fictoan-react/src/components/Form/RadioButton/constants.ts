@@ -18,6 +18,7 @@ export type RadioButtonProps = InputLabelCustomProps & {
     onChange?: ValueChangeHandler<string>;
     helpText?: string;
     errorText?: string;
+    labelFirst?: boolean;
 };
 
 // RADIO GROUP OPTIONS /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,6 +37,7 @@ export interface RadioGroupCustomProps {
     onChange?: ValueChangeHandler<string>;
     size?: Exclude<SpacingTypes, "nano" | "huge">;
     columns?: number;
+    labelFirst?: boolean;
 }
 
 export type RadioGroupProps = Omit<RadioButtonProps, keyof RadioGroupCustomProps | "value"> & RadioGroupCustomProps & {

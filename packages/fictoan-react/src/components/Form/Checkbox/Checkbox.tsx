@@ -2,8 +2,11 @@
 import React, { useMemo } from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
-import { Element } from "$element";
 import { CommonProps, SpacingTypes } from "../../Element/constants";
+import { Element } from "$element";
+
+// UTILS ===============================================================================================================
+import { separateWrapperProps } from "$utils/propSeparation";
 
 // STYLES ==============================================================================================================
 import "./checkbox.css";
@@ -11,7 +14,6 @@ import "./checkbox.css";
 // OTHER ===============================================================================================================
 import { FormItem } from "../FormItem/FormItem";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
-import { separateWrapperProps } from "../../../utils/propSeparation";
 
 export type CheckboxElementType = HTMLInputElement;
 export type CheckboxProps = InputLabelCustomProps & CommonProps & {
@@ -25,6 +27,7 @@ export type CheckboxProps = InputLabelCustomProps & CommonProps & {
     size           ? : Exclude<SpacingTypes, "nano" | "huge">;
     helpText       ? : string;
     errorText      ? : string;
+    labelFirst     ? : boolean;
 };
 
 // TODO: Fix required indicator that clashes with tick because both use the same `label::after` setup.
@@ -45,6 +48,7 @@ export const Checkbox = React.forwardRef(
             disabled,
             required,
             size = "medium",
+            labelFirst,
             ...props
         } : CheckboxProps,
         ref : React.Ref<CheckboxElementType>,
@@ -66,6 +70,7 @@ export const Checkbox = React.forwardRef(
                 errorText={errorText}
                 required={required}
                 size={size}
+                labelFirst={labelFirst}
                 {...wrapperProps}
             >
                 <Element<CheckboxElementType>
@@ -82,7 +87,8 @@ export const Checkbox = React.forwardRef(
                     {...inputProps}
                 />
                 <Element
-                    as="div"
+                    as={labelFirst ? "label" : "div"}
+                    htmlFor={labelFirst ? id : undefined}
                     data-checkbox
                     className={`size-${size}`}
                 />

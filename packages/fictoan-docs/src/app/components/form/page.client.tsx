@@ -4,16 +4,7 @@
 import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import {
-    Div,
-    Heading2,
-    Divider,
-    Text,
-    Form,
-    RadioTabGroup,
-    Checkbox,
-    CodeBlock,
-} from "fictoan-react";
+import { Div, Heading2, Divider, Text, Form, RadioTabGroup, Checkbox, CodeBlock, } from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./page-form.css";
@@ -30,18 +21,335 @@ const FormDocs = () => {
 
     // Generate code
     const codeString = useMemo(() => {
-        const sizeAttr = selectedSize !== "medium" ? ` size="${selectedSize}"` : "";
-        return [
-            `<Form${selectedSpacing ? ` spacing="${selectedSpacing}"` : ""}>`,
-            `    <FormItemGroup${isJoint ? " isJoint" : ""}>`,
-            `        <InputField label="First name"${sizeAttr} />`,
-            `        <InputField label="Last name"${sizeAttr} />`,
-            `    </FormItemGroup>\n`,
-            `    <InputField label="Email"${sizeAttr} />\n`,
-            `    <InputField label="Address"${sizeAttr} />\n`,
-            `    <Button kind="primary"${isButtonFullWidth ? ` isFullWidth` : ""}>Submit</Button>`,
-            `</Form>`,
-        ].join("\n");
+        const sizeAttr = selectedSize !== "medium" ? `\n                size="${selectedSize}"` : "";
+        const spacingAttr = selectedSpacing ? `\n            spacing="${selectedSpacing}"` : "";
+        const jointAttr = isJoint ? " isJoint" : "";
+        const fullWidthAttr = isButtonFullWidth ? `\n                    isFullWidth` : "";
+
+        return `// IMPORTS =====================================================
+import { useState, FormEvent } from "react";
+import {
+    Form,
+    FormItemGroup,
+    InputField,
+    TextArea,
+    Select,
+    ListBox,
+    FileUpload,
+    Range,
+    RadioTabGroup,
+    RadioGroup,
+    CheckboxGroup,
+    SwitchGroup,
+    Checkbox,
+    Switch,
+    Button,
+    Divider,
+    Footer,
+} from "fictoan-react";
+
+const MyForm = () => {
+    const [formData, setFormData] = useState({
+        // Text inputs
+        firstName   : "",
+        lastName    : "",
+        email       : "",
+        password    : "",
+        phoneNumber : "",
+        website     : "",
+
+        // Rich inputs
+        about : "",
+
+        // Selects and ListBox
+        country  : "",
+        language : "",
+        skills   : [] as string[],
+
+        // Options
+        gender            : "female",
+        contactPreference : "sms",
+
+        // Checkboxes and Switches
+        interests          : [] as string[],
+        food               : [] as string[],
+        preferredCountries : [] as string[],
+        notifications      : false,
+        newsletter         : false,
+
+        // Range
+        experienceLevel     : "5",
+        experienceAsManager : "3",
+
+        termsAccepted : false,
+    });
+
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleInputChange = (name: string) => (
+        valueOrEvent: string | string[] | React.ChangeEvent<HTMLInputElement>,
+    ) => {
+        if (Array.isArray(valueOrEvent)) {
+            setFormData(prev => ({ ...prev, [name]: valueOrEvent }));
+            return;
+        }
+        const value = typeof valueOrEvent === "string"
+            ? valueOrEvent
+            : valueOrEvent.target.value;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleRadioChange = (name: string) => (value: string) => {
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleCheckboxChange = (name: string) => (checked: boolean) => {
+        setFormData(prev => ({ ...prev, [name]: checked }));
+    };
+
+    const handleRangeChange = (name: string) => (value: number) => {
+        setFormData(prev => {
+            const updates: Record<string, string> = { [name]: value.toString() };
+            if (name === "experienceLevel" && value < Number(prev.experienceAsManager)) {
+                updates.experienceAsManager = value.toString();
+            }
+            return { ...prev, ...updates };
+        });
+    };
+
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+        console.log("Form submitted:", formData);
+    };
+
+    return (
+        <Form${spacingAttr}
+            onSubmit={handleSubmit}
+        >
+            {/* NAME FIELDS */}
+            <FormItemGroup${jointAttr}>
+                <InputField
+                    label="First name"
+                    value={formData.firstName}
+                    onChange={handleInputChange("firstName")}${sizeAttr}
+                    required
+                />
+                <InputField
+                    label="Last name"
+                    value={formData.lastName}
+                    onChange={handleInputChange("lastName")}${sizeAttr}
+                    required
+                />
+            </FormItemGroup>
+
+            {/* EMAIL */}
+            <InputField
+                label="Email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange("email")}${sizeAttr}
+                required
+            />
+
+            {/* PASSWORD */}
+            <InputField
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                value={formData.password}
+                onChange={handleInputChange("password")}
+                helpText="At least 8 characters"${sizeAttr}
+            />
+
+            {/* PHONE AND WEBSITE */}
+            <FormItemGroup${jointAttr}>
+                <InputField
+                    label="Phone number"
+                    type="tel"
+                    value={formData.phoneNumber}
+                    onChange={handleInputChange("phoneNumber")}${sizeAttr}
+                />
+                <InputField
+                    label="Website"
+                    type="url"
+                    value={formData.website}
+                    onChange={handleInputChange("website")}${sizeAttr}
+                />
+            </FormItemGroup>
+
+            {/* ABOUT */}
+            <TextArea
+                label="About you"
+                characterLimit={50}
+                wordLimit={10}${sizeAttr}
+                onChange={handleInputChange("about")}
+                value={formData.about}
+            />
+
+            {/* SELECTS */}
+            <FormItemGroup equalWidthForChildren>
+                <Select
+                    label="Country"
+                    value={formData.country}
+                    onChange={handleInputChange("country")}
+                    options={[
+                        { label: "United States", value: "us" },
+                        { label: "United Kingdom", value: "uk" },
+                        { label: "Canada", value: "ca" },
+                    ]}${sizeAttr}
+                    isFullWidth
+                />
+                <Select
+                    label="Language"
+                    value={formData.language}
+                    onChange={handleInputChange("language")}
+                    options={[
+                        { label: "English", value: "en" },
+                        { label: "Spanish", value: "es" },
+                        { label: "French", value: "fr" },
+                    ]}${sizeAttr}
+                    isFullWidth
+                />
+            </FormItemGroup>
+
+            {/* LISTBOX */}
+            <ListBox
+                label="Skills"
+                value={formData.skills}
+                onChange={handleInputChange("skills")}
+                options={[
+                    { value: "react", label: "React" },
+                    { value: "vue", label: "Vue" },
+                    { value: "angular", label: "Angular" },
+                ]}
+                allowMultiSelect
+                allowCustomEntries${sizeAttr}
+                isFullWidth
+            />
+
+            {/* FILE UPLOAD */}
+            <FileUpload
+                id="file-upload"
+                label="Upload your resume"
+                allowMultipleFiles
+                accept=".pdf,.doc,.docx"
+                onChange={(files) => console.log("Files:", files)}
+                required
+            />
+
+            {/* RANGE */}
+            <FormItemGroup equalWidthForChildren>
+                <Range
+                    label="Experience"
+                    min={1}
+                    max={20}
+                    suffix=" years"
+                    value={Number(formData.experienceLevel)}
+                    onChange={handleRangeChange("experienceLevel")}${sizeAttr}
+                    isFullWidth
+                />
+                <Range
+                    label="Exp as manager"
+                    min={1}
+                    max={Number(formData.experienceLevel)}
+                    suffix=" years"
+                    value={Number(formData.experienceAsManager)}
+                    onChange={handleRangeChange("experienceAsManager")}${sizeAttr}
+                    isFullWidth
+                />
+            </FormItemGroup>
+
+            {/* RADIO TAB GROUP */}
+            <RadioTabGroup
+                id="contact-preference"
+                label="Preferred contact method"
+                value={formData.contactPreference}
+                options={[
+                    { id: "email-contact", label: "Email", value: "email" },
+                    { id: "phone-contact", label: "Phone", value: "phone" },
+                    { id: "sms-contact", label: "SMS", value: "sms" },
+                ]}
+                onChange={handleRadioChange("contactPreference")}${sizeAttr}
+            />
+
+            {/* RADIO GROUP */}
+            <RadioGroup
+                label="Gender"
+                name="gender"
+                value={formData.gender}
+                options={[
+                    { id: "male", label: "Male", value: "male" },
+                    { id: "female", label: "Female", value: "female" },
+                    { id: "other", label: "Other", value: "other" },
+                ]}
+                onChange={handleRadioChange("gender")}${sizeAttr}
+            />
+
+            {/* CHECKBOX GROUP */}
+            <CheckboxGroup
+                label="Preferred cuisine"
+                name="food"
+                options={[
+                    { id: "food-indian", value: "Indian", label: "Indian" },
+                    { id: "food-italian", value: "Italian", label: "Italian" },
+                    { id: "food-french", value: "French", label: "French" },
+                ]}
+                value={formData.food}
+                onChange={(values) => setFormData({ ...formData, food: values })}${sizeAttr}
+                columns={2}
+            />
+
+            {/* SWITCH GROUP */}
+            <SwitchGroup
+                label="Preferred country"
+                name="preferredCountries"
+                options={[
+                    { id: "country-india", value: "India", label: "India" },
+                    { id: "country-italy", value: "Italy", label: "Italy" },
+                    { id: "country-france", value: "France", label: "France" },
+                ]}
+                value={formData.preferredCountries}
+                onChange={(values) => setFormData({ ...formData, preferredCountries: values })}${sizeAttr}
+                align="horizontal"
+            />
+
+            {/* INDIVIDUAL SWITCHES */}
+            <FormItemGroup equalWidthForChildren>
+                <Switch
+                    id="notifications"
+                    label="Enable notifications"
+                    checked={formData.notifications}
+                    onChange={handleCheckboxChange("notifications")}${sizeAttr}
+                />
+                <Switch
+                    id="newsletter"
+                    label="Subscribe to newsletter"
+                    checked={formData.newsletter}
+                    onChange={handleCheckboxChange("newsletter")}${sizeAttr}
+                />
+            </FormItemGroup>
+
+            <Divider marginBottom="micro" kind="secondary" />
+
+            <Footer verticallyCentreItems pushItemsToEnds>
+                <Checkbox
+                    id="terms"
+                    label="I accept the terms and conditions"
+                    checked={formData.termsAccepted}
+                    onChange={handleCheckboxChange("termsAccepted")}${sizeAttr}
+                    labelFirst
+                />
+
+                <Button
+                    kind="primary"
+                    type="submit"
+                    size="large"${fullWidthAttr}
+                >
+                    Submit
+                </Button>
+            </Footer>
+        </Form>
+    );
+};`;
     }, [selectedSpacing, selectedSize, isJoint, isButtonFullWidth]);
 
     return (

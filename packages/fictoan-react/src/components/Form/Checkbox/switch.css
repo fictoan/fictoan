@@ -146,3 +146,148 @@
     transform : translateY(-50%) translateX(24px);
 }
 
+/* LABEL FIRST ============================================================== */
+/* Container layout */
+[data-form-item].label-first:has([data-switch]) {
+    width           : 100%;
+    display         : flex;
+    justify-content : space-between;
+    align-items     : center;
+}
+
+/* Remove padding from label - no longer needs space for pseudo-elements */
+[data-form-item].label-first:has([data-switch]) label {
+    padding-left  : 0;
+    padding-right : 0;
+}
+
+/* Hide label pseudo-elements (only the text label, not the control) */
+[data-form-item].label-first:has([data-switch]) > [data-label-wrapper] > label::before,
+[data-form-item].label-first:has([data-switch]) > [data-label-wrapper] > label::after {
+    display : none;
+}
+
+/* Style [data-switch] to render the visual control */
+[data-form-item].label-first [data-switch] {
+    position    : relative;
+    width       : 36px;
+    height      : 18px;
+    flex-shrink : 0;
+    cursor      : pointer;
+}
+
+[data-form-item].label-first [data-switch]::before,
+[data-form-item].label-first [data-switch]::after {
+    display    : inline-flex;
+    content    : "";
+    transition : all 0.1s ease-out;
+    position   : absolute;
+}
+
+/* The grey stadium shape for the case */
+[data-form-item].label-first [data-switch]::before {
+    top           : 50%;
+    left          : 0;
+    transform     : translateY(-50%);
+    border-radius : 16px;
+    background    : var(--switch-bg-default);
+    width         : 36px;
+    height        : 18px;
+}
+
+/* The white inner circle actuator */
+[data-form-item].label-first [data-switch]::after {
+    top           : 50%;
+    transform     : translateY(-50%);
+    background    : var(--switch-slider-bg-default);
+    border-radius : 50%;
+    box-shadow    : 0 2px 4px -2px hsla(0, 0%, 0%, 0.6);
+    left          : 3px;
+    width         : 12px;
+    height        : 12px;
+}
+
+/* LABEL FIRST STATES ======================================================= */
+/* Hover */
+[data-form-item].label-first:has(> [data-input-wrapper] > input[type="checkbox"]:hover) [data-switch]::before {
+    background : var(--switch-bg-hover);
+}
+
+[data-form-item].label-first:has(> [data-input-wrapper] > input[type="checkbox"]:hover) [data-switch]::after {
+    background : var(--switch-slider-bg-hover);
+}
+
+/* Checked */
+[data-form-item].label-first:has(> [data-input-wrapper] > input[type="checkbox"]:checked) [data-switch]::before {
+    background : var(--switch-bg-checked);
+}
+
+[data-form-item].label-first:has(> [data-input-wrapper] > input[type="checkbox"]:checked) [data-switch]::after {
+    transform  : translateY(-50%) translateX(18px);
+    background : var(--switch-slider-bg-checked);
+}
+
+/* LABEL FIRST + SIZES ====================================================== */
+/* TINY --------------------------------------------------------------------- */
+[data-form-item].label-first.size-tiny [data-switch] {
+    width  : 16px;
+    height : 8px;
+}
+
+[data-form-item].label-first.size-tiny [data-switch]::before {
+    width  : 16px;
+    height : 8px;
+}
+
+[data-form-item].label-first.size-tiny [data-switch]::after {
+    width  : 6px;
+    height : 6px;
+    left   : 1px;
+}
+
+[data-form-item].label-first.size-tiny:has(> [data-input-wrapper] > input[type="checkbox"]:checked) [data-switch]::after {
+    transform : translateY(-50%) translateX(8px);
+}
+
+/* SMALL -------------------------------------------------------------------- */
+[data-form-item].label-first.size-small [data-switch] {
+    width  : 24px;
+    height : 12px;
+}
+
+[data-form-item].label-first.size-small [data-switch]::before {
+    width  : 24px;
+    height : 12px;
+}
+
+[data-form-item].label-first.size-small [data-switch]::after {
+    width  : 8px;
+    height : 8px;
+    left   : 2px;
+}
+
+[data-form-item].label-first.size-small:has(> [data-input-wrapper] > input[type="checkbox"]:checked) [data-switch]::after {
+    transform : translateY(-50%) translateX(12px);
+}
+
+/* LARGE -------------------------------------------------------------------- */
+[data-form-item].label-first.size-large [data-switch] {
+    width  : 48px;
+    height : 24px;
+}
+
+[data-form-item].label-first.size-large [data-switch]::before {
+    width  : 48px;
+    height : 24px;
+}
+
+[data-form-item].label-first.size-large [data-switch]::after {
+    width  : 18px;
+    height : 18px;
+    left   : 3px;
+}
+
+[data-form-item].label-first.size-large:has(> [data-input-wrapper] > input[type="checkbox"]:checked) [data-switch]::after {
+    transform : translateY(-50%) translateX(24px);
+}
+

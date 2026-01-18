@@ -3,28 +3,31 @@ import React, { useMemo } from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { Element } from "$element";
-import { FormItem } from "../FormItem/FormItem";
 import { SpacingTypes } from "../../Element/constants";
-import { separateWrapperProps } from "../../../utils/propSeparation";
+
+// UTILS ===============================================================================================================
+import { separateWrapperProps } from "$utils/propSeparation";
 
 // STYLES ==============================================================================================================
 import "./switch.css";
 
-// TYPES ===============================================================================================================
+// OTHER ===============================================================================================================
+import { FormItem } from "../FormItem/FormItem";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 
 export type SwitchElementType = HTMLInputElement;
 export type SwitchProps = InputLabelCustomProps & {
-    id?: string;
-    name?: string;
-    checked?: boolean;
-    defaultChecked?: boolean;
-    disabled?: boolean;
-    required?: boolean;
-    onChange?: (checked: boolean) => void;
-    size?: Exclude<SpacingTypes, "nano" | "huge">;
-    helpText?: string;
-    errorText?: string;
+    id             ? : string;
+    name           ? : string;
+    checked        ? : boolean;
+    defaultChecked ? : boolean;
+    disabled       ? : boolean;
+    required       ? : boolean;
+    onChange       ? : (checked : boolean) => void;
+    size           ? : Exclude<SpacingTypes, "nano" | "huge">;
+    helpText       ? : string;
+    errorText      ? : string;
+    labelFirst     ? : boolean;
 };
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,18 +46,19 @@ export const Switch = React.forwardRef(
             disabled,
             required,
             size = "medium",
+            labelFirst,
             ...props
-        }: SwitchProps,
-        ref: React.Ref<SwitchElementType>
+        } : SwitchProps,
+        ref : React.Ref<SwitchElementType>,
     ) => {
-        const derivedName = useMemo(() => name || id, [name, id]);
+        const derivedName = useMemo(() => name || id, [ name, id ]);
 
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
             onChange?.(e.target.checked);
         };
 
         // Separate wrapper-level props (margin, padding, etc.) from input-specific props
-        const { wrapperProps, inputProps } = separateWrapperProps(props);
+        const {wrapperProps, inputProps} = separateWrapperProps(props);
 
         return (
             <FormItem
@@ -64,6 +68,7 @@ export const Switch = React.forwardRef(
                 errorText={errorText}
                 required={required}
                 size={size}
+                labelFirst={labelFirst}
                 {...wrapperProps}
             >
                 <Element<SwitchElementType>
@@ -80,12 +85,13 @@ export const Switch = React.forwardRef(
                     {...inputProps}
                 />
                 <Element
-                    as="div"
+                    as={labelFirst ? "label" : "div"}
+                    htmlFor={labelFirst ? id : undefined}
                     data-switch
                     className={`size-${size}`}
                 />
             </FormItem>
         );
-    }
+    },
 );
 Switch.displayName = "Switch";

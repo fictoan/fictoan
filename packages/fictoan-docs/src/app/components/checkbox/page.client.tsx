@@ -36,6 +36,9 @@ const CheckboxDocs = () => {
     const [disabled, setDisabled] = useState(false);
     const [helpText, setHelpText] = useState("");
     const [errorText, setErrorText] = useState("");
+    const [labelFirst, setLabelFirst] = useState(false);
+    const [size, setSize] = useState<"tiny" | "small" | "medium" | "large">("medium");
+    const [columns, setColumns] = useState<number | undefined>(undefined);
 
     // Mode toggles
     const [componentType, setComponentType] = useState<"checkbox" | "switch">("checkbox");
@@ -66,20 +69,26 @@ const CheckboxDocs = () => {
 
         if (showGroup) {
             const groupName = `${componentName}Group`;
+            const groupProps = [];
+            groupProps.push(`name="${componentType}-group"`);
+            groupProps.push(`options={[
+        { id: "option1", value: "option1", label: "Option 1"${disabled ? ", disabled: true" : ""} },
+        { id: "option2", value: "option2", label: "Option 2" },
+        { id: "option3", value: "option3", label: "Option 3" },
+    ]}`);
+            groupProps.push(`value={values}`);
+            groupProps.push(`onChange={(vals) => setValues(vals)}`);
+            if (labelFirst) groupProps.push(`labelFirst`);
+            if (size !== "medium") groupProps.push(`size="${size}"`);
+            if (columns) groupProps.push(`columns={${columns}}`);
+
             return `import { useState } from "react";
 import { ${groupName} } from "fictoan-react";
 
 const [values, setValues] = useState<string[]>([]);
 
 <${groupName}
-    name="${componentType}-group"
-    options={[
-        { id: "option1", value: "option1", label: "Option 1"${disabled ? ", disabled: true" : ""} },
-        { id: "option2", value: "option2", label: "Option 2" },
-        { id: "option3", value: "option3", label: "Option 3" },
-    ]}
-    value={values}
-    onChange={(vals) => setValues(vals)}
+    ${groupProps.join("\n    ")}
 />`;
         }
 
@@ -91,6 +100,8 @@ const [values, setValues] = useState<string[]>([]);
         if (disabled) props.push(`disabled`);
         if (helpText) props.push(`helpText="${helpText}"`);
         if (errorText) props.push(`errorText="${errorText}"`);
+        if (labelFirst) props.push(`labelFirst`);
+        if (size !== "medium") props.push(`size="${size}"`);
 
         return `import { useState } from "react";
 import { ${componentName} } from "fictoan-react";
@@ -100,7 +111,7 @@ const [checked, setChecked] = useState(${defaultChecked});
 <${componentName}
     ${props.join("\n    ")}
 />`;
-    }, [componentType, showGroup, id, label, defaultChecked, disabled, helpText, errorText]);
+    }, [componentType, showGroup, id, label, defaultChecked, disabled, helpText, errorText, labelFirst, size, columns]);
 
     return (
         <ComponentDocsLayout pageId="page-checkbox">
@@ -138,6 +149,9 @@ const [checked, setChecked] = useState(${defaultChecked});
                             value={groupValue}
                             onChange={(values) => setGroupValue(values)}
                             align="horizontal"
+                            labelFirst={labelFirst}
+                            size={size}
+                            columns={columns}
                         />
                     ) : (
                         <SwitchGroup
@@ -146,30 +160,37 @@ const [checked, setChecked] = useState(${defaultChecked});
                             value={groupValue}
                             onChange={(values) => setGroupValue(values)}
                             align="horizontal"
+                            labelFirst={labelFirst}
+                            size={size}
+                            columns={columns}
                         />
                     )
                 ) : (
                     componentType === "checkbox" ? (
                         <Checkbox
                             {...themeProps}
-                            key={`checkbox-${defaultChecked}-${disabled}`}
+                            key={`checkbox-${defaultChecked}-${disabled}-${labelFirst}-${size}`}
                             id={id}
                             label={label}
                             defaultChecked={defaultChecked}
                             disabled={disabled}
                             helpText={helpText || undefined}
                             errorText={errorText || undefined}
+                            labelFirst={labelFirst}
+                            size={size}
                         />
                     ) : (
                         <Switch
                             {...themeProps}
-                            key={`switch-${defaultChecked}-${disabled}`}
+                            key={`switch-${defaultChecked}-${disabled}-${labelFirst}-${size}`}
                             id={id}
                             label={label}
                             defaultChecked={defaultChecked}
                             disabled={disabled}
                             helpText={helpText || undefined}
                             errorText={errorText || undefined}
+                            labelFirst={labelFirst}
+                            size={size}
                         />
                     )
                 )}
@@ -252,18 +273,76 @@ const [checked, setChecked] = useState(${defaultChecked});
                                 helpText="Error message to display."
                                 marginBottom="micro" isFullWidth
                             />
+
+                            <Checkbox
+                                id="prop-labelFirst"
+                                label="labelFirst"
+                                checked={labelFirst}
+                                onChange={(checked) => setLabelFirst(checked)}
+                                helpText="Place the label before the control."
+                                marginBottom="micro"
+                            />
+
+                            <RadioTabGroup
+                                id="prop-size"
+                                label="size"
+                                options={[
+                                    { id: "size-tiny", value: "tiny", label: "tiny" },
+                                    { id: "size-small", value: "small", label: "small" },
+                                    { id: "size-medium", value: "medium", label: "medium" },
+                                    { id: "size-large", value: "large", label: "large" },
+                                ]}
+                                value={size}
+                                onChange={(val) => setSize(val as "tiny" | "small" | "medium" | "large")}
+                                helpText="Size of the checkbox/switch."
+                                marginBottom="micro"
+                            />
                         </>
                     )}
 
                     {showGroup && (
-                        <Checkbox
-                            id="prop-disabled-group"
-                            label="disabled (first option)"
-                            checked={disabled}
-                            onChange={(checked) => setDisabled(checked)}
-                            helpText="Disable the first option in the group."
-                            marginBottom="micro"
-                        />
+                        <>
+                            <Checkbox
+                                id="prop-disabled-group"
+                                label="disabled (first option)"
+                                checked={disabled}
+                                onChange={(checked) => setDisabled(checked)}
+                                helpText="Disable the first option in the group."
+                                marginBottom="micro"
+                            />
+
+                            <Checkbox
+                                id="prop-labelFirst-group"
+                                label="labelFirst"
+                                checked={labelFirst}
+                                onChange={(checked) => setLabelFirst(checked)}
+                                helpText="Place labels before each control."
+                                marginBottom="micro"
+                            />
+
+                            <RadioTabGroup
+                                id="prop-size-group"
+                                label="size"
+                                options={[
+                                    { id: "size-tiny", value: "tiny", label: "tiny" },
+                                    { id: "size-small", value: "small", label: "small" },
+                                    { id: "size-medium", value: "medium", label: "medium" },
+                                    { id: "size-large", value: "large", label: "large" },
+                                ]}
+                                value={size}
+                                onChange={(val) => setSize(val as "tiny" | "small" | "medium" | "large")}
+                                helpText="Size of each checkbox/switch."
+                                marginBottom="micro"
+                            />
+
+                            <InputField
+                                label="columns"
+                                value={columns?.toString() || ""}
+                                onChange={(value) => setColumns(value ? parseInt(value) : undefined)}
+                                helpText="Number of columns for grid layout."
+                                marginBottom="micro" isFullWidth
+                            />
+                        </>
                     )}
                 </Div>
             </Div>

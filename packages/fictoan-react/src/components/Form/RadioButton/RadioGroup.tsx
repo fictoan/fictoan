@@ -32,6 +32,7 @@ export const RadioGroup = React.forwardRef(
             disabled,
             size,
             columns,
+            labelFirst,
             ...props
         }: RadioGroupProps,
         ref: React.Ref<HTMLDivElement>
@@ -54,6 +55,10 @@ export const RadioGroup = React.forwardRef(
 
         if (columns) {
             classNames.push(`with-columns`);
+        }
+
+        if (labelFirst) {
+            classNames.push(`label-first`);
         }
 
         return (
@@ -86,6 +91,7 @@ export const RadioGroup = React.forwardRef(
                                 data-radio-button
                                 role="radio"
                                 aria-checked={isChecked}
+                                className={labelFirst ? "label-first" : undefined}
                             >
                                 <input
                                     type="radio"
@@ -98,6 +104,11 @@ export const RadioGroup = React.forwardRef(
                                     {...optionProps}
                                 />
                                 <label htmlFor={finalId}>{optionLabel}</label>
+                                {labelFirst ? (
+                                    <label htmlFor={finalId} data-radio />
+                                ) : (
+                                    <Div data-radio />
+                                )}
                             </Div>
                         );
                     })}

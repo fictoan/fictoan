@@ -81,3 +81,100 @@
 [data-radio-button]:has(input[type="radio"]:disabled) label::before {
     background : var(--radio-circle-bg-disabled);
 }
+
+/* LABEL FIRST ============================================================== */
+/* Container layout */
+[data-radio-button].label-first {
+    width : 100%;
+}
+
+[data-radio-button].label-first [data-form-item] {
+    width           : 100%;
+    display         : flex;
+    justify-content : space-between;
+    align-items     : center;
+}
+
+/* Remove padding from label - no longer needs space for pseudo-elements */
+[data-radio-button].label-first label {
+    padding-left  : 0;
+    padding-right : 0;
+}
+
+/* Hide label pseudo-elements (only the text label, not the control) */
+[data-radio-button].label-first [data-form-item] > [data-label-wrapper] > label::before,
+[data-radio-button].label-first [data-form-item] > [data-label-wrapper] > label::after,
+[data-radio-button].label-first > label:not([data-radio])::before,
+[data-radio-button].label-first > label:not([data-radio])::after {
+    display : none;
+}
+
+/* Style [data-radio] to render the visual control */
+[data-radio-button].label-first [data-radio] {
+    position    : relative;
+    width       : 16px;
+    height      : 16px;
+    flex-shrink : 0;
+    cursor      : pointer;
+}
+
+[data-radio-button].label-first [data-radio]::before,
+[data-radio-button].label-first [data-radio]::after {
+    display    : inline-block;
+    position   : absolute;
+    content    : "";
+    transition : all 0.1s ease-out;
+}
+
+/* The grey outer circle */
+[data-radio-button].label-first [data-radio]::before {
+    width         : 16px;
+    height        : 16px;
+    left          : 0;
+    top           : 0;
+    border-radius : 50%;
+    background    : var(--radio-circle-bg-default);
+}
+
+/* The white inner circle */
+[data-radio-button].label-first [data-radio]::after {
+    opacity       : 0;
+    left          : 4px;
+    top           : 4px;
+    width         : 8px;
+    height        : 8px;
+    background    : var(--radio-button-dot);
+    border-radius : 50%;
+    box-shadow    : 0 2px 4px -2px hsla(0, 0%, 0%, 0.6);
+}
+
+/* LABEL FIRST STATES ======================================================= */
+/* Hover */
+[data-radio-button].label-first:hover [data-radio]::before {
+    background : var(--radio-circle-bg-hover);
+}
+
+/* Focus */
+[data-radio-button].label-first:has(input[type="radio"]:focus) [data-radio]::before {
+    outline : solid 2px var(--radio-circle-bg-checked);
+}
+
+/* Checked */
+[data-radio-button].label-first:has(input[type="radio"]:checked) [data-radio]::before {
+    background : var(--radio-circle-bg-checked);
+}
+
+[data-radio-button].label-first:has(input[type="radio"]:checked) [data-radio]::after {
+    opacity : 1;
+}
+
+/* Disabled */
+[data-radio-button].label-first:has(input[type="radio"]:disabled) [data-radio] {
+    opacity        : 0.5;
+    cursor         : not-allowed;
+    pointer-events : none;
+}
+
+[data-radio-button].label-first:has(input[type="radio"]:disabled) [data-radio]::before {
+    background : var(--radio-circle-bg-disabled);
+}
