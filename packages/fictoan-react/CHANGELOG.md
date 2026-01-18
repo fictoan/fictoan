@@ -1,7 +1,6 @@
 # CHANGELOG
 
 ## 2.0.0
-
 ### ⚠️ Breaking changes
 
 **OKLCH colour system migration**
@@ -125,6 +124,9 @@
   - Uses event delegation instead of per-element listeners
   - Eliminates DOM pollution from multiple hidden tooltip elements
 - Add `SidebarItemGroup` for grouping sidebar items
+- Fixed `equaliseWidth` CSS selector for CheckboxGroup and SwitchGroup
+- Added `size` prop to Input elements
+- Added `columns` prop to `CheckboxGroup`, `SwitchGroup`, and `RadioGroup` for grid layout
 
 ### Bug fixes
 - Fix `Tabs` component losing state of controlled inputs (checkboxes, text fields, etc.) when parent re-renders

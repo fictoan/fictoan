@@ -51,6 +51,7 @@
         height        : 8px;
         background    : var(--radio-button-dot);
         border-radius : 50%;
+        box-shadow    : 0 2px 4px -2px hsla(0, 0%, 0%, 0.6);
     }
 
     &:hover label::before {

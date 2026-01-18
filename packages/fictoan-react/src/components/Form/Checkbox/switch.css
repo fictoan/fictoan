@@ -126,3 +126,23 @@
     transform : translateY(-50%) translateX(12px);
 }
 
+/* LARGE -------------------------------------------------------------------- */
+[data-form-item].size-large:has([data-switch]) label {
+    padding-left : 56px;
+}
+
+[data-form-item].size-large:has([data-switch]) label::before {
+    width  : 48px;
+    height : 24px;
+}
+
+[data-form-item].size-large:has([data-switch]) label::after {
+    width  : 18px;
+    height : 18px;
+    left   : 3px;
+}
+
+[data-form-item].size-large:has([data-switch]):has(> [data-input-wrapper] > input[type="checkbox"]:checked) > [data-label-wrapper] > label::after {
+    transform : translateY(-50%) translateX(24px);
+}
+

@@ -4,7 +4,30 @@
 import React, { FormEvent, useState } from "react";
 
 // UI ==================================================================================================================
-import { Button, Card, Checkbox, CheckboxGroup, CodeBlock, Divider, FileUpload, Footer, Form, FormItemGroup, InputField, ListBox, Portion, RadioGroup, RadioTabGroup, Range, Row, Select, Switch, SwitchGroup, Text, TextArea } from "fictoan-react";
+import {
+    Button,
+    Card,
+    Checkbox,
+    CheckboxGroup,
+    CodeBlock,
+    Divider,
+    FileUpload,
+    Footer,
+    Form,
+    FormItemGroup,
+    InputField,
+    ListBox,
+    Portion,
+    RadioGroup,
+    RadioTabGroup,
+    Range,
+    Row,
+    Select,
+    Switch,
+    SwitchGroup,
+    Text,
+    TextArea,
+}from "fictoan-react";
 
 // ASSETS ==============================================================================================================
 import EyeClosedIcon from "../../../assets/icons/eye-closed.svg";
@@ -277,6 +300,7 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                                     { label : "United Kingdom", value : "uk" },
                                     { label : "Canada", value : "ca" },
                                 ]}
+                                size={size}
                                 isFullWidth
                             />
 
@@ -290,6 +314,7 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                                     { label : "Spanish", value : "es" },
                                     { label : "French", value : "fr" },
                                 ]}
+                                size={size}
                                 isFullWidth
                             />
                         </FormItemGroup>
@@ -310,6 +335,7 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                             allowMultiSelect
                             allowCustomEntries
                             selectionLimit={2}
+                            size={size}
                             helpText="Select from the list, or add your own"
                         />
 
@@ -338,6 +364,7 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                                 suffix=" years"
                                 value={Number(formData.experienceLevel)}
                                 onChange={handleRangeChange("experienceLevel")}
+                                size={size}
                             />
 
                             <Range
@@ -349,6 +376,7 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                                 suffix={` years`}
                                 value={Number(formData.experienceAsManager)}
                                 onChange={handleRangeChange("experienceAsManager")}
+                                size={size}
                             />
                         </FormItemGroup>
 
@@ -380,6 +408,7 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                                 { id : "other", label : "Other", value : "other" },
                             ]}
                             onChange={handleRadioChange("gender")}
+                            size={size}
                         />
 
                         {/* INTERESTS ============================================================================== */}
@@ -444,6 +473,8 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                             ]}
                             value={formData.food}
                             onChange={(values: any) => setFormData({ ...formData, food : values })}
+                            size={size}
+                            align="horizontal" equaliseWidth columns={3}
                         />
 
                         <SwitchGroup
@@ -458,6 +489,8 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                             ]}
                             value={formData.preferredCountries}
                             onChange={(values: any) => setFormData({ ...formData, preferredCountries : values })}
+                            size={size}
+                            align="horizontal"
                         />
 
                         <FormItemGroup equalWidthForChildren>

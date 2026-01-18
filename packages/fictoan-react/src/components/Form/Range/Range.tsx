@@ -2,7 +2,7 @@
 import React, { useCallback, useRef, useState, useEffect } from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
-import { CommonAndHTMLProps, CommonProps } from "../../Element/constants";
+import { CommonAndHTMLProps, CommonProps, SpacingTypes } from "../../Element/constants";
 import { Div } from "../../Element/Tags";
 
 // UTILS ===============================================================================================================
@@ -41,20 +41,22 @@ export interface DualRangeCustomProps {
 export type RangeElementType = HTMLInputElement;
 
 // Separate prop types for each mode
-export type SingleRangeProps = Omit<CommonAndHTMLProps<RangeElementType>, "onChange" | "value"> &
+export type SingleRangeProps = Omit<CommonAndHTMLProps<RangeElementType>, "onChange" | "value" | "size"> &
                                SingleRangeCustomProps &
                                CommonProps & {
     label     ? : string;
     helpText  ? : string;
     errorText ? : string;
+    size      ? : Exclude<SpacingTypes, "nano" | "huge">;
 };
 
-export type DualRangeProps = Omit<CommonAndHTMLProps<RangeElementType>, "onChange" | "value"> &
+export type DualRangeProps = Omit<CommonAndHTMLProps<RangeElementType>, "onChange" | "value" | "size"> &
                              DualRangeCustomProps &
                              CommonProps & {
     label     ? : string;
     helpText  ? : string;
     errorText ? : string;
+    size      ? : Exclude<SpacingTypes, "nano" | "huge">;
 };
 
 export type RangeProps = SingleRangeProps | DualRangeProps;
@@ -92,6 +94,7 @@ const SingleThumbRange : React.FC<SingleThumbRangeInternalProps> = ({
     step = 1,
     id,
     disabled,
+    size,
     ...props
 }) => {
     // Separate wrapper-level props (margin, padding, etc.) from component-specific props
@@ -247,6 +250,7 @@ const SingleThumbRange : React.FC<SingleThumbRangeInternalProps> = ({
             )}
             helpText={helpText}
             errorText={errorText}
+            size={size}
             {...wrapperProps}
         >
             <Div
@@ -316,6 +320,7 @@ const DualThumbRange : React.FC<DualThumbRangeInternalProps> = ({
     maxLabel = "Maximum value",
     id,
     disabled,
+    size,
     ...props
 }) => {
     // Separate wrapper-level props (margin, padding, etc.) from component-specific props
@@ -489,6 +494,7 @@ const DualThumbRange : React.FC<DualThumbRangeInternalProps> = ({
             )}
             helpText={helpText}
             errorText={errorText}
+            size={size}
             {...wrapperProps}
         >
             <Div

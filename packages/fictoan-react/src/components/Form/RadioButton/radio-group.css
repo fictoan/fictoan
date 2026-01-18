@@ -13,3 +13,64 @@
     flex : 1 1;
 }
 
+/* COLUMNS GRID LAYOUT ====================================================== */
+[data-radio-group].with-columns {
+    display : grid;
+    gap     : 16px 24px;
+}
+
+/* SIZES ==================================================================== */
+/* TINY --------------------------------------------------------------------- */
+[data-form-item].size-tiny [data-radio-button] label {
+    padding-left : 16px;
+    font-size    : calc(var(--paragraph-font-size) * 0.72);
+
+    &::before {
+        width  : 10px;
+        height : 10px;
+    }
+
+    &::after {
+        width  : 4px;
+        height : 4px;
+        left   : 3px;
+        top    : 3px;
+    }
+}
+
+/* SMALL -------------------------------------------------------------------- */
+[data-form-item].size-small [data-radio-button] label {
+    padding-left : 20px;
+    font-size    : calc(var(--paragraph-font-size) * 0.88);
+
+    &::before {
+        width  : 12px;
+        height : 12px;
+    }
+
+    &::after {
+        width  : 6px;
+        height : 6px;
+        left   : 3px;
+        top    : 3px;
+    }
+}
+
+/* LARGE -------------------------------------------------------------------- */
+[data-form-item].size-large [data-radio-button] label {
+    padding-left : 36px;
+    font-size    : calc(var(--paragraph-font-size) * 1.2);
+
+    &::before {
+        width  : 24px;
+        height : 24px;
+    }
+
+    &::after {
+        width  : 12px;
+        height : 12px;
+        left   : 6px;
+        top    : 6px;
+    }
+}
+

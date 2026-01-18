@@ -34,6 +34,7 @@ interface GroupCustomProps {
     equaliseWidth?: boolean;
     equalizeWidth?: boolean;
     size?: Exclude<SpacingTypes, "nano" | "huge">;
+    columns?: number;
 }
 
 // Combined props for the group component
@@ -63,6 +64,7 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
             required,
             disabled,
             size,
+            columns,
             ...props
         },
         ref
@@ -106,6 +108,10 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
             classNames.push(`equalise-width`);
         }
 
+        if (columns) {
+            classNames.push(`with-columns`);
+        }
+
         return (
             <FormItem
                 label={label}
@@ -121,6 +127,7 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
                     classNames={classNames}
                     role="group"
                     aria-label={label}
+                    style={columns ? { gridTemplateColumns: `repeat(${columns}, 1fr)` } : undefined}
                     {...props}
                 >
                     {options.map((option, index) => {
@@ -168,6 +175,7 @@ export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
             required,
             disabled,
             size,
+            columns,
             ...props
         },
         ref
@@ -211,6 +219,10 @@ export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
             classNames.push(`equalise-width`);
         }
 
+        if (columns) {
+            classNames.push(`with-columns`);
+        }
+
         return (
             <FormItem
                 label={label}
@@ -226,6 +238,7 @@ export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
                     classNames={classNames}
                     role="group"
                     aria-label={label}
+                    style={columns ? { gridTemplateColumns: `repeat(${columns}, 1fr)` } : undefined}
                     {...props}
                 >
                     {options.map((option, index) => {

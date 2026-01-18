@@ -164,6 +164,7 @@ export const RadioTabGroup = React.forwardRef<HTMLDivElement, RadioTabGroupProps
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
+                size={size}
                 {...wrapperProps}
             >
                 <Element

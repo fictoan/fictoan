@@ -93,3 +93,58 @@
 [data-form-item]:has(> [data-input-wrapper] > input[type="checkbox"]:checked) > [data-label-wrapper] > label::before { background : var(--checkbox-square-bg-checked); }
 
 [data-form-item]:has(> [data-input-wrapper] > input[type="checkbox"]:checked) > [data-label-wrapper] > label::after { opacity : 1; }
+
+/* SIZES ==================================================================== */
+/* TINY --------------------------------------------------------------------- */
+[data-form-item].size-tiny:has([data-checkbox]) label {
+    padding-left : 16px;
+}
+
+[data-form-item].size-tiny:has([data-checkbox]) label::before {
+    width  : 10px;
+    height : 10px;
+}
+
+[data-form-item].size-tiny:has([data-checkbox]) label::after {
+    width         : 6px;
+    height        : 3px;
+    left          : 2px;
+    top           : 3px;
+    border-width  : 1.5px;
+}
+
+/* SMALL -------------------------------------------------------------------- */
+[data-form-item].size-small:has([data-checkbox]) label {
+    padding-left : 20px;
+}
+
+[data-form-item].size-small:has([data-checkbox]) label::before {
+    width  : 12px;
+    height : 12px;
+}
+
+[data-form-item].size-small:has([data-checkbox]) label::after {
+    width         : 8px;
+    height        : 4px;
+    left          : 2px;
+    top           : 3px;
+    border-width  : 1.5px;
+}
+
+/* LARGE -------------------------------------------------------------------- */
+[data-form-item].size-large:has([data-checkbox]) label {
+    padding-left : 32px;
+}
+
+[data-form-item].size-large:has([data-checkbox]) label::before {
+    width  : 24px;
+    height : 24px;
+}
+
+[data-form-item].size-large:has([data-checkbox]) label::after {
+    width         : 16px;
+    height        : 8px;
+    left          : 4px;
+    top           : 6px;
+    border-width  : 3px;
+}

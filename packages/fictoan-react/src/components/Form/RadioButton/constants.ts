@@ -34,6 +34,8 @@ export interface RadioGroupCustomProps {
     value?: string;  // For controlled usage
     defaultValue?: string;  // For uncontrolled usage
     onChange?: ValueChangeHandler<string>;
+    size?: Exclude<SpacingTypes, "nano" | "huge">;
+    columns?: number;
 }
 
 export type RadioGroupProps = Omit<RadioButtonProps, keyof RadioGroupCustomProps | "value"> & RadioGroupCustomProps & {
@@ -44,7 +46,7 @@ export type RadioGroupProps = Omit<RadioButtonProps, keyof RadioGroupCustomProps
 
 // RADIO TAB GROUP /////////////////////////////////////////////////////////////////////////////////////////////////////
 export interface RadioTabGroupCustomProps {
-    size?: SpacingTypes;
+    size?: Exclude<SpacingTypes, "nano" | "huge">;
     bgColour?: string;
 }
 
