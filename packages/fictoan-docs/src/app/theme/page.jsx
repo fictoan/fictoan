@@ -10,7 +10,7 @@ export const metadata = {
         siteName    : "Fictoan UI",
         images      : [
             {
-                url    : "https://fictoan.io/components/option-card/opengraph-image",
+                url    : "https://fictoan.io/theme/opengraph-image",
                 width  : 1200,
                 height : 630,
                 alt    : "Theme-ing — Fictoan UI",
@@ -23,7 +23,7 @@ export const metadata = {
         card        : "summary_large_image",
         title       : "Theme-ing — Fictoan UI",
         description : "How to setup the colour theme for your project",
-        images      : ["https://fictoan.io/components/option-card/opengraph-image"],
+        images      : ["https://fictoan.io/theme/opengraph-image"],
     },
 };
 

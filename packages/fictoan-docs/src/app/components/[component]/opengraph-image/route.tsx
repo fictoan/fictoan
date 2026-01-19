@@ -13,6 +13,7 @@ export async function GET(
     return createOGImageResponse({
         componentName,
         description,
+        componentSlug: component,
     });
 }
 
