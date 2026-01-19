@@ -2,7 +2,7 @@
 import React, { useRef, useState } from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
-import { ColourPropTypes } from "$components/Element/constants";
+import { ColourPropTypes, SpacingTypes } from "$components/Element/constants";
 import { Div } from "../../Element/Tags";
 
 // STYLES ==============================================================================================================
@@ -35,6 +35,7 @@ export type FileUploadProps = InputLabelCustomProps & {
     disabled            ? : boolean;
     invalid             ? : boolean;
     className           ? : string;
+    size                ? : Exclude<SpacingTypes, "nano" | "huge">;
     "aria-label"? : string;
     "aria-invalid"? : boolean;
 };
@@ -62,6 +63,7 @@ export const FileUpload = React.forwardRef(
             name,
             badgeBgColour,
             badgeTextColour,
+            size,
             ...props
         } : FileUploadProps,
         ref : React.Ref<FileUploadElementType>,
@@ -126,6 +128,7 @@ export const FileUpload = React.forwardRef(
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
+                size={size}
             >
                 <Div
                     data-file-upload-area

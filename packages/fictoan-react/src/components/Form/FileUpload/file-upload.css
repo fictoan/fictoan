@@ -63,3 +63,43 @@
 [data-file-upload-area].dragging .file-upload-area {
     transform : scale(1.02);
 }
+
+/* SIZE VARIANTS //////////////////////////////////////////////////////////// */
+[data-form-item].size-tiny .file-upload-area {
+    height : 64px !important;
+}
+
+[data-form-item].size-small .file-upload-area {
+    height : 88px !important;
+}
+
+[data-form-item].size-large .file-upload-area {
+    height : 160px !important;
+}
+
+[data-form-item].size-tiny .file-upload-content p {
+    font-size : calc(var(--paragraph-font-size) * 0.72);
+}
+
+[data-form-item].size-small .file-upload-content p {
+    font-size : calc(var(--paragraph-font-size) * 0.88);
+}
+
+[data-form-item].size-large .file-upload-content p {
+    font-size : calc(var(--paragraph-font-size) * 1.2);
+}
+
+[data-form-item].size-tiny .uploaded-files {
+    gap        : 4px;
+    margin-top : 4px;
+}
+
+[data-form-item].size-small .uploaded-files {
+    gap        : 6px;
+    margin-top : 6px;
+}
+
+[data-form-item].size-large .uploaded-files {
+    gap        : 12px;
+    margin-top : 12px;
+}
