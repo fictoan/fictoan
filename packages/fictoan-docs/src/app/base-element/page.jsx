@@ -28,7 +28,7 @@ export const metadata = {
         siteName    : "Fictoan UI",
         images      : [
             {
-                url    : "https://fictoan.io/components/option-card/opengraph-image",
+                url    : "https://fictoan.io/base-element/opengraph-image",
                 width  : 1200,
                 height : 630,
                 alt    : "Base element — Fictoan UI",
@@ -41,7 +41,7 @@ export const metadata = {
         card        : "summary_large_image",
         title       : "Base element — Fictoan UI",
         description : "A common wrapper tag so you can add Fictoan props to any element",
-        images      : ["https://fictoan.io/components/option-card/opengraph-image"],
+        images      : ["https://fictoan.io/base-element/opengraph-image"],
     },
 };
 

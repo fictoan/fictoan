@@ -77,3 +77,10 @@
     border-top-left-radius    : 0;
     border-bottom-left-radius : 0;
 }
+
+/* Remove left border from non-first items to prevent double borders */
+[data-form-item-group].is-joint [data-form-item]:not(:first-child) input,
+[data-form-item-group].is-joint [data-form-item]:not(:first-child) select,
+[data-form-item-group].is-joint button:not(:first-child) {
+    border-left : 0;
+}

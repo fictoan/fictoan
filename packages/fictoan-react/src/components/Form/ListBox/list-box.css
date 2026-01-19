@@ -138,6 +138,11 @@
     z-index          : 1000;
 }
 
+.list-box-dropdown.open-upward {
+    top    : auto;
+    bottom : calc(100% + 12px);
+}
+
 .list-box-options {
     list-style : none;
     padding    : 0;

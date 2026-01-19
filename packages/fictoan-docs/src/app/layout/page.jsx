@@ -10,7 +10,7 @@ export const metadata = {
         siteName    : "Fictoan UI",
         images      : [
             {
-                url    : "https://fictoan.io/components/option-card/opengraph-image",
+                url    : "https://fictoan.io/layout/opengraph-image",
                 width  : 1200,
                 height : 630,
                 alt    : "Layout — Fictoan UI",
@@ -23,7 +23,7 @@ export const metadata = {
         card        : "summary_large_image",
         title       : "Layout — Fictoan UI",
         description : "How to setup the content scaffolding on a page",
-        images      : ["https://fictoan.io/components/option-card/opengraph-image"],
+        images      : ["https://fictoan.io/layout/opengraph-image"],
     },
 };
 

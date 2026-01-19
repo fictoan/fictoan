@@ -22,8 +22,6 @@ import { ListBoxProps, OptionForListBoxProps, ListBoxElementType, ListBoxCustomP
 import { Text } from "../../Typography/Text";
 import { searchOptions } from "./listBoxUtils";
 
-// TODO: Reposition if dropdown cannot fit in viewport
-
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
     (
@@ -55,6 +53,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
         const [activeIndex, setActiveIndex] = useState(-1);
         const [selectedOption, setSelectedOption] = useState<OptionForListBoxProps | null>(null);
         const [selectedOptions, setSelectedOptions] = useState<OptionForListBoxProps[]>([]);
+        const [openUpward, setOpenUpward] = useState(false);
 
         useEffect(() => {
             if (defaultValue && onChange) {
@@ -69,6 +68,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
 
         const dropdownRef = useRef<HTMLSelectElement>(null) as MutableRefObject<HTMLSelectElement>;
         const searchInputRef = useRef<HTMLInputElement>(null);
+        const dropdownMenuRef = useRef<HTMLDivElement>(null);
 
         const listboxId = id || `listbox-${Math.random().toString(36).substring(2, 9)}`;
         const filteredOptions = searchOptions(allOptions, searchValue);
@@ -223,6 +223,23 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
             }
         }, [isOpen]);
 
+        // Determine if dropdown should open upward based on available viewport space
+        useEffect(() => {
+            if (isOpen && dropdownRef.current) {
+                const wrapperRect = dropdownRef.current.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+                // Estimate dropdown height (max-height is 240px for options + search + padding)
+                const estimatedDropdownHeight = 300;
+                const spaceBelow = viewportHeight - wrapperRect.bottom;
+                const spaceAbove = wrapperRect.top;
+
+                // Open upward if not enough space below but enough space above
+                setOpenUpward(spaceBelow < estimatedDropdownHeight && spaceAbove > spaceBelow);
+            } else {
+                setOpenUpward(false);
+            }
+        }, [isOpen]);
+
         useEffect(() => {
             if (activeIndex >= 0) {
                 const activeOption = document.querySelector(`[data-index="${activeIndex}"]`);
@@ -321,7 +338,10 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
 
                     {/* DROPDOWN */}
                     {isOpen && !disabled && (
-                        <Div className="list-box-dropdown">
+                        <Div
+                            ref={dropdownMenuRef}
+                            className={`list-box-dropdown${openUpward ? " opens-upward" : ""}`}
+                        >
                             <Div className="list-box-search-wrapper">
                                 <InputField
                                     type="text"

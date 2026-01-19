@@ -7,11 +7,12 @@ import { ReactNode, Children, isValidElement } from "react";
 import { Article, Divider, Portion, Row, Section, Div, Tabs } from "fictoan-react";
 
 interface ComponentDocsLayoutProps {
-    children : ReactNode;
-    pageId   : string;
+    children         : ReactNode;
+    pageId           : string;
+    secondTabLabel ? : string;
 }
 
-export const ComponentDocsLayout = ({ children, pageId }: ComponentDocsLayoutProps) => {
+export const ComponentDocsLayout = ({ children, pageId, secondTabLabel = "Theme config" }: ComponentDocsLayoutProps) => {
     // Extract content by ID
     const getContentById = (targetId: string) => {
         let content = null;
@@ -74,7 +75,7 @@ export const ComponentDocsLayout = ({ children, pageId }: ComponentDocsLayoutPro
                                 },
                                 {
                                     key: "theme-tab",
-                                    label: "Theme config",
+                                    label: secondTabLabel,
                                     content: (getContentById("theme-config"))
                                 }
                             ]}

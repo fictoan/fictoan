@@ -131,6 +131,10 @@
     .range-thumb {
         border-width : 2px;
     }
+
+    .range-value {
+        font-size : calc(var(--paragraph-font-size) * 0.72);
+    }
 }
 
 /* SMALL -------------------------------------------------------------------- */
@@ -145,6 +149,10 @@
     .range-thumb {
         border-width : 3px;
     }
+
+    .range-value {
+        font-size : calc(var(--paragraph-font-size) * 0.88);
+    }
 }
 
 /* LARGE -------------------------------------------------------------------- */
@@ -158,5 +166,9 @@
 
     .range-thumb {
         border-width : 5px;
+    }
+
+    .range-value {
+        font-size : calc(var(--paragraph-font-size) * 1.2);
     }
 }

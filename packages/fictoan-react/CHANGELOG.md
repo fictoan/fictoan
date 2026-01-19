@@ -6,8 +6,9 @@
 **OKLCH colour system migration**
 - All colours now use the OKLCH colour space for perceptually uniform lightness and better colour mixing
 - Expanded palette from 22 to 36 named colours, with ~10° hue gaps for comprehensive coverage
-- New colours: `rose`, `gold`, `lime`, `chartreuse`, `sage`, `emerald`, `jade`, `aqua`, `azure`, `cerulean`, `cobalt`, `navy`, `royal`, `iris`, `plum`, `magenta`, `fuchsia`, `cerise`
-- Removed: `brick` colour (use `sienna` or `crimson` as alternatives)
+- Add new colours: `rose`, `gold`, `lime`, `chartreuse`, `sage`, `emerald`, `jade`, `aqua`, `azure`, `cerulean`, 
+    `cobalt`, `navy`, `royal`, `iris`, `plum`, `magenta`, `fuchsia`, `cerise`
+- Remove: `brick` colour (use `sienna` or `crimson` as alternatives)
 - Single source of truth: all colour definitions now live in `oklchColourDefinitions`
 
 **New `bgOpacity` and `borderOpacity` props**
@@ -21,7 +22,7 @@
   <Card bgColour="red" bgOpacity="50" />
   ```
 - Uses CSS `color-mix()` for runtime opacity calculation
-- Removes ~24,000 pre-generated opacity utility classes
+- Remove ~24,000 pre-generated opacity utility classes
 
 **Modal and Drawer now use declarative API**
 
@@ -40,9 +41,8 @@
     ```
 
 **Notifications and Toast now use provider pattern**
-
 - Both components replace manual state management with context providers and hooks
-  - Removed: `NotificationsWrapper`, `NotificationItem`, `ToastsWrapper`, `ToastItem`, `showWhen`, `closeWhen`, `secondsToShowFor`
+  - Remove: `NotificationsWrapper`, `NotificationItem`, `ToastsWrapper`, `ToastItem`, `showWhen`, `closeWhen`, `secondsToShowFor`
   - Add: `NotificationsProvider`, `useNotifications()`, `ToastsProvider`, `useToasts()`
     ```tsx
     // Before (v1.x) - manual state for each item
@@ -80,6 +80,7 @@
 
 ### Accessibility improvements
 - Add `prefers-reduced-motion` media query support for WCAG 2.1 compliance
+- `ListBox` dropdown now opens upward when there’s insufficient space below
 
 ### Developer experience improvements
 **Standardized value-based `onChange` across all form components**
@@ -108,6 +109,7 @@
     ```
 
 **Additional improvements:**
+
 - Remove ambiguous `FlexibleEventHandler` union types
 - Remove runtime type checking from form components
 - Add comprehensive JSDoc documentation to `RadioTabGroup`
@@ -126,7 +128,8 @@
 - Add `SidebarItemGroup` for grouping sidebar items
 - Fixed `equaliseWidth` CSS selector for CheckboxGroup and SwitchGroup
 - Add `size` prop to Input elements
-- Add `columns` prop to `CheckboxGroup`, `SwitchGroup`, and `RadioGroup` for grid layout
+- Add `size` prop to `FileUpload` for consistent sizing with other form elements
+- Fix `Range` value text not scaling with `size` prop
 - Add `columns` prop to `CheckboxGroup`, `SwitchGroup`, and `RadioGroup` for grid layout
 
 ### Bug fixes

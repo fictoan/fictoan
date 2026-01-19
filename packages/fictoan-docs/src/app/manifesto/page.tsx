@@ -11,7 +11,7 @@ export const metadata = {
         siteName    : "FictoanUI",
         images      : [
             {
-                url    : "https://fictoan.io/opengraph-image",
+                url    : "https://fictoan.io/manifesto/opengraph-image",
                 width  : 1200,
                 height : 630,
                 alt    : "Manifesto — FictoanUI",
@@ -24,7 +24,7 @@ export const metadata = {
         card        : "summary_large_image",
         title       : "Manifesto — FictoanUI",
         description : "UI code has become needlessly complex. It doesn't have to be.",
-        images      : ["https://fictoan.io/opengraph-image"],
+        images      : ["https://fictoan.io/manifesto/opengraph-image"],
     },
 };
 

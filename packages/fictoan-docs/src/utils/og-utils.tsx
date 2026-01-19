@@ -1,12 +1,166 @@
 // REACT CORE ==========================================================================================================
 import { ImageResponse } from "next/og";
-import { readFile } from "fs/promises";
+
+// OTHER ===============================================================================================================
 import { join } from "path";
+import { readFile } from "fs/promises";
 
 interface OGImageOptions {
-        componentName   : string;
-        description     : string;
-        type          ? : "root" | "component";
+    componentName   : string;
+    description     : string;
+    type          ? : "root" | "component";
+    componentSlug ? : string;
+}
+
+// Icon mapping: page/component slug -> icon file path (relative to src/assets/icons/)
+const ICON_MAP: Record<string, string> = {
+    // Non-component pages
+    "home"            : "new-icons/home.svg",
+    "manifesto"       : "new-icons/fist.svg",
+    "getting-started" : "new-icons/home.svg",
+    "theme"           : "new-icons/paint-roller.svg",
+    "base-element"    : "new-icons/lego-brick.svg",
+    "layout"          : "new-icons/window.svg",
+    "typography"      : "new-icons/caret.svg",
+    "colour"          : "new-icons/drop.svg",
+
+    // Components
+    "accordion"       : "new-icons/accordion.svg",
+    "badge"           : "new-icons/badge.svg",
+    "breadcrumbs"     : "new-icons/breadcrumbs.svg",
+    "button"          : "new-icons/button.svg",
+    "button-group"    : "new-icons/button-group.svg",
+    "callout"         : "new-icons/callout.svg",
+    "card"            : "new-icons/card.svg",
+    "checkbox"        : "new-icons/checkbox.svg",
+    "code-block"      : "new-icons/braces.svg",
+    "divider"         : "new-icons/line.svg",
+    "drawer"          : "new-icons/drawer.svg",
+    "form"            : "new-icons/form.svg",
+    "form-builder"    : "new-icons/form.svg",
+    "input-field"     : "new-icons/input.svg",
+    "list-box"        : "new-icons/listbox.svg",
+    "meter"           : "new-icons/meter.svg",
+    "modal"           : "new-icons/window.svg",
+    "notifications"   : "new-icons/notification.svg",
+    "option-cards"    : "new-icons/option-card.svg",
+    "pagination"      : "new-icons/pagination.svg",
+    "pin-input-field" : "pin-input.svg",
+    "progress-bar"    : "new-icons/meter.svg",
+    "radio-button"    : "new-icons/radio.svg",
+    "radio-tab-group" : "new-icons/radio-tab-group.svg",
+    "range"           : "new-icons/range.svg",
+    "select"          : "new-icons/select.svg",
+    "sidebar"         : "new-icons/sidebar.svg",
+    "sidebar-item"    : "new-icons/sidebar.svg",
+    "skeleton"        : "new-icons/skeleton.svg",
+    "table"           : "new-icons/table.svg",
+    "tabs"            : "new-icons/tabs.svg",
+    "toast"           : "new-icons/toast.svg",
+    "tooltip"         : "new-icons/tooltip.svg",
+};
+
+// Page metadata for non-component pages (title and description for OG images)
+const PAGE_METADATA: Record<string, { title: string; description: string }> = {
+    "manifesto"       : { title: "Manifesto", description: "UI code has become needlessly complex. It doesn’t have to be." },
+    "getting-started" : { title: "Getting started", description: "Start using Fictoan to build modern interfaces for the web." },
+    "theme"           : { title: "Theme", description: "How to setup the colour theme for your project." },
+    "base-element"    : { title: "Base element", description: "A common wrapper tag so you can add Fictoan props to any element." },
+    "layout"          : { title: "Layout", description: "How to setup the content scaffolding on a page." },
+    "typography"      : { title: "Typography", description: "How to setup a type system for your project." },
+    "colour"          : { title: "Colour", description: "A comprehensive set of named colours in Fictoan." },
+};
+
+// Get metadata for a non-component page
+export function getPageMetadata(slug: string): { title: string; description: string } | null {
+    return PAGE_METADATA[slug] || null;
+}
+
+// Get list of all non-component page slugs (for generateStaticParams)
+export function getPageSlugs(): string[] {
+    return Object.keys(PAGE_METADATA);
+}
+
+// Load SVG and return as base64 data URL for use in img tag
+async function loadIconDataUrl(componentSlug: string): Promise<string | null> {
+    const iconPath = ICON_MAP[componentSlug];
+    if (!iconPath) return null;
+
+    try {
+        const fullPath = join(process.cwd(), "src/assets/icons", iconPath);
+        let svgContent = await readFile(fullPath, "utf-8");
+
+        // Remove XML declaration and metadata
+        svgContent = svgContent
+            .replace(/<\?xml[^>]*\?>/g, "")
+            .replace(/<metadata>[\s\S]*?<\/metadata>/g, "");
+
+        // Add fill="white" to the svg tag if not present, for visibility on dark backgrounds
+        if (!svgContent.includes('fill=')) {
+            svgContent = svgContent.replace(/<svg/, '<svg fill="white"');
+        } else {
+            // Replace any existing fill with white
+            svgContent = svgContent.replace(/fill="[^"]*"/, 'fill="white"');
+        }
+
+        // Convert to base64 data URL
+        const base64 = Buffer.from(svgContent).toString("base64");
+        return `data:image/svg+xml;base64,${base64}`;
+    } catch (error) {
+        console.error(`Failed to load icon for ${componentSlug}:`, error);
+        return null;
+    }
+}
+
+// Export icon map for external use (e.g., checking which components have icons)
+export function getIconMap(): Record<string, string> {
+    return ICON_MAP;
+}
+
+// Generate density grid pattern dots for OG images (bottom-right corner, fading to top-left)
+function generateDensityPattern(
+    width: number,
+    height: number,
+    dotSize: number = 4,
+    gap: number = 16,
+    color: string = "rgba(255,255,255,0.15)"
+): React.ReactNode[] {
+    const dots: React.ReactNode[] = [];
+    const cols = Math.ceil(width / gap);
+    const rows = Math.ceil(height / gap);
+
+    // Use a seeded pseudo-random for consistent output
+    const seededRandom = (x: number, y: number) => {
+        const seed = x * 1000 + y;
+        return ((Math.sin(seed) * 10000) % 1 + 1) % 1;
+    };
+
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+            // Probability increases toward bottom-right
+            const xProb = i / (cols - 1);
+            const yProb = j / (rows - 1);
+            const probability = Math.pow((xProb + yProb) / 2, 1.2);
+
+            if (seededRandom(i, j) < probability) {
+                dots.push(
+                    <div
+                        key={`${i}-${j}`}
+                        style={{
+                            position        : "absolute",
+                            right           : (cols - 1 - i) * gap,
+                            bottom          : (rows - 1 - j) * gap,
+                            width           : dotSize,
+                            height          : dotSize,
+                            backgroundColor : color,
+                        }}
+                    />
+                );
+            }
+        }
+    }
+
+    return dots;
 }
 
 // Load Mondwest font for OG images
@@ -124,9 +278,12 @@ export async function extractComponentMetadata(request : Request) : Promise<{
     }
 }
 
-export async function createOGImageResponse({componentName, description, type = "component"} : OGImageOptions) {
+export async function createOGImageResponse({componentName, description, type = "component", componentSlug} : OGImageOptions) {
     // Load custom font
     const mondwestFont = await loadMondwestFont();
+
+    // Load component icon if available
+    const iconDataUrl = componentSlug ? await loadIconDataUrl(componentSlug) : null;
 
     // Fictoan logo (pixelated FF)
     const logo = (
@@ -199,6 +356,9 @@ export async function createOGImageResponse({componentName, description, type = 
         );
     }
 
+    // Generate the density pattern for bottom-right
+    const densityDots = generateDensityPattern(600, 400, 8, 18, "rgba(255,255,255,0.25)");
+
     // Component layout - left-aligned with component info
     return new ImageResponse(
         (
@@ -210,28 +370,61 @@ export async function createOGImageResponse({componentName, description, type = 
                     flexDirection  : "column",
                     alignItems     : "flex-start",
                     justifyContent : "space-between",
-                    background     : "linear-gradient(135deg, #667eea 0%, #1a1a1a 100%)",
+                    background     : "#667eea",
                     fontFamily     : "Mondwest",
                     padding        : "64px 80px 48px 80px",
+                    position       : "relative",
+                    overflow       : "hidden",
                 }}
             >
+                {/* Density pattern overlay */}
+                <div
+                    style={{
+                        position : "absolute",
+                        right    : 0,
+                        bottom   : 0,
+                        width    : 600,
+                        height   : 400,
+                        display  : "flex",
+                    }}
+                >
+                    {densityDots}
+                </div>
                 <div
                     style={{
                         display       : "flex",
                         flexDirection : "column",
                     }}
                 >
-                    <p
+                    <div
                         style={{
-                            fontSize     : 72,
-                            fontWeight   : 600,
-                            color        : "#ffffff",
-                            marginBottom : 8,
-                            lineHeight   : 1,
+                            display    : "flex",
+                            alignItems : "center",
+                            gap        : 24,
                         }}
                     >
-                        {componentName}
-                    </p>
+                        {iconDataUrl && (
+                            <img
+                                src={iconDataUrl}
+                                width={72}
+                                height={72}
+                                style={{
+                                    opacity : 0.95,
+                                }}
+                            />
+                        )}
+                        <p
+                            style={{
+                                fontSize     : 72,
+                                fontWeight   : 600,
+                                color        : "#ffffff",
+                                marginBottom : 0,
+                                lineHeight   : 1,
+                            }}
+                        >
+                            {componentName}
+                        </p>
+                    </div>
 
                     <div
                         style={{
@@ -240,6 +433,7 @@ export async function createOGImageResponse({componentName, description, type = 
                             lineHeight : 1.4,
                             maxWidth   : "900px",
                             opacity    : 0.9,
+                            marginTop  : 8,
                         }}
                     >
                         {description}
