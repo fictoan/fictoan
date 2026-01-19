@@ -2,4 +2,17 @@
     #component-wrapper {
         position : unset;
     }
+
+    #current-form-values-card {
+        position : sticky;
+        top      : 72px;
+
+        pre {
+            padding: 8px;
+
+            span {
+                line-height: 0.12;
+            }
+        }
+    }
 }

@@ -29,12 +29,11 @@ import {
     TextArea,
 }from "fictoan-react";
 
-// ASSETS ==============================================================================================================
-import EyeClosedIcon from "../../../assets/icons/eye-closed.svg";
-import EyeOpenIcon from "../../../assets/icons/eye-open.svg";
+// ICONS ===============================================================================================================
+import { Eye, EyeOff } from "lucide-react";
 
 // @ts-ignore
-export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
+export const SampleForm = ({spacing, size, isJoint, isButtonFullWidth}) => {
     const [ formData, setFormData ] = useState({
         // Text inputs
         firstName   : "",
@@ -64,23 +63,23 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
         food               : [] as string[],
         preferredCountries : [] as string[],
         hobbies            : [] as string[],
-        notifications : false,
-        newsletter    : false,
+        notifications      : false,
+        newsletter         : false,
 
         // Range
         experienceLevel     : "5",
         experienceAsManager : "3",
 
         // File
-        documents      : [],
+        documents : [],
 
         termsAccepted : false,
     });
 
-    const [showPassword, setShowPassword] = useState(false);
+    const [ showPassword, setShowPassword ] = useState(false);
 
-    const handleInputChange = (name: string) => (
-        valueOrEvent: string | string[] | React.ChangeEvent<HTMLInputElement>,
+    const handleInputChange = (name : string) => (
+        valueOrEvent : string | string[] | React.ChangeEvent<HTMLInputElement>,
     ) => {
         // Handle array values (for ListBox multiple selection)
         if (Array.isArray(valueOrEvent)) {
@@ -102,14 +101,14 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
         }));
     };
 
-    const handleRadioChange = (name: string) => (value: string) => {
+    const handleRadioChange = (name : string) => (value : string) => {
         setFormData(prev => ({
             ...prev,
             [name] : value,
         }));
     };
 
-    const handleCheckboxChange = (name: string, value?: string) => (checked: boolean) => {
+    const handleCheckboxChange = (name : string, value? : string) => (checked : boolean) => {
         if (name === "interests") {
             setFormData(prev => ({
                 ...prev,
@@ -125,8 +124,8 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
         }
     };
 
-    const handleListBoxChange = (name: string) => (
-        valueOrEvent: string | string[] | React.ChangeEvent<HTMLInputElement>,
+    const handleListBoxChange = (name : string) => (
+        valueOrEvent : string | string[] | React.ChangeEvent<HTMLInputElement>,
     ) => {
         console.log("ListBoxChange - input:", valueOrEvent);
 
@@ -143,18 +142,18 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
         }));
     };
 
-    const handleRangeChange = (name: string) => (value: number) => {
+    const handleRangeChange = (name : string) => (value : number) => {
         setFormData(prev => {
-            const updates: Record<string, string> = { [name]: value.toString() };
+            const updates : Record<string, string> = {[name] : value.toString()};
             // If experience drops below manager experience, clamp it
             if (name === "experienceLevel" && value < Number(prev.experienceAsManager)) {
                 updates.experienceAsManager = value.toString();
             }
-            return { ...prev, ...updates };
+            return {...prev, ...updates};
         });
     };
 
-    const handleFileChange = (name: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (name : string) => (e : React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (files) {
             if (name === "profilePicture") {
@@ -172,7 +171,7 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
         }
     };
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = (e : FormEvent) => {
         e.preventDefault();
         console.log("Form submitted:", formData);
     };
@@ -249,7 +248,7 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                                         setShowPassword(!showPassword);
                                     }}
                                 >
-                                    {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
+                                    {showPassword ? <Eye /> : <EyeOff />}
                                 </div>
                             }
                         />
@@ -296,9 +295,9 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                                 value={formData.country}
                                 onChange={handleInputChange("country")}
                                 options={[
-                                    { label : "United States", value : "us" },
-                                    { label : "United Kingdom", value : "uk" },
-                                    { label : "Canada", value : "ca" },
+                                    {label : "United States", value : "us"},
+                                    {label : "United Kingdom", value : "uk"},
+                                    {label : "Canada", value : "ca"},
                                 ]}
                                 size={size}
                                 isFullWidth
@@ -310,9 +309,9 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                                 value={formData.language}
                                 onChange={handleInputChange("language")}
                                 options={[
-                                    { label : "English", value : "en" },
-                                    { label : "Spanish", value : "es" },
-                                    { label : "French", value : "fr" },
+                                    {label : "English", value : "en"},
+                                    {label : "Spanish", value : "es"},
+                                    {label : "French", value : "fr"},
                                 ]}
                                 size={size}
                                 isFullWidth
@@ -327,10 +326,10 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                             isFullWidth
                             onChange={handleListBoxChange("skills")}
                             options={[
-                                { value : "react", label : "React" },
-                                { value : "vue", label : "Vue" },
-                                { value : "angular", label : "Angular" },
-                                { value : "svelte", label : "Svelte" },
+                                {value : "react", label : "React"},
+                                {value : "vue", label : "Vue"},
+                                {value : "angular", label : "Angular"},
+                                {value : "svelte", label : "Svelte"},
                             ]}
                             allowMultiSelect
                             allowCustomEntries
@@ -352,6 +351,7 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                             badgeBgColour="amber"
                             badgeTextColour="black"
                             height="120px"
+                            size={size}
                         />
 
                         {/* EXPERIENCE ============================================================================= */}
@@ -387,11 +387,11 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                             label="Preferred contact method"
                             value={formData.contactPreference}
                             options={[
-                                { id : "email-contact", label : "Email", value : "email" },
-                                { id : "phone-contact", label : "Phone", value : "phone" },
-                                { id : "sms-contact", label : "SMS", value : "sms" },
-                                { id : "letters-contact", label : "Letters", value : "letters" },
-                                { id : "pigeon", label : "Pigeon", value : "pigeon", disabled : true },
+                                {id : "email-contact", label : "Email", value : "email"},
+                                {id : "phone-contact", label : "Phone", value : "phone"},
+                                {id : "sms-contact", label : "SMS", value : "sms"},
+                                {id : "letters-contact", label : "Letters", value : "letters"},
+                                {id : "pigeon", label : "Pigeon", value : "pigeon", disabled : true},
                             ]}
                             onChange={handleRadioChange("contactPreference")}
                             size={size}
@@ -403,9 +403,9 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                             name="gender"
                             value={formData.gender}
                             options={[
-                                { id : "male", label : "Male", value : "male" },
-                                { id : "female", label : "Female", value : "female" },
-                                { id : "other", label : "Other", value : "other" },
+                                {id : "male", label : "Male", value : "male"},
+                                {id : "female", label : "Female", value : "female"},
+                                {id : "other", label : "Other", value : "other"},
                             ]}
                             onChange={handleRadioChange("gender")}
                             size={size}
@@ -465,14 +465,14 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                             label="Preferred cuisine"
                             name="food"
                             options={[
-                                { id : "food-indian", value : "Indian", label : "Indian" },
-                                { id : "food-italian", value : "Italian", label : "Italian" },
-                                { id : "food-french", value : "French", label : "French" },
-                                { id : "food-greek", value : "Greek", label : "Greek" },
-                                { id : "food-thai", value : "Thai", label : "Thai" },
+                                {id : "food-indian", value : "Indian", label : "Indian"},
+                                {id : "food-italian", value : "Italian", label : "Italian"},
+                                {id : "food-french", value : "French", label : "French"},
+                                {id : "food-greek", value : "Greek", label : "Greek"},
+                                {id : "food-thai", value : "Thai", label : "Thai"},
                             ]}
                             value={formData.food}
-                            onChange={(values: any) => setFormData({ ...formData, food : values })}
+                            onChange={(values : any) => setFormData({...formData, food : values})}
                             size={size}
                             labelFirst columns={2}
                         />
@@ -481,14 +481,14 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                             label="Preferred country"
                             name="preferredCountries"
                             options={[
-                                { id : "country-indian", value : "Indian", label : "Indian" },
-                                { id : "country-italian", value : "Italian", label : "Italian" },
-                                { id : "country-French", value : "French", label : "French" },
-                                { id : "country-greek", value : "Greek", label : "Greek" },
-                                { id : "country-thai", value : "Thai", label : "Thai" },
+                                {id : "country-indian", value : "Indian", label : "Indian"},
+                                {id : "country-italian", value : "Italian", label : "Italian"},
+                                {id : "country-French", value : "French", label : "French"},
+                                {id : "country-greek", value : "Greek", label : "Greek"},
+                                {id : "country-thai", value : "Thai", label : "Thai"},
                             ]}
                             value={formData.preferredCountries}
-                            onChange={(values: any) => setFormData({ ...formData, preferredCountries : values })}
+                            onChange={(values : any) => setFormData({...formData, preferredCountries : values})}
                             size={size}
                             align="horizontal"
                         />
@@ -525,14 +525,14 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
                                 label="I accept the terms and conditions"
                                 checked={formData.termsAccepted}
                                 onChange={handleCheckboxChange("termsAccepted")}
-                                size={size} labelFirst
+                                size={size}
                             />
 
                             {/* SUBMIT BUTTON ====================================================================== */}
                             <Button
                                 kind="primary"
                                 type="submit"
-                                size="large"
+                                size={size}
                                 isFullWidth={isButtonFullWidth}
                             >
                                 Submit
@@ -544,12 +544,9 @@ export const SampleForm = ({ spacing, size, isJoint, isButtonFullWidth }) => {
 
             {/* DISPLAY FORM VALUES //////////////////////////////////////////////////////////////////////////////// */}
             <Portion desktopSpan="half">
-                <Card padding="micro" shape="rounded">
-                    <Text size="large" weight="700" marginBottom="micro">Current form values</Text>
-                    <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton>
-                        {JSON.stringify(formData, null, 4)}
-                    </CodeBlock>
-                </Card>
+                <CodeBlock id="current-form-values-card" withSyntaxHighlighting language="jsx" showCopyButton>
+                    {JSON.stringify(formData, null, 4).replace(/"password": "(.*)",/, '"password": "$1", // please hash')}
+                </CodeBlock>
             </Portion>
         </Row>
     );

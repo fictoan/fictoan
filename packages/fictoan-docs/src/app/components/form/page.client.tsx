@@ -47,6 +47,7 @@ import {
     Divider,
     Footer,
 } from "fictoan-react";
+import { Eye, EyeOff } from "lucide-react";
 
 const MyForm = () => {
     const [formData, setFormData] = useState({
@@ -54,7 +55,7 @@ const MyForm = () => {
         firstName   : "",
         lastName    : "",
         email       : "",
-        password    : "",
+        password    : "", // please hash
         phoneNumber : "",
         website     : "",
 
@@ -158,6 +159,11 @@ const MyForm = () => {
                 value={formData.password}
                 onChange={handleInputChange("password")}
                 helpText="At least 8 characters"${sizeAttr}
+                innerIconRight={
+                    <div onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? <Eye /> : <EyeOff />}
+                    </div>
+                }
             />
 
             {/* PHONE AND WEBSITE */}
@@ -341,8 +347,7 @@ const MyForm = () => {
 
                 <Button
                     kind="primary"
-                    type="submit"
-                    size="large"${fullWidthAttr}
+                    type="submit"${sizeAttr}${fullWidthAttr}
                 >
                     Submit
                 </Button>
@@ -353,7 +358,7 @@ const MyForm = () => {
     }, [selectedSpacing, selectedSize, isJoint, isButtonFullWidth]);
 
     return (
-        <ComponentDocsLayout pageId="page-form">
+        <ComponentDocsLayout pageId="page-form" secondTabLabel="Source code">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">Form</Heading2>
@@ -390,10 +395,6 @@ const MyForm = () => {
 
             {/* PROPS CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="props-config">
-                <CodeBlock language="jsx" withSyntaxHighlighting showCopyButton marginBottom="micro">
-                    {codeString}
-                </CodeBlock>
-
                 <Div className="doc-controls">
                     <RadioTabGroup
                         id="spacing"
@@ -412,9 +413,8 @@ const MyForm = () => {
                         value={selectedSpacing}
                         onChange={(value) => setSelectedSpacing(value)}
                         helpText="Controls the vertical gap between form elements"
+                        marginBottom="micro"
                     />
-
-                    <Divider kind="secondary" horizontalMargin="none" marginTop="micro" />
 
                     <RadioTabGroup
                         id="size"
@@ -429,9 +429,8 @@ const MyForm = () => {
                         value={selectedSize}
                         onChange={(value) => setSelectedSize(value)}
                         helpText="Controls the size of form elements"
+                        marginBottom="micro"
                     />
-
-                    <Divider kind="secondary" horizontalMargin="none" marginTop="micro" />
 
                     <Checkbox
                         id="checkbox-is-joint"
@@ -439,9 +438,8 @@ const MyForm = () => {
                         checked={isJoint}
                         onChange={(checked) => setIsJoint(checked)}
                         helpText="Visually joins inputs inside a FormItemGroup"
+                        marginBottom="micro"
                     />
-
-                    <Divider kind="secondary" horizontalMargin="none" marginTop="micro" />
 
                     <Checkbox
                         id="checkbox-button-full-width"
@@ -453,12 +451,11 @@ const MyForm = () => {
                 </Div>
             </Div>
 
-            {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
+            {/* SOURCE CODE //////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="theme-config">
-                <Text textColour="slate">
-                    The Form component inherits spacing from theme variables. Individual form elements
-                    have their own theme configuration options.
-                </Text>
+                <CodeBlock language="jsx" withSyntaxHighlighting showCopyButton>
+                    {codeString}
+                </CodeBlock>
             </Div>
         </ComponentDocsLayout>
     );
