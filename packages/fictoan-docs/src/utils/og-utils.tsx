@@ -1,13 +1,15 @@
 // REACT CORE ==========================================================================================================
 import { ImageResponse } from "next/og";
-import { readFile } from "fs/promises";
+
+// OTHER ===============================================================================================================
 import { join } from "path";
+import { readFile } from "fs/promises";
 
 interface OGImageOptions {
-        componentName   : string;
-        description     : string;
-        type          ? : "root" | "component";
-        componentSlug ? : string;
+    componentName   : string;
+    description     : string;
+    type          ? : "root" | "component";
+    componentSlug ? : string;
 }
 
 // Icon mapping: page/component slug -> icon file path (relative to src/assets/icons/)
@@ -60,7 +62,7 @@ const ICON_MAP: Record<string, string> = {
 
 // Page metadata for non-component pages (title and description for OG images)
 const PAGE_METADATA: Record<string, { title: string; description: string }> = {
-    "manifesto"       : { title: "Manifesto", description: "UI code has become needlessly complex. It doesn't have to be." },
+    "manifesto"       : { title: "Manifesto", description: "UI code has become needlessly complex. It doesn’t have to be." },
     "getting-started" : { title: "Getting started", description: "Start using Fictoan to build modern interfaces for the web." },
     "theme"           : { title: "Theme", description: "How to setup the colour theme for your project." },
     "base-element"    : { title: "Base element", description: "A common wrapper tag so you can add Fictoan props to any element." },
@@ -113,6 +115,52 @@ async function loadIconDataUrl(componentSlug: string): Promise<string | null> {
 // Export icon map for external use (e.g., checking which components have icons)
 export function getIconMap(): Record<string, string> {
     return ICON_MAP;
+}
+
+// Generate density grid pattern dots for OG images (bottom-right corner, fading to top-left)
+function generateDensityPattern(
+    width: number,
+    height: number,
+    dotSize: number = 4,
+    gap: number = 16,
+    color: string = "rgba(255,255,255,0.15)"
+): React.ReactNode[] {
+    const dots: React.ReactNode[] = [];
+    const cols = Math.ceil(width / gap);
+    const rows = Math.ceil(height / gap);
+
+    // Use a seeded pseudo-random for consistent output
+    const seededRandom = (x: number, y: number) => {
+        const seed = x * 1000 + y;
+        return ((Math.sin(seed) * 10000) % 1 + 1) % 1;
+    };
+
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+            // Probability increases toward bottom-right
+            const xProb = i / (cols - 1);
+            const yProb = j / (rows - 1);
+            const probability = Math.pow((xProb + yProb) / 2, 1.2);
+
+            if (seededRandom(i, j) < probability) {
+                dots.push(
+                    <div
+                        key={`${i}-${j}`}
+                        style={{
+                            position        : "absolute",
+                            right           : (cols - 1 - i) * gap,
+                            bottom          : (rows - 1 - j) * gap,
+                            width           : dotSize,
+                            height          : dotSize,
+                            backgroundColor : color,
+                        }}
+                    />
+                );
+            }
+        }
+    }
+
+    return dots;
 }
 
 // Load Mondwest font for OG images
@@ -308,6 +356,9 @@ export async function createOGImageResponse({componentName, description, type = 
         );
     }
 
+    // Generate the density pattern for bottom-right
+    const densityDots = generateDensityPattern(600, 400, 8, 18, "rgba(255,255,255,0.25)");
+
     // Component layout - left-aligned with component info
     return new ImageResponse(
         (
@@ -319,11 +370,26 @@ export async function createOGImageResponse({componentName, description, type = 
                     flexDirection  : "column",
                     alignItems     : "flex-start",
                     justifyContent : "space-between",
-                    background     : "linear-gradient(135deg, #667eea 0%, #1a1a1a 100%)",
+                    background     : "#667eea",
                     fontFamily     : "Mondwest",
                     padding        : "64px 80px 48px 80px",
+                    position       : "relative",
+                    overflow       : "hidden",
                 }}
             >
+                {/* Density pattern overlay */}
+                <div
+                    style={{
+                        position : "absolute",
+                        right    : 0,
+                        bottom   : 0,
+                        width    : 600,
+                        height   : 400,
+                        display  : "flex",
+                    }}
+                >
+                    {densityDots}
+                </div>
                 <div
                     style={{
                         display       : "flex",
@@ -352,7 +418,7 @@ export async function createOGImageResponse({componentName, description, type = 
                                 fontSize     : 72,
                                 fontWeight   : 600,
                                 color        : "#ffffff",
-                                marginBottom : 8,
+                                marginBottom : 0,
                                 lineHeight   : 1,
                             }}
                         >
@@ -367,7 +433,7 @@ export async function createOGImageResponse({componentName, description, type = 
                             lineHeight : 1.4,
                             maxWidth   : "900px",
                             opacity    : 0.9,
-                            marginTop  : iconDataUrl ? 16 : 0,
+                            marginTop  : 8,
                         }}
                     >
                         {description}
