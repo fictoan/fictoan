@@ -192,7 +192,7 @@
     --drawer-border-radius   : var(--global-border-radius);
 
     --drawer-overlay-bg      : var(--black);
-    --drawer-overlay-opacity : 0.4;
+    --drawer-overlay-opacity : 60%;
     --drawer-overlay-blur    : 4px;
 
     --drawer-dismiss-button  : var(--slate-light40);
