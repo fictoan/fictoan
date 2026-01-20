@@ -141,6 +141,8 @@
   - Props like `marginBottom`, `padding`, `shadow`, etc. now correctly apply to the FormItem wrapper
   - Affected components: `TextArea`, `InputField`, `Checkbox`, `Switch`, `Select`, `RadioButton`, `ListBox`
   - Add `separateWrapperProps` utility in `propSeparation.ts` to handle prop separation consistently
+- Fix Turbopack build error for universal selector parsing bug
+- Fix `Drawer` overlay colour bug
 
 ## 1.12.0
 - `ThemeProvider` now uses unique key based on hostname for local storage, instead of default `fictoan-theme`

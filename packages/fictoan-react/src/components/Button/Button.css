@@ -12,8 +12,8 @@
     user-select         : none;
 }
 
-/*To make sure a button’s children don’t style themselves like a d-bag*/
-> * { all : unset; }
+/*To make sure a button's children don't style themselves like a d-bag*/
+[data-button] > * { all : unset; }
 
 [data-button]:active {
     box-shadow : none;

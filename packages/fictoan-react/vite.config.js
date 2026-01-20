@@ -66,19 +66,26 @@ function createVisualizer() {
     };
 }
 
-// Strip trailing newlines from CSS to fix Turbopack "Invalid empty selector" error
-function stripCssTrailingNewlines() {
+// Fix CSS for Turbopack compatibility
+function fixCssForTurbopack() {
     return {
-        name: "strip-css-trailing-newlines",
-        writeBundle: {
+        name: "fix-css-for-turbopack",
+        enforce: "post",
+        closeBundle: {
             sequential: true,
+            order: "post",
             handler() {
                 const cssPath = path.resolve(__dirname, "dist/index.css");
                 try {
-                    const css = readFileSync(cssPath, "utf-8");
-                    writeFileSync(cssPath, css.trimEnd());
+                    let css = readFileSync(cssPath, "utf-8");
+                    // Add newline before * universal selectors (Turbopack can't parse }*)
+                    css = css.replace(/\}\*/g, "}\n*");
+                    // Strip trailing whitespace
+                    css = css.trimEnd();
+                    writeFileSync(cssPath, css);
+                    console.log("Fixed CSS for Turbopack compatibility");
                 } catch (e) {
-                    // CSS file might not exist yet
+                    console.warn("Could not fix CSS for Turbopack:", e.message);
                 }
             },
         },
@@ -131,7 +138,6 @@ export default defineConfig({
         svgr(),
         preserveUseClient(),
         createVisualizer(),
-        stripCssTrailingNewlines(),
         react(),
         dts({
             insertTypesEntry : true,
@@ -177,5 +183,6 @@ export default defineConfig({
                 };
             },
         }),
+        fixCssForTurbopack(),
     ],
 });

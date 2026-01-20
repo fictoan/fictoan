@@ -65,15 +65,15 @@
             width  : 48px;
         }
     }
+}
 
-    /*  Animation for loader  */
-    @-webkit-keyframes spinner {
-        from { -webkit-transform : rotate(0deg); }
-        to { -webkit-transform : rotate(359deg); }
-    }
+/*  Animation for loader  */
+@-webkit-keyframes spinner {
+    from { -webkit-transform : rotate(0deg); }
+    to { -webkit-transform : rotate(359deg); }
+}
 
-    @keyframes spinner {
-        from { transform : rotate(0deg); }
-        to { transform : rotate(359deg); }
-    }
+@keyframes spinner {
+    from { transform : rotate(0deg); }
+    to { transform : rotate(359deg); }
 }

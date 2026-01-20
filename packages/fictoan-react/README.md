@@ -1,5 +1,9 @@
 <p align="center" style="color: #343a40">
-    <a href="https://fictoan.io"><img src="https://raw.githubusercontent.com/fictoan/fictoan-react/main/fictoan-icon.svg" alt="Fictoan Framework" height="150" width="150"></a>
+    <img
+        src="https://raw.githubusercontent.com/fictoan/fictoan/c870bb88fdf2893b4ef3dd7cbbcdfb4a54d1b2b1/packages/fictoan-docs/src/assets/images/fictoan-logo-new.svg"
+        alt="Fictoan Framework" height="auto" width="240"
+        style="filter: invert(46%) sepia(97%) saturate(1424%) hue-rotate(200deg) brightness(98%) contrast(106%);"
+    >
 </p>
 
 <h1 align="center">Fictoan</h1>

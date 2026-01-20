@@ -2,7 +2,7 @@
 
 // REACT CORE ==========================================================================================================
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 
 // UI ==================================================================================================================
 import { Badge, Div, Header, Heading5 } from "fictoan-react";
@@ -19,7 +19,7 @@ import { ThemeToggle } from "./ThemeToggle/ThemeToggle";
 import { VersionBadge } from "./VersionBadge";
 
 interface SiteHeaderProps {
-    toggleSidebarOnMobile: () => void;
+    toggleSidebarOnMobile : () => void;
 }
 
 export const SiteHeader = ({ toggleSidebarOnMobile }: SiteHeaderProps) => {
@@ -61,15 +61,6 @@ export const SiteHeader = ({ toggleSidebarOnMobile }: SiteHeaderProps) => {
                 <Div id="toggle-and-badge-wrapper">
                     {/* THEME TOGGLE =============================================================================== */}
                     <ThemeToggle />
-
-                    {/* WIP BADGE ================================================================================== */}
-                    <Badge
-                        id="wip-badge"
-                        bgColour="red" textColour="white" shape="rounded"
-                        hideOnMobile
-                    >
-                        These Docs are WIP
-                    </Badge>
                 </Div>
             </Header>
         </>
