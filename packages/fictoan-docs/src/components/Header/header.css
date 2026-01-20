@@ -51,6 +51,7 @@
         align-items    : center;
         flex-direction : row;
         gap            : 32px;
+        margin-right   : 16px;
     }
 }
 
