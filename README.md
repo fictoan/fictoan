@@ -1,8 +1,8 @@
 <p align="center">
     <a href="https://fictoan.io">
         <picture>
-            <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/fictoan/fictoan-react/main/fictoan-logo-dark.svg">
-            <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/fictoan/fictoan-react/main/fictoan-logo.svg">
+            <source media="(prefers-color-scheme: dark)" srcset="[https://raw.githubusercontent.com/fictoan/fictoan-react/main/fictoan-logo-dark.svg](https://raw.githubusercontent.com/fictoan/fictoan/ee8fdb7209ecc88ed375bc65529734987e950eb4/packages/fictoan-docs/src/assets/images/fictoan-logo-new.svg)">
+            <source media="(prefers-color-scheme: light)" srcset="[https://raw.githubusercontent.com/fictoan/fictoan-react/main/fictoan-logo.svg](https://raw.githubusercontent.com/fictoan/fictoan/ee8fdb7209ecc88ed375bc65529734987e950eb4/packages/fictoan-docs/src/assets/images/fictoan-logo-new.svg)">
             <img src="https://raw.githubusercontent.com/fictoan/fictoan-react/main/fictoan-logo.svg" alt="Fictoan" height="80">
         </picture>
     </a>
