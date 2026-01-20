@@ -29,7 +29,7 @@ import CodeIcon from "../../assets/icons/new-icons/braces.svg";
 import ColourIcon from "../../assets/icons/new-icons/drop.svg";
 import DividerIcon from "../../assets/icons/new-icons/line.svg";
 import DrawerIcon from "../../assets/icons/new-icons/drawer.svg";
-import FictoanIcon from "../../assets/images/fictoan-icon.svg";
+import FictoanIcon from "../../assets/icons/new-icons/favicon.svg";
 import FictoanLogo from "../../assets/images/fictoan-logo-new.svg";
 import FormIcon from "../../assets/icons/new-icons/form.svg";
 import HomeIcon from "../../assets/icons/new-icons/home.svg";
