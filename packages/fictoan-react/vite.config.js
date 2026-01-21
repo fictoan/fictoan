@@ -110,6 +110,7 @@ export default defineConfig({
     },
     build   : {
         minify        : "esbuild",
+        cssMinify     : false,
         sourcemap     : true,
         lib           : {
             entry    : input,
