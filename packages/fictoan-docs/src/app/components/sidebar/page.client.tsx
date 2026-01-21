@@ -5,13 +5,34 @@ import Link from "next/link";
 import React, { useState } from "react";
 
 // UI ==================================================================================================================
-import { Element, Heading2, Heading4, Heading6, Divider, Portion, Row, Text, Article, Card, Header, Select, Range, SidebarWrapper, SidebarHeader, SidebarItem, SidebarFooter, CodeBlock, Section, Div, Footer } from "fictoan-react";
+import {
+    Element,
+    Heading2,
+    Heading6,
+    Divider,
+    Portion,
+    Row,
+    Text,
+    Article,
+    Card,
+    Header,
+    Select,
+    Range,
+    SidebarWrapper,
+    SidebarHeader,
+    SidebarItem,
+    SidebarFooter,
+    CodeBlock,
+    Section,
+    Div,
+    Footer,
+}from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { useThemeVariables } from "$utils/useThemeVariables";
 
 // ASSETS ==============================================================================================================
-import FictoanIcon from "../../../assets/images/fictoan-icon.svg";
+import FictoanIcon from "../../../assets/icons/new-icons/favicon.svg";
 import FictoanLogo from "../../../assets/images/fictoan-logo-new.svg";
 import HomeIcon from "../../../assets/icons/home.svg";
 import ThemeSwitchIcon from "../../../assets/icons/theme.svg";
