@@ -33,7 +33,8 @@ export interface OptionCardsProviderProps {
     tickPosition            ? : TickPosition;
     onSelectionChange       ? : (selectedIds: Set<string>) => void;
     selectionLimit          ? : number;
-    defaultSelectedIds      ? : Set<string>;
+    defaultSelectedIds      ? : Set<string>;  // Uncontrolled mode - initial selection
+    selectedIds             ? : Set<string>;  // Controlled mode - external state
 }
 
 export interface OptionCardProps extends CardProps {
@@ -43,36 +44,33 @@ export interface OptionCardProps extends CardProps {
 }
 
 export interface OptionCardsGroupRef {
-    selectAllOptions   : () => void;
-    clearAllOptions    : () => void;
-    setSelectedOptions : (ids: string[]) => void;
-    setSelectedIds     : (ids: Set<string>) => void;
+    selectAll     : () => void;
+    selectNone    : () => void;
+    selectInverse : () => void;
 }
 
 interface OptionCardsContextType {
-    isSelected           : (id: string) => boolean;
-    toggleSelection      : (id: string) => void;
-    showTickIcon       ? : boolean;
-    tickPosition       ? : TickPosition;
-    selectAllOptions   ? : () => void;
-    clearAllOptions    ? : () => void;
-    setSelectedOptions ? : (ids: string[]) => void;
-    setSelectedIds     ? : (ids: Set<string>) => void;
-    registerOption       : (id: string, disabled: boolean) => void;
-    unregisterOption     : (id: string) => void;
+    isSelected       : (id: string) => boolean;
+    toggleSelection  : (id: string) => void;
+    showTickIcon   ? : boolean;
+    tickPosition   ? : TickPosition;
+    selectAll      ? : () => void;
+    selectNone     ? : () => void;
+    selectInverse  ? : () => void;
+    registerOption   : (id: string, disabled: boolean) => void;
+    unregisterOption : (id: string) => void;
 }
 
 const OptionCardsContext = createContext<OptionCardsContextType>({
-    isSelected         : () => false,
-    toggleSelection    : () => {},
-    showTickIcon       : false,
-    tickPosition       : "top-right",
-    selectAllOptions   : () => {},
-    clearAllOptions    : () => {},
-    setSelectedOptions : () => {},
-    setSelectedIds     : () => {},
-    registerOption     : () => {},
-    unregisterOption   : () => {},
+    isSelected       : () => false,
+    toggleSelection  : () => {},
+    showTickIcon     : false,
+    tickPosition     : "top-right",
+    selectAll        : () => {},
+    selectNone       : () => {},
+    selectInverse    : () => {},
+    registerOption   : () => {},
+    unregisterOption : () => {},
 });
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,23 +84,30 @@ export const OptionCardsGroup = React.forwardRef<OptionCardsGroupRef, OptionCard
             tickPosition = "top-right",
             selectionLimit,
             defaultSelectedIds,
+            selectedIds: selectedIdsProp,
             ...props
         },
         ref
     ) => {
-        // Initialize with defaultSelectedIds if provided
-        const [selectedIds, setSelectedIds] = useState<Set<string>>(
+        // Determine if controlled or uncontrolled mode
+        const isControlled = selectedIdsProp !== undefined;
+
+        // Internal state for uncontrolled mode only
+        const [internalSelectedIds, setInternalSelectedIds] = useState<Set<string>>(
             defaultSelectedIds ? new Set(defaultSelectedIds) : new Set()
         );
         const availableOptionsRef = useRef<Map<string, boolean>>(new Map()); // id -> disabled
-        
-        // Apply defaultSelectedIds if provided after mount or when it changes
-        useEffect(() => {
-            if (defaultSelectedIds && defaultSelectedIds.size > 0) {
-                setSelectedIds(new Set(defaultSelectedIds));
-                onSelectionChange?.(new Set(defaultSelectedIds));
+
+        // Use controlled value if provided, otherwise use internal state
+        const selectedIds = isControlled ? selectedIdsProp : internalSelectedIds;
+
+        // Wrapper to update selection - in controlled mode, just call onSelectionChange
+        const updateSelectedIds = useCallback((newIds: Set<string>) => {
+            if (!isControlled) {
+                setInternalSelectedIds(newIds);
             }
-        }, [defaultSelectedIds, onSelectionChange]);
+            onSelectionChange?.(newIds);
+        }, [isControlled, onSelectionChange]);
 
         const registerOption = useCallback((id: string, disabled: boolean) => {
             availableOptionsRef.current.set(id, disabled);
@@ -114,83 +119,68 @@ export const OptionCardsGroup = React.forwardRef<OptionCardsGroupRef, OptionCard
 
         // Click to toggle an option ===================================================================================
         const toggleSelection = useCallback((id: string) => {
-            setSelectedIds(prevSelectedIds => {
-                const newSelectedIds = new Set(prevSelectedIds);
-                if (allowMultipleSelections) {
-                    if (newSelectedIds.has(id)) {
-                        newSelectedIds.delete(id);
-                    } else {
-                        if (selectionLimit && newSelectedIds.size >= selectionLimit) {
-                            return prevSelectedIds;
-                        }
-                        newSelectedIds.add(id);
-                    }
+            const newSelectedIds = new Set(selectedIds);
+            if (allowMultipleSelections) {
+                if (newSelectedIds.has(id)) {
+                    newSelectedIds.delete(id);
                 } else {
-                    if (newSelectedIds.has(id) && prevSelectedIds.size === 1) {
-                        newSelectedIds.clear();
-                    } else {
-                        newSelectedIds.clear();
-                        newSelectedIds.add(id);
+                    if (selectionLimit && newSelectedIds.size >= selectionLimit) {
+                        return;
                     }
+                    newSelectedIds.add(id);
                 }
-                onSelectionChange?.(newSelectedIds);
-                return newSelectedIds;
-            });
-        }, [allowMultipleSelections, onSelectionChange, selectionLimit]);
+            } else {
+                if (newSelectedIds.has(id) && selectedIds.size === 1) {
+                    newSelectedIds.clear();
+                } else {
+                    newSelectedIds.clear();
+                    newSelectedIds.add(id);
+                }
+            }
+            updateSelectedIds(newSelectedIds);
+        }, [selectedIds, allowMultipleSelections, selectionLimit, updateSelectedIds]);
 
         // Select all available options ================================================================================
-        const selectAllOptions = useCallback(() => {
+        const selectAll = useCallback(() => {
             if (!allowMultipleSelections) return;
 
-            setSelectedIds(prevSelectedIds => {
-                const newSelectedIds = new Set(prevSelectedIds);
+            // Get all enabled options
+            const enabledOptions = Array.from(availableOptionsRef.current.entries())
+                .filter(([_, disabled]) => !disabled)
+                .map(([id]) => id);
 
-                // Get all enabled options
-                const enabledOptions = Array.from(availableOptionsRef.current.entries())
-                    .filter(([_, disabled]) => !disabled)
-                    .map(([id]) => id);
+            // Respect selection limit if set
+            const optionsToSelect = selectionLimit
+                ? enabledOptions.slice(0, selectionLimit)
+                : enabledOptions;
 
-                // Respect selection limit if set
-                const optionsToAdd = selectionLimit
-                    ? enabledOptions.slice(0, selectionLimit)
-                    : enabledOptions;
-
-                optionsToAdd.forEach(id => newSelectedIds.add(id));
-                onSelectionChange?.(newSelectedIds);
-                return newSelectedIds;
-            });
-        }, [allowMultipleSelections, selectionLimit, onSelectionChange]);
+            updateSelectedIds(new Set(optionsToSelect));
+        }, [allowMultipleSelections, selectionLimit, updateSelectedIds]);
 
         // De-select all options =======================================================================================
-        const clearAllOptions = useCallback(() => {
-            setSelectedIds(new Set());
-            onSelectionChange?.(new Set());
-        }, [onSelectionChange]);
+        const selectNone = useCallback(() => {
+            updateSelectedIds(new Set());
+        }, [updateSelectedIds]);
 
-        // Set selected options - improved for more reliable state updates ==============================================
-        const setSelectedOptions = useCallback((ids: string[]) => {
-            if (ids) {
-                console.log("Setting selected options:", ids);
-                // Use functional update to ensure we're working with latest state
-                setSelectedIds(() => {
-                    const newSet = new Set(ids);
-                    onSelectionChange?.(newSet);
-                    return newSet;
-                });
-            }
-        }, [onSelectionChange]);
-        
-        // Extra helper method to set using a Set directly
-        const setSelectedIdSet = useCallback((ids: Set<string>) => {
-            if (ids) {
-                console.log("Setting selected ids:", Array.from(ids));
-                setSelectedIds(() => {
-                    const newSet = new Set(ids);
-                    onSelectionChange?.(newSet);
-                    return newSet;
-                });
-            }
-        }, [onSelectionChange]);
+        // Invert selection ============================================================================================
+        const selectInverse = useCallback(() => {
+            if (!allowMultipleSelections) return;
+
+            // Get all enabled options
+            const enabledOptions = Array.from(availableOptionsRef.current.entries())
+                .filter(([_, disabled]) => !disabled)
+                .map(([id]) => id);
+
+            // Select options that are not currently selected
+            const invertedSelection = enabledOptions.filter(id => !selectedIds.has(id));
+
+            // Respect selection limit if set
+            const optionsToSelect = selectionLimit
+                ? invertedSelection.slice(0, selectionLimit)
+                : invertedSelection;
+
+            updateSelectedIds(new Set(optionsToSelect));
+        }, [selectedIds, allowMultipleSelections, selectionLimit, updateSelectedIds]);
 
         const isSelected = useCallback((id: string) => {
             return selectedIds.has(id);
@@ -198,21 +188,19 @@ export const OptionCardsGroup = React.forwardRef<OptionCardsGroupRef, OptionCard
 
         // Expose methods via ref
         React.useImperativeHandle(ref, () => ({
-            selectAllOptions,
-            clearAllOptions,
-            setSelectedOptions,
-            setSelectedIds: setSelectedIdSet
-        }), [selectAllOptions, clearAllOptions, setSelectedOptions, setSelectedIdSet]);
+            selectAll,
+            selectNone,
+            selectInverse,
+        }), [selectAll, selectNone, selectInverse]);
 
         const contextValue = {
             isSelected,
             toggleSelection,
             showTickIcon,
             tickPosition,
-            selectAllOptions,
-            clearAllOptions,
-            setSelectedOptions,
-            setSelectedIds: setSelectedIdSet,
+            selectAll,
+            selectNone,
+            selectInverse,
             registerOption,
             unregisterOption,
         };
@@ -238,19 +226,8 @@ export const useOptionCard = (id: string) => {
 };
 
 export const useOptionCardsGroup = () => {
-    const { 
-        selectAllOptions, 
-        clearAllOptions, 
-        setSelectedOptions,
-        setSelectedIds 
-    } = useContext(OptionCardsContext);
-    
-    return { 
-        selectAllOptions, 
-        clearAllOptions, 
-        setSelectedOptions,
-        setSelectedIds 
-    };
+    const { selectAll, selectNone, selectInverse } = useContext(OptionCardsContext);
+    return { selectAll, selectNone, selectInverse };
 };
 
 export const OptionCard: React.FC<OptionCardProps> = ({ id, children, disabled = false, ...props }) => {
