@@ -126,6 +126,7 @@
   - Uses event delegation instead of per-element listeners
   - Eliminates DOM pollution from multiple hidden tooltip elements
 - Add `SidebarItemGroup` for grouping sidebar items
+- Add `selectAll`, `selectNone`, and `selectInverse` methods to `OptionCardsGroup` via ref
 - Fixed `equaliseWidth` CSS selector for CheckboxGroup and SwitchGroup
 - Add `size` prop to Input elements
 - Add `size` prop to `FileUpload` for consistent sizing with other form elements

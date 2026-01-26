@@ -1,7 +1,7 @@
 "use client";
 
 // REACT CORE ==========================================================================================================
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 
 // UI ==================================================================================================================
 import {
@@ -14,7 +14,9 @@ import {
     ListBox,
     OptionCard,
     OptionCardsGroup,
+    OptionCardsGroupRef,
     TickPosition,
+    Button,
 }from "fictoan-react";
 
 // UTILS ===============================================================================================================
@@ -29,10 +31,12 @@ import { ComponentDocsLayout } from "../ComponentDocsLayout";
 
 const OptionCardsDocs = () => {
     // Props state
-    const [allowMultipleSelections, setAllowMultipleSelections] = useState(false);
+    const [allowMultipleSelections, setAllowMultipleSelections] = useState(true);
     const [showTickIcon, setShowTickIcon] = useState(true);
     const [tickPosition, setTickPosition] = useState<TickPosition>("top-right");
-    const [selectedIds, setSelectedIds] = useState(new Set<string>());
+
+    // Ref to access selection methods
+    const optionCardsRef = useRef<OptionCardsGroupRef>(null);
 
     // Theme configurator
     const OptionCardComponent = (varName: string) => {
@@ -45,32 +49,29 @@ const OptionCardsDocs = () => {
         themeConfigurator,
     } = createThemeConfigurator("OptionCard", OptionCardComponent);
 
-    // Handle selection change
-    const handleSelectionChange = (newSelectedIds: Set<string>) => {
-        setSelectedIds(newSelectedIds);
-        console.log("Selected IDs:", Array.from(newSelectedIds));
-    };
-
     // Generate code
     const codeString = useMemo(() => {
         const groupProps = [];
+        groupProps.push(`    ref={optionCardsRef}`);
         if (allowMultipleSelections) groupProps.push(`    allowMultipleSelections`);
         if (!showTickIcon) groupProps.push(`    showTickIcon={false}`);
         if (tickPosition !== "top-right") groupProps.push(`    tickPosition="${tickPosition}"`);
-        groupProps.push(`    onSelectionChange={(ids) => console.log(ids)}`);
 
         const groupPropsString = groupProps.length > 0 ? `\n${groupProps.join("\n")}\n` : "";
 
-        return `<OptionCardsGroup${groupPropsString}>
-    <OptionCard id="card-1" padding="small">
-        Option 1
-    </OptionCard>
-    <OptionCard id="card-2" padding="small">
-        Option 2
-    </OptionCard>
-    <OptionCard id="card-3" padding="small">
-        Option 3
-    </OptionCard>
+        return `import { useRef } from "react";
+import { OptionCardsGroup, OptionCardsGroupRef, OptionCard, Button } from "fictoan-react";
+
+const optionCardsRef = useRef<OptionCardsGroupRef>(null);
+
+<Button onClick={() => optionCardsRef.current?.selectAll()}>Select all</Button>
+<Button onClick={() => optionCardsRef.current?.selectNone()}>Select none</Button>
+<Button onClick={() => optionCardsRef.current?.selectInverse()}>Invert selection</Button>
+
+<OptionCardsGroup${groupPropsString}>
+    <OptionCard id="card-1">Option 1</OptionCard>
+    <OptionCard id="card-2">Option 2</OptionCard>
+    <OptionCard id="card-3">Option 3</OptionCard>
 </OptionCardsGroup>`;
     }, [allowMultipleSelections, showTickIcon, tickPosition]);
 
@@ -100,10 +101,10 @@ const OptionCardsDocs = () => {
             {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="demo-component">
                 <OptionCardsGroup
+                    ref={optionCardsRef}
                     allowMultipleSelections={allowMultipleSelections}
                     showTickIcon={showTickIcon}
                     tickPosition={tickPosition}
-                    onSelectionChange={handleSelectionChange}
                 >
                     <OptionCard
                         // @ts-ignore
@@ -168,6 +169,15 @@ const OptionCardsDocs = () => {
                         marginBottom="micro"
                         isFullWidth
                     />
+
+                    <Divider kind="tertiary" verticalMargin="micro" />
+
+                    <Text size="small" marginBottom="nano">Selection methods</Text>
+                    <Div>
+                        <Button size="small" kind="tertiary" onClick={() => optionCardsRef.current?.selectAll()} marginRight="nano">selectAll</Button>
+                        <Button size="small" kind="tertiary" onClick={() => optionCardsRef.current?.selectNone()} marginRight="nano">selectNone</Button>
+                        <Button size="small" kind="tertiary" onClick={() => optionCardsRef.current?.selectInverse()}>selectInverse</Button>
+                    </Div>
                 </Div>
             </Div>
 

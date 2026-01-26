@@ -8,6 +8,7 @@ import {
     Element,
     Card,
     Heading2,
+    Heading6,
     Text,
     Divider,
     Portion,
@@ -18,7 +19,7 @@ import {
     CodeBlock,
     Section,
     oklchColourDefinitions,
-} from "fictoan-react";
+}from "fictoan-react";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { ColorWheel } from "$components/ColorWheel/ColorWheel";
