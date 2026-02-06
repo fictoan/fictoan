@@ -4,10 +4,10 @@
     "description"          : "A full-featured, designer-friendly, yet performant framework with plain-English props and focus on rapid iteration.",
     "repository"           : {
         "type" : "git",
-        "url"  : "https://github.com/fictoan/fictoan-react"
+        "url"  : "https://github.com/fictoan/fictoan"
     },
     "bugs"                 : {
-        "url" : "https://github.com/fictoan/fictoan-react/issues"
+        "url" : "https://github.com/fictoan/fictoan/issues"
     },
     "homepage"             : "https://fictoan.io",
     "type"                 : "module",
