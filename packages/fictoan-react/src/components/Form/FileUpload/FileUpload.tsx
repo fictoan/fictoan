@@ -2,8 +2,11 @@
 import React, { useRef, useState } from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
-import { ColourPropTypes, SpacingTypes } from "$components/Element/constants";
+import { ColourPropTypes, CommonProps, SpacingTypes } from "$components/Element/constants";
 import { Div } from "../../Element/Tags";
+
+// UTILS ===============================================================================================================
+import { separateWrapperProps } from "$utils/propSeparation";
 
 // STYLES ==============================================================================================================
 import "./file-upload.css";
@@ -15,7 +18,7 @@ import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 import { Text } from "../../Typography/Text";
 
 export type FileUploadElementType = HTMLInputElement;
-export type FileUploadProps = InputLabelCustomProps & {
+export type FileUploadProps = InputLabelCustomProps & CommonProps & {
     id                  ? : string;
     name                ? : string;
     accept              ? : string;
@@ -121,6 +124,9 @@ export const FileUpload = React.forwardRef(
             fileInputRef.current?.click();
         };
 
+        // Separate wrapper-level props (margin, padding, etc.) from component-specific props
+        const { wrapperProps } = separateWrapperProps(props);
+
         return (
             <FormItem
                 label={label}
@@ -129,6 +135,7 @@ export const FileUpload = React.forwardRef(
                 errorText={errorText}
                 required={required}
                 size={size}
+                {...wrapperProps}
             >
                 <Div
                     data-file-upload-area

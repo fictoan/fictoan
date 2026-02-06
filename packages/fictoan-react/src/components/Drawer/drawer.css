@@ -155,6 +155,7 @@
     }
 
 
+    /* LEFT / RIGHT ========================================================= */
     &.left,
     &.right {
         .drawer-dismiss-button { top : 8px; }
@@ -168,7 +169,7 @@
         .drawer-dismiss-button { right : -40px; }
     }
 
-
+    /* TOP / BOTTOM ========================================================= */
     &.top,
     &.bottom {
         .drawer-dismiss-button { right : 8px; }

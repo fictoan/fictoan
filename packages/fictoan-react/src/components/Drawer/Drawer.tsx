@@ -180,11 +180,11 @@ export const Drawer = React.forwardRef(
 
                     <Div
                         className="drawer-content"
+                        role="document"
                         padding={padding}
                         bgColor={bgColor}
                         bgColour={bgColour}
                     >
-
                         {/* SR-ONLY DESCRIPTION */}
                         {description && (
                             <div id={descriptionId} className="sr-only">
@@ -192,10 +192,7 @@ export const Drawer = React.forwardRef(
                             </div>
                         )}
 
-                        {/* CONTENT */}
-                        <div role="document">
-                            {children}
-                        </div>
+                        {children}
                     </Div>
                 </Element>
             </>

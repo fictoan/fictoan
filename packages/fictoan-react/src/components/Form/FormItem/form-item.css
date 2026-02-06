@@ -120,6 +120,7 @@ form[data-form] [data-form-item] {
     grid-area : info;
     flex-wrap : wrap;
 
+    /* TODO: Add lower opacity for non-focused help text */
     p.help-text,
     p.error-text {
         font-size   : var(--input-helptext-scale);
@@ -226,4 +227,11 @@ form[data-form] [data-form-item] {
 /* FOR FILE UPLOAD ========================================================== */
 [data-form-item] [data-input-wrapper]:has([data-file-upload-area]) {
     flex-direction : column;
+}
+
+/* FULL WIDTH =============================================================== */
+/* Cascade full-width to child wrappers that have their own width constraints */
+[data-form-item].full-width [data-select],
+[data-form-item].full-width [data-list-box] {
+    width : 100%;
 }

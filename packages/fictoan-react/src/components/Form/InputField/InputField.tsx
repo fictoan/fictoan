@@ -14,8 +14,6 @@ import { FormItem } from "../FormItem/FormItem";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 import { separateWrapperProps } from "../../../utils/propSeparation";
 
-// TODO: Add full-width support for standalone input fields
-
 export type ValueChangeHandler<T = string> = (value: T) => void;
 export type InputFocusHandler = (e: React.FocusEvent<HTMLInputElement>) => void;
 export interface InputCommonProps {

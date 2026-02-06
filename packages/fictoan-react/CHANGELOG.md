@@ -142,6 +142,10 @@
   - Props like `marginBottom`, `padding`, `shadow`, etc. now correctly apply to the FormItem wrapper
   - Affected components: `TextArea`, `InputField`, `Checkbox`, `Switch`, `Select`, `RadioButton`, `ListBox`
   - Add `separateWrapperProps` utility in `propSeparation.ts` to handle prop separation consistently
+- Fix `isFullWidth` prop not working correctly for `Select` and `ListBox` components
+  - Add CSS rules to cascade `full-width` class to child wrapper elements (`[data-select]`, `[data-list-box]`)
+  - Fix `FileUpload` to properly pass wrapper props (including `isFullWidth`) to `FormItem`
+  - Remove stale TODO comment from `InputField`
 - Fix Turbopack build error for universal selector parsing bug
 - Fix `Drawer` overlay colour bug
 
