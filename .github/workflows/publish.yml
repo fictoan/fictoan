@@ -29,6 +29,6 @@ jobs :
                 run  : pnpm --filter fictoan-react build
             -   name              : Publish fictoan-react
                 working-directory : ./packages/fictoan-react
-                run               : npm publish --access public --tag alpha
+                run               : npm publish --access public --tag beta
                 env               :
                     NODE_AUTH_TOKEN : ${{secrets.NPM_PUBLISH_TOKEN}}
