@@ -2,27 +2,31 @@
 import React, { useRef } from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
+import { CommonAndHTMLProps, SpacingTypes } from "../../Element/constants";
 import { Element } from "$element";
-import { FormItem } from "../FormItem/FormItem";
+
+// UTILS ===============================================================================================================
 import { separateWrapperProps } from "../../../utils/propSeparation";
 
 // STYLES ==============================================================================================================
 import "./textarea.css";
 
-// TYPES ===============================================================================================================
-import { CommonAndHTMLProps, SpacingTypes } from "../../Element/constants";
+// OTHER ===============================================================================================================
+import { FormItem } from "../FormItem/FormItem";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
+
+// TODO Add minimumWordLength prop
 
 // Common input types
 export interface InputCommonProps {
-    label?: string;
-    helpText?: string | React.ReactNode;
-    errorText?: string;
-    validateThis?: boolean;
-    valid?: boolean;
-    invalid?: boolean;
-    required?: boolean;
-    disabled?: boolean;
+    label        ? : string;
+    helpText     ? : string | React.ReactNode;
+    errorText    ? : string;
+    validateThis ? : boolean;
+    valid        ? : boolean;
+    invalid      ? : boolean;
+    required     ? : boolean;
+    disabled     ? : boolean;
 }
 
 export type TextareaElementType = HTMLTextAreaElement;
@@ -30,32 +34,32 @@ export type TextareaProps =
     Omit<CommonAndHTMLProps<TextareaElementType>, "onChange" | "size"> &
     InputLabelCustomProps &
     Omit<InputCommonProps, "validationState"> & {
-        id?: string;
-        name?: string;
-        onChange?: (value: string) => void;
-        value?: string;
-        rows?: number;
-        cols?: number;
-        minLength?: number;
-        maxLength?: number;
-        placeholder?: string;
-        readOnly?: boolean;
-        required?: boolean;
-        disabled?: boolean;
-        autoComplete?: string;
-        characterLimit?: number;
-        wordLimit?: number;
-        size?: Exclude<SpacingTypes, "nano" | "huge">;
-    };
+    id             ? : string;
+    name           ? : string;
+    onChange       ? : (value : string) => void;
+    value          ? : string;
+    rows           ? : number;
+    cols           ? : number;
+    minLength      ? : number;
+    maxLength      ? : number;
+    placeholder    ? : string;
+    readOnly       ? : boolean;
+    required       ? : boolean;
+    disabled       ? : boolean;
+    autoComplete   ? : string;
+    characterLimit ? : number;
+    wordLimit      ? : number;
+    size           ? : Exclude<SpacingTypes, "nano" | "huge">;
+};
 
 // Helper functions to determine limit states
-const getLimitState = (current: number, limit: number): "normal" | "warning" | "exceeded" => {
+const getLimitState = (current : number, limit : number) : "normal" | "warning" | "exceeded" => {
     if (current > limit) return "exceeded";
     if (current >= limit * 0.9) return "warning";
     return "normal";
 };
 
-const pluralise = (count: number, singular: string, plural: string): string => {
+const pluralise = (count : number, singular : string, plural : string) : string => {
     return Math.abs(count) === 1 ? singular : plural;
 };
 
@@ -91,17 +95,17 @@ export const TextArea = React.forwardRef(
             valid,
             invalid,
             ...props
-        }: TextareaProps,
-        ref: React.Ref<TextareaElementType>
+        } : TextareaProps,
+        ref : React.Ref<TextareaElementType>,
     ) => {
         const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-        const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const handleChange = (e : React.ChangeEvent<HTMLTextAreaElement>) => {
             onChange?.(e.target.value);
         };
 
-        const constructHelpText = (): React.ReactNode => {
-            const limitsMessages: React.ReactNode[] = [];
+        const constructHelpText = () : React.ReactNode => {
+            const limitsMessages : React.ReactNode[] = [];
 
             if (characterLimit) {
                 const currentChars = value.length;
@@ -114,7 +118,7 @@ export const TextArea = React.forwardRef(
                         {excessChars > 0
                             ? `${excessChars} ${pluralise(excessChars, "char", "chars")} over limit`
                             : `${remaining} ${pluralise(remaining, "char", "chars")} left`}
-                    </span>
+                    </span>,
                 );
             }
 
@@ -129,7 +133,7 @@ export const TextArea = React.forwardRef(
                         {excessWords > 0
                             ? `${excessWords} ${pluralise(excessWords, "word", "words")} over limit`
                             : `${remaining} ${pluralise(remaining, "word", "words")} left`}
-                    </span>
+                    </span>,
                 );
             }
 
@@ -149,7 +153,7 @@ export const TextArea = React.forwardRef(
             );
         };
 
-        const setRefs = (element: HTMLTextAreaElement | null) => {
+        const setRefs = (element : HTMLTextAreaElement | null) => {
             textareaRef.current = element;
             if (typeof ref === "function") {
                 ref(element);
@@ -159,7 +163,7 @@ export const TextArea = React.forwardRef(
         };
 
         // Separate wrapper-level props (margin, padding, etc.) from input-specific props
-        const { wrapperProps, inputProps } = separateWrapperProps(props);
+        const {wrapperProps, inputProps} = separateWrapperProps(props);
 
         return (
             <FormItem
@@ -192,6 +196,6 @@ export const TextArea = React.forwardRef(
                 />
             </FormItem>
         );
-    }
+    },
 );
 TextArea.displayName = "TextArea";
