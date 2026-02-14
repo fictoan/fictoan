@@ -39,18 +39,30 @@
 
 /* VARIANT COLOUR LAYER ///////////////////////////////////////////////////// */
 [data-button].success {
-    --button-primary-bg   : var(--button-success-bg);
-    --button-primary-text : var(--button-success-text);
+    --button-primary-bg     : var(--button-success-bg);
+    --button-primary-text   : var(--button-success-text);
+    --button-secondary-bg   : color-mix(in oklch, var(--button-success-bg), var(--body-bg) 80%);
+    --button-secondary-text : var(--button-success-bg);
+    --button-tertiary-bg    : transparent;
+    --button-tertiary-text  : var(--button-success-bg);
 }
 
 [data-button].warning {
-    --button-primary-bg   : var(--button-warning-bg);
-    --button-primary-text : var(--button-warning-text);
+    --button-primary-bg     : var(--button-warning-bg);
+    --button-primary-text   : var(--button-warning-text);
+    --button-secondary-bg   : color-mix(in oklch, var(--button-warning-bg), var(--body-bg) 80%);
+    --button-secondary-text : var(--button-warning-bg);
+    --button-tertiary-bg    : transparent;
+    --button-tertiary-text  : var(--button-warning-bg);
 }
 
 [data-button].danger {
-    --button-primary-bg   : var(--button-danger-bg);
-    --button-primary-text : var(--button-danger-text);
+    --button-primary-bg     : var(--button-danger-bg);
+    --button-primary-text   : var(--button-danger-text);
+    --button-secondary-bg   : color-mix(in oklch, var(--button-danger-bg), var(--body-bg) 80%);
+    --button-secondary-text : var(--button-danger-bg);
+    --button-tertiary-bg    : transparent;
+    --button-tertiary-text  : var(--button-danger-bg);
 }
 
 /* PRIMARY BUTTON /////////////////////////////////////////////////////////// */
