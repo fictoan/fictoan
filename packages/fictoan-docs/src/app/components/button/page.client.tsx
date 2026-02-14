@@ -245,12 +245,9 @@ const ButtonDocs = () => {
                 <Text weight="700" marginBottom="micro">Theme variables</Text>
 
                 <Text marginBottom="micro">
-                    Set <code>primary-bg</code> and <code>primary-text</code> to define the base
-                    button colour. Secondary and tertiary derive from it
-                    automatically&mdash;secondary mixes the primary colour
-                    with <code>--body-bg</code>, tertiary uses it for text and border. Hover and
-                    active states are computed using <code>color-mix()</code>. You can override
-                    any of the six values independently.
+                    Each emphasis type has its own <code>bg</code> and <code>text</code> pair.
+                    Hover and active states are computed automatically
+                    using <code>color-mix()</code>. You can override any of these independently.
                 </Text>
 
                 <CodeBlock language="css" withSyntaxHighlighting showCopyButton marginBottom="small">
@@ -267,9 +264,9 @@ const ButtonDocs = () => {
                 <Text weight="700" marginBottom="micro">Variant colours</Text>
 
                 <Text marginBottom="micro">
-                    Variants switch the colour palette. They
-                    override <code>--button-primary-bg</code> and <code>--button-primary-text</code> at
-                    the element level, and secondary and tertiary re-derive automatically.
+                    Variants switch the colour palette for all three emphasis types at
+                    once. The secondary variant mixes the variant colour
+                    with <code>--body-bg</code>, so it adapts to both light and dark themes.
                 </Text>
 
                 <CodeBlock language="css" withSyntaxHighlighting showCopyButton marginBottom="small">
