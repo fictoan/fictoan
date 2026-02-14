@@ -38,40 +38,61 @@
 
 
 /* VARIANT COLOUR LAYER ///////////////////////////////////////////////////// */
-[data-button]         { --btn-bg: var(--button-bg);         --btn-text: var(--button-text); }
-[data-button].success { --btn-bg: var(--button-success-bg); --btn-text: var(--button-success-text); }
-[data-button].warning { --btn-bg: var(--button-warning-bg); --btn-text: var(--button-warning-text); }
-[data-button].danger  { --btn-bg: var(--button-danger-bg);  --btn-text: var(--button-danger-text); }
+[data-button].success {
+    --button-primary-bg    : var(--button-success-bg);
+    --button-primary-text  : var(--button-success-text);
+    --button-secondary-bg  : color-mix(in oklch, var(--button-success-bg), white 80%);
+    --button-secondary-text : var(--button-success-bg);
+    --button-tertiary-bg   : transparent;
+    --button-tertiary-text : var(--button-success-bg);
+}
+
+[data-button].warning {
+    --button-primary-bg    : var(--button-warning-bg);
+    --button-primary-text  : var(--button-warning-text);
+    --button-secondary-bg  : color-mix(in oklch, var(--button-warning-bg), white 80%);
+    --button-secondary-text : var(--button-warning-bg);
+    --button-tertiary-bg   : transparent;
+    --button-tertiary-text : var(--button-warning-bg);
+}
+
+[data-button].danger {
+    --button-primary-bg    : var(--button-danger-bg);
+    --button-primary-text  : var(--button-danger-text);
+    --button-secondary-bg  : color-mix(in oklch, var(--button-danger-bg), white 80%);
+    --button-secondary-text : var(--button-danger-bg);
+    --button-tertiary-bg   : transparent;
+    --button-tertiary-text : var(--button-danger-bg);
+}
 
 
 /* PRIMARY BUTTON /////////////////////////////////////////////////////////// */
 [data-button].primary {
-    font-family      : var(--button-primary-font, var(--button-font)), sans-serif;
     /* DEFAULT STATE ======================================================== */
-    background-color : var(--button-primary-bg-default, var(--btn-bg));
-    color            : var(--button-primary-text-default, var(--btn-text));
-    border-color     : var(--button-primary-border-default, var(--btn-bg));
+    background-color : var(--button-primary-bg);
+    color            : var(--button-primary-text);
+    border-color     : var(--button-primary-bg);
     border-style     : solid;
-    border-width     : var(--button-primary-border-width-default, var(--button-border-width));
-    border-radius    : var(--button-primary-border-radius-default, var(--button-border-radius));
+    border-width     : var(--button-border-width);
+    border-radius    : var(--button-border-radius);
 
     /* HOVER STATE ========================================================== */
     &:hover {
-        background-color : var(--button-primary-bg-hover, color-mix(in oklch, var(--btn-bg), white 15%));
-        color            : var(--button-primary-text-hover, var(--btn-text));
-        border-color     : var(--button-primary-border-hover, color-mix(in oklch, var(--btn-bg), black 15%));
+        background-color : color-mix(in oklch, var(--button-primary-bg), white 15%);
+        color            : var(--button-primary-text);
+        border-color     : color-mix(in oklch, var(--button-primary-bg), black 15%);
     }
 
     /* CLICKED STATE ======================================================== */
     &:active {
-        background-color : var(--button-primary-bg-active, color-mix(in oklch, var(--btn-bg), white 25%));
-        color            : var(--button-primary-text-active, var(--btn-text));
-        border-color     : var(--button-primary-border-active, color-mix(in oklch, var(--btn-bg), black 25%));
+        background-color : color-mix(in oklch, var(--button-primary-bg), white 25%);
+        color            : var(--button-primary-text);
+        border-color     : color-mix(in oklch, var(--button-primary-bg), black 25%);
     }
 
     /* LOADING STATE ======================================================== */
     &.is-loading::after {
-        border             : 3px solid var(--button-primary-spinner-loading, var(--btn-text));
+        border             : 3px solid var(--button-primary-text);
         border-top-color   : transparent;
         border-right-color : transparent;
     }
@@ -79,33 +100,31 @@
 
 /* SECONDARY BUTTON ///////////////////////////////////////////////////////// */
 [data-button].secondary {
-    font-family      : var(--button-secondary-font, var(--button-font)), sans-serif;
-
     /* DEFAULT STATE ======================================================== */
-    background-color : var(--button-secondary-bg-default, color-mix(in oklch, var(--btn-bg), white var(--button-lightness-difference)));
-    color            : var(--button-secondary-text-default, var(--btn-bg));
-    border-color     : var(--button-secondary-border-default, color-mix(in oklch, var(--btn-bg), white var(--button-lightness-difference)));
+    background-color : var(--button-secondary-bg);
+    color            : var(--button-secondary-text);
+    border-color     : var(--button-secondary-bg);
     border-style     : solid;
-    border-width     : var(--button-secondary-border-width-default, var(--button-border-width));
-    border-radius    : var(--button-secondary-border-radius-default, var(--button-border-radius));
+    border-width     : var(--button-border-width);
+    border-radius    : var(--button-border-radius);
 
     /* HOVER STATE ========================================================== */
     &:hover {
-        background-color : var(--button-secondary-bg-hover, color-mix(in oklch, var(--btn-bg), white calc(var(--button-lightness-difference) - 10%)));
-        color            : var(--button-secondary-text-hover, var(--btn-bg));
-        border-color     : var(--button-secondary-border-hover, color-mix(in oklch, var(--btn-bg), white calc(var(--button-lightness-difference) - 10%)));
+        background-color : color-mix(in oklch, var(--button-secondary-bg), var(--button-secondary-text) 20%);
+        color            : var(--button-secondary-text);
+        border-color     : color-mix(in oklch, var(--button-secondary-bg), var(--button-secondary-text) 20%);
     }
 
     /* CLICKED STATE ======================================================== */
     &:active {
-        background-color : var(--button-secondary-bg-active, color-mix(in oklch, var(--btn-bg), white calc(var(--button-lightness-difference) - 5%)));
-        color            : var(--button-secondary-text-active, var(--btn-bg));
-        border-color     : var(--button-secondary-border-active, color-mix(in oklch, var(--btn-bg), white calc(var(--button-lightness-difference) - 5%)));
+        background-color : color-mix(in oklch, var(--button-secondary-bg), var(--button-secondary-text) 10%);
+        color            : var(--button-secondary-text);
+        border-color     : color-mix(in oklch, var(--button-secondary-bg), var(--button-secondary-text) 10%);
     }
 
     /* LOADING STATE ======================================================== */
     &.is-loading::after {
-        border             : 3px solid var(--button-secondary-spinner-loading, var(--btn-bg));
+        border             : 3px solid var(--button-secondary-text);
         border-top-color   : transparent;
         border-right-color : transparent;
     }
@@ -113,33 +132,31 @@
 
 /* TERTIARY BUTTON ////////////////////////////////////////////////////////// */
 [data-button].tertiary {
-    font-family      : var(--button-tertiary-font, var(--button-font)), sans-serif;
-
     /* DEFAULT STATE ======================================================== */
-    background-color : var(--button-tertiary-bg-default, transparent);
-    color            : var(--button-tertiary-text-default, var(--btn-bg));
-    border-color     : var(--button-tertiary-border-default, var(--btn-bg));
+    background-color : var(--button-tertiary-bg);
+    color            : var(--button-tertiary-text);
+    border-color     : var(--button-tertiary-text);
     border-style     : solid;
-    border-width     : var(--button-tertiary-border-width-default, var(--button-border-width));
-    border-radius    : var(--button-tertiary-border-radius-default, var(--button-border-radius));
+    border-width     : var(--button-border-width);
+    border-radius    : var(--button-border-radius);
 
     /* HOVER STATE ========================================================== */
     &:hover {
-        background-color : var(--button-tertiary-bg-hover, color-mix(in oklch, var(--btn-bg), transparent 90%));
-        color            : var(--button-tertiary-text-hover, var(--btn-bg));
-        border-color     : var(--button-tertiary-border-hover, color-mix(in oklch, var(--btn-bg), white 15%));
+        background-color : color-mix(in oklch, var(--button-tertiary-text), transparent 90%);
+        color            : var(--button-tertiary-text);
+        border-color     : color-mix(in oklch, var(--button-tertiary-text), white 15%);
     }
 
     /* CLICKED STATE ======================================================== */
     &:active {
-        background-color : var(--button-tertiary-bg-active, color-mix(in oklch, var(--btn-bg), transparent 85%));
-        color            : var(--button-tertiary-text-active, var(--btn-bg));
-        border-color     : var(--button-tertiary-border-active, color-mix(in oklch, var(--btn-bg), white 25%));
+        background-color : color-mix(in oklch, var(--button-tertiary-text), transparent 85%);
+        color            : var(--button-tertiary-text);
+        border-color     : color-mix(in oklch, var(--button-tertiary-text), white 25%);
     }
 
     /* LOADING STATE ======================================================== */
     &.is-loading::after {
-        border             : 3px solid var(--button-tertiary-spinner-loading, var(--btn-bg));
+        border             : 3px solid var(--button-tertiary-text);
         border-top-color   : transparent;
         border-right-color : transparent;
     }
@@ -257,7 +274,7 @@
     border-radius      : 50%;
     content            : "";
     border             : 3px solid;
-    border-color       : var(--btn-text);
+    border-color       : var(--button-primary-text);
     border-top-color   : transparent;
     border-right-color : transparent;
     -webkit-animation  : spinner 0.4s infinite linear;
