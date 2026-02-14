@@ -2,7 +2,7 @@
 import React from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
-import { CommonAndHTMLProps, EmphasisTypes, ShapeTypes, SpacingTypes } from "../Element/constants";
+import { CommonAndHTMLProps, EmphasisTypes, ShapeTypes, SpacingTypes, ButtonVariantTypes } from "../Element/constants";
 import { Element } from "$element";
 
 // STYLES ==============================================================================================================
@@ -11,6 +11,7 @@ import "./Button.css";
 // prettier-ignore
 export interface ButtonCustomProps {
     kind      ? : EmphasisTypes;
+    variant   ? : ButtonVariantTypes;
     size      ? : SpacingTypes;
     shape     ? : ShapeTypes;
     isLoading ? : boolean;
@@ -22,11 +23,15 @@ export type ButtonProps = Omit<CommonAndHTMLProps<ButtonElementType>, keyof Butt
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const Button = React.forwardRef(
-    ({size = "medium", shape, kind, isLoading, label, ...props} : ButtonProps, ref : React.Ref<ButtonElementType>) => {
+    ({size = "medium", shape, kind, variant, isLoading, label, ...props} : ButtonProps, ref : React.Ref<ButtonElementType>) => {
         let classNames = [];
 
         if (kind) {
             classNames.push(kind);
+        }
+
+        if (variant) {
+            classNames.push(variant);
         }
 
         if (size) {

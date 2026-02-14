@@ -50,101 +50,25 @@
 
 /* BUTTON /////////////////////////////////////////////////////////////////// */
 :root {
-    --button-font                             : var(--font-sans-serif);
+    --button-font          : var(--font-sans-serif);
+    --button-bg            : var(--blue);
+    --button-text          : var(--white);
+    --button-border-width  : var(--global-border-width);
+    --button-border-radius : var(--global-border-radius);
 
-    /* PRIMARY BUTTON ======================================================= */
-    --button-primary-font                     : var(--font-sans-serif);
-    --button-primary-bg-default               : var(--blue);
-    --button-primary-text-default             : var(--white);
-    --button-primary-border-default           : var(--blue);
-    --button-primary-border-width-default     : var(--global-border-width);
-    --button-primary-border-radius-default    : var(--global-border-radius);
-
-    --button-primary-bg-hover                 : var(--blue-light10);
-    --button-primary-text-hover               : var(--white);
-    --button-primary-border-hover             : var(--blue-dark30);
-    --button-primary-border-width-hover       : var(--global-border-width);
-    --button-primary-border-radius-hover      : var(--global-border-radius);
-
-    --button-primary-bg-active                : var(--blue-light20);
-    --button-primary-text-active              : var(--white);
-    --button-primary-border-active            : var(--blue-dark40);
-    --button-primary-border-width-active      : var(--global-border-width);
-    --button-primary-border-radius-active     : var(--global-border-radius);
-
-    --button-primary-spinner-loading          : var(--white);
-
-    --button-primary-bg-disabled              : var(--blue-light10);
-    --button-primary-text-disabled            : var(--white);
-    --button-primary-border-disabled          : var(--blue-light10);
-    --button-primary-border-width-disabled    : var(--global-border-width);
-    --button-primary-border-radius-disabled   : var(--global-border-radius);
-
-
-    /* SECONDARY BUTTON ===================================================== */
-    --button-secondary-font                   : var(--font-sans-serif);
-    --button-secondary-bg-default             : var(--blue-light50);
-    --button-secondary-text-default           : var(--blue);
-    --button-secondary-border-default         : var(--blue-light50);
-    --button-secondary-border-width-default   : var(--global-border-width);
-    --button-secondary-border-radius-default  : var(--global-border-radius);
-
-    --button-secondary-bg-hover               : var(--blue-light40);
-    --button-secondary-text-hover             : var(--blue);
-    --button-secondary-border-hover           : var(--blue-light40);
-    --button-secondary-border-width-hover     : var(--global-border-width);
-    --button-secondary-border-radius-hover    : var(--global-border-radius);
-
-    --button-secondary-bg-active              : var(--blue-light50);
-    --button-secondary-text-active            : var(--blue);
-    --button-secondary-border-active          : var(--blue-light50);
-    --button-secondary-border-width-active    : var(--global-border-width);
-    --button-secondary-border-radius-active   : var(--global-border-radius);
-
-    --button-secondary-spinner-loading        : var(--blue);
-
-    --button-secondary-bg-disabled            : var(--blue-light10);
-    --button-secondary-text-disabled          : var(--white);
-    --button-secondary-border-disabled        : var(--blue-light10);
-    --button-secondary-border-width-disabled  : var(--global-border-width);
-    --button-secondary-border-radius-disabled : var(--global-border-radius);
-
-
-    /* TERTIARY BUTTON ====================================================== */
-    --button-tertiary-font                    : var(--font-sans-serif);
-    --button-tertiary-bg-default              : var(--transparent);
-    --button-tertiary-text-default            : var(--blue);
-    --button-tertiary-border-default          : var(--blue);
-    --button-tertiary-border-width-default    : var(--global-border-width);
-    --button-tertiary-border-radius-default   : var(--global-border-radius);
-
-    --button-tertiary-bg-hover                : var(--blue-light80);
-    --button-tertiary-text-hover              : var(--blue);
-    --button-tertiary-border-hover            : var(--blue-light20);
-    --button-tertiary-border-width-hover      : var(--global-border-width);
-    --button-tertiary-border-radius-hover     : var(--global-border-radius);
-
-    --button-tertiary-bg-active               : var(--blue-light70);
-    --button-tertiary-text-active             : var(--blue);
-    --button-tertiary-border-active           : var(--blue-light30);
-    --button-tertiary-border-width-active     : var(--global-border-width);
-    --button-tertiary-border-radius-active    : var(--global-border-radius);
-
-    --button-tertiary-spinner-loading         : var(--blue);
-
-    --button-tertiary-bg-disabled             : var(--blue-light10);
-    --button-tertiary-text-disabled           : var(--white);
-    --button-tertiary-border-disabled         : var(--blue-light10);
-    --button-tertiary-border-width-disabled   : var(--global-border-width);
-    --button-tertiary-border-radius-disabled  : var(--global-border-radius);
-
+    --button-success-bg    : var(--green);
+    --button-success-text  : var(--white);
+    --button-warning-bg    : var(--amber);
+    --button-warning-text  : var(--white);
+    --button-danger-bg     : var(--red);
+    --button-danger-text   : var(--white);
 
     /* ROUND BUTTON ========================================================= */
-    --button-round-size-tiny                  : 24px;
-    --button-round-size-small                 : 32px;
-    --button-round-size-medium                : 64px;
-    --button-round-size-large                 : 80px;
-    --button-round-size-huge                  : 128px;
+    --button-round-size-tiny   : 24px;
+    --button-round-size-small  : 32px;
+    --button-round-size-medium : 64px;
+    --button-round-size-large  : 80px;
+    --button-round-size-huge   : 128px;
 }
 
 /* CALLOUT ////////////////////////////////////////////////////////////////// */

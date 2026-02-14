@@ -177,6 +177,7 @@ export {
     type ShapeTypes,
     type OpacityTypes,
     type WeightTypes,
+    type ButtonVariantTypes,
 } from "./components/Element/constants";
 
 export {
