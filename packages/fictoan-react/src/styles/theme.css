@@ -51,11 +51,17 @@
 /* BUTTON /////////////////////////////////////////////////////////////////// */
 :root {
     --button-font          : var(--font-sans-serif);
-    --button-bg            : var(--blue);
-    --button-text          : var(--white);
-    --button-border-width      : var(--global-border-width);
-    --button-border-radius     : var(--global-border-radius);
-    --button-lightness-difference : 80%;
+    --button-border-width  : var(--global-border-width);
+    --button-border-radius : var(--global-border-radius);
+
+    --button-primary-bg    : var(--blue);
+    --button-primary-text  : var(--white);
+
+    --button-secondary-bg   : var(--blue-light50);
+    --button-secondary-text : var(--blue);
+
+    --button-tertiary-bg   : transparent;
+    --button-tertiary-text : var(--blue);
 
     --button-success-bg    : var(--green);
     --button-success-text  : var(--white);
