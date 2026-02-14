@@ -23,6 +23,7 @@ export type ShadowTypes = "none" | "mild" | "hard" | "soft";
 export type ShapeTypes = "rounded" | "curved";
 export type OpacityTypes = "0" | "5" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90";
 export type WeightTypes = "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900";
+export type ButtonVariantTypes = "success" | "warning" | "danger";
 
 export type ColourPropTypes =
     | `${OklchColourName}-${Luminance}${ShadeLevel}`
@@ -80,6 +81,7 @@ export interface CommonProps {
     verticallyCentreItems     ? : boolean;
     verticallyCenterItems     ? : boolean;
     pushItemsToEnds           ? : boolean;
+    isClickable               ? : boolean;
     isFullWidth               ? : boolean;
     isFullHeight              ? : boolean;
     hideOnMobile              ? : boolean;
@@ -103,7 +105,6 @@ export type FlexibleEventHandler<T, V = any> =
     | ((event : T) => void)
     | ((value : V) => void);
 
-// prettier-ignore
 export interface ElementProps<T extends {}> extends CommonProps, Omit<HTMLProps<T>, "as" | "ref" | "shape"> {
     as        ? : ElementType;
     className ? : string;

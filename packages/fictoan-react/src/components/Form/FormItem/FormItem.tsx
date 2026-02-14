@@ -2,37 +2,39 @@
 import React from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
+import { CommonAndHTMLProps, SpacingTypes } from "../../Element/constants";
 import { Div } from "$tags";
 import { Element } from "$element";
-import { CommonAndHTMLProps, SpacingTypes } from "../../Element/constants";
-import { InputLabel } from "../InputLabel/InputLabel";
-import { Text } from "../../Typography/Text";
 
 // STYLES ==============================================================================================================
 import "./form-item.css";
+
+// OTHER ===============================================================================================================
+import { InputLabel } from "../InputLabel/InputLabel";
+import { Text } from "../../Typography/Text";
 
 // TYPES ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export type FormItemElementType = HTMLDivElement;
 
 export interface FormItemProps extends CommonAndHTMLProps<FormItemElementType> {
     // Label
-    label?: string;
-    customLabel?: React.ReactNode;
-    htmlFor?: string;
+    label           ? : string;
+    customLabel     ? : React.ReactNode;
+    htmlFor         ? : string;
     // Info section
-    helpText?: string | React.ReactNode;
-    errorText?: string;
+    helpText        ? : string | React.ReactNode;
+    errorText       ? : string;
     // Validation
-    validationState?: "valid" | "invalid" | null;
+    validationState ? : "valid" | "invalid" | null;
     // Form semantics
-    required?: boolean;
-    size?: Exclude<SpacingTypes, "nano" | "huge">;
+    required        ? : boolean;
+    size            ? : Exclude<SpacingTypes, "nano" | "huge">;
     // Layout
-    labelFirst?: boolean;
+    labelFirst      ? : boolean;
 }
 
 // VALIDATION ICON /////////////////////////////////////////////////////////////////////////////////////////////////////
-const ValidationIcon = ({ state }: { state: "valid" | "invalid" }) => {
+const ValidationIcon = ({state} : { state : "valid" | "invalid" }) => {
     if (state === "valid") {
         return (
             <svg
@@ -100,8 +102,8 @@ export const FormItem = React.forwardRef(
             labelFirst,
             children,
             ...props
-        }: FormItemProps,
-        ref: React.Ref<FormItemElementType>
+        } : FormItemProps,
+        ref : React.Ref<FormItemElementType>,
     ) => {
         const hasLabel = label || customLabel;
         const hasInfoSection = helpText || errorText;
@@ -113,7 +115,8 @@ export const FormItem = React.forwardRef(
                 ref={ref}
                 role="group"
                 required={required}
-                className={[size ? `size-${size}` : "", labelFirst ? "label-first" : ""].filter(Boolean).join(" ") || undefined}
+                className={[ size ? `size-${size}` : "", labelFirst ? "label-first" : "" ].filter(Boolean)
+                    .join(" ") || undefined}
                 {...props}
             >
                 {/* LABEL ////////////////////////////////////////////////////////////////////////////////////// */}
@@ -146,6 +149,6 @@ export const FormItem = React.forwardRef(
                 )}
             </Element>
         );
-    }
+    },
 );
 FormItem.displayName = "FormItem";
