@@ -54,14 +54,14 @@
     --button-border-width  : var(--global-border-width);
     --button-border-radius : var(--global-border-radius);
 
-    --button-primary-bg    : var(--blue);
-    --button-primary-text  : var(--white);
+    --button-primary-bg     : var(--blue);
+    --button-primary-text   : var(--white);
 
-    --button-secondary-bg   : var(--blue-light50);
-    --button-secondary-text : var(--blue);
+    --button-secondary-bg   : color-mix(in oklch, var(--button-primary-bg), var(--body-bg) 80%);
+    --button-secondary-text : var(--button-primary-bg);
 
-    --button-tertiary-bg   : transparent;
-    --button-tertiary-text : var(--blue);
+    --button-tertiary-bg    : transparent;
+    --button-tertiary-text  : var(--button-primary-bg);
 
     --button-success-bg    : var(--green);
     --button-success-text  : var(--white);
