@@ -23,6 +23,7 @@ const ButtonDocs = () => {
     // Props state
     const [children, setChildren] = useState("Button");
     const [kind, setKind] = useState("primary");
+    const [variant, setVariant] = useState("");
     const [size, setSize] = useState("medium");
     const [shape, setShape] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -48,6 +49,7 @@ const ButtonDocs = () => {
     const codeString = useMemo(() => {
         const props = [];
         if (kind && kind !== "primary") props.push(`    kind="${kind}"`);
+        if (variant) props.push(`    variant="${variant}"`);
         if (size && size !== "medium") props.push(`    size="${size}"`);
         if (shape) props.push(`    shape="${shape}"`);
         if (isLoading) props.push(`    isLoading`);
@@ -60,7 +62,7 @@ const ButtonDocs = () => {
 
         const propsString = props.length > 0 ? `\n${props.join("\n")}\n` : "";
         return `<Button${propsString}>\n    ${children}\n</Button>`;
-    }, [children, kind, size, shape, isLoading, label, bgColour, borderColour, textColour]);
+    }, [children, kind, variant, size, shape, isLoading, label, bgColour, borderColour, textColour]);
 
     return (
         <ComponentDocsLayout pageId="page-button">
@@ -80,9 +82,12 @@ const ButtonDocs = () => {
                 <Divider kind="tertiary" verticalMargin="micro" />
 
                 <Text>
-                    For the <code>primary / secondary / tertiary</code> kinds, the background, text and border colours are
-                    defined in the theme, to ensure consistency. The <code>custom</code> value lets you add them
-                    manually.
+                    The <code>kind</code> prop controls the visual emphasis&mdash;<code>primary</code> is
+                    solid, <code>secondary</code> is tinted, and <code>tertiary</code> is outlined. Hover and
+                    active states are computed automatically
+                    using <code>color-mix()</code>. The <code>variant</code> prop
+                    switches the colour palette to <code>success</code>, <code>warning</code>,
+                    or <code>danger</code>. Use <code>custom</code> for full manual control.
                 </Text>
             </Div>
 
@@ -91,6 +96,7 @@ const ButtonDocs = () => {
                 <Button
                     ref={interactiveElementRef}
                     kind={kind as any}
+                    variant={variant as any || undefined}
                     size={size as any}
                     shape={shape as any || undefined}
                     isLoading={isLoading}
@@ -132,6 +138,23 @@ const ButtonDocs = () => {
                         onChange={(value) => setKind(value)}
                         marginBottom="micro"
                     />
+
+                    {kind !== "custom" && (
+                        <RadioTabGroup
+                            id="prop-variant"
+                            label="variant"
+                            options={[
+                                { id: "variant-none", value: "", label: "none" },
+                                { id: "variant-success", value: "success", label: "success" },
+                                { id: "variant-warning", value: "warning", label: "warning" },
+                                { id: "variant-danger", value: "danger", label: "danger" },
+                            ]}
+                            value={variant}
+                            onChange={(value) => setVariant(value)}
+                            helpText="Switches the colour palette. Hover and active states are computed automatically."
+                            marginBottom="micro"
+                        />
+                    )}
 
                     {kind === "custom" && (
                         <>
@@ -219,7 +242,54 @@ const ButtonDocs = () => {
 
             {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="theme-config">
-                {themeConfigurator()}
+                <Text weight="700" marginBottom="micro">Theme variables</Text>
+
+                <Text marginBottom="micro">
+                    Set <code>primary-bg</code> and <code>primary-text</code> to define the base
+                    button colour. Secondary and tertiary derive from it
+                    automatically&mdash;secondary mixes the primary colour
+                    with <code>--body-bg</code>, tertiary uses it for text and border. Hover and
+                    active states are computed using <code>color-mix()</code>. You can override
+                    any of the six values independently.
+                </Text>
+
+                <CodeBlock language="css" withSyntaxHighlighting showCopyButton marginBottom="small">
+{`--button-primary-bg     : var(--blue);
+--button-primary-text   : var(--white);
+
+--button-secondary-bg   : color-mix(in oklch, var(--button-primary-bg), var(--body-bg) 80%);
+--button-secondary-text : var(--button-primary-bg);
+
+--button-tertiary-bg    : transparent;
+--button-tertiary-text  : var(--button-primary-bg);`}
+                </CodeBlock>
+
+                <Text weight="700" marginBottom="micro">Variant colours</Text>
+
+                <Text marginBottom="micro">
+                    Variants switch the colour palette. They
+                    override <code>--button-primary-bg</code> and <code>--button-primary-text</code> at
+                    the element level, and secondary and tertiary re-derive automatically.
+                </Text>
+
+                <CodeBlock language="css" withSyntaxHighlighting showCopyButton marginBottom="small">
+{`--button-success-bg   : var(--green);
+--button-success-text : var(--white);
+
+--button-warning-bg   : var(--amber);
+--button-warning-text : var(--white);
+
+--button-danger-bg    : var(--red);
+--button-danger-text  : var(--white);`}
+                </CodeBlock>
+
+                <Text weight="700" marginBottom="micro">Full manual control</Text>
+
+                <Text marginBottom="micro">
+                    Use <code>kind="custom"</code> with the <code>bgColour</code>, <code>textColour</code>,
+                    and <code>borderColour</code> props for complete control over the button appearance
+                    without any computed styles.
+                </Text>
             </Div>
         </ComponentDocsLayout>
     );
