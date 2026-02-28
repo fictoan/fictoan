@@ -4,7 +4,7 @@ import React from "react";
 // UI ==================================================================================================================
 import { Text } from "fictoan-react";
 
-const VERSION = "2.0.0-beta.8";
+const VERSION = "2.0.0-beta.13";
 
 export const VersionBadge = () => {
     return (
