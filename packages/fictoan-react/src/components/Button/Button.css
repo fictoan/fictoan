@@ -10,6 +10,9 @@
     transition          : all 0.2s ease-in-out;
     background-position : center;
     user-select         : none;
+    display             : flex;
+    gap                 : 8px;
+    align-items         : center;
 }
 
 /*To make sure a button's children don't style themselves like a d-bag*/
@@ -35,7 +38,6 @@
     filter         : grayscale(100%);
     cursor         : not-allowed;
 }
-
 
 /* VARIANT COLOUR LAYER ///////////////////////////////////////////////////// */
 [data-button].success {

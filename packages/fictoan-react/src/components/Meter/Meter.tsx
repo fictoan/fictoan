@@ -5,31 +5,32 @@ import React from "react";
 import { CommonAndHTMLProps, CommonProps } from "../Element/constants";
 import { Element } from "$element";
 
+// UTILS ===============================================================================================================
+import { separateWrapperProps } from "../../utils/propSeparation";
+
 // STYLES ==============================================================================================================
 import "./meter.css";
 
 // OTHER ===============================================================================================================
 import { Text } from "../Typography/Text";
-import { separateWrapperProps } from "../../utils/propSeparation";
 
 export interface MeterLabelCustomProps {
-        suffix ? : string;
+    suffix ? : string;
 }
 
-// prettier-ignore
 export interface MeterCustomProps {
-        min                 : number;
-        max                 : number;
-        low                 : number;
-        high                : number;
-        value               : number;
-        optimum           ? : number;
-        showOptimumMarker ? : boolean;
-        suffix            ? : string;
-        height            ? : string;
-        label             ? : string;
-        ariaLabel         ? : string;
-        description       ? : string;
+    min                 : number;
+    max                 : number;
+    low                 : number;
+    high                : number;
+    value               : number;
+    optimum           ? : number;
+    showOptimumMarker ? : boolean;
+    suffix            ? : string;
+    height            ? : string;
+    label             ? : string;
+    ariaLabel         ? : string;
+    description       ? : string;
 }
 
 export type MeterElementType = HTMLMeterElement;
@@ -37,6 +38,7 @@ export type MeterProps = MeterCustomProps & CommonProps;
 export type MeterMetaProps = Omit<CommonAndHTMLProps<HTMLDivElement>, keyof MeterLabelCustomProps> &
                              MeterLabelCustomProps;
 
+// TODO: Add size for label
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const Meter = React.forwardRef(
     ({
@@ -76,7 +78,7 @@ export const Meter = React.forwardRef(
         };
 
         // Separate wrapper-level props (margin, padding, etc.) from meter-specific props
-        const { wrapperProps, inputProps } = separateWrapperProps(props);
+        const {wrapperProps, inputProps} = separateWrapperProps(props);
 
         return (
             <Element<HTMLDivElement>
@@ -114,7 +116,7 @@ export const Meter = React.forwardRef(
                         high={high}
                         optimum={optimum}
                         {...inputProps}
-                        style={{ height }}
+                        style={{height}}
                         aria-label={label || ariaLabel || "Progress meter"}
                         aria-valuemin={min}
                         aria-valuemax={max}
@@ -127,7 +129,7 @@ export const Meter = React.forwardRef(
                     {showOptimumMarker && optimum && (
                         <div
                             className="optimum-marker"
-                            style={{ left : `calc(${optimumPositionPercent}% - var(--meter-border-width))` }}
+                            style={{left : `calc(${optimumPositionPercent}% - var(--meter-border-width))`}}
                             title={`Optimum: ${optimum}`}
                             role="presentation"
                             aria-hidden="true"
