@@ -84,6 +84,7 @@ export interface CommonProps {
     isClickable               ? : boolean;
     isFullWidth               ? : boolean;
     isFullHeight              ? : boolean;
+    inheritFormSpacing        ? : boolean;
     hideOnMobile              ? : boolean;
     showOnlyOnMobile          ? : boolean;
     hideOnTabletPortrait      ? : boolean;

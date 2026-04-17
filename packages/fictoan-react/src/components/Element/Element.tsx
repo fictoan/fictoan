@@ -45,6 +45,7 @@ export const Element = React.forwardRef(
             horizontalPadding,
             horizontallyCenterThis,
             horizontallyCentreThis,
+            inheritFormSpacing,
             isClickable,
             isFullHeight,
             isFullWidth,
@@ -101,6 +102,7 @@ export const Element = React.forwardRef(
                 tabIndex={tabIndex}
                 onKeyDown={onKeyDown}
                 {...minimalProps}
+                data-form-spaced={inheritFormSpacing || undefined}
                 style={Object.keys(computedStyle).length > 0 ? computedStyle : undefined}
                 className={createClassName(
                     [

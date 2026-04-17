@@ -10,9 +10,10 @@ interface ComponentDocsLayoutProps {
     children         : ReactNode;
     pageId           : string;
     secondTabLabel ? : string;
+    thirdTabLabel  ? : string;
 }
 
-export const ComponentDocsLayout = ({ children, pageId, secondTabLabel = "Theme config" }: ComponentDocsLayoutProps) => {
+export const ComponentDocsLayout = ({ children, pageId, secondTabLabel = "Theme config", thirdTabLabel }: ComponentDocsLayoutProps) => {
     // Extract content by ID
     const getContentById = (targetId: string) => {
         let content = null;
@@ -77,7 +78,12 @@ export const ComponentDocsLayout = ({ children, pageId, secondTabLabel = "Theme 
                                     key: "theme-tab",
                                     label: secondTabLabel,
                                     content: (getContentById("theme-config"))
-                                }
+                                },
+                                ...(thirdTabLabel ? [{
+                                    key: "third-tab",
+                                    label: thirdTabLabel,
+                                    content: (getContentById("third-tab-content"))
+                                }] : [])
                             ]}
                         />
                     </Portion>
