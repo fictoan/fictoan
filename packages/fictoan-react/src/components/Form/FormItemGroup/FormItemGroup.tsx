@@ -55,6 +55,7 @@ export const FormItemGroup = React.forwardRef(
             <Element<FormItemGroupElementType>
                 as="div"
                 data-form-item-group
+                data-form-spaced
                 ref={ref}
                 id={groupId}
                 role="group"

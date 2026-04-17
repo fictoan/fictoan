@@ -132,6 +132,7 @@
 - Add `size` prop to `FileUpload` for consistent sizing with other form elements
 - Fix `Range` value text not scaling with `size` prop
 - Add `columns` prop to `CheckboxGroup`, `SwitchGroup`, and `RadioGroup` for grid layout
+- Overhaul `Form` spacing: flex `gap` replaces the `margin-bottom` whitelist, a new `data-form-spaced` marker cascades spacing at any nesting depth, `inheritFormSpacing` on `Element` lets any component opt into the Form's rhythm, and `--form-spacing` is exposed as a CSS custom property for per-instance overrides
 
 ### Bug fixes
 - Fix `Tabs` component losing state of controlled inputs (checkboxes, text fields, etc.) when parent re-renders

@@ -112,6 +112,7 @@ export const FormItem = React.forwardRef(
             <Element<FormItemElementType>
                 as="div"
                 data-form-item
+                data-form-spaced
                 ref={ref}
                 role="group"
                 required={required}
