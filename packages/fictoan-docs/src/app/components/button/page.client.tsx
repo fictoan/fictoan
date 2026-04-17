@@ -4,20 +4,31 @@
 import React, { useState, useMemo } from "react";
 
 // UI ==================================================================================================================
-import { Button, Heading2, Div, Text, Divider, CodeBlock, InputField, RadioTabGroup, Checkbox, ListBox } from "fictoan-react";
-
-// LOCAL COMPONENTS ====================================================================================================
-import { ComponentDocsLayout } from "../ComponentDocsLayout";
+import {
+    Button,
+    Heading2,
+    Div,
+    Text,
+    Divider,
+    CodeBlock,
+    InputField,
+    RadioTabGroup,
+    Checkbox,
+    ListBox,
+    Row,
+    Portion,
+}from "fictoan-react";
 
 // UTILS ===============================================================================================================
 import { createThemeConfigurator } from "$utils/themeConfigurator";
 
-// DATA ================================================================================================================
-import { colourOptions } from "../../colour/colours";
-
 // STYLES ==============================================================================================================
 import "../../../styles/fictoan-theme.css";
 import "./page-button.css";
+
+// OTHER ===============================================================================================================
+import { ComponentDocsLayout } from "../ComponentDocsLayout";
+import { colourOptions } from "../../colour/colours";
 
 const ButtonDocs = () => {
     // Props state
@@ -65,7 +76,7 @@ const ButtonDocs = () => {
     }, [children, kind, variant, size, shape, isLoading, label, bgColour, borderColour, textColour]);
 
     return (
-        <ComponentDocsLayout pageId="page-button">
+        <ComponentDocsLayout pageId="page-button" thirdTabLabel="All variants">
             {/* INTRO HEADER /////////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="intro-header">
                 <Heading2 id="component-name">
@@ -287,6 +298,48 @@ const ButtonDocs = () => {
                     and <code>borderColour</code> props for complete control over the button appearance
                     without any computed styles.
                 </Text>
+            </Div>
+            {/* ALL VARIANTS /////////////////////////////////////////////////////////////////////////////////////// */}
+            <Div id="third-tab-content">
+                {["default", "success", "warning", "danger"].map((v) => (
+                    <Div key={v} marginBottom="small">
+                        <Text weight="700" marginBottom="nano">
+                            {v === "default" ? "Default (no variant)" : v}
+                        </Text>
+
+                        <Row gutters="tiny" marginBottom="none">
+                            <Portion desktopSpan="one-third">
+                                <Button
+                                    kind="primary"
+                                    variant={v === "default" ? undefined : v as any}
+                                    isFullWidth
+                                >
+                                    Primary
+                                </Button>
+                            </Portion>
+
+                            <Portion desktopSpan="one-third">
+                                <Button
+                                    kind="secondary"
+                                    variant={v === "default" ? undefined : v as any}
+                                    isFullWidth
+                                >
+                                    Secondary
+                                </Button>
+                            </Portion>
+
+                            <Portion desktopSpan="one-third">
+                                <Button
+                                    kind="tertiary"
+                                    variant={v === "default" ? undefined : v as any}
+                                    isFullWidth
+                                >
+                                    Tertiary
+                                </Button>
+                            </Portion>
+                        </Row>
+                    </Div>
+                ))}
             </Div>
         </ComponentDocsLayout>
     );

@@ -65,7 +65,7 @@
 
     --button-success-bg    : var(--green);
     --button-success-text  : var(--white);
-    --button-warning-bg    : var(--amber);
+    --button-warning-bg    : var(--amber-light40);
     --button-warning-text  : var(--white);
     --button-danger-bg     : var(--red);
     --button-danger-text   : var(--white);
