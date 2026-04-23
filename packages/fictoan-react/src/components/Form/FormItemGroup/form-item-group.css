@@ -44,7 +44,7 @@
 [data-form-item-group] > :has([data-input-field]):not(:has([data-select])):not(:has([data-button])),
 [data-form-item-group] > :has([data-textarea]),
 [data-form-item-group] > :has([data-file-upload-area]) {
-    flex      : 1 1 auto;
+    flex      : 1;
     min-width : 0;
 }
 

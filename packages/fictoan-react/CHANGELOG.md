@@ -135,6 +135,7 @@
 - Overhaul `Form` spacing: flex `gap` replaces the `margin-bottom` whitelist, a new `data-form-spaced` marker cascades spacing at any nesting depth, `inheritFormSpacing` on `Element` lets any component opt into the Form's rhythm, and `--form-spacing` is exposed as a CSS custom property for per-instance overrides
 - Make `FormItemGroup` sizing wrapper-agnostic: the flex-grow rule and `equalWidthForChildren` now apply to direct children via `:has()` (so a `<Div>` or `<Card>` around a FileUpload/TextArea/InputField still stretches to fill space), and both include `min-width: 0` so items shrink below their intrinsic content width instead of wrapping onto new rows
 - Add `columns` prop to `FormItemGroup` for a grid layout with N equal tracks, mirroring the existing `columns` prop on `CheckboxGroup`, `SwitchGroup`, and `RadioGroup`
+- Fix `FormItemGroup` children wrapping onto separate rows when their intrinsic content width (long labels or placeholders) exceeded the container — the wrapper-aware grow rule now uses `flex: 1` (basis `0`) instead of `flex: 1 1 auto`, so container width drives sizing rather than content width, matching `equalWidthForChildren` behaviour
 
 ### Bug fixes
 - Fix `Tabs` component losing state of controlled inputs (checkboxes, text fields, etc.) when parent re-renders
