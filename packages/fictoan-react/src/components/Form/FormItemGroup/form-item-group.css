@@ -33,16 +33,30 @@
 
 [data-form-item-group] [data-form-item] { width : auto; }
 
-[data-form-item-group].equal-width-for-children [data-form-item],
-[data-form-item-group].equal-width-for-children [data-switch] {
-    flex : 1;
+[data-form-item-group].equal-width-for-children > * {
+    flex      : 1;
+    min-width : 0;
 }
 
 [data-form-item-group] > * { flex: 0 0 auto; }
 
-/* Make only input fields grow to fill space */
-[data-form-item-group] [data-form-item]:has([data-input-field]):not(:has([data-select])):not(:has([data-button])) {
-    flex: 1 1 auto;
+/* Grow any direct child that contains a text-input-style control, wrapper or not */
+[data-form-item-group] > :has([data-input-field]):not(:has([data-select])):not(:has([data-button])),
+[data-form-item-group] > :has([data-textarea]),
+[data-form-item-group] > :has([data-file-upload-area]) {
+    flex      : 1 1 auto;
+    min-width : 0;
+}
+
+/* Columns grid layout */
+[data-form-item-group].with-columns {
+    display   : grid;
+    flex-wrap : unset;
+}
+
+[data-form-item-group].with-columns > * {
+    flex      : unset;
+    min-width : 0;
 }
 
 [data-form-item-group].is-joint {
