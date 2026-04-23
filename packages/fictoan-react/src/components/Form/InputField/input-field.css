@@ -44,13 +44,16 @@
         font-size : calc(var(--paragraph-font-size) * 1.2);
     }
 
-    /* TODO: Size-specific icon sizing */
     &.size-tiny {
         --input-icon-size : 12px;
     }
 
     &.size-small {
         --input-icon-size : 16px;
+    }
+
+    &.size-large {
+        --input-icon-size : 32px;
     }
 }
 
@@ -144,6 +147,22 @@ input[data-input-field] {
         height       : var(--input-icon-size);
         fill         : none;
         stroke-width : 2px;
+
+        /* Scale any wrapper (e.g. a click handler div) and the SVG itself to */
+        /* match the size-controlled wrapper. Lets library icons follow the */
+        /* input's size prop instead of sitting at their intrinsic dimensions. */
+        & > * {
+            display         : flex;
+            align-items     : center;
+            justify-content : center;
+            width           : 100%;
+            height          : 100%;
+        }
+
+        & svg {
+            width  : 100%;
+            height : 100%;
+        }
     }
 }
 

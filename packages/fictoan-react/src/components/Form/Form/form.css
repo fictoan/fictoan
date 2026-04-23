@@ -32,3 +32,12 @@ form[data-form] [data-radio-group]       [data-form-spaced]:not(:first-child),
 form[data-form] [data-radio-tab-group]   [data-form-spaced]:not(:first-child) {
     margin-block-start : 0;
 }
+
+/* Generic wrapper with inheritFormSpacing acts as a vertical flow container */
+/* for its own children, using the Form's spacing as the gap. Native form */
+/* components keep their own layouts. */
+[data-form-spaced]:not([data-form-item]):not([data-form-item-group]):not([data-checkbox]):not([data-switch]) {
+    display        : flex;
+    flex-direction : column;
+    gap            : var(--form-spacing, 0);
+}
