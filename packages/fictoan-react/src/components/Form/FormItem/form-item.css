@@ -31,6 +31,11 @@
         "info";
 }
 
+[data-form-item]:has([data-radio-group]),
+[data-form-item]:has([data-range-single]) {
+    gap : 8px;
+}
+
 form[data-form] [data-form-item] {
     width : 100%;
 }
