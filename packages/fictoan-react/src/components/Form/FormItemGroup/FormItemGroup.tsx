@@ -1,26 +1,25 @@
 // REACT CORE ==========================================================================================================
 import React from "react";
 
-// ELEMENT =============================================================================================================
+// LOCAL COMPONENTS ====================================================================================================
 import { CommonAndHTMLProps } from "../../Element/constants";
+import { Element } from "$element";
 
 // STYLES ==============================================================================================================
 import "./form-item-group.css";
 
-// OTHER ===============================================================================================================
-import { Element } from "$element";
-
 // prettier-ignore
 export interface FormItemGroupCustomProps {
-        isJoint               ? : boolean;
-        equalWidthForChildren ? : React.ReactNode;
-        retainLayout          ? : boolean;
-        legend                ? : string;
+    isJoint               ? : boolean;
+    equalWidthForChildren ? : React.ReactNode;
+    retainLayout          ? : boolean;
+    legend                ? : string;
+    columns               ? : number;
 }
 
 export type FormItemGroupElementType = HTMLDivElement;
 export type FormItemGroupProps = Omit<CommonAndHTMLProps<FormItemGroupElementType>, keyof FormItemGroupCustomProps> &
-    FormItemGroupCustomProps;
+                                 FormItemGroupCustomProps;
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const FormItemGroup = React.forwardRef(
@@ -32,9 +31,11 @@ export const FormItemGroup = React.forwardRef(
             children,
             legend,
             id,
+            columns,
+            style,
             ...props
-        }: FormItemGroupProps,
-        ref: React.Ref<FormItemGroupElementType>
+        } : FormItemGroupProps,
+        ref : React.Ref<FormItemGroupElementType>,
     ) => {
         const groupId = id || `form-group-${Math.random().toString(36).substring(2, 9)}`;
         let classNames = [];
@@ -51,6 +52,10 @@ export const FormItemGroup = React.forwardRef(
             classNames.push("retain-layout");
         }
 
+        if (columns) {
+            classNames.push("with-columns");
+        }
+
         return (
             <Element<FormItemGroupElementType>
                 as="div"
@@ -61,11 +66,12 @@ export const FormItemGroup = React.forwardRef(
                 role="group"
                 aria-label={legend}
                 classNames={classNames}
+                style={columns ? { gridTemplateColumns : `repeat(${columns}, 1fr)`, ...style } : style}
                 {...props}
             >
                 {children}
             </Element>
         );
-    }
+    },
 );
 FormItemGroup.displayName = "FormItemGroup";
