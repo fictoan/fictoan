@@ -6,4 +6,8 @@
         transform : rotate(-90deg);
         margin    : 40vh 10vh;
     }
+
+    #name-full-form {
+        color : transparent;
+    }
 }

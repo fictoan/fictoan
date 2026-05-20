@@ -4,7 +4,7 @@
 import React from "react";
 
 // UI ==================================================================================================================
-import { Row, Portion, Heading1, Text, Divider, Article } from "fictoan-react";
+import { Row, Portion, Heading1, Text, Divider, Article, Span, Header } from "fictoan-react";
 
 // STYLES ==============================================================================================================
 import "./page-manifesto.css";
@@ -104,13 +104,17 @@ const ManifestoPage = () => {
                 <Portion desktopSpan="one-sixth" hideOnTabletPortrait hideOnMobile />
 
                 <Portion desktopSpan="two-third">
-                    <Heading1 weight="400" marginBottom="micro">
-                        Enter Fictoan
-                    </Heading1>
+                    <Header marginBottom="micro">
+                        <Heading1 weight="400">
+                            Enter Fictoan
+                        </Heading1>
+                        <Text size="tiny" id="name-full-form">Fuck I Couldn’t Think Of A Name</Text>
+                    </Header>
 
                     <Text size="huge" marginBottom="micro">
-                        Plain English props that say exactly what they do. <code>bgColour</code>, <code>marginBottom</code>, <code>shadow="soft"</code>, <code>horizontallyCentreThis</code>. No
-                        abbreviations to memorise, no utility class cheat sheets.
+                        Plain English props that say exactly what they
+                        do. <code>bgColour</code>, <code>marginBottom</code>, <code>shadow="soft"</code>, <code>horizontallyCentreThis</code>.
+                        No abbreviations to memorise, no utility class cheat sheets.
                     </Text>
 
                     <Text size="huge" marginBottom="micro">
@@ -136,7 +140,7 @@ const ManifestoPage = () => {
 
                 <Portion desktopSpan="two-third">
                     <Heading1 weight="400" marginBottom="micro">
-                        And here's the bonus
+                        And here’s the bonus
                     </Heading1>
 
                     <Text size="huge" marginBottom="micro">

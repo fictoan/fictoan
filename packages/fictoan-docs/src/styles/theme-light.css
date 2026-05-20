@@ -194,6 +194,7 @@
 
     --heading-font                       : var(--font-serif, serif);
     --heading-text-colour                : var(--black);
+    --heading-line-height                : 1.2;
 
     --type-scale                         : 1.2;
 
