@@ -85,8 +85,6 @@ export const Element = React.forwardRef(
             ...minimalProps
         } = props;
 
-        const {className : _, classNames : __, ...sanitizedProps} = props;
-
         // Build style object with opacity CSS custom properties
         const computedStyle = {
             ...style,

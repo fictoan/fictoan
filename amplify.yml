@@ -10,7 +10,7 @@ applications:
           commands:
             - pnpm turbo run build --filter=fictoan-docs
       artifacts:
-        baseDirectory: packages/fictoan-docs/.next
+        baseDirectory: packages/fictoan-docs/out
         files:
           - '**/*'
       cache:

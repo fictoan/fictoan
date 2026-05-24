@@ -23,15 +23,11 @@
     "module"               : "./dist/index.js",
     "types"                : "./dist/types/index.d.ts",
     "exports"              : {
-        "."              : {
+        "."       : {
             "types"   : "./dist/types/index.d.ts",
             "default" : "./dist/index.js"
         },
-        "./components/*" : {
-            "types"   : "./dist/types/components/*.d.ts",
-            "default" : "./dist/components/*.js"
-        },
-        "./dist/"        : "./dist/"
+        "./dist/" : "./dist/"
     },
     "scripts"              : {
         "watch"                : "vite build --watch",
