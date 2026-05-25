@@ -69,51 +69,55 @@ hr[data-hrule] {
        reproduces Row's cap+centre while the explicit `2400 - 2X` value gives
        the line the same inset Row's padding does. */
     @media all and (min-width : 2400px) {
+        /* Subtract var(--X) * 2 (not * 4 or * 2.4) so the divider line matches
+           the Row's content area now that Row's >=2400 padding multiplier has
+           been removed. The Row's padding is var(--X) per side; the divider
+           clamps to 2400 - 2X centred, which lands on the exact same inset. */
         &.margin-left-nano.margin-right-nano {
             width        : auto;
-            max-width    : calc(2400px - var(--nano) * 4);
+            max-width    : calc(2400px - var(--nano) * 2);
             margin-left  : auto;
             margin-right : auto;
         }
 
         &.margin-left-micro.margin-right-micro {
             width        : auto;
-            max-width    : calc(2400px - var(--micro) * 4);
+            max-width    : calc(2400px - var(--micro) * 2);
             margin-left  : auto;
             margin-right : auto;
         }
 
         &.margin-left-tiny.margin-right-tiny {
             width        : auto;
-            max-width    : calc(2400px - var(--tiny) * 4);
+            max-width    : calc(2400px - var(--tiny) * 2);
             margin-left  : auto;
             margin-right : auto;
         }
 
         &.margin-left-small.margin-right-small {
             width        : auto;
-            max-width    : calc(2400px - var(--small) * 4);
+            max-width    : calc(2400px - var(--small) * 2);
             margin-left  : auto;
             margin-right : auto;
         }
 
         &.margin-left-medium.margin-right-medium {
             width        : auto;
-            max-width    : calc(2400px - var(--medium) * 4);
+            max-width    : calc(2400px - var(--medium) * 2);
             margin-left  : auto;
             margin-right : auto;
         }
 
         &.margin-left-large.margin-right-large {
             width        : auto;
-            max-width    : calc(2400px - var(--large) * 2.4);
+            max-width    : calc(2400px - var(--large) * 2);
             margin-left  : auto;
             margin-right : auto;
         }
 
         &.margin-left-huge.margin-right-huge {
             width        : auto;
-            max-width    : calc(2400px - var(--huge) * 2.4);
+            max-width    : calc(2400px - var(--huge) * 2);
             margin-left  : auto;
             margin-right : auto;
         }
