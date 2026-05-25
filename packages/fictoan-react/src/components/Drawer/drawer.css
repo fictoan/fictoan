@@ -1,37 +1,23 @@
-/* DRAWER OVERLAY /////////////////////////////////////////////////////////// */
-[data-drawer-overlay-for] {
-    visibility       : hidden;
-    opacity          : 0;
-    position         : fixed;
-    top              : 0;
-    left             : 0;
-    width            : 100vw;
-    height           : 100vh;
-    background-color : color-mix(in oklch, var(--drawer-overlay-bg) var(--drawer-overlay-opacity), transparent);
-    transition       : opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-
-    &.blur {
-        backdrop-filter : blur(var(--drawer-overlay-blur));
-    }
-
-    &.visible {
-        opacity    : 1;
-        visibility : visible;
-    }
-}
-
-/* DRAWER STYLES //////////////////////////////////////////////////////////// */
+/* DRAWER /////////////////////////////////////////////////////////////////// */
+/* Built on the native popover API. The closed state is the browser default
+   (display:none on [popover]:not(:popover-open)); we use @starting-style and
+   transition-behavior: allow-discrete to animate enter/exit. */
 [data-drawer] {
-    position               : fixed;
-    visibility             : hidden;
-    display                : flex;
-    flex-direction         : column;
-    background-color       : var(--drawer-bg);
-    box-shadow             : 4px 0 24px -16px rgba(0, 0, 0, 0.92);
-    border                 : solid var(--drawer-border);
-    border-width           : var(--global-border-width);
-    border-radius          : var(--drawer-border-radius);
+    /* Reset popover/dialog defaults */
+    margin             : 0;
+    padding            : 0;
+    border             : solid var(--drawer-border);
+    border-width       : var(--global-border-width);
+    border-radius      : var(--drawer-border-radius);
+    background-color   : var(--drawer-bg);
+    box-shadow         : 4px 0 24px -16px rgba(0, 0, 0, 0.92);
 
+    display            : flex;
+    flex-direction     : column;
+    position           : fixed;
+    overflow           : visible;  /* allow dismiss button to overflow */
+
+    /* SIZES //////////////////////////////////////////////////////////////// */
     --drawer-width-tiny    : 8vw;
     --drawer-width-small   : 12vw;
     --drawer-width-medium  : 24vw;
@@ -44,6 +30,18 @@
     --drawer-height-large  : 32vh;
     --drawer-height-huge   : 48vh;
 
+    /* TRANSITIONS ////////////////////////////////////////////////////////// */
+    /* allow-discrete on display + overlay lets us animate the enter/exit
+       even though [popover] toggles display: none. @starting-style sets
+       the "from" values when the popover begins to open. */
+    transition :
+        transform    0.3s ease-out,
+        opacity      0.3s ease-out,
+        overlay      0.3s ease-out allow-discrete,
+        display      0.3s ease-out allow-discrete;
+
+    opacity : 0;  /* default (closed) state */
+
     /* CONTENT ////////////////////////////////////////////////////////////// */
     .drawer-content {
         overflow-y : auto;
@@ -53,7 +51,7 @@
         position   : relative;
     }
 
-    /* POSITIONS & SIZES //////////////////////////////////////////////////// */
+    /* POSITIONS //////////////////////////////////////////////////////////// */
     &.right {
         right     : 0;
         top       : 0;
@@ -66,7 +64,6 @@
         &.medium { width : var(--drawer-width-medium); }
         &.large { width : var(--drawer-width-large); }
         &.huge { width : var(--drawer-width-huge); }
-        &.closing { animation-name : drawer-slide-out-right; }
     }
 
     &.left {
@@ -81,8 +78,6 @@
         &.medium { width : var(--drawer-width-medium); }
         &.large { width : var(--drawer-width-large); }
         &.huge { width : var(--drawer-width-huge); }
-        &.open { animation-name : drawer-slide-in-left; }
-        &.closing { animation-name : drawer-slide-out-left; }
     }
 
     &.top {
@@ -97,8 +92,6 @@
         &.medium { height : var(--drawer-height-medium); }
         &.large { height : var(--drawer-height-large); }
         &.huge { height : var(--drawer-height-huge); }
-        &.open { animation-name : drawer-slide-in-top; }
-        &.closing { animation-name : drawer-slide-out-top; }
     }
 
     &.bottom {
@@ -113,19 +106,37 @@
         &.medium { height : var(--drawer-height-medium); }
         &.large { height : var(--drawer-height-large); }
         &.huge { height : var(--drawer-height-huge); }
-        &.open { animation-name : drawer-slide-in-bottom; }
-        &.closing { animation-name : drawer-slide-out-bottom; }
     }
 
-    /* STATES /////////////////////////////////////////////////////////////// */
-    &.open {
-        visibility : visible;
-        transform  : translate(0, 0);
-        animation  : drawer-slide-in 0.3s ease-out;
+    /* OPEN STATE /////////////////////////////////////////////////////////// */
+    &:popover-open {
+        opacity   : 1;
+        transform : translate(0, 0);
     }
 
-    &.closing {
-        animation : drawer-slide-out 0.3s ease-out;
+    /* The "from" values when transitioning to open. Without this, the
+       transition starts from the open state (no animation visible). */
+    @starting-style {
+        &.right:popover-open  { transform : translateX(100%);  opacity : 0; }
+        &.left:popover-open   { transform : translateX(-100%); opacity : 0; }
+        &.top:popover-open    { transform : translateY(-100%); opacity : 0; }
+        &.bottom:popover-open { transform : translateY(100%);  opacity : 0; }
+    }
+
+    /* BACKDROP ///////////////////////////////////////////////////////////// */
+    /* Native ::backdrop replaces the previous overlay <Div>. */
+    &::backdrop {
+        background-color : transparent;
+        backdrop-filter  : none;
+        transition       : background-color 0.3s ease-out, backdrop-filter 0.3s ease-out;
+    }
+
+    &.with-overlay:popover-open::backdrop {
+        background-color : color-mix(in oklch, var(--drawer-overlay-bg) var(--drawer-overlay-opacity), transparent);
+    }
+
+    &.with-overlay.blur-overlay:popover-open::backdrop {
+        backdrop-filter : blur(var(--drawer-overlay-blur));
     }
 
     /* DISMISS BUTTON /////////////////////////////////////////////////////// */
@@ -154,7 +165,6 @@
         }
     }
 
-
     /* LEFT / RIGHT ========================================================= */
     &.left,
     &.right {
@@ -182,47 +192,6 @@
     &.bottom {
         .drawer-dismiss-button { top : -40px; }
     }
-}
-
-/* ANIMATIONS /////////////////////////////////////////////////////////////// */
-@keyframes drawer-slide-in {
-    from { transform : translateX(100%); }
-    to { transform : translateX(0); }
-}
-
-@keyframes drawer-slide-in-left {
-    from { transform : translateX(-100%); }
-    to { transform : translateX(0); }
-}
-
-@keyframes drawer-slide-in-top {
-    from { transform : translateY(-100%); }
-    to { transform : translateY(0); }
-}
-
-@keyframes drawer-slide-in-bottom {
-    from { transform : translateY(100%); }
-    to { transform : translateY(0); }
-}
-
-@keyframes drawer-slide-out-right {
-    from { transform : translateX(0); }
-    to { transform : translateX(100%); }
-}
-
-@keyframes drawer-slide-out-left {
-    from { transform : translateX(0); }
-    to { transform : translateX(-100%); }
-}
-
-@keyframes drawer-slide-out-top {
-    from { transform : translateY(0); }
-    to { transform : translateY(-100%); }
-}
-
-@keyframes drawer-slide-out-bottom {
-    from { transform : translateY(0); }
-    to { transform : translateY(100%); }
 }
 
 /* SCREEN READER ONLY /////////////////////////////////////////////////////// */
