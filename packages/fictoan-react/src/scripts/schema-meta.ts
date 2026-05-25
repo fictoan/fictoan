@@ -15,24 +15,26 @@ export interface ComponentMeta {
 
 export const componentMeta : Record<string, ComponentMeta> = {
     Row : {
-        description : "The horizontal layout primitive. A 24-column CSS grid that caps at 2400px and centres automatically. Children are Portions.",
+        description : "The horizontal layout primitive. A 24-column CSS grid that caps at 2400px and centres automatically. Children are Portions. Acts as a CSS container, so Portion responsive variants react to the Row's actual rendered width, not the viewport.",
         example     : `<Row horizontalPadding="medium" gutters="medium">\n    <Portion desktopSpan="half">Left</Portion>\n    <Portion desktopSpan="half">Right</Portion>\n</Row>`,
         composition : { children : "Portion[]" },
         tips        : [
             "Use `gutters` for inter-column spacing; `horizontalPadding` for left/right padding inside the Row.",
             "Set `allowUltraWide` only when you explicitly need the Row to fill viewports beyond 2400px.",
             "Use `retainLayoutOnMobile` (or `retainLayoutAlways`) to prevent the grid from collapsing to a single column.",
+            "A Row inside a narrow parent (sidebar, modal, etc.) collapses its Portions based on its OWN width, not the viewport.",
         ],
     },
 
     Portion : {
-        description : "Child of Row. Declares a column span at one or more breakpoints. Uses fraction names ('half', 'one-third') or numbers ('1' through '24').",
+        description : "Child of Row. Declares a column span at one or more breakpoints. Uses fraction names ('half', 'one-third') or numbers ('1' through '24'). Breakpoints are now CONTAINER-relative: the parent Row's rendered width decides which span applies, not the viewport.",
         example     : `<Portion desktopSpan="half" mobileSpan="whole">\n    Content\n</Portion>`,
         composition : { parent : "Row" },
         tips        : [
             "Fraction names: one-twelfth, one-eighth, one-sixth, one-fourth, one-third, five-twelfth, half, seven-twelfth, two-third, three-fourth, five-sixth, seven-eighth, eleven-twelfth, whole.",
             "Numeric spans 1–24 give exact column counts.",
-            "Below 600px width, every Portion collapses to span 24 unless the parent Row has `retainLayoutOnMobile`.",
+            "When the parent Row is ≤ 600px wide, every Portion collapses to span 24 unless `mobileSpan` is set or the Row has `retainLayoutOnMobile`.",
+            "Breakpoints are container-relative (Row width), not viewport-relative. A Portion inside a sidebar will stack regardless of the screen size.",
         ],
     },
 
