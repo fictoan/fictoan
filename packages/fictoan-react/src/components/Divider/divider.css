@@ -63,47 +63,59 @@ hr[data-hrule] {
         margin-right : var(--huge);
     }
 
+    /* Above 2400px, Row caps at 2400 and centres. Match that frame here so
+       the divider's edges align with a Row's content area instead of stretching
+       to the full viewport. width:auto + auto margins + a max-width clamp
+       reproduces Row's cap+centre while the explicit `2400 - 2X` value gives
+       the line the same inset Row's padding does. */
     @media all and (min-width : 2400px) {
         &.margin-left-nano.margin-right-nano {
-            width        : calc(100% - (var(--nano) * 4));
-            margin-left  : calc(var(--nano) * 2);
-            margin-right : calc(var(--nano) * 2);
+            width        : auto;
+            max-width    : calc(2400px - var(--nano) * 4);
+            margin-left  : auto;
+            margin-right : auto;
         }
 
         &.margin-left-micro.margin-right-micro {
-            width        : calc(100% - (var(--micro) * 4));
-            margin-left  : calc(var(--micro) * 2);
-            margin-right : calc(var(--micro) * 2);
+            width        : auto;
+            max-width    : calc(2400px - var(--micro) * 4);
+            margin-left  : auto;
+            margin-right : auto;
         }
 
         &.margin-left-tiny.margin-right-tiny {
-            width        : calc(100% - (var(--tiny) * 4));
-            margin-left  : calc(var(--tiny) * 2);
-            margin-right : calc(var(--tiny) * 2);
+            width        : auto;
+            max-width    : calc(2400px - var(--tiny) * 4);
+            margin-left  : auto;
+            margin-right : auto;
         }
 
         &.margin-left-small.margin-right-small {
-            width        : calc(100% - (var(--small) * 4));
-            margin-left  : calc(var(--small) * 2);
-            margin-right : calc(var(--small) * 2);
+            width        : auto;
+            max-width    : calc(2400px - var(--small) * 4);
+            margin-left  : auto;
+            margin-right : auto;
         }
 
         &.margin-left-medium.margin-right-medium {
-            width        : calc(100% - (var(--medium) * 4));
-            margin-left  : calc(var(--medium) * 2);
-            margin-right : calc(var(--medium) * 2);
+            width        : auto;
+            max-width    : calc(2400px - var(--medium) * 4);
+            margin-left  : auto;
+            margin-right : auto;
         }
 
         &.margin-left-large.margin-right-large {
-            width        : calc(100% - (var(--large) * 2.4));
-            margin-left  : calc(var(--large) * 1.2);
-            margin-right : calc(var(--large) * 1.2);
+            width        : auto;
+            max-width    : calc(2400px - var(--large) * 2.4);
+            margin-left  : auto;
+            margin-right : auto;
         }
 
         &.margin-left-huge.margin-right-huge {
-            width        : calc(100% - (var(--huge) * 2.4));
-            margin-left  : calc(var(--huge) * 1.2);
-            margin-right : calc(var(--huge) * 1.2);
+            width        : auto;
+            max-width    : calc(2400px - var(--huge) * 2.4);
+            margin-left  : auto;
+            margin-right : auto;
         }
     }
 
@@ -172,7 +184,7 @@ hr[data-hrule] {
     }
 
     @media all and (max-width : 600px) {
-        &[class*="side-margin-"] {
+        &[class*="margin-left-"][class*="margin-right-"] {
             width        : calc(100% - 12vw);
             margin-left  : 6vw;
             margin-right : 6vw;
