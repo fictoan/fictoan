@@ -33,8 +33,12 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
 
 ### Correctness bugs to clear
 
-- [ ] **ListBox controlled/uncontrolled** — `value` is accepted but internal selection state doesn't sync from it; `defaultValue` calls `onChange` but doesn't initialise the displayed selection. Surprise consumers in real forms. Fix before more people adopt v2.
-- [ ] **Form component a11y audit** — pass through all form inputs to confirm `aria-describedby`, `aria-invalid`, error/helper text wiring, and label association are correct.
+- [x] **ListBox controlled/uncontrolled** — `value` was accepted but ignored; `defaultValue` fired a spurious onChange on mount without actually initialising the displayed selection. Replaced with a proper controlled/uncontrolled split using `resolveSelectedOptions` + lazy-init internal state. Dropped redundant `selectedOption` state. `defaultValue` now typed `string | string[]`.
+- [ ] **Form a11y — `aria-describedby` plumbing** *(highest impact)*. FormItem currently renders help/error text as anonymous `<Text>`. No form component sets `aria-describedby` on its input. Screen readers don't announce errors or help text when focus enters a field. Fix: give help/error text deterministic ids in FormItem, expose them via context, and have every form input wire `aria-describedby`. Affects: InputField, TextArea, Select, Checkbox, RadioButton, Switch, Range, PinInputField, FileUpload, ListBox.
+- [ ] **Form a11y — fill in `aria-invalid` and `aria-required`** on TextArea, Select, Checkbox, RadioButton, Range, PinInputField, ListBox. InputField and FileUpload already have them; the rest are inconsistent.
+- [ ] **ListBox `aria-activedescendant`** — `activeIndex` (keyboard focus within the listbox) isn't reflected to assistive tech. Set `aria-activedescendant={listboxId}-option-${filteredOptions[activeIndex]?.value}` on the combobox div.
+- [ ] **FormItem `required` plumbing** — currently the `required` prop is forwarded to a `<div>` where it's meaningless. Either propagate to children (preferred) or render a visible marker. Decide and implement.
+- [ ] **RadioButton role hygiene** — verify `role="radio"` (line 50) is on the native `<input>` (where it's redundant but harmless) rather than a wrapping element (where it'd be wrong).
 
 ### Accessibility hardening
 
