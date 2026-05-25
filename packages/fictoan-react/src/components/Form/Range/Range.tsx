@@ -12,7 +12,7 @@ import { separateWrapperProps } from "../../../utils/propSeparation";
 import "./range.css";
 
 // OTHER ===============================================================================================================
-import { FormItem } from "../FormItem/FormItem";
+import { FormItem, deriveAriaIds } from "../FormItem/FormItem";
 import { InputLabel } from "../InputLabel/InputLabel";
 import { Text } from "../../Typography/Text";
 
@@ -233,6 +233,9 @@ const SingleThumbRange : React.FC<SingleThumbRangeInternalProps> = ({
     }, [ disabled, clampedValue, min, max, step, onChange ]);
 
     const percent = getPercent(clampedValue);
+    const reactId = React.useId();
+    const finalId = id || `range-${reactId.replace(/:/g, "")}`;
+    const { describedBy } = deriveAriaIds(finalId, helpText, errorText);
 
     return (
         <FormItem
@@ -241,13 +244,14 @@ const SingleThumbRange : React.FC<SingleThumbRangeInternalProps> = ({
                     <InputLabel
                         className="range-label"
                         label={label}
-                        htmlFor={id}
+                        htmlFor={finalId}
                     />
                     <Text className="range-value">
                         {clampedValue}{suffix && suffix}
                     </Text>
                 </Div>
             )}
+            htmlFor={finalId}
             helpText={helpText}
             errorText={errorText}
             size={size}
@@ -258,7 +262,8 @@ const SingleThumbRange : React.FC<SingleThumbRangeInternalProps> = ({
                 data-range-single
                 className={disabled ? "disabled" : ""}
                 role="group"
-                aria-labelledby={label ? `${id}-label` : undefined}
+                aria-labelledby={label ? `${finalId}-label` : undefined}
+                aria-describedby={describedBy}
             >
                 {/* Track background */}
                 <Div className="range-track" aria-hidden="true" />
@@ -276,7 +281,7 @@ const SingleThumbRange : React.FC<SingleThumbRangeInternalProps> = ({
                 {/* Thumb */}
                 <button
                     ref={thumbRef}
-                    id={id}
+                    id={finalId}
                     type="button"
                     className="range-thumb"
                     style={{left : `${percent}%`}}
@@ -293,6 +298,8 @@ const SingleThumbRange : React.FC<SingleThumbRangeInternalProps> = ({
                     aria-valuenow={clampedValue}
                     aria-valuetext={`${clampedValue}${suffix ? ` ${suffix}` : ""}`}
                     aria-orientation="horizontal"
+                    aria-invalid={Boolean(errorText) || undefined}
+                    aria-describedby={describedBy}
                 />
             </Div>
         </FormItem>
@@ -477,6 +484,9 @@ const DualThumbRange : React.FC<DualThumbRangeInternalProps> = ({
 
     const minPercent = getPercent(minValue);
     const maxPercent = getPercent(maxValue);
+    const reactId = React.useId();
+    const finalId = id || `range-${reactId.replace(/:/g, "")}`;
+    const { describedBy } = deriveAriaIds(finalId, helpText, errorText);
 
     return (
         <FormItem
@@ -485,13 +495,14 @@ const DualThumbRange : React.FC<DualThumbRangeInternalProps> = ({
                     <InputLabel
                         className="range-label"
                         label={label}
-                        htmlFor={id}
+                        htmlFor={finalId}
                     />
                     <Text className="range-value">
                         {minValue}&ndash;{maxValue}{suffix && suffix}
                     </Text>
                 </Div>
             )}
+            htmlFor={finalId}
             helpText={helpText}
             errorText={errorText}
             size={size}
@@ -502,7 +513,8 @@ const DualThumbRange : React.FC<DualThumbRangeInternalProps> = ({
                 data-range-dual
                 className={disabled ? "disabled" : ""}
                 role="group"
-                aria-labelledby={label ? `${id}-label` : undefined}
+                aria-labelledby={label ? `${finalId}-label` : undefined}
+                aria-describedby={describedBy}
             >
                 {/* Track background */}
                 <Div className="range-track" aria-hidden="true" />
@@ -520,7 +532,7 @@ const DualThumbRange : React.FC<DualThumbRangeInternalProps> = ({
                 {/* Min thumb */}
                 <button
                     ref={minThumbRef}
-                    id={`${id}-min`}
+                    id={`${finalId}-min`}
                     type="button"
                     className="range-thumb range-thumb-min"
                     style={{left : `${minPercent}%`}}
@@ -538,12 +550,14 @@ const DualThumbRange : React.FC<DualThumbRangeInternalProps> = ({
                     aria-valuenow={minValue}
                     aria-valuetext={`${minValue}${suffix ? ` ${suffix}` : ""}`}
                     aria-orientation="horizontal"
+                    aria-invalid={Boolean(errorText) || undefined}
+                    aria-describedby={describedBy}
                 />
 
                 {/* Max thumb */}
                 <button
                     ref={maxThumbRef}
-                    id={`${id}-max`}
+                    id={`${finalId}-max`}
                     type="button"
                     className="range-thumb range-thumb-max"
                     style={{left : `${maxPercent}%`}}
@@ -561,6 +575,8 @@ const DualThumbRange : React.FC<DualThumbRangeInternalProps> = ({
                     aria-valuenow={maxValue}
                     aria-valuetext={`${maxValue}${suffix ? ` ${suffix}` : ""}`}
                     aria-orientation="horizontal"
+                    aria-invalid={Boolean(errorText) || undefined}
+                    aria-describedby={describedBy}
                 />
             </Div>
         </FormItem>

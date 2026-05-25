@@ -16,7 +16,7 @@ import "./list-box.css";
 
 // OTHER ===============================================================================================================
 import { Badge } from "../../Badge/Badge";
-import { FormItem } from "../FormItem/FormItem";
+import { FormItem, deriveAriaIds } from "../FormItem/FormItem";
 import { InputField } from "../InputField/InputField";
 import { ListBoxProps, OptionForListBoxProps, ListBoxElementType, ListBoxCustomProps } from "./constants";
 import { Text } from "../../Typography/Text";
@@ -90,8 +90,13 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
         const searchInputRef = useRef<HTMLInputElement>(null);
         const dropdownMenuRef = useRef<HTMLDivElement>(null);
 
-        const listboxId = id || `listbox-${Math.random().toString(36).substring(2, 9)}`;
+        const reactId = React.useId();
+        const listboxId = id || `listbox-${reactId.replace(/:/g, "")}`;
+        const { describedBy } = deriveAriaIds(listboxId, helpText, errorText);
         const filteredOptions = searchOptions(allOptions, searchValue);
+        const activeOptionId = activeIndex >= 0 && filteredOptions[activeIndex]
+            ? `${listboxId}-option-${filteredOptions[activeIndex].value}`
+            : undefined;
 
         const handleSelectOption = (option: OptionForListBoxProps) => {
             if (option.disabled) return;
@@ -270,7 +275,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
         return (
             <FormItem
                 label={label}
-                htmlFor={id}
+                htmlFor={listboxId}
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
@@ -289,12 +294,18 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                 >
                     <Div
                         className="list-box-input-wrapper"
+                        id={listboxId}
                         onClick={() => !disabled && setIsOpen(!isOpen)}
                         role="combobox"
                         aria-haspopup="listbox"
                         aria-expanded={isOpen}
                         aria-controls={`${listboxId}-listbox`}
                         aria-owns={`${listboxId}-listbox`}
+                        aria-activedescendant={isOpen ? activeOptionId : undefined}
+                        aria-invalid={Boolean(errorText) || undefined}
+                        aria-required={required}
+                        aria-describedby={describedBy}
+                        aria-disabled={disabled || undefined}
                         tabIndex={disabled ? -1 : 0}
                     >
                         {allowMultiSelect ? (

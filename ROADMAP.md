@@ -34,11 +34,12 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
 ### Correctness bugs to clear
 
 - [x] **ListBox controlled/uncontrolled** — `value` was accepted but ignored; `defaultValue` fired a spurious onChange on mount without actually initialising the displayed selection. Replaced with a proper controlled/uncontrolled split using `resolveSelectedOptions` + lazy-init internal state. Dropped redundant `selectedOption` state. `defaultValue` now typed `string | string[]`.
-- [ ] **Form a11y — `aria-describedby` plumbing** *(highest impact)*. FormItem currently renders help/error text as anonymous `<Text>`. No form component sets `aria-describedby` on its input. Screen readers don't announce errors or help text when focus enters a field. Fix: give help/error text deterministic ids in FormItem, expose them via context, and have every form input wire `aria-describedby`. Affects: InputField, TextArea, Select, Checkbox, RadioButton, Switch, Range, PinInputField, FileUpload, ListBox.
-- [ ] **Form a11y — fill in `aria-invalid` and `aria-required`** on TextArea, Select, Checkbox, RadioButton, Range, PinInputField, ListBox. InputField and FileUpload already have them; the rest are inconsistent.
-- [ ] **ListBox `aria-activedescendant`** — `activeIndex` (keyboard focus within the listbox) isn't reflected to assistive tech. Set `aria-activedescendant={listboxId}-option-${filteredOptions[activeIndex]?.value}` on the combobox div.
+- [x] **Form a11y — `aria-describedby` plumbing**. FormItem now gives help/error text deterministic ids (`${baseId}-help`, `${baseId}-error`) and exposes them via `FormItemContext` plus `deriveAriaIds` helper. Every form input (InputField, TextArea, Select, Checkbox, Switch, RadioButton, RadioGroup, RadioTabGroup, CheckboxGroup, SwitchGroup, Range single + dual, FileUpload, ListBox) now generates a stable id via `useId`, passes it to FormItem as `htmlFor`, and wires `aria-describedby` on its focusable element.
+- [x] **Form a11y — fill in `aria-invalid` and `aria-required`** on TextArea, Select, Checkbox, Switch, RadioButton, RadioGroup, RadioTabGroup, CheckboxGroup, SwitchGroup, Range, ListBox. All wired off `errorText`/`required`.
+- [x] **ListBox `aria-activedescendant`** — combobox div now sets `aria-activedescendant` to the active option's id while open.
+- [x] **RadioButton role hygiene** — dropped the duplicate `role="radio"` on the wrapper div. The native `<input type="radio">` inside provides the role; the wrapper was making AT announce two radios per RadioButton.
+- [ ] **PinInputField FormItem integration** — PinInputField doesn't render inside FormItem (it's a custom layout). Help/error text from a parent FormItem isn't wired into the inputs. Either (a) move PinInputField inside FormItem like other inputs, or (b) have it consume `FormItemContext` directly.
 - [ ] **FormItem `required` plumbing** — currently the `required` prop is forwarded to a `<div>` where it's meaningless. Either propagate to children (preferred) or render a visible marker. Decide and implement.
-- [ ] **RadioButton role hygiene** — verify `role="radio"` (line 50) is on the native `<input>` (where it's redundant but harmless) rather than a wrapping element (where it'd be wrong).
 
 ### Accessibility hardening
 

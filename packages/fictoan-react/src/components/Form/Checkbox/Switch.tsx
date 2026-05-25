@@ -12,7 +12,7 @@ import { separateWrapperProps } from "$utils/propSeparation";
 import "./switch.css";
 
 // OTHER ===============================================================================================================
-import { FormItem } from "../FormItem/FormItem";
+import { FormItem, deriveAriaIds } from "../FormItem/FormItem";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 
 export type SwitchElementType = HTMLInputElement;
@@ -60,10 +60,14 @@ export const Switch = React.forwardRef(
         // Separate wrapper-level props (margin, padding, etc.) from input-specific props
         const {wrapperProps, inputProps} = separateWrapperProps(props);
 
+        const reactId = React.useId();
+        const finalId = id || `switch-${reactId.replace(/:/g, "")}`;
+        const { describedBy } = deriveAriaIds(finalId, helpText, errorText);
+
         return (
             <FormItem
                 label={label}
-                htmlFor={id}
+                htmlFor={finalId}
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
@@ -75,18 +79,21 @@ export const Switch = React.forwardRef(
                     as="input"
                     type="checkbox"
                     ref={ref}
-                    id={id}
+                    id={finalId}
                     name={derivedName}
                     checked={checked}
                     defaultChecked={defaultChecked}
                     disabled={disabled}
                     required={required}
+                    aria-invalid={Boolean(errorText) || undefined}
+                    aria-required={required}
+                    aria-describedby={describedBy}
                     onChange={handleChange}
                     {...inputProps}
                 />
                 <Element
                     as={labelFirst ? "label" : "div"}
-                    htmlFor={labelFirst ? id : undefined}
+                    htmlFor={labelFirst ? finalId : undefined}
                     data-switch
                     className={`size-${size}`}
                 />

@@ -12,7 +12,7 @@ import { separateWrapperProps } from "$utils/propSeparation";
 import "./checkbox.css";
 
 // OTHER ===============================================================================================================
-import { FormItem } from "../FormItem/FormItem";
+import { FormItem, deriveAriaIds } from "../FormItem/FormItem";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 
 export type CheckboxElementType = HTMLInputElement;
@@ -62,10 +62,14 @@ export const Checkbox = React.forwardRef(
         // Separate wrapper-level props (margin, padding, etc.) from input-specific props
         const { wrapperProps, inputProps } = separateWrapperProps(props);
 
+        const reactId = React.useId();
+        const finalId = id || `checkbox-${reactId.replace(/:/g, "")}`;
+        const { describedBy } = deriveAriaIds(finalId, helpText, errorText);
+
         return (
             <FormItem
                 label={label}
-                htmlFor={id}
+                htmlFor={finalId}
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
@@ -77,18 +81,21 @@ export const Checkbox = React.forwardRef(
                     as="input"
                     type="checkbox"
                     ref={ref}
-                    id={id}
+                    id={finalId}
                     name={derivedName}
                     checked={checked}
                     defaultChecked={defaultChecked}
                     disabled={disabled}
                     required={required}
+                    aria-invalid={Boolean(errorText) || undefined}
+                    aria-required={required}
+                    aria-describedby={describedBy}
                     onChange={handleChange}
                     {...inputProps}
                 />
                 <Element
                     as={labelFirst ? "label" : "div"}
-                    htmlFor={labelFirst ? id : undefined}
+                    htmlFor={labelFirst ? finalId : undefined}
                     data-checkbox
                     className={`size-${size}`}
                 />

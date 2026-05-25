@@ -10,7 +10,7 @@ import { SpacingTypes, CommonProps } from "../../Element/constants";
 import "./input-field.css";
 
 // OTHER ===============================================================================================================
-import { FormItem } from "../FormItem/FormItem";
+import { FormItem, deriveAriaIds, mergeDescribedBy } from "../FormItem/FormItem";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 import { separateWrapperProps } from "../../../utils/propSeparation";
 
@@ -78,6 +78,7 @@ export const InputField = React.forwardRef(
             // Aria
             "aria-label": ariaLabel,
             "aria-invalid": ariaInvalid,
+            "aria-describedby": ariaDescribedBy,
             // Input props
             id,
             name,
@@ -201,10 +202,18 @@ export const InputField = React.forwardRef(
         // Separate wrapper-level props (margin, padding, etc.) from input-specific props
         const { wrapperProps, inputProps } = separateWrapperProps(props);
 
+        // Stable id so help/error text in FormItem can be linked back via
+        // aria-describedby. Falls back to a React.useId when the consumer
+        // doesn't pass one explicitly.
+        const reactId = React.useId();
+        const finalId = id || `input-${reactId.replace(/:/g, "")}`;
+        const { describedBy } = deriveAriaIds(finalId, helpText, errorText);
+        const hasError = Boolean(errorText) || ariaInvalid || invalid;
+
         return (
             <FormItem
                 label={label}
-                htmlFor={id}
+                htmlFor={finalId}
                 helpText={helpText}
                 errorText={errorText}
                 validationState={validationState}
@@ -216,7 +225,7 @@ export const InputField = React.forwardRef(
                     as="input"
                     ref={mergeRefs}
                     data-input-field
-                    id={id}
+                    id={finalId}
                     name={name}
                     type={type}
                     value={value}
@@ -237,8 +246,9 @@ export const InputField = React.forwardRef(
                         .filter(Boolean)
                         .join(" ")}
                     aria-label={ariaLabel || label}
-                    aria-invalid={ariaInvalid || invalid}
+                    aria-invalid={hasError || undefined}
                     aria-required={required}
+                    aria-describedby={mergeDescribedBy(ariaDescribedBy, describedBy)}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     onFocus={handleFocus}
