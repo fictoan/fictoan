@@ -66,33 +66,41 @@ export const ThemeProvider = React.forwardRef(
                     ? value(themeState)
                     : value;
 
-                if (!themeList.includes(newTheme)) {
-                    // Fall back to first available theme
-                    const fallbackTheme = themeList[0];
-                    setThemeState(fallbackTheme);
+                const finalTheme = themeList.includes(newTheme)
+                    ? newTheme
+                    : themeList[0];
+
+                // The visible theme switch is documentElement.className changing,
+                // which all theme-* CSS rules cascade off. Wrap that mutation in
+                // a view transition so consumers get a smooth crossfade between
+                // themes without writing animation CSS. Falls back to instant
+                // change on browsers that don't support the API.
+                const applyClass = () => {
                     document.documentElement.className = "";
-                    document.documentElement.classList.add(fallbackTheme);
-                    try {
-                        localStorage.setItem(getStorageKey(), fallbackTheme);
-                    } catch (e) {
-                        // Unsupported
-                    }
-                    return;
+                    document.documentElement.classList.add(finalTheme);
+                };
+
+                const doc = typeof document !== "undefined"
+                    ? document as Document & { startViewTransition?: (cb: () => void) => unknown }
+                    : null;
+
+                if (doc && typeof doc.startViewTransition === "function") {
+                    doc.startViewTransition(applyClass);
+                } else if (typeof document !== "undefined") {
+                    applyClass();
                 }
 
-                setThemeState(newTheme);
-                document.documentElement.className = "";
-                document.documentElement.classList.add(newTheme);
+                setThemeState(finalTheme);
                 if (!shouldRender) {
                     setShouldRender(true);
                 }
                 try {
-                    localStorage.setItem(getStorageKey(), newTheme);
+                    localStorage.setItem(getStorageKey(), finalTheme);
                 } catch (e) {
                     // Unsupported
                 }
             },
-            [themeState, themeList]
+            [themeState, themeList, shouldRender]
         );
 
         useEffect(() => {

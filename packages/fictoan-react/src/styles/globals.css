@@ -26,3 +26,15 @@
     --large  : clamp(24px, 16vmax, 160px);
     --huge   : clamp(32px, 24vmax, 320px);
 }
+
+/* View Transitions ////////////////////////////////////////////////////////
+   Components that opt into view transitions (ThemeProvider crossfade, plus
+   anything consumers wire up via useViewTransition) animate via these
+   pseudo-elements. Respect the user's motion preference. */
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none !important;
+    }
+}
