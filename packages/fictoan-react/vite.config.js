@@ -92,6 +92,33 @@ function fixCssForTurbopack() {
     };
 }
 
+// Wrap the entire bundled stylesheet in @layer fictoan so consumer styles
+// (defined outside any layer) win cascade conflicts regardless of specificity.
+// Standard pattern for design systems — lets users override anything without
+// having to escalate to !important or write higher-specificity selectors.
+function wrapInFictoanLayer() {
+    return {
+        name: "wrap-in-fictoan-layer",
+        enforce: "post",
+        closeBundle: {
+            sequential: true,
+            order: "post",
+            handler() {
+                const cssPath = path.resolve(__dirname, "dist/index.css");
+                try {
+                    const css = readFileSync(cssPath, "utf-8");
+                    // Don't double-wrap if a previous run already added the layer.
+                    if (css.trimStart().startsWith("@layer fictoan")) return;
+                    writeFileSync(cssPath, `@layer fictoan {\n${css}\n}\n`);
+                    console.log("Wrapped CSS in @layer fictoan");
+                } catch (e) {
+                    console.warn("Could not wrap CSS in @layer:", e.message);
+                }
+            },
+        },
+    };
+}
+
 export default defineConfig({
     resolve : {
         alias : {
@@ -185,5 +212,6 @@ export default defineConfig({
             },
         }),
         fixCssForTurbopack(),
+        wrapInFictoanLayer(),
     ],
 });

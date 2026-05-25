@@ -67,7 +67,7 @@ Once the gating items are in, these unlock real improvements.
 
 ### CSS delivery and theming
 
-- [ ] **Wrap library styles in `@layer fictoan`** — makes the cascade predictable when consumers add their own CSS.
+- [x] **Wrap library styles in `@layer fictoan`** — done; see the Bet 3 entry below for details.
 - [ ] **Document import modes** — full framework CSS vs component CSS vs theme-only CSS. Today everything comes through `index.tsx:7` whether the consumer wants it or not.
 - [ ] **PurgeCSS / unused-style guide** — official guidance for trimming the 584 KB raw bundle in production. Document `sideEffects` interaction.
 - [ ] **Schema-driven theme tokens** — define all tokens in one TOML or JSON file. Generate the CSS variables, TS types, docs page, AND the theme configurator from the same source. Kills the heuristic variable detection in `themeConfigurator.tsx`.
@@ -113,7 +113,7 @@ Stop reinventing what the browser now does natively. Each item below shrinks the
 - [x] **Accordion** — already uses native `<details>` and `<summary>`. Follow-up: add support for `<details name="...">` to get exclusive-accordion behaviour with zero JS.
 - [x] **Tooltip** — migrated to popover API + CSS anchor positioning (`anchor-name` / `position-anchor` / `position-area` / `position-try-fallbacks`). Drops the module-level singleton, the `react-dom/client` `createRoot` portal, the ~60-line `getBoundingClientRect` position math, and the document-level scroll/resize listeners. Each Tooltip is now an independent popover that positions itself relative to its target via CSS.
 - [x] **`color-mix()` for shade/opacity** — already pervasive. Used in `theme.css` for hover/translucent variants and in `colours.css` for every opacity utility (e.g. `.bg-pink-dark80 { background-color: color-mix(in oklch, var(--pink-dark80) calc(var(--bg-opacity, 1) * 100%), transparent); }`). No JS-side colour math to remove.
-- [ ] **Wrap library styles in `@layer fictoan`** (also listed under CSS delivery — same change). Currently not in use anywhere in `packages/fictoan-react/src/styles`; consumer styles compete at default cascade weight.
+- [x] **Wrap library styles in `@layer fictoan`** — the entire bundled `dist/index.css` is now wrapped in `@layer fictoan { ... }` via a new `wrapInFictoanLayer` Vite plugin. Consumer styles defined outside any layer now win cascade conflicts regardless of specificity, so overrides no longer need `!important` or higher-specificity selectors.
 - [ ] **Container queries** → replace `desktopSpan` / `tabletSpan` / `mobileSpan` with container-relative span variants. A Portion in a sidebar shouldn't behave like a Portion in a full-width row. Biggest *correctness* improvement to the grid system.
 - [ ] **View Transitions** for Drawer/Modal open-close, route changes, theme switches. ~50 lines of CSS; looks like premium product.
 - [ ] **Accordion `name="..."` for exclusive accordions** — small follow-up from above.
