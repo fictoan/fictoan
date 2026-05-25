@@ -3,8 +3,12 @@
    (display:none on [popover]:not(:popover-open)); we use @starting-style and
    transition-behavior: allow-discrete to animate enter/exit. */
 [data-drawer] {
-    /* Reset popover/dialog defaults */
-    margin             : 0;
+    /* Reset popover defaults. The browser UA sheet sets
+         [popover] { inset: 0; margin: auto; }
+       which centres the element. We need to neutralise inset and reset margin
+       so our per-direction rules below can pin the drawer to one edge. */
+    inset              : auto;
+    margin             : var(--nano);
     padding            : 0;
     border             : solid var(--drawer-border);
     border-width       : var(--global-border-width);
@@ -52,12 +56,16 @@
     }
 
     /* POSITIONS //////////////////////////////////////////////////////////// */
+    /* For each direction, only the two relevant insets are set. The other two
+       stay at `auto` (from the base reset above), letting margin and width/
+       height define the box. Height/width subtract var(--nano)*2 to account
+       for the margin on both perpendicular sides. */
     &.right {
         right     : 0;
         top       : 0;
-        height    : 100vh;
+        height    : calc(100vh - var(--nano) * 2);
         max-width : 92vw;
-        transform : translateX(100%);
+        transform : translateX(calc(100% + var(--nano)));
 
         &.tiny { width : var(--drawer-width-tiny); }
         &.small { width : var(--drawer-width-small); }
@@ -69,9 +77,9 @@
     &.left {
         left      : 0;
         top       : 0;
-        height    : 100vh;
+        height    : calc(100vh - var(--nano) * 2);
         max-width : 92vw;
-        transform : translateX(-100%);
+        transform : translateX(calc(-100% - var(--nano)));
 
         &.tiny { width : var(--drawer-width-tiny); }
         &.small { width : var(--drawer-width-small); }
@@ -83,9 +91,9 @@
     &.top {
         top        : 0;
         left       : 0;
-        width      : 100%;
+        width      : calc(100vw - var(--nano) * 2);
         max-height : 92vh;
-        transform  : translateY(-100%);
+        transform  : translateY(calc(-100% - var(--nano)));
 
         &.tiny { height : var(--drawer-height-tiny); }
         &.small { height : var(--drawer-height-small); }
@@ -97,9 +105,9 @@
     &.bottom {
         bottom     : 0;
         left       : 0;
-        width      : 100%;
+        width      : calc(100vw - var(--nano) * 2);
         max-height : 92vh;
-        transform  : translateY(100%);
+        transform  : translateY(calc(100% + var(--nano)));
 
         &.tiny { height : var(--drawer-height-tiny); }
         &.small { height : var(--drawer-height-small); }
@@ -115,12 +123,14 @@
     }
 
     /* The "from" values when transitioning to open. Without this, the
-       transition starts from the open state (no animation visible). */
+       transition starts from the open state (no animation visible). The
+       extra var(--nano) shift matches the closed-state transforms above so
+       the drawer slides cleanly off-screen past its own margin. */
     @starting-style {
-        &.right:popover-open  { transform : translateX(100%);  opacity : 0; }
-        &.left:popover-open   { transform : translateX(-100%); opacity : 0; }
-        &.top:popover-open    { transform : translateY(-100%); opacity : 0; }
-        &.bottom:popover-open { transform : translateY(100%);  opacity : 0; }
+        &.right:popover-open  { transform : translateX(calc(100% + var(--nano)));  opacity : 0; }
+        &.left:popover-open   { transform : translateX(calc(-100% - var(--nano))); opacity : 0; }
+        &.top:popover-open    { transform : translateY(calc(-100% - var(--nano))); opacity : 0; }
+        &.bottom:popover-open { transform : translateY(calc(100% + var(--nano)));  opacity : 0; }
     }
 
     /* BACKDROP ///////////////////////////////////////////////////////////// */
