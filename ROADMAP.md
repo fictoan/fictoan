@@ -108,14 +108,16 @@ The real Fictoan is the CSS layer + the prop-to-class engine. React is a binding
 
 Stop reinventing what the browser now does natively. Each item below shrinks the bundle, fixes a11y bugs by default, and ages better.
 
-- [ ] **Modal** → native `<dialog>` + popover API + invokers. Focus management and ESC handling come for free.
-- [ ] **Drawer** → same backbone as Modal; scroll lock via popover API.
-- [ ] **Accordion** → `<details>` and `<details name="...">` for exclusive accordions.
-- [ ] **Tooltip + popover-style menus** → CSS anchor positioning, no Floating UI / Popper.
-- [ ] **Wrap library styles in `@layer fictoan`** (also listed under CSS delivery — same change).
+- [x] **Modal** — already on the popover API (`Modal.tsx` uses `showPopover`/`hidePopover`/`popover="auto"|"manual"`, `::backdrop` for the dimming layer). Remaining cleanup: replace manual first-focusable focus with native focus delegation, drop the lone `@ts-ignore`, consider pairing with the new `command`/`commandfor` invokers so non-React callers don't need JS to trigger.
+- [x] **Drawer** — migrated to popover API with `:popover-open` + `@starting-style` + `transition-behavior: allow-discrete` for slide animations. Native ESC and backdrop-click dismissal via `popover="auto"`. Top-layer rendering removes the z-index war. Net ~80 lines deleted from the component. (`closeOnClickOutside` deprecated; ESC and outside-click are now coupled via `isDismissible`.)
+- [x] **Accordion** — already uses native `<details>` and `<summary>`. Follow-up: add support for `<details name="...">` to get exclusive-accordion behaviour with zero JS.
+- [x] **Tooltip** — migrated to popover API + CSS anchor positioning (`anchor-name` / `position-anchor` / `position-area` / `position-try-fallbacks`). Drops the module-level singleton, the `react-dom/client` `createRoot` portal, the ~60-line `getBoundingClientRect` position math, and the document-level scroll/resize listeners. Each Tooltip is now an independent popover that positions itself relative to its target via CSS.
+- [x] **`color-mix()` for shade/opacity** — already pervasive. Used in `theme.css` for hover/translucent variants and in `colours.css` for every opacity utility (e.g. `.bg-pink-dark80 { background-color: color-mix(in oklch, var(--pink-dark80) calc(var(--bg-opacity, 1) * 100%), transparent); }`). No JS-side colour math to remove.
+- [ ] **Wrap library styles in `@layer fictoan`** (also listed under CSS delivery — same change). Currently not in use anywhere in `packages/fictoan-react/src/styles`; consumer styles compete at default cascade weight.
 - [ ] **Container queries** → replace `desktopSpan` / `tabletSpan` / `mobileSpan` with container-relative span variants. A Portion in a sidebar shouldn't behave like a Portion in a full-width row. Biggest *correctness* improvement to the grid system.
-- [ ] **`color-mix()` for shade/opacity** → kill any JS-side colour math; everything in OKLCH via `color-mix(in oklch, ...)`.
 - [ ] **View Transitions** for Drawer/Modal open-close, route changes, theme switches. ~50 lines of CSS; looks like premium product.
+- [ ] **Accordion `name="..."` for exclusive accordions** — small follow-up from above.
+- [ ] **Modal small cleanup** — see Modal note above (focus delegation, drop `@ts-ignore`, optional `command`/`commandfor` invoker support).
 
 ---
 
