@@ -3,10 +3,11 @@
     "version"         : "1.0.0",
     "private"         : true,
     "scripts"         : {
-        "dev"   : "next dev --webpack",
-        "build" : "next build --webpack",
-        "start" : "next start",
-        "lint"  : "next lint"
+        "dev"         : "node scripts/sync-schema.js && next dev --webpack",
+        "build"       : "node scripts/sync-schema.js && next build --webpack",
+        "start"       : "next start",
+        "lint"        : "next lint",
+        "sync-schema" : "node scripts/sync-schema.js"
     },
     "dependencies"    : {
         "@svgr/webpack"        : "^8.1.0",

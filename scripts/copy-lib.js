@@ -107,17 +107,7 @@ function buildAndCopy() {
         process.exit(1);
     }
 
-    // Generate props metadata
-    try {
-        execSync("pnpm build:props-metadata", {
-            cwd: fictoanReactDir,
-            stdio: "inherit"
-        });
-        console.log("✓ Props metadata generated successfully");
-    } catch (err) {
-        console.error("✗ Props metadata generation failed:", err.message);
-        process.exit(1);
-    }
+    // Schema is generated as part of `pnpm build` above; no separate step.
 
     copyOnly();
 }
