@@ -5,7 +5,24 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
 // UI ==================================================================================================================
-import { Element, Row, Portion, Heading2, Heading4, Heading5, Heading6, Text, Divider, Drawer, Tabs, CodeBlock, Accordion, Section, Span, Article } from "fictoan-react";
+import {
+    Element,
+    Row,
+    Portion,
+    Heading2,
+    Heading4,
+    Heading5,
+    Heading6,
+    Text,
+    Divider,
+    Drawer,
+    Tabs,
+    CodeBlock,
+    Accordion,
+    Section,
+    Span,
+    Article,
+}from "fictoan-react";
 
 // ASSETS ==============================================================================================================
 import AppleIcon from "../../assets/icons/logo-apple.svg";
@@ -14,7 +31,13 @@ import NPMIcon from "../../assets/icons/npm.svg";
 import PNPMIcon from "../../assets/icons/pnpm.svg";
 import WindowsIcon from "../../assets/icons/logo-windows.svg";
 import YarnIcon from "../../assets/icons/yarn.svg";
-import { snippetPageSetupJSX, snippetPageSetupCSS, snippetStructure, snippetUsage, snippetInstallation } from "../../assets/code-samples/CodeSamples";
+import {
+    snippetPageSetupJSX,
+    snippetPageSetupCSS,
+    snippetStructure,
+    snippetUsage,
+    snippetInstallation,
+}from "../../assets/code-samples/CodeSamples";
 
 // STYLES ==============================================================================================================
 import "./getting-started.css";
