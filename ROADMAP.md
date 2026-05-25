@@ -38,8 +38,8 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
 - [x] **Form a11y — fill in `aria-invalid` and `aria-required`** on TextArea, Select, Checkbox, Switch, RadioButton, RadioGroup, RadioTabGroup, CheckboxGroup, SwitchGroup, Range, ListBox. All wired off `errorText`/`required`.
 - [x] **ListBox `aria-activedescendant`** — combobox div now sets `aria-activedescendant` to the active option's id while open.
 - [x] **RadioButton role hygiene** — dropped the duplicate `role="radio"` on the wrapper div. The native `<input type="radio">` inside provides the role; the wrapper was making AT announce two radios per RadioButton.
-- [ ] **PinInputField FormItem integration** — PinInputField doesn't render inside FormItem (it's a custom layout). Help/error text from a parent FormItem isn't wired into the inputs. Either (a) move PinInputField inside FormItem like other inputs, or (b) have it consume `FormItemContext` directly.
-- [ ] **FormItem `required` plumbing** — currently the `required` prop is forwarded to a `<div>` where it's meaningless. Either propagate to children (preferred) or render a visible marker. Decide and implement.
+- [x] **PinInputField FormItem integration** — added `label`, `helpText`, `errorText`, `required`, `size` props. Wraps its custom layout in FormItem and applies `aria-describedby` / `aria-invalid` / `aria-required` on its `role="group"` div via `deriveAriaIds`. Replaced the `Math.random()` id with a stable `React.useId` fallback.
+- [x] **FormItem `required` plumbing** — *the audit was wrong about this one*. `required` IS forwarded to the `<div>` and the existing CSS rule `[data-form-item][required] label::after { content: "*"; ... }` (in `form-item.css:99-113`, using `var(--input-required-indicator)` for colour) already renders the visible asterisk marker. Combined with the per-input `aria-required` wired in the previous batch, both sighted users and AT users now get the cue.
 
 ### Accessibility hardening
 
