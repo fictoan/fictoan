@@ -33,8 +33,7 @@ export const SidebarWrapper = React.forwardRef(
 
         const internalRef = useRef<HTMLDivElement>(null);
 
-        // @ts-ignore
-        useImperativeHandle(forwardedRef, () => internalRef.current);
+        useImperativeHandle(forwardedRef, () => internalRef.current!);
 
         useClickOutside(internalRef, () => {
             if (typeof closeOnClickOutside === "function") {

@@ -108,7 +108,6 @@ export const Drawer = React.forwardRef(
                 data-drawer
                 ref={effectiveRef}
                 classNames={drawerClasses}
-                // @ts-ignore — popover is a valid HTML attribute, TS types may lag
                 popover={isDismissible ? "auto" : "manual"}
                 role="dialog"
                 aria-modal="true"

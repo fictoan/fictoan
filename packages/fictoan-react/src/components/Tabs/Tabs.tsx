@@ -44,7 +44,11 @@ export const Tabs = React.forwardRef(
         const [ isExiting, setIsExiting ] = React.useState<boolean>(false);
 
         // Refs for keyboard navigation to focus the tab buttons
-        const tabButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+        // Element's forwarded ref type is HTMLElement (its generic param doesn't
+        // propagate through forwardRef). Widen the ref array to match so the
+        // assignment in the callback below type-checks; we only ever call
+        // .focus() on these refs so the precision loss is harmless.
+        const tabButtonRefs = useRef<(HTMLElement | null)[]>([]);
 
         // V2's performant animation logic
         const handleTabChange = useCallback((tab : TabType) => {
@@ -116,8 +120,7 @@ export const Tabs = React.forwardRef(
                             <li key={tab.key}>
                                 <Element<HTMLButtonElement>
                                     as="button"
-                                    // @ts-ignore
-                                    ref={(el) => (tabButtonRefs.current[i] = el)}
+                                    ref={(el) => { tabButtonRefs.current[i] = el; }}
                                     id={`tab-${tab.key}`}
                                     role="tab"
                                     aria-selected={activeTab.key === tab.key}

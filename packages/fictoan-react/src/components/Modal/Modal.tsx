@@ -101,7 +101,6 @@ export const Modal = React.forwardRef(
                 as="dialog"
                 id={modalId}
                 data-modal
-                // @ts-ignore
                 popover={isDismissible ? "auto" : "manual"}
                 ref={ref}
                 classNames={classNames}

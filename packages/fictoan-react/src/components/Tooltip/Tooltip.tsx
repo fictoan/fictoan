@@ -97,7 +97,6 @@ export const Tooltip = ({
             id={tooltipId}
             data-tooltip
             data-position={position}
-            // @ts-ignore — popover is a valid HTML attribute, TS types may lag
             popover="manual"
             role="tooltip"
             style={{
