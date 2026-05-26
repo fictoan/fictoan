@@ -22,12 +22,16 @@
     overflow           : visible;  /* allow dismiss button to overflow */
 
     /* SIZES //////////////////////////////////////////////////////////////// */
+    --drawer-width-nano    : 4vw;
+    --drawer-width-micro   : 6vw;
     --drawer-width-tiny    : 8vw;
     --drawer-width-small   : 12vw;
     --drawer-width-medium  : 24vw;
     --drawer-width-large   : 32vw;
     --drawer-width-huge    : 48vw;
 
+    --drawer-height-nano   : 4vh;
+    --drawer-height-micro  : 6vh;
     --drawer-height-tiny   : 8vh;
     --drawer-height-small  : 12vh;
     --drawer-height-medium : 24vh;
@@ -67,6 +71,8 @@
         max-width : 92vw;
         transform : translateX(calc(100% + var(--nano)));
 
+        &.nano { width : var(--drawer-width-nano); }
+        &.micro { width : var(--drawer-width-micro); }
         &.tiny { width : var(--drawer-width-tiny); }
         &.small { width : var(--drawer-width-small); }
         &.medium { width : var(--drawer-width-medium); }
@@ -81,6 +87,8 @@
         max-width : 92vw;
         transform : translateX(calc(-100% - var(--nano)));
 
+        &.nano { width : var(--drawer-width-nano); }
+        &.micro { width : var(--drawer-width-micro); }
         &.tiny { width : var(--drawer-width-tiny); }
         &.small { width : var(--drawer-width-small); }
         &.medium { width : var(--drawer-width-medium); }
@@ -95,6 +103,8 @@
         max-height : 92vh;
         transform  : translateY(calc(-100% - var(--nano)));
 
+        &.nano { height : var(--drawer-height-nano); }
+        &.micro { height : var(--drawer-height-micro); }
         &.tiny { height : var(--drawer-height-tiny); }
         &.small { height : var(--drawer-height-small); }
         &.medium { height : var(--drawer-height-medium); }
@@ -109,6 +119,8 @@
         max-height : 92vh;
         transform  : translateY(calc(100% + var(--nano)));
 
+        &.nano { height : var(--drawer-height-nano); }
+        &.micro { height : var(--drawer-height-micro); }
         &.tiny { height : var(--drawer-height-tiny); }
         &.small { height : var(--drawer-height-small); }
         &.medium { height : var(--drawer-height-medium); }
