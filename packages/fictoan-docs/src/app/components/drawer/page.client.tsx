@@ -36,7 +36,8 @@ const DrawerDocs = () => {
     const [isDismissible, setIsDismissible] = useState(true);
     const [showOverlay, setShowOverlay] = useState(true);
     const [blurOverlay, setBlurOverlay] = useState(false);
-    const [closeOnClickOutside, setCloseOnClickOutside] = useState(true);
+    // closeOnClickOutside is deprecated — see notes below the toggles. ESC and
+    // backdrop-click are now coupled to `isDismissible` via the popover API.
 
     // Theme configurator
     const DrawerComponent = (varName: string) => {
@@ -60,7 +61,6 @@ const DrawerDocs = () => {
         if (!isDismissible) props.push(`isDismissible={false}`);
         if (!showOverlay) props.push(`showOverlay={false}`);
         if (blurOverlay) props.push(`blurOverlay`);
-        if (!closeOnClickOutside) props.push(`closeOnClickOutside={false}`);
 
         return `import { useState } from "react";
 import { Drawer, Button } from "fictoan-react";
@@ -76,7 +76,7 @@ const [isOpen, setIsOpen] = useState(false);
 >
     {/* Your content here */}
 </Drawer>`;
-    }, [position, size, isDismissible, showOverlay, blurOverlay, closeOnClickOutside]);
+    }, [position, size, isDismissible, showOverlay, blurOverlay]);
 
     return (
         <>
@@ -164,7 +164,7 @@ const [isOpen, setIsOpen] = useState(false);
                             label="isDismissible"
                             checked={isDismissible}
                             onChange={() => setIsDismissible(!isDismissible)}
-                            helpText="Shows a close button and allows dismissal."
+                            helpText="Shows a close button. Also enables ESC and backdrop-click dismissal — both come together via the native popover API."
                             marginBottom="micro"
                         />
 
@@ -185,16 +185,13 @@ const [isOpen, setIsOpen] = useState(false);
                             helpText="Adds a blur effect to the overlay."
                             marginBottom="micro"
                         />
-
-                        <Checkbox
-                            id="prop-closeOnClickOutside"
-                            label="closeOnClickOutside"
-                            checked={closeOnClickOutside}
-                            onChange={() => setCloseOnClickOutside(!closeOnClickOutside)}
-                            helpText="Closes the drawer when clicking outside."
-                            marginBottom="micro"
-                        />
                     </Div>
+
+                    <Text marginTop="micro" textColour="grey-dark30">
+                        <strong>Note:</strong> <code>closeOnClickOutside</code> is deprecated in v2 —
+                        ESC and backdrop click are now coupled to <code>isDismissible</code> via the
+                        native popover API. Setting one without the other is no longer supported.
+                    </Text>
                 </Div>
 
                 {/* THEME CONFIG /////////////////////////////////////////////////////////////////////////////////////// */}
@@ -203,7 +200,6 @@ const [isOpen, setIsOpen] = useState(false);
                 </Div>
             </ComponentDocsLayout>
 
-            {/* TODO: Fix overlay not displaying */}
             <Drawer
                 ref={interactiveElementRef}
                 isOpen={isDrawerOpen}
@@ -213,7 +209,6 @@ const [isOpen, setIsOpen] = useState(false);
                 isDismissible={isDismissible}
                 showOverlay={showOverlay}
                 blurOverlay={blurOverlay}
-                closeOnClickOutside={closeOnClickOutside}
                 zIndex={60000}
                 {...themeProps}
             >

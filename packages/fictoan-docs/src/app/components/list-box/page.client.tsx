@@ -128,6 +128,12 @@ const [value, setValue] = useState<${stateType}>(${stateDefault});
                 <Text>
                     Enable <code>allowCustomEntries</code> to let users add new options.
                 </Text>
+
+                <Text>
+                    Use either <code>value</code> + <code>onChange</code> (controlled) or{" "}
+                    <code>defaultValue</code> (uncontrolled). For multi-select, both accept{" "}
+                    <code>string[]</code>; for single-select, <code>string</code>.
+                </Text>
             </Div>
 
             {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
