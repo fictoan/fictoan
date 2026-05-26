@@ -1,6 +1,6 @@
 {
     "name"                 : "fictoan-react",
-    "version"              : "2.0.0-beta.17",
+    "version"              : "2.0.0-beta.18",
     "description"          : "A full-featured, designer-friendly, yet performant framework with plain-English props and focus on rapid iteration.",
     "repository"           : {
         "type" : "git",
@@ -23,11 +23,12 @@
     "module"               : "./dist/index.js",
     "types"                : "./dist/types/index.d.ts",
     "exports"              : {
-        "."       : {
+        "."              : {
             "types"   : "./dist/types/index.d.ts",
             "default" : "./dist/index.js"
         },
-        "./dist/" : "./dist/"
+        "./package.json" : "./package.json",
+        "./dist/"        : "./dist/"
     },
     "scripts"              : {
         "watch"            : "vite build --watch",
