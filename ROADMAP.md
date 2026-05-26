@@ -72,11 +72,23 @@ Once the gating items are in, these unlock real improvements.
 - [ ] **PurgeCSS / unused-style guide** — official guidance for trimming the 584 KB raw bundle in production. Document `sideEffects` interaction.
 - [ ] **Schema-driven theme tokens** — define all tokens in one TOML or JSON file. Generate the CSS variables, TS types, docs page, AND the theme configurator from the same source. Kills the heuristic variable detection in `themeConfigurator.tsx`.
 
-### Docs site
+### Docs site — infrastructure
 
 - [ ] **Component metadata registry** — pages currently hand-roll state, code generation, and controls (e.g. `button/page.client.tsx:33`). Move toward a typed metadata registry generated from source + small curated examples.
 - [ ] **Consolidate search index** — `searchIndex.js` is a large manual file at risk of drift. Generate from the same registry.
 - [ ] **Bare Divider cap** — optional follow-up: if a `<Divider />` without horizontal-margin is placed at the page root, should it also cap at 2400 px? Currently spans 100% of parent. Decide and document.
+
+### Docs site — content gaps
+
+Things that landed in beta-18 but the docs either don't mention or under-sell. None of these actively mislead a reader (so they didn't make the Option B sweep), but each represents a feature consumers may not discover.
+
+- [ ] **Drawer viewport gutter** — Drawer now floats 8 px (`var(--nano)`) off the viewport edges with `height/width` adjusted via `calc()`. Worth a one-sentence note on the Drawer docs page explaining the design choice, since it's visible to anyone using the component.
+- [ ] **Spacing-token clamps** — `--tiny` through `--huge` are now `clamp(min, vmax, max)` instead of bare `vmax`. The Layout/Theme docs should show the new evaluated values across viewport widths (small table, ideally) so designers know what to expect on a 5K monitor.
+- [ ] **`@layer fictoan`** — the entire bundle is now wrapped in this layer, so consumer styles outside any layer win specificity battles automatically. Significant consumer-facing change that deserves a "Customising Fictoan" or "Cascade layers" note in the docs — possibly on the Theme page or as a Getting Started addendum.
+- [ ] **`useViewTransition` hook** — exported from `fictoan-react` but has no docs page. Needs a short page with the API signature, the theme-switch example (already wired into `ThemeProvider`), and the `prefers-reduced-motion` behaviour.
+- [ ] **PinInputField FormItem integration** — now accepts `label`, `helpText`, `errorText`, `required`, `size` props. The docs page (`components/pin-input-field/page.client.tsx`) doesn't demo any of them.
+- [ ] **Theme switching crossfade** — ThemeProvider wraps theme changes in `document.startViewTransition()`. Worth mentioning on the Theme page so users know they can opt into a smoother switch by upgrading.
+- [ ] **Form a11y context helpers** — `FormItemContext`, `useFormItemContext`, `deriveAriaIds`, `mergeDescribedBy` are exported from `FormItem.tsx` internally but not re-exported from `fictoan-react`'s public surface. Decide: keep internal (no docs needed), or expose for advanced consumers building custom form components (then docs needed).
 
 ---
 
