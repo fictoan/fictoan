@@ -27,9 +27,9 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
 
 ### Quality gates
 
-- [ ] **PR CI workflow** — separate from publish. Runs `tsc --noEmit`, `pnpm build`, and (when they exist) tests. Required check on PRs into `main`.
-- [ ] **Gate publish on CI** — make the npm-publish workflow `needs:` the PR CI job. Today it builds and publishes blind.
-- [ ] **Tests for high-traffic components** — Vitest + React Testing Library. Start with Button, InputField, Select, ListBox, Modal, Drawer, Tabs, Toast, Pagination, ThemeProvider. Add Playwright + axe for a11y and visual regressions once the unit set is in place.
+- [x] **PR CI workflow** — `.github/workflows/ci.yml` now runs on every PR into `main` (and on direct pushes to `main` as a tripwire). Builds fictoan-react (which runs tsc + vite + schema gen) and fictoan-docs (full Next.js type-check). Doesn't touch npm. Configure as a required check via branch protection in the GitHub UI to block bad merges.
+- [~] **Gate publish on CI** — `publish.yml` already runs `pnpm --filter fictoan-react build` before `npm publish`, so a broken build can't publish. What's left is making the *PR* show red before merge — handled by enabling branch protection with the new CI job as a required check (configuration step, not code).
+- [ ] **Tests for high-traffic components** — Vitest + React Testing Library. Start with Button, InputField, Select, ListBox, Modal, Drawer, Tabs, Toast, Pagination, ThemeProvider. Add Playwright + axe for a11y and visual regressions once the unit set is in place. Once a `test` script exists, add a `pnpm test` step to ci.yml.
 
 ### Correctness bugs to clear
 

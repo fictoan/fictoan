@@ -1,0 +1,48 @@
+name : CI
+on   :
+    # PR runs give reviewers visible pass/fail before merge — set this job as a
+    # required check via branch protection if you want to block bad merges.
+    pull_request :
+        branches :
+            - main
+    # Also run on direct pushes to main (used for docs-only edits) so a broken
+    # commit shows up immediately in the Actions tab even when no PR was opened.
+    # This job doesn't publish anything; publish.yml stays the only path to npm
+    # and still only fires on merged PRs.
+    push :
+        branches :
+            - main
+
+jobs :
+    build :
+        name    : Build and type-check
+        runs-on : ubuntu-latest
+        steps   :
+            -   name : Checkout repository
+                uses : actions/checkout@v4
+
+            -   name : Setup Node.js
+                uses : actions/setup-node@v4
+                with :
+                    node-version : lts/*
+
+            -   name : Install pnpm
+                uses : pnpm/action-setup@v4
+                with :
+                    version : 10.15.1
+
+            -   name : Install dependencies
+                run  : pnpm install
+
+            # `pnpm --filter fictoan-react build` runs:
+            #   - tsc (type-check the library)
+            #   - vite build (bundle CSS + JS, emit declarations)
+            #   - generateSchema.ts (fail if schema gen blows up)
+            -   name : Build fictoan-react
+                run  : pnpm --filter fictoan-react build
+
+            # `next build` runs a full type-check across the docs app, so this
+            # catches docs-side breakage (broken imports, prop signature drift
+            # against newly published Fictoan types, etc.).
+            -   name : Build fictoan-docs
+                run  : pnpm --filter fictoan-docs build
