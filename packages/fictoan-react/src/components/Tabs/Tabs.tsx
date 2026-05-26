@@ -44,11 +44,7 @@ export const Tabs = React.forwardRef(
         const [ isExiting, setIsExiting ] = React.useState<boolean>(false);
 
         // Refs for keyboard navigation to focus the tab buttons
-        // Element's forwarded ref type is HTMLElement (its generic param doesn't
-        // propagate through forwardRef). Widen the ref array to match so the
-        // assignment in the callback below type-checks; we only ever call
-        // .focus() on these refs so the precision loss is harmless.
-        const tabButtonRefs = useRef<(HTMLElement | null)[]>([]);
+        const tabButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
         // V2's performant animation logic
         const handleTabChange = useCallback((tab : TabType) => {

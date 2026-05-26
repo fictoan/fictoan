@@ -86,7 +86,10 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
             if (!isControlled) setInternalSelectedOptions(next);
         }, [ isControlled ]);
 
-        const dropdownRef = useRef<HTMLSelectElement>(null) as MutableRefObject<HTMLSelectElement>;
+        // The list-box wrapper renders as a <div>, not a <select> — the prior
+        // HTMLSelectElement typing was a pre-existing mistake that only got
+        // caught when Element's ref type tightened.
+        const dropdownRef = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement>;
         const searchInputRef = useRef<HTMLInputElement>(null);
         const dropdownMenuRef = useRef<HTMLDivElement>(null);
 
