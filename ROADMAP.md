@@ -343,27 +343,22 @@ Once the gating items are in, these unlock real improvements.
 Things that landed in beta-18 but the docs either don't mention or under-sell. None of these actively mislead a reader (
 so they didn't make the Option B sweep), but each represents a feature consumers may not discover.
 
-- [ ] **Drawer viewport gutter** — Drawer now floats 8 px (`var(--nano)`) off the viewport edges with `height/width`
-  adjusted via `calc()`. Worth a one-sentence note on the Drawer docs page explaining the design choice, since it's
-  visible to anyone using the component.
-- [ ] **Spacing-token clamps** — `--tiny` through `--huge` are now `clamp(min, vmax, max)` instead of bare `vmax`. The
-  Layout/Theme docs should show the new evaluated values across viewport widths (small table, ideally) so designers know
-  what to expect on a 5K monitor. **Correction — this is worse than under-sold:** `CodeSamples.jsx` shows the *old*
-  `--tiny: 2vmax … --huge: 24vmax` as current, contradicting `globals.css` (`clamp(8px, 2vmax, 24px)` etc.), so a
-  consumer copying it reintroduces the runaway-padding bug the clamps fixed. Update `--tiny` through `--huge` to the real
-  clamp values (nano/micro are already correct).
-- [ ] **`@layer fictoan`** — the entire bundle is now wrapped in this layer, so consumer styles outside any layer win
-  specificity battles automatically. Significant consumer-facing change that deserves a "Customising Fictoan" or "
-  Cascade layers" note in the docs — possibly on the Theme page or as a Getting Started addendum. Add one clarifying
-  sentence: the utility classes still use `!important` (41 rules in `utilities.css`, the idiomatic way to make utilities
-  win), so the override-without-`!important` contract is about non-utility *component* styles — the `!important` use is
-  correct, not a bug to audit.
-- [ ] **`useViewTransition` hook** — exported from `fictoan-react` but has no docs page. Needs a short page with the API
-  signature, the theme-switch example (already wired into `ThemeProvider`), and the `prefers-reduced-motion` behaviour.
-- [ ] **PinInputField FormItem integration** — now accepts `label`, `helpText`, `errorText`, `required`, `size` props.
-  The docs page (`components/pin-input-field/page.client.tsx`) doesn't demo any of them.
-- [ ] **Theme switching crossfade** — ThemeProvider wraps theme changes in `document.startViewTransition()`. Worth
-  mentioning on the Theme page so users know they can opt into a smoother switch by upgrading.
+- [x] **Drawer viewport gutter** — Drawer floats 8 px (`var(--nano)`) off the viewport edges. Documented with a note
+  on the Drawer docs page (intro + the `size` helpText, which now spells out the nano→huge scale).
+- [x] **Spacing-token clamps** — `--tiny` through `--huge` are now `clamp(min, vmax, max)`. The docs showed the *old*
+  bare-`vmax` values in three places — `theme/CodeSamples.jsx`, the getting-started spacing table, and the docs' own
+  `fictoan-theme.css` override (which, post-`@layer`, actually won — so the live docs rendered with the old runaway
+  spacing). All three updated to the real clamp values.
+- [x] **`@layer fictoan`** — documented as an "Overriding styles" section in getting-started: consumers can override
+  component CSS without `!important`, with the utility-class `!important` exception called out (those keep it on
+  purpose, so the override-without-`!important` contract is about non-utility *component* styles).
+- [x] **`useViewTransition` hook** — documented inline on the Theme page (API signature, example, and
+  `prefers-reduced-motion` fallback), next to the crossfade note, rather than a standalone Hooks page — more
+  discoverable where View Transitions are already explained.
+- [x] **PinInputField FormItem integration** — the docs page now demos `label`, `helpText`, `errorText`, `required`
+  and `size` (state, code-gen, live props, and controls).
+- [x] **Theme switching crossfade** — documented on the Theme page: the automatic `document.startViewTransition()`
+  crossfade and its `prefers-reduced-motion` handling.
 - [ ] **Form a11y context helpers** — `FormItemContext`, `useFormItemContext`, `deriveAriaIds`, `mergeDescribedBy` are
   exported from `FormItem.tsx` internally but not re-exported from `fictoan-react`'s public surface. Decide: keep
   internal (no docs needed), or expose for advanced consumers building custom form components (then docs needed).
@@ -398,13 +393,12 @@ The plain-English prop model is the differentiator. Make it official.
   referenced interfaces into a top-level types map, map `ColourPropTypes` → `Colours` + `colourModifiers`, extract a
   named size enum, and backfill descriptions/examples. Split the generator fixes from the description backfill.
 - [x] `llms.txt` (shipped on `beta-18`).
-- [ ] **`llms.txt` upkeep + discoverability** — `public/llms.txt` has dead links (`/components/row` &
-  `/components/portion` 404 — they live at `/layout`; `/components/spinner` has no page) and documents `FormBuilder`,
-  which the library and schema don't expose; the schema's `$schema` points at `https://fictoan.io/schema/v1.json`, which
-  is never built or served; and nothing advertises the artifacts (no robots.txt, no head `<link>` to `/llms.txt` or
-  `/fictoan-schema.json`). Quick wins (fix the dead URLs, resolve `$schema` to the served path, add robots.txt + head
-  link) can ship now; generating the component index from the schema removes the whole drift class but needs a
-  slug-resolution layer.
+- [~] **`llms.txt` upkeep + discoverability** — *discoverability done:* footer links + `<head>` `rel=alternate` links
+  to `/llms.txt` and `/fictoan-schema.json`, a new `public/robots.txt`, and the Portion entry reworded to
+  `@container`-based. *Still open:* `public/llms.txt` has dead links (`/components/row` & `/components/portion` 404 —
+  they live at `/layout`; `/components/spinner` has no page) and documents `FormBuilder`, which the library and schema
+  don't expose; the schema's `$schema` points at `https://fictoan.io/schema/v1.json`, which is never built or served.
+  Generating the component index from the schema removes the whole drift class but needs a slug-resolution layer.
 - [ ] **`@fictoan/mcp` server** — an MCP server exposing tools like `list_components`, `get_prop_signature`,
   `find_component_by_intent`. AI assistants using Cursor / Claude / Copilot can ground completions in real schema
   instead of training-data approximations.
