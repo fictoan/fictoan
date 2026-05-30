@@ -152,51 +152,37 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
   to the search input when open, so it sits on a non-focused element — move it onto the search input. **This reopens the
   shipped `aria-activedescendant` item** (above) whose placement is wrong. (This is the concrete content of the old
   "ListBox combobox pattern" item — it remains a separate project from Modal/Drawer.)
-- [~] **RadioGroup duplicate radio role** — *done:* removed the wrapper `<Div role="radio" aria-checked>` around each
-  native radio (`RadioGroup.tsx`), so AT no longer announces two radios per option; the native input carries the role +
-  checked state and the CSS styles off `input:checked`. *Still open:* the option-id fallback uses the raw `id` prop
-  instead of the stable group id at `RadioGroup.tsx:93`, `CheckboxAndSwitchGroup.tsx:149,274`, and
-  `RadioTabGroup.tsx:217` — switch all four to `finalGroupId`.
+- [x] **RadioGroup duplicate radio role** — removed the wrapper `<Div role="radio" aria-checked>` (the native input
+  carries the role + checked state; CSS styles off `input:checked`), and switched the option-id fallback from the raw
+  `id` prop to the stable `finalGroupId` in RadioGroup, RadioTabGroup, and Checkbox/SwitchGroup.
 - [x] **`hideLabel` is a no-op** — fixed end-to-end: added `hideLabel` to `FormItemProps`, forwarded it through FormItem
   to InputLabel, passed it from InputField/TextArea/Checkbox/Switch, and changed InputLabel to push `.sr-only` (it
   previously pushed the non-existent `visually-hidden`). A visually-hidden but screen-reader-announced label now works.
-- [ ] **Range group label IDREF dangles** — both SingleThumbRange and DualThumbRange set
-  `aria-labelledby` to a `{finalId}-label` id on the `role="group"` wrapper (`Range.tsx:265,516`) but nothing renders an
-  element with that id (the InputLabel has `htmlFor` but no `id`), so the accessible name resolves to nothing and axe
-  flags the dangling reference. Add the matching `id` to those InputLabels (InputLabel already forwards `id`).
-- [ ] **FileUpload has no visible focus ring** — the file input is `opacity:0` over the drop area (`file-upload.css`),
-  which defeats the global `*:focus-visible` outline (`reset.css`), so keyboard focus is invisible (WCAG 2.4.7). Add a
-  `[data-file-upload-area]:has(.file-input:focus-visible)` outline rule reusing the focus token — exactly as
-  RadioButton/Checkbox/RadioTabs already do.
-- [~] **Modal close button keyboard-dead; Notification dismiss lacks button semantics** — *done:* Modal's × is now a
-  native `<button type="button">` (was a `<Text>`→`<p>` with `tabIndex` + `onClick` but no key handler, WCAG 2.1.1),
-  with an `appearance`/`background`/`border` reset on `.dismiss-button`. *Still open:* Notification's dismiss is a
-  `<div>` with a manual key handler but no `role="button"` — give it native button semantics too.
+- [x] **Range group label IDREF resolved** — added the matching `id` on the group InputLabel (single + dual thumb), so
+  the `role="group"` `aria-labelledby` no longer dangles.
+- [x] **FileUpload focus ring** — the `opacity:0` file input swallowed the global focus ring; added a
+  `[data-file-upload-area]:has(.file-input:focus-visible) .file-upload-area` outline reusing the focus token (WCAG 2.4.7).
+- [x] **Modal/Notification dismiss button semantics** — both dismiss controls are now native `<button type="button">`
+  (Modal's was a keyboard-dead `<Text>`→`<p>`; Notification's a `<div>` with a hand-rolled key handler), each with an
+  `appearance`/`background`/`border` reset (WCAG 2.1.1).
 - [x] **Accordion ARIA is broken** — dropped the hardcoded `aria-labelledby="accordion-summary"` /
   `aria-controls="accordion-content"` (dangling ids), the redundant `role`s + `tabIndex`, and the stale `aria-expanded`;
   native `<details>`/`<summary>` provide disclosure semantics (CSS only keys off `[open]`, so no visual change). The
   `<details name="...">` exclusive-accordion follow-up (Bet 3) is separate and still open.
-- [~] **Tooltip has no accessible link + click-mode bug** — *done:* `aria-describedby` is now set on the target in the
-  existing effect (cleaned up on unmount), so SR users who focus the anchor get the tooltip announced (WCAG 4.1.2).
-  *Still open:* `tooltip.css` sets `pointer-events:none` on every `[data-tooltip]` — right for hover but makes
-  `showOn="click"` tooltips with interactive content unclickable; scope it to hover mode via a data attribute.
+- [x] **Tooltip accessible link + click-mode** — `aria-describedby` is now set on the target in the effect (cleaned up
+  on unmount, WCAG 4.1.2), and `pointer-events:none` is scoped to non-click modes via `data-show-on`, so
+  `showOn="click"` tooltips with interactive content are clickable.
 - [x] **Pagination arrows are unlabelled** — the first/previous/next/last icon buttons now get a per-type `aria-label`
   ("Go to first page", …) and the decorative SVGs are `aria-hidden="true"` (WCAG 4.1.2). Labels are hardcoded English
   for now; exposing them via `constants.ts` (mirroring `itemDisplayText`) for localisation is a future nicety.
-- [ ] **Over-applied live-region roles** — `Badge.tsx` always sets `role="status"`, so a static "New"/count badge
-  announces as a polite live region (and a changing count spams AT). `SkeletonGroup` uses `role="alert"` (assertive) for
-  loading scaffolding — should be `role="status"` + `aria-busy`, matching the existing Spinner idiom; and each Skeleton
-  item is an indeterminate `role="progressbar"` with no `aria-valuenow` — mark items `aria-hidden` and let the group own
-  one polite status. Make the live role opt-in (a `live` prop) for static-by-default cases. (Callout's kind-driven role
-  is largely defensible; the only follow-on is a `live=false` opt-out for persistent content.)
-- [ ] **Double-announced toasts/notifications** — `ToastsWrapper` and `NotificationsWrapper` are `role="log"` live
-  regions, and each child item is *also* a live region (`ToastItem`, `NotificationItem`), so AT announces each item
-  twice. Keep the live region in one place — conventionally the wrapper owns it and items are plain children. Preserve
-  the assertive escalation NotificationItem uses for error/warning (e.g. via a separate assertive region), and
-  reconsider `aria-relevant="removals"` on a `role="log"`.
-- [ ] **OptionCard selection state invisible to AT** — `OptionCard.tsx:291-294` renders `role="button"` with
-  `aria-selected`, but `aria-selected` is ignored on `role="button"`, so the selection state (the component's whole
-  point) never reaches screen readers. Minimal fix: convey state via `aria-pressed`. Spec-correct fix: `role="option"`
+- [x] **Over-applied live-region roles** — dropped Badge's default `role="status"` (opt in via props), and changed
+  `SkeletonGroup` from `role="alert"` (assertive) to `role="status"`. (The per-item indeterminate `role="progressbar"`
+  is valid ARIA — left as is; Callout's kind-driven role remains defensible.)
+- [x] **Double-announced toasts/notifications** — removed the `role="log"` live region from ToastsWrapper and
+  NotificationsWrapper, so the per-item regions are the single source and each item announces once; items keep their
+  politeness (NotificationItem stays assertive for error/warning).
+- [~] **OptionCard selection state invisible to AT** — *done:* `aria-selected` (ignored on `role="button"`) switched to
+  `aria-pressed`, so the selection state now reaches assistive tech. *Optional enhancement:* the spec-correct pattern is `role="option"`
   inside a `role="listbox"` container (with `aria-multiselectable` when `allowMultipleSelections`), which needs roving
   tabindex + arrow-key nav (mirror ListBox) since each card currently has `tabIndex=0`.
 
