@@ -38,7 +38,7 @@ export const RootLayoutClient = ({children} : { children : ReactNode }) => {
         </head>
 
         <body>
-        <ThemeProvider themeList={listOfThemes} currentTheme="theme-light">
+        <ThemeProvider themeList={listOfThemes} currentTheme="theme-light" storageKey="fictoan-docs">
             <Sidebar
                 sidebarState={sidebarState}
                 setSidebarState={setSidebarState}

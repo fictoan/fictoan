@@ -71,6 +71,12 @@ const ThemeDocs = () => {
 
                     <CodeBlock withSyntaxHighlighting source={sampleThemeProviderSetup} language="jsx" />
 
+                    <Text marginTop="micro" marginBottom="micro">
+                        If more than one Fictoan app can share an origin (localhost during dev, GitHub Pages, etc.), pass
+                        a unique <code>storageKey</code> so they don&rsquo;t share one theme — your package name works
+                        well (e.g. <code>storageKey="my-app"</code>). It defaults to <code>fictoan-theme</code>.
+                    </Text>
+
                     <Divider kind="secondary" verticalMargin="micro" />
 
                     {/* STEP 3 — Add theme switching =============================================================== */}

@@ -5,22 +5,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { CommonAndHTMLProps } from "../Element/constants";
 import { Element } from "$element";
 
-const getStorageKey = (): string => {
-    if (typeof window !== 'undefined') {
-        const hostname = window.location.hostname;
-        const port = window.location.port;
-        
-        // Create identifier from hostname and port
-        let identifier = hostname.replace(/\./g, '-');
-        if (port) {
-            identifier += `-${port}`;
-        }
-        
-        return `${identifier}-theme`;
-    }
-    
-    return "fictoan-theme";
-};
+const DEFAULT_STORAGE_KEY = "fictoan-theme";
+let hasWarnedDefaultKey = false;
 
 // Create a tuple type for the theme context
 type ThemeContextType = [string, React.Dispatch<React.SetStateAction<string>>];
@@ -40,6 +26,10 @@ export type ThemeProviderElementType = HTMLDivElement;
 export interface ThemeProviderProps extends CommonAndHTMLProps<ThemeProviderElementType> {
     themeList    : string[];
     currentTheme : string;
+    /** localStorage key the theme is persisted under. Defaults to "fictoan-theme"; pass a unique
+     *  value (your package.json name works well) when multiple Fictoan apps can share an origin
+     *  (e.g. localhost during dev, GitHub Pages) so their themes don't collide. */
+    storageKey ? : string;
     /** Pass your CSP nonce so the no-flash inline script is allowed under a strict `script-src`. */
     nonce      ? : string;
 }
@@ -56,9 +46,10 @@ const getTheme = (key: string, fallback?: string) => {
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const ThemeProvider = React.forwardRef(
-    ({ currentTheme, themeList, children, nonce, ...props }: ThemeProviderProps, ref: React.Ref<ThemeProviderElementType>) => {
+    ({ currentTheme, themeList, children, nonce, storageKey, ...props }: ThemeProviderProps, ref: React.Ref<ThemeProviderElementType>) => {
+        const resolvedKey = storageKey ?? DEFAULT_STORAGE_KEY;
         const [themeState, setThemeState] = useState<string>(() =>
-            getTheme(getStorageKey()) || currentTheme);
+            getTheme(resolvedKey) || currentTheme);
 
         const setTheme = useCallback(
             (value: React.SetStateAction<string>) => {
@@ -93,28 +84,41 @@ export const ThemeProvider = React.forwardRef(
 
                 setThemeState(finalTheme);
                 try {
-                    localStorage.setItem(getStorageKey(), finalTheme);
+                    localStorage.setItem(resolvedKey, finalTheme);
                 } catch (e) {
                     // Unsupported
                 }
             },
-            [themeState, themeList]
+            [themeState, themeList, resolvedKey]
         );
 
         useEffect(() => {
-            const theme = getTheme(getStorageKey());
+            const theme = getTheme(resolvedKey);
             setTheme(theme || currentTheme);
-        }, [currentTheme, setTheme]);
+
+            if (
+                storageKey === undefined && !hasWarnedDefaultKey &&
+                typeof process !== "undefined" && process.env?.NODE_ENV !== "production"
+            ) {
+                hasWarnedDefaultKey = true;
+                console.warn(
+                    `[fictoan-react] ThemeProvider is persisting the theme to the default localStorage ` +
+                    `key "${DEFAULT_STORAGE_KEY}". If more than one Fictoan app can share an origin (e.g. ` +
+                    `localhost during dev, GitHub Pages), pass a unique \`storageKey\` (your package.json ` +
+                    `name works well) so their themes don't collide.`,
+                );
+            }
+        }, [currentTheme, setTheme, resolvedKey, storageKey]);
 
         // No-flash pre-hydration script: set the persisted theme class on <html>
         // before first paint, so the (un-gated, SSR-rendered) children don't flash
-        // the default theme. Mirrors getStorageKey(); falls back to currentTheme.
-        // Inline → strict-CSP consumers should pass a `nonce`. SSR/SSG: runs during
-        // initial HTML parse; pure CSR: a no-op (the mount effect applies the theme).
+        // the default theme. Reads the same storageKey as the component; falls back
+        // to currentTheme. Inline → strict-CSP consumers should pass a `nonce`.
+        // SSR/SSG: runs during initial HTML parse; pure CSR: a no-op (the mount
+        // effect applies the theme).
         const noFlashScript =
-            `(function(){try{var p=window.location.port,` +
-            `k=window.location.hostname.replace(/\\./g,"-")+(p?"-"+p:"")+"-theme",` +
-            `t=localStorage.getItem(k)||${JSON.stringify(currentTheme)};` +
+            `(function(){try{var t=localStorage.getItem(${JSON.stringify(resolvedKey)})` +
+            `||${JSON.stringify(currentTheme)};` +
             `if(t){document.documentElement.className=t;}}catch(e){}})();`;
 
         return (
