@@ -97,8 +97,6 @@ export const RadioGroup = React.forwardRef(
                             <Div
                                 key={finalId}
                                 data-radio-button
-                                role="radio"
-                                aria-checked={isChecked}
                                 className={labelFirst ? "label-first" : undefined}
                             >
                                 <input
