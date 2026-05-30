@@ -506,8 +506,8 @@ ages better.
   fits this very well because each component is small and readable.
 - [ ] **Agent-UI component pack** — streaming text container, "thinking" indicator, tool-call card, citation chip, retry
   button. A real and growing UI category that didn't exist in 2020.
-- [ ] **`stats.html` gitignore** — currently regenerated on every build and shows up as a dirty file. Add to
-  `.gitignore`.
+- [x] **`stats.html` gitignore** — was regenerated on every build and showed up as a dirty file. Added `stats.html` to
+  `.gitignore` and untracked the existing copy (`git rm --cached`).
 
 ---
 

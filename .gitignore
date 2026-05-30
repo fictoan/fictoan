@@ -13,6 +13,7 @@ build
 out
 .next
 storybook-static
+stats.html
 
 # Schema synced into docs from fictoan-react/dist (generated, not committed)
 packages/fictoan-docs/public/fictoan-schema.json
