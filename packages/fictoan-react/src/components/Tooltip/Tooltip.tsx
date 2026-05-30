@@ -40,6 +40,8 @@ export const Tooltip = ({
         // Brand the target as the anchor. We set this dynamically rather than
         // requiring the caller to add the anchor-name themselves.
         target.style.setProperty("anchor-name", anchorName);
+        // Link the target to the tooltip for assistive tech (WCAG 4.1.2).
+        target.setAttribute("aria-describedby", tooltipId);
 
         const show = () => {
             if (!tooltip.matches(":popover-open")) tooltip.showPopover();
@@ -89,6 +91,7 @@ export const Tooltip = ({
         return () => {
             cleanups.forEach((fn) => fn());
             target.style.removeProperty("anchor-name");
+            target.removeAttribute("aria-describedby");
         };
     }, [ isTooltipFor, showOn, tooltipId, anchorName ]);
 

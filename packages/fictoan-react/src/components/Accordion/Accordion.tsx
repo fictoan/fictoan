@@ -33,15 +33,8 @@ export const Accordion = React.forwardRef(
                 ref={ref}
                 {...props}
                 open={isOpen}
-                role="region"
-                aria-labelledby="accordion-summary"
             >
-                <summary
-                    role="button"
-                    tabIndex={0}
-                    aria-controls="accordion-content"
-                    aria-expanded={isOpen}
-                >
+                <summary>
                     {typeof summary === "string" ? <Text margin="none">{summary}</Text> : summary}
                 </summary>
                 {children}
