@@ -123,7 +123,6 @@ export default defineConfig({
     resolve : {
         alias : {
             "$"           : path.resolve(__dirname, "./src"),
-            "$colour"     : path.resolve(__dirname, "./src/colour/colour"),
             "$components" : path.resolve(__dirname, "./src/components"),
             "$element"    : path.resolve(__dirname, "./src/components/Element/index"),
             "$hooks"      : path.resolve(__dirname, "./src/hooks"),
@@ -137,7 +136,7 @@ export default defineConfig({
     },
     build   : {
         minify        : "esbuild",
-        cssMinify     : false,
+        cssMinify     : true,
         sourcemap     : true,
         lib           : {
             entry    : input,
@@ -150,7 +149,6 @@ export default defineConfig({
                     format         : "es",
                     entryFileNames : "[name].js",
                     assetFileNames : "index.[ext]",
-                    banner         : `"use client;"`,
                 },
             ],
             external : [

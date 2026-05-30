@@ -32,7 +32,6 @@
     "scripts"              : {
         "watch"            : "vite build --watch",
         "build"            : "tsc && vite build && pnpm exec tsx src/scripts/generateSchema.ts",
-        "build:umd"        : "tsc && vite build -c vite.config.umd.js",
         "build:schema"     : "pnpm exec tsx src/scripts/generateSchema.ts",
         "tree-shake"       : "agadoo",
         "test"             : "echo \"Error: no test specified\" && exit 1",
