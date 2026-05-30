@@ -83,6 +83,12 @@ const TooltipDocs = () => {
                     Each tooltip is its own native popover (popover API), so there’s no shared DOM node, portal,
                     or JavaScript positioning math.
                 </Text>
+
+                <Text>
+                    Built on the popover API and CSS anchor positioning — both fairly recent browser features, so
+                    check support if you target older browsers. The optional <code>zIndex</code> prop is accepted but
+                    rarely needed, since popovers render in the browser’s top layer.
+                </Text>
             </Div>
 
             {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}

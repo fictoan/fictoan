@@ -825,6 +825,15 @@ const GettingStarted = () => {
                         />
 
                         <Text marginBottom="micro">
+                            Fictoan&rsquo;s bundled CSS is wrapped in an <code>@layer fictoan</code> cascade layer.
+                            Because your own styles live outside any layer, they automatically beat Fictoan&rsquo;s
+                            component styles in cascade conflicts — so you can override almost anything with a plain CSS
+                            rule, with no <code>!important</code> and no specificity battles. The responsive utility
+                            classes (e.g. <code>show-only-on-mobile</code>) keep <code>!important</code> on purpose, so
+                            those still win.
+                        </Text>
+
+                        <Text marginBottom="micro">
                             In your content files, just import the components you need at the top, and use them inside
                             the return function like so—
                         </Text>

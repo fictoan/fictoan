@@ -81,6 +81,10 @@ const LayoutDocs = () => {
                                 the Row&rsquo;s own rendered width — not the viewport — so a Portion in a
                                 narrow sidebar stacks the same way it would on a phone.
                             </li>
+                            <li>
+                                A Row is always horizontally centred and caps its content at 2400px — pass{" "}
+                                <code>allowUltraWide</code> to lift that cap on very wide screens.
+                            </li>
                         </ul>
                     </Portion>
                 </Row>

@@ -107,6 +107,11 @@ const [isOpen, setIsOpen] = useState(false);
                     <Text>
                         You can add multiple Drawers on a page with unique IDs.
                     </Text>
+
+                    <Text>
+                        The drawer floats <code>8px</code> (<code>var(--nano)</code>) off the viewport edges on all
+                        sides rather than sitting flush; <code>size</code> sets its length within that gutter.
+                    </Text>
                 </Div>
 
                 {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
@@ -155,7 +160,7 @@ const [isOpen, setIsOpen] = useState(false);
                             ]}
                             value={size}
                             onChange={(value) => setSize(value)}
-                            helpText="Width (for left/right) or height (for top/bottom) of the drawer."
+                            helpText="Width (for left/right) or height (for top/bottom). The scale runs from nano (smallest) to huge."
                             marginBottom="micro"
                         />
 

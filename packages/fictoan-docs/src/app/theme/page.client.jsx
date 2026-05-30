@@ -92,6 +92,13 @@ const ThemeDocs = () => {
                             rendered, and that would cause it have no context of the themes.
                         </Text>
                     </Callout>
+
+                    <Text marginTop="micro" marginBottom="micro">
+                        Switching themes crossfades automatically — <code>ThemeProvider</code> wraps the change in the
+                        browser&rsquo;s View Transitions API, so you get a smooth fade between themes without writing any
+                        animation CSS. Browsers without the API switch instantly, and the crossfade is skipped for users
+                        with <code>prefers-reduced-motion: reduce</code>.
+                    </Text>
                 </Portion>
             </Row>
 

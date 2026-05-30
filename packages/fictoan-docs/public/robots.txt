@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# AI-facing resources
+# llms.txt:         https://fictoan.io/llms.txt
+# Component schema: https://fictoan.io/fictoan-schema.json
