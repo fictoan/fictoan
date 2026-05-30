@@ -9,7 +9,7 @@ import { Element } from "$element";
 import "./accordion.css";
 
 // OTHER ===============================================================================================================
-import { Text } from "$/components";
+import { Text } from "$components/Typography";
 
 export interface AccordionCustomProps {
     isOpen   ? : boolean;

@@ -137,20 +137,27 @@ export default defineConfig({
     build   : {
         minify        : "esbuild",
         cssMinify     : true,
+        // Keep all CSS in one dist/index.css (consumers import it once, and the
+        // post-build @layer / Turbopack-fix plugins operate on that single file).
+        cssCodeSplit  : false,
         sourcemap     : true,
         lib           : {
-            entry    : input,
-            name     : pkg.name,
-            fileName : "index",
+            entry   : input,
+            formats : [ "es" ],
         },
         rollupOptions : {
-            output   : [
-                {
-                    format         : "es",
-                    entryFileNames : "[name].js",
-                    assetFileNames : "index.[ext]",
-                },
-            ],
+            output   : {
+                format              : "es",
+                // One JS file per source module so a consumer's bundler can drop
+                // the components they don't import. Nothing is removed from the
+                // package — every component, prop, value, and the schema still
+                // ship in full; this only changes what the CONSUMER's final
+                // bundle ends up including.
+                preserveModules     : true,
+                preserveModulesRoot : "src",
+                entryFileNames      : "[name].js",
+                assetFileNames      : "index.[ext]",
+            },
             external : [
                 ...Object.keys(pkg.peerDependencies),
                 "react/jsx-runtime",

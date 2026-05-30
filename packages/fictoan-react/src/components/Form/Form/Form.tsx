@@ -9,7 +9,7 @@ import { Element } from "$element";
 import "./form.css";
 
 // OTHER ===============================================================================================================
-import { Callout } from "$/components";
+import { Callout } from "$components/Callout";
 import { FormFieldsConfig, generateFormThroughConfig } from "./FormGenerator";
 
 // prettier-ignore

@@ -9,7 +9,7 @@ import { Element } from "$element";
 import "./breadcrumbs.css";
 
 // OTHER ===============================================================================================================
-import { Text } from "$/components";
+import { Text } from "$components/Typography";
 
 export type BreadcrumbsElementType = HTMLDivElement;
 

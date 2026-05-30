@@ -12,8 +12,7 @@
     "homepage"             : "https://fictoan.io",
     "type"                 : "module",
     "sideEffects"          : [
-        "./src/styles/*.css",
-        "./src/components/**/*.css"
+        "**/*.css"
     ],
     "files"                : [
         "dist"

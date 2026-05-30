@@ -9,8 +9,8 @@ import { Element } from "$element";
 import "./CodeBlock.css";
 
 // OTHER ===============================================================================================================
-import { Badge } from "$/components";
-import { Button } from "$/components";
+import { Badge } from "$components/Badge";
+import { Button } from "$components/Button";
 
 interface PrismType {
     languages : { [key : string] : any };
