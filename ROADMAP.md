@@ -95,15 +95,14 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
   `tabletLandscapeSpan="7"` silently got no `grid-column: span 7` in 3 of 4 breakpoint bands. Fixed by deleting the
   single space in those three rules (verified against the span-6 twins, which build correctly). The base digit
   selectors' trailing spaces (before the block brace) are harmless and were left alone.
-- [ ] **ThemeProvider SSR un-gate + docs prerender-safety** *(paired effort — attempted, reverted)* —
-  `ThemeProvider.tsx:114` renders `{shouldRender && children}` where `shouldRender` starts `false` and only flips in a
-  post-mount effect, so server/SSG render emits an empty `data-theme-provider` div, blanking the *entire* wrapped app
-  (incl. the docs) — a full SSR/SEO outage. The library fix is small (render children unconditionally + a pre-hydration
-  no-flash inline script replicating `getStorageKey()`; optional `nonce` for strict CSP). **But it can't land alone:**
-  the gate had made the docs effectively client-only, so un-gating surfaces a *cascade* of pre-existing prerender bugs
-  in the docs — render-time `getComputedStyle` in `useThemeVariables` (28 pages), `cssVariablesList is not defined` on
-  `/template`, etc. Land as one effort: the ~10-line library un-gate **plus** a docs prerender-safety pass (guard the
-  theme-config utils + audit every prerendered page). Reverted for now to keep the docs build/CI green.
+- [x] **ThemeProvider SSR un-gate + docs prerender-safety** — un-gated ThemeProvider (render children unconditionally +
+  a pre-hydration no-flash inline script replicating `getStorageKey()`, falling back to `currentTheme`; optional `nonce`
+  prop for strict CSP), fixing the SSR/SEO blackout where server/SSG rendered an empty `data-theme-provider` div. The
+  docs had to be made prerender-safe to land it — the feared cascade was bounded to two fixes: guarded
+  `useThemeVariables`' render-time `getComputedStyle` (falls back to declared defaults on the server) and the
+  `/template` scaffold's undefined `cssVariablesList`. Audited the rest — all other browser-API use is in
+  effects/handlers. Verified: the static export now ships ~20k chars of real content + the inline script; lib + docs
+  build clean.
 - [x] **`fontStyle="sans-serif"` is dead** — Text/Heading emit the class `font-sans-serif` by default, but
   `typography.css` only defined `.font-sans`, so the default font class was a no-op (it only worked via the inherited
   body font). Renamed the rule to `.font-sans-serif` (it was otherwise unused — verified).
