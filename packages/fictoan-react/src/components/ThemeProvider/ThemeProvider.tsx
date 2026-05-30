@@ -40,6 +40,8 @@ export type ThemeProviderElementType = HTMLDivElement;
 export interface ThemeProviderProps extends CommonAndHTMLProps<ThemeProviderElementType> {
     themeList    : string[];
     currentTheme : string;
+    /** Pass your CSP nonce so the no-flash inline script is allowed under a strict `script-src`. */
+    nonce      ? : string;
 }
 
 const getTheme = (key: string, fallback?: string) => {
@@ -54,8 +56,7 @@ const getTheme = (key: string, fallback?: string) => {
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const ThemeProvider = React.forwardRef(
-    ({ currentTheme, themeList, children, ...props }: ThemeProviderProps, ref: React.Ref<ThemeProviderElementType>) => {
-        const [shouldRender, setShouldRender] = useState<boolean>(false);
+    ({ currentTheme, themeList, children, nonce, ...props }: ThemeProviderProps, ref: React.Ref<ThemeProviderElementType>) => {
         const [themeState, setThemeState] = useState<string>(() =>
             getTheme(getStorageKey()) || currentTheme);
 
@@ -91,16 +92,13 @@ export const ThemeProvider = React.forwardRef(
                 }
 
                 setThemeState(finalTheme);
-                if (!shouldRender) {
-                    setShouldRender(true);
-                }
                 try {
                     localStorage.setItem(getStorageKey(), finalTheme);
                 } catch (e) {
                     // Unsupported
                 }
             },
-            [themeState, themeList, shouldRender]
+            [themeState, themeList]
         );
 
         useEffect(() => {
@@ -108,10 +106,22 @@ export const ThemeProvider = React.forwardRef(
             setTheme(theme || currentTheme);
         }, [currentTheme, setTheme]);
 
+        // No-flash pre-hydration script: set the persisted theme class on <html>
+        // before first paint, so the (un-gated, SSR-rendered) children don't flash
+        // the default theme. Mirrors getStorageKey(); falls back to currentTheme.
+        // Inline → strict-CSP consumers should pass a `nonce`. SSR/SSG: runs during
+        // initial HTML parse; pure CSR: a no-op (the mount effect applies the theme).
+        const noFlashScript =
+            `(function(){try{var p=window.location.port,` +
+            `k=window.location.hostname.replace(/\\./g,"-")+(p?"-"+p:"")+"-theme",` +
+            `t=localStorage.getItem(k)||${JSON.stringify(currentTheme)};` +
+            `if(t){document.documentElement.className=t;}}catch(e){}})();`;
+
         return (
             <ThemeContext.Provider value={[themeState, setTheme]}>
+                <script nonce={nonce} dangerouslySetInnerHTML={{ __html: noFlashScript }} />
                 <Element<ThemeProviderElementType> as="div" data-theme-provider ref={ref} {...props}>
-                    {shouldRender && children}
+                    {children}
                 </Element>
             </ThemeContext.Provider>
         );

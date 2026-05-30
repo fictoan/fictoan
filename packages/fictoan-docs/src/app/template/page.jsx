@@ -106,7 +106,7 @@ const ComponentDocs = () => {
                                 <Portion>
                                     <CodeBlock
                                         withSyntaxHighlighting
-                                        source={cssVariablesList}
+                                        source=""
                                         language="css"
                                         showCopyButton
                                         marginBottom="micro"

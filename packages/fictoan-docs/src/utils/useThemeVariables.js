@@ -33,12 +33,14 @@ export const useThemeVariables = (variablesStructure, targetElementId = "interac
     };
 
     function getDefaultVariableValues() {
-        // Read from the root element initially, but we'll apply changes only to the target
-        const root = document.documentElement;
-        const styles = getComputedStyle(root);
+        // Read from the root element initially, but we'll apply changes only to the target.
+        // Guard for SSR/prerender (getComputedStyle/document are browser-only): fall back to
+        // the declared defaults; the client reads the real computed values after mount.
+        const canRead = typeof window !== "undefined" && typeof document !== "undefined";
+        const styles = canRead ? getComputedStyle(document.documentElement) : null;
 
         return Object.entries(variablesStructure).reduce((acc, [key, varStruct]) => {
-            const computedValue = styles.getPropertyValue(key).trim();
+            const computedValue = styles ? styles.getPropertyValue(key).trim() : "";
             let value, unit;
 
             if (varStruct.type === "value-unit") {
