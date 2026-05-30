@@ -17,7 +17,6 @@
     font-size        : 0.875rem;
     line-height      : 1.4;
     word-wrap        : break-word;
-    pointer-events   : none;
 
     /* Smooth fade in/out via popover + @starting-style + allow-discrete */
     opacity    : 0;
@@ -25,6 +24,11 @@
         opacity 0.2s ease-in-out,
         overlay 0.2s ease-in-out allow-discrete,
         display 0.2s ease-in-out allow-discrete;
+}
+
+/* Hover/focus tooltips ignore pointer events; click tooltips stay interactive */
+[data-tooltip]:not([data-show-on="click"]) {
+    pointer-events : none;
 }
 
 [data-tooltip]:popover-open {

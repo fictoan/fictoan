@@ -90,7 +90,7 @@ export const RadioGroup = React.forwardRef(
                 >
                     {options.map((option, index) => {
                         const { id: optionId, value: optionValue, label: optionLabel, ...optionProps } = option;
-                        const finalId = optionId || `${id}-option-${index}`;
+                        const finalId = optionId || `${finalGroupId}-option-${index}`;
                         const isChecked = value ? value === optionValue : defaultValue === optionValue;
 
                         return (

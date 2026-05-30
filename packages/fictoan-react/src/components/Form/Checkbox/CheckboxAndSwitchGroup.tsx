@@ -146,7 +146,7 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
                 >
                     {options.map((option, index) => {
                         const {id : optionId, value : optionValue, label : optionLabel, ...optionProps} = option;
-                        const finalId = optionId || `${id}-option-${index}`;
+                        const finalId = optionId || `${finalGroupId}-option-${index}`;
                         const isChecked = selectedValues.includes(optionValue);
 
                         return (
@@ -271,7 +271,7 @@ export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
                 >
                     {options.map((option, index) => {
                         const {id : optionId, value : optionValue, label : optionLabel, ...optionProps} = option;
-                        const finalId = optionId || `${id}-option-${index}`;
+                        const finalId = optionId || `${finalGroupId}-option-${index}`;
                         const isChecked = selectedValues.includes(optionValue);
 
                         return (

@@ -214,7 +214,7 @@ export const RadioTabGroup = React.forwardRef<HTMLDivElement, RadioTabGroupProps
 
                             {options.map((option, index) => {
                                 const { id: optionId, ...optionProps } = option;
-                                const finalId = optionId || `${id}-option-${index}`;
+                                const finalId = optionId || `${finalGroupId}-option-${index}`;
 
                                 return (
                                     <React.Fragment key={finalId}>

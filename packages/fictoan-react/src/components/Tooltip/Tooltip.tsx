@@ -100,6 +100,7 @@ export const Tooltip = ({
             id={tooltipId}
             data-tooltip
             data-position={position}
+            data-show-on={showOn}
             popover="manual"
             role="tooltip"
             style={{
