@@ -16,15 +16,14 @@
         "./src/components/**/*.css"
     ],
     "files"                : [
-        "dist",
-        "dist/types"
+        "dist"
     ],
     "main"                 : "./dist/index.js",
     "module"               : "./dist/index.js",
-    "types"                : "./dist/types/index.d.ts",
+    "types"                : "./dist/index.d.ts",
     "exports"              : {
         "."              : {
-            "types"   : "./dist/types/index.d.ts",
+            "types"   : "./dist/index.d.ts",
             "default" : "./dist/index.js"
         },
         "./package.json" : "./package.json",

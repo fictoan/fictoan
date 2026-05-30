@@ -172,7 +172,7 @@
             flex        : 0 0 25%
         }
 
-        &.\000037 -on-mobile {
+        &.\000037-on-mobile {
             grid-column : span 7;
             flex        : 0 0 29.1667%
         }
@@ -309,7 +309,7 @@
             flex        : 0 0 25%
         }
 
-        &.\000037 -on-tablet-portrait {
+        &.\000037-on-tablet-portrait {
             grid-column : span 7;
             flex        : 0 0 29.1667%
         }
@@ -447,7 +447,7 @@
             flex        : 0 0 25%
         }
 
-        &.\000037 -on-tablet-landscape {
+        &.\000037-on-tablet-landscape {
             grid-column : span 7;
             flex        : 0 0 29.1667%
         }

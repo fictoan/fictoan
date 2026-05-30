@@ -71,8 +71,8 @@ export const componentMeta : Record<string, ComponentMeta> = {
         example     : `<InputField\n    label="Email"\n    type="email"\n    value={email}\n    onChange={setEmail}\n    required\n/>`,
         tips        : [
             "Pass either an `onChange` that takes a value, or a standard React change event handler — both shapes are supported.",
-            "Use `iconLeft` / `iconRight` for inline icons; `helperText` for descriptions below the field.",
-            "For validation, pass `errorText` or `successText`.",
+            "Use `innerIconLeft` / `innerIconRight` for inline icons; `helpText` for descriptions below the field.",
+            "For validation, pass `errorText` for the message and set `validationState` to `valid` or `invalid`.",
         ],
     },
 
@@ -88,15 +88,15 @@ export const componentMeta : Record<string, ComponentMeta> = {
 
     Modal : {
         description : "Overlay dialog. Built on the native popover API; manages focus, backdrop, and ESC handling.",
-        example     : `<Modal\n    id="confirm-modal"\n    openWhen={isOpen}\n    onClose={() => setIsOpen(false)}\n>\n    <Heading4>Confirm action</Heading4>\n    <Text>Are you sure?</Text>\n</Modal>`,
+        example     : `<Modal\n    id="confirm-modal"\n    isOpen={isOpen}\n    onClose={() => setIsOpen(false)}\n>\n    <Heading4>Confirm action</Heading4>\n    <Text>Are you sure?</Text>\n</Modal>`,
         tips        : [
-            "Mount once near the root; toggle visibility with `openWhen`. Don't conditionally render the Modal itself.",
+            "Mount once near the root; toggle visibility with `isOpen`. Don't conditionally render the Modal itself.",
         ],
     },
 
     Drawer : {
         description : "Side-anchored overlay panel. Common for navigation, filters, settings.",
-        example     : `<Drawer\n    id="filters"\n    openWhen={isOpen}\n    position="right"\n    size="medium"\n    onCloseCallback={() => setIsOpen(false)}\n>\n    Filter content\n</Drawer>`,
+        example     : `<Drawer\n    id="filters"\n    isOpen={isOpen}\n    position="right"\n    size="medium"\n    onClose={() => setIsOpen(false)}\n>\n    Filter content\n</Drawer>`,
     },
 
     Tabs : {
