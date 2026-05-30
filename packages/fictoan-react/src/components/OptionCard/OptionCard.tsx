@@ -291,7 +291,7 @@ export const OptionCard: React.FC<OptionCardProps> = ({ id, children, disabled =
             role="button"
             tabIndex={disabled ? -1 : 0}
             aria-disabled={disabled}
-            aria-selected={isSelected(id)}
+            aria-pressed={isSelected(id)}
             classNames={classNames}
             onClick={handleClick}
             onKeyDown={handleKeyDown}

@@ -27,6 +27,13 @@
     cursor   : pointer;
 }
 
+/* The file input is visually hidden (opacity:0), so surface keyboard focus on
+   the drop area itself (WCAG 2.4.7). */
+[data-file-upload-area]:has(.file-input:focus-visible) .file-upload-area {
+    outline        : var(--global-focus-width) solid var(--global-focus-colour);
+    outline-offset : var(--global-focus-offset);
+}
+
 .file-upload-content {
     display         : flex;
     flex-direction  : column;

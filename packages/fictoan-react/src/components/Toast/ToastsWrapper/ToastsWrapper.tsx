@@ -39,8 +39,6 @@ export const ToastsWrapper = React.forwardRef(
                 ref={ref}
                 classNames={[anchor]}
                 aria-label="Toasts"
-                aria-relevant="additions removals"
-                role="log"
                 {...props}
             >
                 {children}

@@ -243,6 +243,7 @@ const SingleThumbRange : React.FC<SingleThumbRangeInternalProps> = ({
                 <Div data-range-meta>
                     <InputLabel
                         className="range-label"
+                        id={`${finalId}-label`}
                         label={label}
                         htmlFor={finalId}
                     />
@@ -494,6 +495,7 @@ const DualThumbRange : React.FC<DualThumbRangeInternalProps> = ({
                 <Div data-range-meta>
                     <InputLabel
                         className="range-label"
+                        id={`${finalId}-label`}
                         label={label}
                         htmlFor={finalId}
                     />
