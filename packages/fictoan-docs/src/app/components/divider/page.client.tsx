@@ -72,6 +72,11 @@ const DividerDocs = () => {
                 <Text>
                     The <code>label</code> prop sets an accessible aria-label for screen readers.
                 </Text>
+
+                <Text>
+                    With horizontal margins, a Divider aligns to the parent Row&rsquo;s content frame (capped and
+                    centred at 2400px) rather than stretching full-width on ultra-wide screens.
+                </Text>
             </Div>
 
             {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}

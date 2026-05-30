@@ -10,7 +10,7 @@ import "./checkbox-and-switch-group.css";
 
 // OTHER ===============================================================================================================
 import { Checkbox, } from "./Checkbox";
-import { FormItem } from "../FormItem/FormItem";
+import { FormItem, deriveAriaIds } from "../FormItem/FormItem";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 import { Switch } from "./Switch";
 
@@ -118,10 +118,14 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
             classNames.push(`label-first`);
         }
 
+        const reactId = React.useId();
+        const finalGroupId = id || `checkbox-group-${reactId.replace(/:/g, "")}`;
+        const { describedBy } = deriveAriaIds(finalGroupId, helpText, errorText);
+
         return (
             <FormItem
                 label={label}
-                htmlFor={id}
+                htmlFor={finalGroupId}
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
@@ -130,15 +134,19 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
                     as="div"
                     data-checkbox-group
                     ref={ref}
+                    id={finalGroupId}
                     classNames={classNames}
                     role="group"
                     aria-label={label}
+                    aria-invalid={Boolean(errorText) || undefined}
+                    aria-required={required}
+                    aria-describedby={describedBy}
                     style={columns ? {gridTemplateColumns : `repeat(${columns}, 1fr)`} : undefined}
                     {...props}
                 >
                     {options.map((option, index) => {
                         const {id : optionId, value : optionValue, label : optionLabel, ...optionProps} = option;
-                        const finalId = optionId || `${id}-option-${index}`;
+                        const finalId = optionId || `${finalGroupId}-option-${index}`;
                         const isChecked = selectedValues.includes(optionValue);
 
                         return (
@@ -235,10 +243,14 @@ export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
             classNames.push(`label-first`);
         }
 
+        const reactId = React.useId();
+        const finalGroupId = id || `switch-group-${reactId.replace(/:/g, "")}`;
+        const { describedBy } = deriveAriaIds(finalGroupId, helpText, errorText);
+
         return (
             <FormItem
                 label={label}
-                htmlFor={id}
+                htmlFor={finalGroupId}
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
@@ -247,15 +259,19 @@ export const SwitchGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
                     as="div"
                     data-switch-group
                     ref={ref}
+                    id={finalGroupId}
                     classNames={classNames}
                     role="group"
                     aria-label={label}
+                    aria-invalid={Boolean(errorText) || undefined}
+                    aria-required={required}
+                    aria-describedby={describedBy}
                     style={columns ? {gridTemplateColumns : `repeat(${columns}, 1fr)`} : undefined}
                     {...props}
                 >
                     {options.map((option, index) => {
                         const {id : optionId, value : optionValue, label : optionLabel, ...optionProps} = option;
-                        const finalId = optionId || `${id}-option-${index}`;
+                        const finalId = optionId || `${finalGroupId}-option-${index}`;
                         const isChecked = selectedValues.includes(optionValue);
 
                         return (

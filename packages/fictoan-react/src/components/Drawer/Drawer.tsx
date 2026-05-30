@@ -6,9 +6,6 @@ import { CommonAndHTMLProps, SpacingTypes } from "../Element/constants";
 import { Div } from "$tags";
 import { Element } from "$element";
 
-// HOOKS ===============================================================================================================
-import { useClickOutside } from "$hooks/UseClickOutside";
-
 // STYLES ==============================================================================================================
 import "./drawer.css";
 
@@ -21,6 +18,9 @@ export interface DrawerCustomProps {
     isDismissible       ? : boolean;
     showOverlay         ? : boolean;
     blurOverlay         ? : boolean;
+    /** @deprecated Click-outside-to-close is governed by `isDismissible` via the
+     *  popover API: when dismissible, both ESC and backdrop click close the
+     *  drawer. Splitting the two is no longer supported. */
     closeOnClickOutside ? : boolean;
     label               ? : string;
     description         ? : string;
@@ -46,7 +46,7 @@ export const Drawer = React.forwardRef(
             isDismissible = true,
             showOverlay = true,
             blurOverlay = false,
-            closeOnClickOutside = true,
+            closeOnClickOutside : _closeOnClickOutside,
             zIndex,
             label,
             description,
@@ -55,147 +55,95 @@ export const Drawer = React.forwardRef(
         } : DrawerProps,
         ref : React.Ref<DrawerElementType>,
     ) => {
-        const drawerId = `${id}`;
+        const drawerId      = `${id}`;
         const descriptionId = description ? `${drawerId}-description` : undefined;
-        const drawerRef = useRef<HTMLDivElement>(null);
-        const effectiveRef = (ref || drawerRef) as React.RefObject<HTMLDivElement>;
+        const drawerRef     = useRef<HTMLDivElement>(null);
+        const effectiveRef  = (ref as React.MutableRefObject<HTMLDivElement | null>) || drawerRef;
 
-        // Build class names
         const drawerClasses : string[] = [
             "drawer",
             position,
             size,
-            ...(isOpen ? [ "open" ] : []),
             ...(showOverlay ? [ "with-overlay" ] : []),
             ...(blurOverlay ? [ "blur-overlay" ] : []),
             ...classNames,
         ];
 
-        // Handle open/close state declaratively
+        // Sync isOpen prop to popover state. The popover API handles backdrop
+        // click and ESC dismissal natively; we only call showPopover/hidePopover.
         useEffect(() => {
             const drawer = effectiveRef.current;
-            const overlay = document.querySelector(`[data-drawer-overlay-for="${drawerId}"]`) as HTMLElement;
+            if (!drawer) return;
 
-            if (isOpen) {
-                // Show drawer
-                drawer?.classList.add("open");
-                drawer?.classList.remove("closing");
-                drawer?.focus();
-
-                // Show overlay
-                if (overlay) {
-                    overlay.classList.add("visible");
-                }
-
-                // Prevent body scroll
-                document.body.style.overflow = "hidden";
-            } else {
-                // Hide drawer
-                if (drawer?.classList.contains("open")) {
-                    drawer.classList.add("closing");
-                    drawer.classList.remove("open");
-
-                    // Hide overlay
-                    if (overlay) {
-                        overlay.classList.remove("visible");
-                    }
-
-                    // Restore body scroll
-                    document.body.style.overflow = "";
-                }
+            if (isOpen && !drawer.matches(":popover-open")) {
+                drawer.showPopover();
+                // Focus the dismiss button or the drawer itself for keyboard users.
+                drawer.focus();
+            } else if (!isOpen && drawer.matches(":popover-open")) {
+                drawer.hidePopover();
             }
+        }, [ isOpen, effectiveRef ]);
 
-            // Cleanup on unmount
-            return () => {
-                document.body.style.overflow = "";
-            };
-        }, [ isOpen, drawerId, effectiveRef ]);
-
-        // Handle Escape key
+        // When the popover closes externally (ESC, backdrop click), keep React
+        // state in sync by firing onClose.
         useEffect(() => {
-            const handleEscape = (e : KeyboardEvent) => {
-                if (e.key === "Escape" && isDismissible && isOpen && onClose) {
+            const drawer = effectiveRef.current;
+            if (!drawer) return;
+
+            const handleToggle = (e : Event) => {
+                const toggleEvent = e as ToggleEvent;
+                if (toggleEvent.newState === "closed" && isOpen && onClose) {
                     onClose();
                 }
             };
 
-            document.addEventListener("keydown", handleEscape);
-            return () => document.removeEventListener("keydown", handleEscape);
-        }, [ isDismissible, isOpen, onClose ]);
-
-        // Handle click outside
-        useClickOutside(effectiveRef, () => {
-            if (closeOnClickOutside && isDismissible && isOpen && onClose) {
-                onClose();
-            }
-        });
-
-        // Handle animation end
-        const handleAnimationEnd = (e : React.AnimationEvent) => {
-            if (e.animationName.includes("slide-out") || e.animationName.includes("fade-out")) {
-                e.currentTarget.classList.remove("closing");
-            }
-        };
+            drawer.addEventListener("toggle", handleToggle);
+            return () => drawer.removeEventListener("toggle", handleToggle);
+        }, [ isOpen, onClose, effectiveRef ]);
 
         return (
-            <>
-                {/* OVERLAY */}
-                {showOverlay && (
-                    <Div
-                        className={`drawer-overlay ${blurOverlay ? "blur" : ""} ${isOpen ? "visible" : ""}`}
-                        data-drawer-overlay-for={id}
-                        aria-hidden="true"
-                        onClick={closeOnClickOutside && isDismissible && onClose ? onClose : undefined}
-                        style={{zIndex : zIndex ?? 10000 - 1}}
-                    />
+            <Element<DrawerElementType>
+                as="div"
+                id={drawerId}
+                data-drawer
+                ref={effectiveRef}
+                classNames={drawerClasses}
+                popover={isDismissible ? "auto" : "manual"}
+                role="dialog"
+                aria-modal="true"
+                aria-label={label || "Drawer"}
+                aria-describedby={descriptionId}
+                tabIndex={-1}
+                style={zIndex !== undefined ? { zIndex } : undefined}
+                {...props}
+            >
+                {isDismissible && onClose && (
+                    <button
+                        type="button"
+                        className="drawer-dismiss-button"
+                        onClick={onClose}
+                        aria-label="Close drawer"
+                    >
+                        &times;
+                    </button>
                 )}
 
-                {/* DRAWER */}
-                <Element<DrawerElementType>
-                    as="div"
-                    id={drawerId}
-                    data-drawer
-                    ref={effectiveRef}
-                    classNames={drawerClasses}
-                    onAnimationEnd={handleAnimationEnd}
-                    role="dialog"
-                    aria-modal="true"
-                    aria-label={label || "Drawer"}
-                    aria-describedby={descriptionId}
-                    tabIndex={-1}
-                    style={{zIndex : zIndex ?? 10000}}
-                    {...props}
+                <Div
+                    className="drawer-content"
+                    role="document"
+                    padding={padding}
+                    bgColor={bgColor}
+                    bgColour={bgColour}
                 >
-                    {/* DISMISS BUTTON */}
-                    {isDismissible && onClose && (
-                        <button
-                            className="drawer-dismiss-button"
-                            onClick={onClose}
-                            aria-label="Close drawer"
-                            tabIndex={0}
-                        >
-                            &times;
-                        </button>
+                    {description && (
+                        <div id={descriptionId} className="sr-only">
+                            {description}
+                        </div>
                     )}
 
-                    <Div
-                        className="drawer-content"
-                        role="document"
-                        padding={padding}
-                        bgColor={bgColor}
-                        bgColour={bgColour}
-                    >
-                        {/* SR-ONLY DESCRIPTION */}
-                        {description && (
-                            <div id={descriptionId} className="sr-only">
-                                {description}
-                            </div>
-                        )}
-
-                        {children}
-                    </Div>
-                </Element>
-            </>
+                    {children}
+                </Div>
+            </Element>
         );
     },
 );

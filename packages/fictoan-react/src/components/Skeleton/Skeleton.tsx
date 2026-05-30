@@ -138,7 +138,7 @@ export const SkeletonGroup = React.forwardRef((
                 ref={ref}
                 data-skeleton-group
                 classNames={groupClassNames}
-                role="alert"
+                role="status"
                 aria-busy="true"
                 aria-label={loadingLabel}
                 {...props}

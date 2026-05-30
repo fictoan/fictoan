@@ -97,6 +97,11 @@ const [isOpen, setIsOpen] = useState(false);
                     <Text>
                         The <code>isDismissible</code> prop shows a close button and allows Escape key dismissal.
                     </Text>
+
+                    <Text>
+                        Set <code>label</code> and <code>description</code> to give the dialog an accessible name and
+                        description for screen readers.
+                    </Text>
                 </Div>
 
                 {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}

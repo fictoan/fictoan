@@ -79,7 +79,6 @@ export const Badge = React.forwardRef(
                 data-has-action={hasAction || undefined}
                 ref={ref}
                 classNames={classNames}
-                role="status"
                 aria-label={(typeof children === "string" ? children : undefined)}
                 {...props}
             >

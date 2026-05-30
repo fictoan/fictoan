@@ -33,10 +33,12 @@ export const RootLayoutClient = ({children} : { children : ReactNode }) => {
                 httpEquiv="Content-Security-Policy"
                 content="script-src 'self' 'unsafe-eval' 'unsafe-inline';"
             />
+            <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
+            <link rel="alternate" type="application/json" href="/fictoan-schema.json" title="Fictoan component schema" />
         </head>
 
         <body>
-        <ThemeProvider themeList={listOfThemes} currentTheme="theme-light">
+        <ThemeProvider themeList={listOfThemes} currentTheme="theme-light" storageKey="fictoan-docs">
             <Sidebar
                 sidebarState={sidebarState}
                 setSidebarState={setSidebarState}

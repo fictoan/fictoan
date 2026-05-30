@@ -53,8 +53,6 @@ export const NotificationsWrapper = React.forwardRef(
                 ref={ref}
                 classNames={classNames}
                 aria-label={label || "Notifications"}
-                aria-relevant="additions removals"
-                role="log"
                 {...props}
             >
                 {children}

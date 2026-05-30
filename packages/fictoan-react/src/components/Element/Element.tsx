@@ -8,8 +8,13 @@ import { createClassName } from "$utils/classNames";
 import { ElementProps } from "./constants";
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Internally typed against HTMLElement (the underlying forwardRef call can
+// only carry one ref type). The exported cast below re-types `Element` as a
+// generic component so `<Element<HTMLButtonElement>>` actually flows a button-
+// typed ref through to consumers — `forwardRef` strips the generic K from the
+// outer signature without this cast.
 export const Element = React.forwardRef(
-    <K extends {}>(
+    <K extends HTMLElement>(
         {
             as : Component = "div",
             role,
@@ -22,7 +27,7 @@ export const Element = React.forwardRef(
             ariaLabel ? : string;
             tabIndex  ? : number;
             onKeyDown ? : (event: React.KeyboardEvent) => void;
-        }, ref: React.LegacyRef<HTMLElement>
+        }, ref: React.Ref<HTMLElement>
     ) => {
         const {
             classNames = [],
@@ -84,8 +89,6 @@ export const Element = React.forwardRef(
             style,
             ...minimalProps
         } = props;
-
-        const {className : _, classNames : __, ...sanitizedProps} = props;
 
         // Build style object with opacity CSS custom properties
         const computedStyle = {
@@ -162,5 +165,13 @@ export const Element = React.forwardRef(
             />
         );
     },
-) as <K extends {}>(props : ElementProps<K> & { ref? : React.LegacyRef<HTMLElement> }) => React.ReactElement;
+) as <K extends HTMLElement = HTMLElement>(
+    props: ElementProps<K> & {
+        role      ? : string;
+        ariaLabel ? : string;
+        tabIndex  ? : number;
+        onKeyDown ? : React.KeyboardEventHandler<K>;
+        ref       ? : React.Ref<K>;
+    },
+) => React.ReactElement;
 (Element as any).displayName = "Element";

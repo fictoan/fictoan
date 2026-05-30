@@ -81,6 +81,16 @@ export const SiteFooter = () => {
                                 <Text size="small">Base element</Text>
                             </Link>
                         </li>
+                        <li>
+                            <a href="/llms.txt" target="_blank" rel="noopener noreferrer">
+                                <Text size="small">llms.txt</Text>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/fictoan-schema.json" target="_blank" rel="noopener noreferrer">
+                                <Text size="small">JSON schema (for AI)</Text>
+                            </a>
+                        </li>
                     </ul>
 
                     <Heading6 weight="600" marginBottom="nano">Community</Heading6>

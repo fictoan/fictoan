@@ -65,16 +65,9 @@ export const NotificationItem = ({
         return () => clearTimeout(fallbackTimer);
     }, [isExiting, onClose]);
 
-    const handleDismissClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const handleDismissClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         setIsExiting(true);
-    };
-
-    const handleKeyDown = (event: React.KeyboardEvent) => {
-        if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            setIsExiting(true);
-        }
     };
 
     const handleTransitionEnd = () => {
@@ -103,15 +96,14 @@ export const NotificationItem = ({
             </div>
 
             {isDismissible && (
-                <Div
+                <button
+                    type="button"
                     className="dismiss-button"
                     onClick={handleDismissClick}
-                    onKeyDown={handleKeyDown}
                     aria-label="Dismiss notification"
-                    tabIndex={0}
                 >
                     <span className="sr-only">Close notification</span>
-                </Div>
+                </button>
             )}
         </Element>
     );

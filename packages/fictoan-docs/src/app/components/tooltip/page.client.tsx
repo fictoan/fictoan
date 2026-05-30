@@ -75,11 +75,19 @@ const TooltipDocs = () => {
                 </Text>
 
                 <Text>
-                    Automatically repositions to stay within viewport boundaries.
+                    Placement uses CSS anchor positioning; the browser flips to a fallback edge automatically
+                    when there isn’t room — no JavaScript repositioning.
                 </Text>
 
                 <Text>
-                    Uses a singleton pattern—only one tooltip DOM element exists for performance.
+                    Each tooltip is its own native popover (popover API), so there’s no shared DOM node, portal,
+                    or JavaScript positioning math.
+                </Text>
+
+                <Text>
+                    Built on the popover API and CSS anchor positioning — both fairly recent browser features, so
+                    check support if you target older browsers. The optional <code>zIndex</code> prop is accepted but
+                    rarely needed, since popovers render in the browser’s top layer.
                 </Text>
             </Div>
 

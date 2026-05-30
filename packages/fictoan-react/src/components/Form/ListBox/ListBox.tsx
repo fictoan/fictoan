@@ -16,7 +16,7 @@ import "./list-box.css";
 
 // OTHER ===============================================================================================================
 import { Badge } from "../../Badge/Badge";
-import { FormItem } from "../FormItem/FormItem";
+import { FormItem, deriveAriaIds } from "../FormItem/FormItem";
 import { InputField } from "../InputField/InputField";
 import { ListBoxProps, OptionForListBoxProps, ListBoxElementType, ListBoxCustomProps } from "./constants";
 import { Text } from "../../Typography/Text";
@@ -51,27 +51,55 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
         const [isOpen, setIsOpen] = useState(false);
         const [searchValue, setSearchValue] = useState("");
         const [activeIndex, setActiveIndex] = useState(-1);
-        const [selectedOption, setSelectedOption] = useState<OptionForListBoxProps | null>(null);
-        const [selectedOptions, setSelectedOptions] = useState<OptionForListBoxProps[]>([]);
         const [openUpward, setOpenUpward] = useState(false);
-
-        useEffect(() => {
-            if (defaultValue && onChange) {
-                onChange(defaultValue);
-            }
-        }, []);
 
         // Create a memoized version of the combined options
         const allOptions = React.useMemo(() => {
             return [...options];
         }, [options]);
 
-        const dropdownRef = useRef<HTMLSelectElement>(null) as MutableRefObject<HTMLSelectElement>;
+        // Map a value or array of values to the matching option objects.
+        const resolveSelectedOptions = React.useCallback(
+            (val : string | string[] | undefined, opts : OptionForListBoxProps[]) : OptionForListBoxProps[] => {
+                if (val == null || val === "") return [];
+                const values = Array.isArray(val) ? val : [val];
+                return values
+                    .map(v => opts.find(o => o.value === v))
+                    .filter((o) : o is OptionForListBoxProps => o !== undefined);
+            },
+            [],
+        );
+
+        // Internal state for uncontrolled mode. Lazy init from defaultValue so the
+        // displayed selection is correct on first paint — no spurious onChange fires.
+        const isControlled = value !== undefined;
+        const [internalSelectedOptions, setInternalSelectedOptions] = useState<OptionForListBoxProps[]>(
+            () => resolveSelectedOptions(defaultValue, allOptions),
+        );
+
+        // The effective selection: controlled value takes precedence, otherwise internal state.
+        const selectedOptions = isControlled
+            ? resolveSelectedOptions(value, allOptions)
+            : internalSelectedOptions;
+
+        const setSelectedOptions = React.useCallback((next : OptionForListBoxProps[]) => {
+            if (!isControlled) setInternalSelectedOptions(next);
+        }, [ isControlled ]);
+
+        // The list-box wrapper renders as a <div>, not a <select> — the prior
+        // HTMLSelectElement typing was a pre-existing mistake that only got
+        // caught when Element's ref type tightened.
+        const dropdownRef = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement>;
         const searchInputRef = useRef<HTMLInputElement>(null);
         const dropdownMenuRef = useRef<HTMLDivElement>(null);
 
-        const listboxId = id || `listbox-${Math.random().toString(36).substring(2, 9)}`;
+        const reactId = React.useId();
+        const listboxId = id || `listbox-${reactId.replace(/:/g, "")}`;
+        const { describedBy } = deriveAriaIds(listboxId, helpText, errorText);
         const filteredOptions = searchOptions(allOptions, searchValue);
+        const activeOptionId = activeIndex >= 0 && filteredOptions[activeIndex]
+            ? `${listboxId}-option-${filteredOptions[activeIndex].value}`
+            : undefined;
 
         const handleSelectOption = (option: OptionForListBoxProps) => {
             if (option.disabled) return;
@@ -91,7 +119,6 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                 onChange?.(newSelectedOptions.map(opt => opt.value));
             } else {
                 newSelectedOptions = [option];
-                setSelectedOption(option);
                 setSelectedOptions(newSelectedOptions);
                 onChange?.(option.value);
                 setIsOpen(false);
@@ -132,7 +159,6 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                 onChange?.(newSelectedOptions.map(opt => opt.value));
             } else {
                 // For single-select mode, just clear everything
-                setSelectedOption(null);
                 setSelectedOptions([]);
                 onChange?.("");
             }
@@ -140,7 +166,6 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
 
         const handleClearAll = () => {
             // Reset local state for both single and multi-select
-            setSelectedOption(null);
             setSelectedOptions([]);
 
             // Notify parent with empty data
@@ -253,7 +278,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
         return (
             <FormItem
                 label={label}
-                htmlFor={id}
+                htmlFor={listboxId}
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
@@ -272,12 +297,18 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                 >
                     <Div
                         className="list-box-input-wrapper"
+                        id={listboxId}
                         onClick={() => !disabled && setIsOpen(!isOpen)}
                         role="combobox"
                         aria-haspopup="listbox"
                         aria-expanded={isOpen}
                         aria-controls={`${listboxId}-listbox`}
                         aria-owns={`${listboxId}-listbox`}
+                        aria-activedescendant={isOpen ? activeOptionId : undefined}
+                        aria-invalid={Boolean(errorText) || undefined}
+                        aria-required={required}
+                        aria-describedby={describedBy}
+                        aria-disabled={disabled || undefined}
                         tabIndex={disabled ? -1 : 0}
                     >
                         {allowMultiSelect ? (

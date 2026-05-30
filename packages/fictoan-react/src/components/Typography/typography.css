@@ -60,7 +60,7 @@ p {
 
 .font-serif { font-family : var(--font-serif), serif; }
 .font-monospace { font-family : var(--font-monospace), monospace; }
-.font-sans { font-family : var(--font-sans-serif), sans-serif; }
+.font-sans-serif { font-family : var(--font-sans-serif), sans-serif; }
 
 .sub-text {
     font-size: calc(var(--paragraph-font-size) * 0.88);

@@ -31,11 +31,19 @@ const defaultRenderItem = (
         );
     }
 
+    const iconButtonLabels: Record<string, string> = {
+        first    : "Go to first page",
+        previous : "Go to previous page",
+        next     : "Go to next page",
+        last     : "Go to last page",
+    };
+
     const paginationItemProps = {
         type      : "button",
         className : `pagination-item ${selected ? "selected" : ""} ${disabled ? "disabled" : ""}`,
         onClick,
         disabled,
+        ...(iconButtonLabels[type] ? { "aria-label" : iconButtonLabels[type] } : {}),
         ...props,
     };
 
@@ -43,7 +51,7 @@ const defaultRenderItem = (
     switch (type) {
         case "first":
             content = content = (
-                <svg viewBox="0 0 24 24">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
                     <line x1="5" y1="18" x2="5" y2="6" />
                     <polyline points="14 18 9 12 14 6" />
                     <line x1="10" y1="12" x2="19" y2="12" />
@@ -52,7 +60,7 @@ const defaultRenderItem = (
             break;
         case "previous":
             content = (
-                <svg viewBox="0 0 24 24">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
                     <polyline points="12 18 7 12 12 6" />
                     <line x1="8" y1="12" x2="17" y2="12" />
                 </svg>
@@ -60,7 +68,7 @@ const defaultRenderItem = (
             break;
         case "next":
             content = content = (
-                <svg viewBox="0 0 24 24">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
                     <polyline points="12 6 17 12 12 18" />
                     <line x1="16" y1="12" x2="7" y2="12" />
                 </svg>
@@ -68,7 +76,7 @@ const defaultRenderItem = (
             break;
         case "last":
             content = content = (
-                <svg viewBox="0 0 24 24">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
                     <polyline points="10 6 15 12 10 18" />
                     <line x1="19" y1="6" x2="19" y2="18" />
                     <line x1="14" y1="12" x2="5" y2="12" />

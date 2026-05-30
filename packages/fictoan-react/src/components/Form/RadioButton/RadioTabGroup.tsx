@@ -4,7 +4,7 @@ import React, { useMemo, useRef, useEffect, useState, useCallback } from "react"
 // LOCAL COMPONENTS ====================================================================================================
 import { Div } from "$tags";
 import { Element } from "$element";
-import { FormItem } from "../FormItem/FormItem";
+import { FormItem, deriveAriaIds } from "../FormItem/FormItem";
 import { SpacingTypes } from "../../Element/constants";
 import { separateWrapperProps } from "../../../utils/propSeparation";
 
@@ -157,10 +157,14 @@ export const RadioTabGroup = React.forwardRef<HTMLDivElement, RadioTabGroupProps
             classNames.push(`size-${size}`);
         }
 
+        const reactId = React.useId();
+        const finalGroupId = id || `radio-tab-group-${reactId.replace(/:/g, "")}`;
+        const { describedBy } = deriveAriaIds(finalGroupId, helpText, errorText);
+
         return (
             <FormItem
                 label={label}
-                htmlFor={id}
+                htmlFor={finalGroupId}
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
@@ -171,8 +175,14 @@ export const RadioTabGroup = React.forwardRef<HTMLDivElement, RadioTabGroupProps
                     as="div"
                     data-radio-tab-group
                     ref={ref}
+                    id={finalGroupId}
                     classNames={classNames}
                     name={derivedName}
+                    role="radiogroup"
+                    aria-label={label}
+                    aria-invalid={Boolean(errorText) || undefined}
+                    aria-required={required}
+                    aria-describedby={describedBy}
                     {...inputProps}
                 >
                     {/* LEFT SCROLL BUTTON */}
@@ -204,7 +214,7 @@ export const RadioTabGroup = React.forwardRef<HTMLDivElement, RadioTabGroupProps
 
                             {options.map((option, index) => {
                                 const { id: optionId, ...optionProps } = option;
-                                const finalId = optionId || `${id}-option-${index}`;
+                                const finalId = optionId || `${finalGroupId}-option-${index}`;
 
                                 return (
                                     <React.Fragment key={finalId}>

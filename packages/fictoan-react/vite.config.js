@@ -41,18 +41,18 @@ function generateColors() {
             sequential : true,
             handler() {
                 console.log("Generating color system...");
-                execSync("npx tsx src/scripts/generateColourClasses.ts", { stdio : "inherit" });
+                execSync("pnpm exec tsx src/scripts/generateColourClasses.ts", { stdio : "inherit" });
             },
         },
         configureServer(server) {
             console.log("Generating color system...");
-            execSync("npx tsx src/scripts/generateColourClasses.ts", { stdio : "inherit" });
+            execSync("pnpm exec tsx src/scripts/generateColourClasses.ts", { stdio : "inherit" });
 
             server.watcher.add("src/scripts/generateColourClasses.ts");
             server.watcher.on("change", (changedPath) => {
                 if (changedPath.endsWith("generateColourClasses.ts")) {
                     console.log("Color generation script changed, regenerating...");
-                    execSync("npx tsx src/scripts/generateColourClasses.ts", { stdio : "inherit" });
+                    execSync("pnpm exec tsx src/scripts/generateColourClasses.ts", { stdio : "inherit" });
                 }
             });
         },
@@ -92,11 +92,37 @@ function fixCssForTurbopack() {
     };
 }
 
+// Wrap the entire bundled stylesheet in @layer fictoan so consumer styles
+// (defined outside any layer) win cascade conflicts regardless of specificity.
+// Standard pattern for design systems — lets users override anything without
+// having to escalate to !important or write higher-specificity selectors.
+function wrapInFictoanLayer() {
+    return {
+        name: "wrap-in-fictoan-layer",
+        enforce: "post",
+        closeBundle: {
+            sequential: true,
+            order: "post",
+            handler() {
+                const cssPath = path.resolve(__dirname, "dist/index.css");
+                try {
+                    const css = readFileSync(cssPath, "utf-8");
+                    // Don't double-wrap if a previous run already added the layer.
+                    if (css.trimStart().startsWith("@layer fictoan")) return;
+                    writeFileSync(cssPath, `@layer fictoan {\n${css}\n}\n`);
+                    console.log("Wrapped CSS in @layer fictoan");
+                } catch (e) {
+                    console.warn("Could not wrap CSS in @layer:", e.message);
+                }
+            },
+        },
+    };
+}
+
 export default defineConfig({
     resolve : {
         alias : {
             "$"           : path.resolve(__dirname, "./src"),
-            "$colour"     : path.resolve(__dirname, "./src/colour/colour"),
             "$components" : path.resolve(__dirname, "./src/components"),
             "$element"    : path.resolve(__dirname, "./src/components/Element/index"),
             "$hooks"      : path.resolve(__dirname, "./src/hooks"),
@@ -110,22 +136,28 @@ export default defineConfig({
     },
     build   : {
         minify        : "esbuild",
-        cssMinify     : false,
+        cssMinify     : true,
+        // Keep all CSS in one dist/index.css (consumers import it once, and the
+        // post-build @layer / Turbopack-fix plugins operate on that single file).
+        cssCodeSplit  : false,
         sourcemap     : true,
         lib           : {
-            entry    : input,
-            name     : pkg.name,
-            fileName : "index",
+            entry   : input,
+            formats : [ "es" ],
         },
         rollupOptions : {
-            output   : [
-                {
-                    format         : "es",
-                    entryFileNames : "[name].js",
-                    assetFileNames : "index.[ext]",
-                    banner         : `"use client;"`,
-                },
-            ],
+            output   : {
+                format              : "es",
+                // One JS file per source module so a consumer's bundler can drop
+                // the components they don't import. Nothing is removed from the
+                // package — every component, prop, value, and the schema still
+                // ship in full; this only changes what the CONSUMER's final
+                // bundle ends up including.
+                preserveModules     : true,
+                preserveModulesRoot : "src",
+                entryFileNames      : "[name].js",
+                assetFileNames      : "index.[ext]",
+            },
             external : [
                 ...Object.keys(pkg.peerDependencies),
                 "react/jsx-runtime",
@@ -185,5 +217,6 @@ export default defineConfig({
             },
         }),
         fixCssForTurbopack(),
+        wrapInFictoanLayer(),
     ],
 });

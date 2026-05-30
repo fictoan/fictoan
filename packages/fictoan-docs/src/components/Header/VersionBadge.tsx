@@ -4,7 +4,9 @@ import React from "react";
 // UI ==================================================================================================================
 import { Text } from "fictoan-react";
 
-const VERSION = "2.0.0-beta.13";
+// The package.json subpath is whitelisted in fictoan-react's exports field
+// so this resolves cleanly under bundler module resolution.
+import { version as VERSION } from "fictoan-react/package.json";
 
 export const VersionBadge = () => {
     return (

@@ -75,6 +75,16 @@ const LayoutDocs = () => {
                             <li>A page can have unlimited Rows and each Row can have unlimited Portions as children</li>
                             <li>Portion widths have to be explicitly set, or they will take the entire width</li>
                             <li>Portions move to the next line if no space is available</li>
+                            <li>
+                                Each Row is a <strong>CSS container</strong>. Portion responsive variants
+                                (<code>mobileSpan</code>, <code>tabletPortraitSpan</code>, etc.) react to
+                                the Row&rsquo;s own rendered width — not the viewport — so a Portion in a
+                                narrow sidebar stacks the same way it would on a phone.
+                            </li>
+                            <li>
+                                A Row is always horizontally centred and caps its content at 2400px — pass{" "}
+                                <code>allowUltraWide</code> to lift that cap on very wide screens.
+                            </li>
                         </ul>
                     </Portion>
                 </Row>
@@ -428,35 +438,41 @@ const LayoutDocs = () => {
                         <Portion>
                             <Heading6 marginBottom="nano">Responsive behaviour</Heading6>
                             <Text marginBottom="micro">
-                                There are four breakpoints as listed below. Using these, you can control the behaviour
-                                of a <code>Portion</code> element across devices. The default prop is{" "}
-                                <code>desktopSpan</code>, but you can add three
-                                more—<code>tabletLandscapeSpan</code>,{" "}
-                                <code>tabletPortraitSpan</code> and <code>mobileSpan</code>.
+                                There are four size bands as listed below. Using these, you can control the
+                                behaviour of a <code>Portion</code> element across container widths. The
+                                default prop is <code>desktopSpan</code>, but you can add three more—
+                                <code>tabletLandscapeSpan</code>, <code>tabletPortraitSpan</code> and{" "}
+                                <code>mobileSpan</code>.
+                            </Text>
+
+                            <Text marginBottom="micro" textColour="grey-dark30">
+                                The bands measure the parent <code>Row</code>&rsquo;s rendered width,
+                                <em> not </em>the viewport. A Row inside a 400px sidebar treats its
+                                Portions like a phone, regardless of the actual screen size.
                             </Text>
                         </Portion>
 
                         <Portion desktopSpan="half" tabletLandscapeSpan="half" tabletPortraitSpan="half">
-                            <Text className="weight-600 no-margin-bottom">Mobile</Text>
-                            <Text>Less than 600px wide</Text>
+                            <Text className="weight-600 no-margin-bottom">Narrow</Text>
+                            <Text>Row width &lt; 600px</Text>
                             <code>mobileSpan</code>
                         </Portion>
 
                         <Portion desktopSpan="half" tabletLandscapeSpan="half" tabletPortraitSpan="half">
-                            <Text className="weight-600 no-margin-bottom">Tab portrait</Text>
-                            <Text>601px to 900px</Text>
+                            <Text className="weight-600 no-margin-bottom">Small</Text>
+                            <Text>Row width 601px&ndash;900px</Text>
                             <code>tabletPortraitSpan</code>
                         </Portion>
 
                         <Portion desktopSpan="half" tabletLandscapeSpan="half" tabletPortraitSpan="half">
-                            <Text className="weight-600 no-margin-bottom">Tab landscape</Text>
-                            <Text>901px to 1200px</Text>
+                            <Text className="weight-600 no-margin-bottom">Medium</Text>
+                            <Text>Row width 901px&ndash;1200px</Text>
                             <code>tabletLandscapeSpan</code>
                         </Portion>
 
                         <Portion desktopSpan="half" tabletLandscapeSpan="half" tabletPortraitSpan="half">
-                            <Text className="weight-600 no-margin-bottom">Desktop</Text>
-                            <Text>1201px and above</Text>
+                            <Text className="weight-600 no-margin-bottom">Wide</Text>
+                            <Text>Row width 1201px and above</Text>
                             <code>desktopSpan</code>
                         </Portion>
 
@@ -488,6 +504,13 @@ const LayoutDocs = () => {
                                           showOnlyOnMobile>&nbsp;&nbsp;&nbsp;&nbsp;two-third</Text>
                                 </Portion>
                             </Row>
+
+                            <Text size="small" marginTop="nano" marginBottom="micro">
+                                The box resizes with the <strong>Row’s</strong> width — each Row is a CSS container —
+                                while the highlighted label tracks the <strong>viewport</strong> via
+                                <code>showOnlyOn*</code>. They line up at full width, but can differ near a breakpoint
+                                when the Row is narrower than the viewport.
+                            </Text>
 
                             <Row bgColour="slate-10" marginBottom="none" isFullHeight retainLayoutAlways>
                                 <Portion desktopSpan="1" bgColour="sky-light60" paddingTop="micro" />

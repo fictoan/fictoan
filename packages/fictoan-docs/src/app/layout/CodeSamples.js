@@ -98,11 +98,11 @@ export const sampleResonsiveness = `<Row>
 //  Code sample 03b ============================================================
 export const sampleTurnOffResponsiveness = `<Row retainLayoutOnTabletLandscape /> // Portions don’t change on tablet landscape
     
-<Row retainLayoutOnTabPT /> // Portions don’t change on tablet portrait
+<Row retainLayoutOnTabletPortrait /> // Portions don’t change on tablet portrait
     
 <Row retainLayoutOnMobile /> // Portions don’t change on mobile
     
-<Row retainLayoutAlways /> // Portions don’t change widths across devices`;
+<Row retainLayoutAlways /> // Portions don’t change widths across container width bands`;
 
 // =============================================================================
 // SIDE PADDING  ===============================================================

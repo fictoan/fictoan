@@ -1,5 +1,89 @@
 # CHANGELOG
 
+## 2.0.0-beta.18
+
+Modernises the CSS layer onto native browser primitives, makes the package tree-shakeable and SSR-safe, hardens
+accessibility, and ships an AI-readable component schema. Most changes are additive — the behaviour changes that need
+your attention are flagged below, with a migration checklist at the end.
+
+### ⚠️ Breaking & behaviour changes
+
+**ThemeProvider now server-renders its children**
+- Previously it rendered nothing until it mounted on the client, so any app wrapping it produced an empty server/SSG
+  render. It now renders children during SSR and injects a small pre-hydration inline script that applies the saved
+  theme before first paint (no flash).
+- **Migration:** if you use SSR/SSG (Next, Remix, Astro, RSC), this surfaces any browser-only code (`window`,
+  `document`, `getComputedStyle`, …) you run *during render* rather than inside `useEffect` — guard it or move it into
+  an effect. The inline script needs `script-src 'unsafe-inline'`, or pass `nonce={...}` under a strict CSP.
+
+**Theme is stored under a stable, configurable key**
+- The localStorage key changed from a hostname/port-derived value to a fixed default `"fictoan-theme"`, settable via the
+  new `storageKey` prop.
+- **Migration:** returning users see their saved theme reset *once*. Pass a unique `storageKey` — your package name is
+  ideal, and it's required if multiple Fictoan apps can share an origin (localhost during dev, GitHub Pages) so they
+  don't collide. To preserve existing prefs, set `storageKey` to the old key.
+  ```tsx
+  <ThemeProvider themeList={themes} currentTheme="theme-light" storageKey="my-app">
+  ```
+
+**Responsive Portion spans are now container-relative**
+- `mobileSpan` / `tabletPortraitSpan` / `tabletLandscapeSpan` / `desktopSpan` (and Row's portion-collapse) react to the
+  parent Row's rendered width via CSS `@container`, not the viewport — a Portion in a narrow sidebar now stacks as it
+  would on a phone. Prop names are unchanged.
+- **Migration:** re-check layouts that assumed viewport breakpoints. (`hideOn*` / `showOnlyOn*` visibility props are
+  unchanged — still viewport-based.)
+
+**Spacing tokens are capped on wide screens**
+- `--tiny` through `--huge` are now `clamp(min, vmax, max)` instead of bare `vmax`, so padding/margins stop growing past
+  a cap on large monitors.
+
+**Package ships per-module ES output**
+- The build now emits one file per component (`dist/components/Button/Button.js`, …) so `import { Button } from
+  "fictoan-react"` tree-shakes — your bundle only includes what you import.
+- **Migration:** importing from `"fictoan-react"` is unchanged. Only code that deep-imported internal
+  `fictoan-react/dist/...` paths (undocumented) is affected — those paths changed.
+
+**Published TypeScript types now resolve**
+- The `types` entry previously pointed at a path the build never emitted, so TS consumers silently got *no* types. Types
+  now resolve correctly — which may surface pre-existing type errors in your code that were previously `any`.
+
+**Renamed CSS class & deprecation**
+- `.font-sans` → `.font-sans-serif` (the class `fontStyle="sans-serif"` actually emits). Only relevant if you referenced
+  `.font-sans` directly.
+- Drawer `closeOnClickOutside` is deprecated — dismissal (ESC + backdrop) is governed by `isDismissible` via the popover
+  API.
+
+### Added
+- **ThemeProvider:** `storageKey` and `nonce` props; theme switches crossfade automatically via the View Transitions
+  API; new `useViewTransition()` hook to animate any state change (with `prefers-reduced-motion` handling).
+- **Native browser primitives:** Modal, Drawer, and Tooltip migrated to the popover API (Tooltip also to CSS anchor
+  positioning); Row is now a CSS container; the whole stylesheet is wrapped in `@layer fictoan`, so unlayered consumer
+  CSS overrides component styles without `!important`.
+- **Forms:** PinInputField gained `label` / `helpText` / `errorText` / `required` / `size` (FormItem integration);
+  `hideLabel` now works on InputField / TextArea / Checkbox / Switch.
+- **AI-friendly:** machine-readable component schema served at `/fictoan-schema.json`, plus `/llms.txt`.
+
+### Fixed
+- Published `types` path (was zero types). CSS is now minified (~589 KB → ~464 KB raw). `Portion span="7"` responsive
+  variants (a dead selector — never applied `grid-column: span 7`). Curated schema examples taught non-existent props
+  (`openWhen`/`iconLeft`/…); corrected, with a build-time guard against future drift. ListBox controlled/uncontrolled
+  state. The global focus ring now meets WCAG 2.2 non-text contrast.
+
+### Accessibility
+- Form a11y wired throughout: `aria-describedby` / `aria-invalid` / `aria-required`, working `hideLabel`, resolved Range
+  group label, FileUpload focus ring, RadioGroup no longer announcing two radios per option.
+- Accordion / Tooltip / Pagination dangling or missing ARIA fixed; Modal and Notification close buttons are now real
+  `<button>`s (keyboard-activatable); Badge / SkeletonGroup live-region roles corrected; Toast/Notification no longer
+  double-announce.
+
+### Migration checklist
+1. Bump `fictoan-react` to `2.0.0-beta.18`.
+2. Add `storageKey={/* your app name */}` to your `<ThemeProvider>` (and `nonce={...}` under a strict CSP).
+3. If you SSR/SSG: build, and fix any browser-API-in-render code the un-gate surfaces.
+4. Grep for the deprecated/renamed bits: `closeOnClickOutside`, `.font-sans`.
+5. Re-check wide-screen spacing and container-relative Portion layouts.
+6. Run your type-checker and resolve newly-surfaced type errors.
+
 ## 2.0.0
 ### ⚠️ Breaking changes
 

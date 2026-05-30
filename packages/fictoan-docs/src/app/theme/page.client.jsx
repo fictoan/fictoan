@@ -22,6 +22,7 @@ import {
     sampleSwitcherSetup,
     sampleThemeGlobals,
     sampleFictoanTheme,
+    sampleUseViewTransition,
 } from "./CodeSamples";
 
 const ThemeDocs = () => {
@@ -70,6 +71,12 @@ const ThemeDocs = () => {
 
                     <CodeBlock withSyntaxHighlighting source={sampleThemeProviderSetup} language="jsx" />
 
+                    <Text marginTop="micro" marginBottom="micro">
+                        If more than one Fictoan app can share an origin (localhost during dev, GitHub Pages, etc.), pass
+                        a unique <code>storageKey</code> so they don&rsquo;t share one theme — your package name works
+                        well (e.g. <code>storageKey="my-app"</code>). It defaults to <code>fictoan-theme</code>.
+                    </Text>
+
                     <Divider kind="secondary" verticalMargin="micro" />
 
                     {/* STEP 3 — Add theme switching =============================================================== */}
@@ -92,6 +99,23 @@ const ThemeDocs = () => {
                             rendered, and that would cause it have no context of the themes.
                         </Text>
                     </Callout>
+
+                    <Text marginTop="micro" marginBottom="micro">
+                        Switching themes crossfades automatically — <code>ThemeProvider</code> wraps the change in the
+                        browser&rsquo;s View Transitions API, so you get a smooth fade between themes without writing any
+                        animation CSS. Browsers without the API switch instantly, and the crossfade is skipped for users
+                        with <code>prefers-reduced-motion: reduce</code>.
+                    </Text>
+
+                    <Text marginBottom="micro">
+                        The same crossfade is available for any state change via the <code>useViewTransition</code>
+                        hook — it returns a <code>startTransition(mutation)</code> callback that runs your update inside
+                        the browser&rsquo;s View Transitions API, with the same instant fallback and reduced-motion
+                        handling:
+                    </Text>
+
+                    <CodeBlock withSyntaxHighlighting source={sampleUseViewTransition} language="jsx"
+                               marginBottom="micro" />
                 </Portion>
             </Row>
 

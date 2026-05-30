@@ -1,0 +1,93 @@
+# Fictoan
+
+> A designer-friendly React UI framework with plain-English props, pure CSS, and zero runtime. Authoritative machine-readable schema at https://fictoan.io/fictoan-schema.json.
+
+Fictoan favours readable prop names over utility classes or terse abbreviations: `bgColour="blue"`, `padding="medium"`, `desktopSpan="half"`. Every component shares a universal Element prop set for spacing, colour, layout, and responsiveness, so the same props work the same way across the whole library.
+
+A quick example:
+
+```jsx
+import { Row, Portion, Heading4, Text, Button } from "fictoan-react";
+
+<Row horizontalPadding="medium" gutters="medium">
+    <Portion desktopSpan="half" mobileSpan="whole">
+        <Heading4 marginBottom="micro">Welcome</Heading4>
+        <Text>Plain-English props, no abbreviations.</Text>
+        <Button kind="primary">Get started</Button>
+    </Portion>
+</Row>
+```
+
+Key points to remember when generating Fictoan code:
+
+- Use British spelling for colour-related props: `bgColour`, `textColour`, `borderColour`, `fillColour`, `strokeColour`. (US aliases `bgColor`, `textColor`, etc. also exist but the British forms are preferred.)
+- Spacing values are named, not numeric: `none`, `nano`, `micro`, `tiny`, `small`, `medium`, `large`, `huge`. Used in props like `padding`, `marginTop`, `gap`, `size`, `gutters`.
+- Layout uses a 24-column `Row` → `Portion` grid. `Portion` accepts fraction names (`half`, `one-third`) or numeric spans (`1`–`24`). Per-breakpoint variants: `desktopSpan`, `tabletLandscapeSpan`, `tabletPortraitSpan`, `mobileSpan`.
+- Colours are named (`red`, `blue`, `amber`, `slate`, `teal`, ...) and can be suffixed for shade and opacity: `red-dark30`, `blue-light20-opacity50`, `green-opacity40`.
+- Element emphasis uses `kind`: `primary`, `secondary`, `tertiary`, `custom`. Set `kind="custom"` to use arbitrary `bgColour` / `textColour` / `borderColour`.
+- Don't reach for `style={{...}}` or className utilities unless a prop genuinely doesn't exist — the prop system covers most of what's needed.
+
+## Documentation
+
+- [Getting started](https://fictoan.io/getting-started): install, basic setup, first page.
+- [Universal Element props](https://fictoan.io/base-element): the prop set shared by every component (spacing, colour, layout, responsiveness, visibility).
+- [Colours](https://fictoan.io/colour): the OKLCH-based colour system and how shade/opacity modifiers work.
+- [Typography](https://fictoan.io/typography): heading and text components, weight, alignment.
+- [Theme](https://fictoan.io/theme): CSS variable–driven theming and the `ThemeProvider`.
+- [Manifesto](https://fictoan.io/manifesto): design philosophy.
+
+## Layout
+
+- [Row](https://fictoan.io/components/row): the 24-column grid primitive, capped and centred at 2400px.
+- [Portion](https://fictoan.io/components/portion): column-spanning children of Row whose responsive spans (mobileSpan/tabletPortraitSpan/tabletLandscapeSpan/desktopSpan) react to the parent Row's rendered width via CSS @container queries, not the viewport.
+- [Card](https://fictoan.io/components/card): surface container with shadow, border, and shape.
+
+## Form components
+
+- [Form](https://fictoan.io/components/form): wrapper that gives consistent vertical spacing.
+- [InputField](https://fictoan.io/components/input-field): single-line text input with label, helper, validation, icon slots.
+- [TextArea](https://fictoan.io/components/input-field): multi-line text input.
+- [Select](https://fictoan.io/components/select): native select with Fictoan styling.
+- [ListBox](https://fictoan.io/components/list-box): searchable, optionally multi-select combobox.
+- [Checkbox](https://fictoan.io/components/checkbox): single checkbox or grouped checkboxes.
+- [RadioButton](https://fictoan.io/components/radio-button): radio with grouped variants and tabbed presentation.
+- [Switch](https://fictoan.io/components/checkbox): boolean toggle.
+- [Range](https://fictoan.io/components/range): slider input.
+- [PinInputField](https://fictoan.io/components/pin-input-field): OTP / verification code input.
+- [FileUpload](https://fictoan.io/components/input-field): file picker.
+- [OptionCard](https://fictoan.io/components/option-cards): card-style radio/checkbox group.
+- [FormBuilder](https://fictoan.io/components/form-builder): schema-driven form generation.
+
+## Interactive components
+
+- [Button](https://fictoan.io/components/button): clickable action, with `kind`, `variant`, `size`, `shape`, `isLoading`.
+- [ButtonGroup](https://fictoan.io/components/button-group): joined buttons.
+- [Tabs](https://fictoan.io/components/tabs): tabbed content switcher.
+- [Accordion](https://fictoan.io/components/accordion): collapsible sections.
+- [Pagination](https://fictoan.io/components/pagination): page navigation.
+- [Tooltip](https://fictoan.io/components/tooltip): hover/focus-triggered hints.
+
+## Overlay components
+
+- [Modal](https://fictoan.io/components/modal): dialog overlay, popover-API based, manages focus + ESC.
+- [Drawer](https://fictoan.io/components/drawer): side-anchored overlay panel.
+- [Notification](https://fictoan.io/components/notifications): persistent in-page messages.
+- [Toast](https://fictoan.io/components/toast): transient stacked notifications via `ToastsProvider` + `useToasts`.
+
+## Feedback / display
+
+- [Callout](https://fictoan.io/components/callout): inline note, warning, success message.
+- [Badge](https://fictoan.io/components/badge): small inline label.
+- [Meter](https://fictoan.io/components/meter): static value indicator.
+- [ProgressBar](https://fictoan.io/components/progress-bar): in-progress indicator.
+- [Spinner](https://fictoan.io/components/spinner): loading spinner.
+- [Skeleton](https://fictoan.io/components/skeleton): placeholder shapes during loading.
+- [Table](https://fictoan.io/components/table): styled tabular data.
+- [Breadcrumbs](https://fictoan.io/components/breadcrumbs): navigation trail.
+- [Sidebar](https://fictoan.io/components/sidebar): app-shell side navigation.
+- [CodeBlock](https://fictoan.io/components/code-block): syntax-highlighted code, editable optional.
+- [Divider](https://fictoan.io/components/divider): horizontal/vertical rule.
+
+## Authoritative references
+
+- [JSON schema](https://fictoan.io/fictoan-schema.json): the source of truth for every component, every prop, every enum value. Use this for code generation, validation, autocompletion, or grounding LLM completions.

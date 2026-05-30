@@ -8,9 +8,6 @@ import { Element } from "$element";
 // STYLES ==============================================================================================================
 import "./modal.css";
 
-// OTHER ===============================================================================================================
-import { Text } from "$/components";
-
 export type ModalElementType = HTMLDivElement;
 
 export interface ModalCustomProps {
@@ -101,7 +98,6 @@ export const Modal = React.forwardRef(
                 as="dialog"
                 id={modalId}
                 data-modal
-                // @ts-ignore
                 popover={isDismissible ? "auto" : "manual"}
                 ref={ref}
                 classNames={classNames}
@@ -112,14 +108,14 @@ export const Modal = React.forwardRef(
                 {...props}
             >
                 {isDismissible && onClose && (
-                    <Text
+                    <button
+                        type="button"
                         className="dismiss-button"
                         onClick={onClose}
                         aria-label="Close modal"
-                        tabIndex={0}
                     >
                         &times;
-                    </Text>
+                    </button>
                 )}
                 {description && (
                     <div id={descriptionId} className="sr-only">

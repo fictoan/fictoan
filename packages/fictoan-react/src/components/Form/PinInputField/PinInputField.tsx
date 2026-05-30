@@ -3,13 +3,14 @@ import React, { createRef, useCallback, useEffect, useImperativeHandle, useRef, 
 
 // FICTOAN =============================================================================================================
 import { InputField } from "../InputField/InputField";
+import { FormItem, deriveAriaIds } from "../FormItem/FormItem";
 import { Div } from "../../Element/Tags";
 
 // STYLES ==============================================================================================================
 import "./pin-input-field.css";
 
 // TYPES ===============================================================================================================
-import { CommonAndHTMLProps } from "../../Element/constants";
+import { CommonAndHTMLProps, SpacingTypes } from "../../Element/constants";
 
 interface PinInputFieldHandle extends HTMLDivElement {
     reset: () => void;
@@ -27,6 +28,12 @@ type PinInputFieldCustomProps = {
     focusFirstInputOnReset ? : boolean;
     isFullWidth            ? : boolean;
     ariaLabel              ? : string;
+    // FormItem integration
+    label                  ? : string;
+    helpText               ? : string | React.ReactNode;
+    errorText              ? : string;
+    required               ? : boolean;
+    size                   ? : Exclude<SpacingTypes, "nano" | "huge">;
 };
 
 export type PinInputFieldElementType = HTMLDivElement & { reset: () => void };
@@ -55,6 +62,12 @@ export const PinInputField = React.forwardRef(
             focusFirstInputOnReset = true,
             isFullWidth,
             ariaLabel,
+            // FormItem integration
+            label,
+            helpText,
+            errorText,
+            required,
+            size,
             ...props
         }: PinInputFieldProps,
         ref: React.Ref<PinInputFieldElementType>
@@ -69,8 +82,10 @@ export const PinInputField = React.forwardRef(
         const [focusedIndex, setFocusedIndex] = useState<number>(-1);
 
         // CONSTANTS ================================================================================================
-        const inputGroupId = props.id || `pin-input-${Math.random().toString(36).substring(2, 9)}`;
-        const inputDescription = ariaLabel || 'Enter verification code';
+        const reactId = React.useId();
+        const inputGroupId = props.id || `pin-input-${reactId.replace(/:/g, "")}`;
+        const inputDescription = ariaLabel || label || "Enter verification code";
+        const { describedBy } = deriveAriaIds(inputGroupId, helpText, errorText);
 
         // HANDLERS =================================================================================================
         const focus = useCallback(
@@ -261,38 +276,50 @@ export const PinInputField = React.forwardRef(
         }
 
         return (
-            <Div
-                data-pin-input-field
-                ref={pinInputFieldRef}
-                classNames={isFullWidth ? ["full-width"] : []}
-                role="group"
-                aria-label={inputDescription}
-                aria-required={props.required}
-                {...props}
+            <FormItem
+                label={label}
+                htmlFor={inputGroupId}
+                helpText={helpText}
+                errorText={errorText}
+                required={required}
+                size={size}
             >
-                {Array.from({ length }, (_, i) => (
-                    <InputField
-                        key={i}
-                        id={`${inputGroupId}-${i}`}
-                        ref={inputRefs[i]}
-                        type={mask ? "password" : type === "number" ? "tel" : "text"}
-                        inputMode={type === "number" ? "numeric" : "text"}
-                        onChange={(value: string | React.FormEvent<HTMLInputElement>) => handleInputChange(value, i)}
-                        onKeyDown={(e) => handleKeyDown(e, i)}
-                        onFocus={(e) => handleFocus(e as React.FocusEvent<HTMLInputElement>, i)}
-                        onSelect={handleSelect}
-                        onBlur={handleBlur}
-                        placeholder={focusedIndex !== i ? "\u2981" : undefined}
-                        autoComplete={isOTP ? "one-time-code" : "off"}
-                        value={values[i] || ""}
-                        autoFocus={autoFocus && i === 0}
-                        onCopy={(e) => pasteFromClipboard === "disabled" && e.preventDefault()}
-                        onPaste={(e) => pasteFromClipboard === "disabled" && e.preventDefault()}
-                        aria-label={`Digit ${i + 1} of ${length}`}
-                        aria-required={props.required}
-                    />
-                ))}
-            </Div>
+                <Div
+                    data-pin-input-field
+                    ref={pinInputFieldRef}
+                    id={inputGroupId}
+                    classNames={isFullWidth ? ["full-width"] : []}
+                    role="group"
+                    aria-label={label ? undefined : inputDescription}
+                    aria-invalid={Boolean(errorText) || undefined}
+                    aria-required={required}
+                    aria-describedby={describedBy}
+                    {...props}
+                >
+                    {Array.from({ length }, (_, i) => (
+                        <InputField
+                            key={i}
+                            id={`${inputGroupId}-${i}`}
+                            ref={inputRefs[i]}
+                            type={mask ? "password" : type === "number" ? "tel" : "text"}
+                            inputMode={type === "number" ? "numeric" : "text"}
+                            onChange={(value: string | React.FormEvent<HTMLInputElement>) => handleInputChange(value, i)}
+                            onKeyDown={(e) => handleKeyDown(e, i)}
+                            onFocus={(e) => handleFocus(e as React.FocusEvent<HTMLInputElement>, i)}
+                            onSelect={handleSelect}
+                            onBlur={handleBlur}
+                            placeholder={focusedIndex !== i ? "\u2981" : undefined}
+                            autoComplete={isOTP ? "one-time-code" : "off"}
+                            value={values[i] || ""}
+                            autoFocus={autoFocus && i === 0}
+                            onCopy={(e) => pasteFromClipboard === "disabled" && e.preventDefault()}
+                            onPaste={(e) => pasteFromClipboard === "disabled" && e.preventDefault()}
+                            aria-label={`Digit ${i + 1} of ${length}`}
+                            aria-required={required}
+                        />
+                    ))}
+                </Div>
+            </FormItem>
         );
     }
 );

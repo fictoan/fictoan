@@ -26,7 +26,7 @@ export interface ListBoxCustomProps {
     disabled           ? : boolean;
     placeholder        ? : string;
     id                 ? : string;
-    defaultValue       ? : string;
+    defaultValue       ? : string | string[];
     selectionLimit     ? : NonZeroNumber;
     allowCustomEntries ? : boolean;
     isLoading          ? : boolean;

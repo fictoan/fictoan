@@ -14,6 +14,7 @@ import {
     Checkbox,
     RadioTabGroup,
     Range,
+    InputField,
     PinInputField,
 } from "fictoan-react";
 
@@ -33,11 +34,21 @@ const PinInputFieldDocs = () => {
     const [autoFocus, setAutoFocus] = useState(false);
     const [pasteFromClipboard, setPasteFromClipboard] = useState("enabled");
     const [isFullWidth, setIsFullWidth] = useState(false);
+    const [label, setLabel] = useState("Verification code");
+    const [helpText, setHelpText] = useState("");
+    const [errorText, setErrorText] = useState("");
+    const [required, setRequired] = useState(false);
+    const [size, setSize] = useState("medium");
 
     // Generate code
     const codeString = useMemo(() => {
         const props = [];
         props.push(`    numberOfFields={${numberOfFields}}`);
+        if (label) props.push(`    label="${label}"`);
+        if (helpText) props.push(`    helpText="${helpText}"`);
+        if (errorText) props.push(`    errorText="${errorText}"`);
+        if (required) props.push(`    required`);
+        if (size !== "medium") props.push(`    size="${size}"`);
         if (type !== "number") props.push(`    type="${type}"`);
         if (mask) props.push(`    mask`);
         if (isOTP) props.push(`    isOTP`);
@@ -46,7 +57,7 @@ const PinInputFieldDocs = () => {
         if (isFullWidth) props.push(`    isFullWidth`);
 
         return `<PinInputField\n${props.join("\n")}\n/>`;
-    }, [numberOfFields, type, mask, isOTP, autoFocus, pasteFromClipboard, isFullWidth]);
+    }, [numberOfFields, label, helpText, errorText, required, size, type, mask, isOTP, autoFocus, pasteFromClipboard, isFullWidth]);
 
     return (
         <ComponentDocsLayout pageId="page-pin-input-field">
@@ -69,12 +80,22 @@ const PinInputFieldDocs = () => {
                     Supports numeric and alphanumeric input, optional masking for sensitive data, and OTP auto-fill
                     on supported devices. Arrow keys navigate between fields, and paste is supported.
                 </Text>
+
+                <Text>
+                    Wraps in a FormItem, so it also accepts the standard <code>label</code>, <code>helpText</code>,
+                    <code>errorText</code>, <code>required</code> and <code>size</code> props.
+                </Text>
             </Div>
 
             {/* DEMO COMPONENT ///////////////////////////////////////////////////////////////////////////////////// */}
             <Div id="demo-component">
                 <PinInputField
                     numberOfFields={numberOfFields}
+                    label={label}
+                    helpText={helpText || undefined}
+                    errorText={errorText || undefined}
+                    required={required}
+                    size={size as any}
                     type={type as "number" | "alphanumeric"}
                     mask={mask}
                     isOTP={isOTP}
@@ -100,6 +121,51 @@ const PinInputFieldDocs = () => {
                         step={1}
                         marginBottom="micro"
                         isFullWidth
+                    />
+
+                    <InputField
+                        label="label"
+                        value={label}
+                        onChange={(value) => setLabel(value)}
+                        marginBottom="micro"
+                    />
+
+                    <InputField
+                        label="helpText"
+                        value={helpText}
+                        onChange={(value) => setHelpText(value)}
+                        marginBottom="micro"
+                    />
+
+                    <InputField
+                        label="errorText"
+                        value={errorText}
+                        onChange={(value) => setErrorText(value)}
+                        marginBottom="micro"
+                    />
+
+                    <Checkbox
+                        id="prop-required"
+                        label="required"
+                        checked={required}
+                        onChange={(checked) => setRequired(checked)}
+                        helpText="Marks the field required and shows the asterisk marker."
+                        marginBottom="micro"
+                    />
+
+                    <RadioTabGroup
+                        id="prop-size"
+                        label="size"
+                        options={[
+                            { id: "pin-size-micro", value: "micro", label: "micro" },
+                            { id: "pin-size-tiny", value: "tiny", label: "tiny" },
+                            { id: "pin-size-small", value: "small", label: "small" },
+                            { id: "pin-size-medium", value: "medium", label: "medium" },
+                            { id: "pin-size-large", value: "large", label: "large" },
+                        ]}
+                        value={size}
+                        onChange={(value) => setSize(value)}
+                        marginBottom="micro"
                     />
 
                     <RadioTabGroup

@@ -13,7 +13,7 @@ import "./file-upload.css";
 
 // OTHER ===============================================================================================================
 import { Badge } from "../../Badge/Badge";
-import { FormItem } from "../FormItem/FormItem";
+import { FormItem, deriveAriaIds } from "../FormItem/FormItem";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 import { Text } from "../../Typography/Text";
 
@@ -127,10 +127,14 @@ export const FileUpload = React.forwardRef(
         // Separate wrapper-level props (margin, padding, etc.) from component-specific props
         const { wrapperProps } = separateWrapperProps(props);
 
+        const reactId = React.useId();
+        const finalId = id || `file-upload-${reactId.replace(/:/g, "")}`;
+        const { describedBy } = deriveAriaIds(finalId, helpText, errorText);
+
         return (
             <FormItem
                 label={label}
-                htmlFor={id}
+                htmlFor={finalId}
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
@@ -146,8 +150,9 @@ export const FileUpload = React.forwardRef(
                         className,
                     ].filter(Boolean).join(" ")}
                     aria-label={ariaLabel || label}
-                    aria-invalid={ariaInvalid || invalid || undefined}
+                    aria-invalid={ariaInvalid || invalid || Boolean(errorText) || undefined}
                     aria-required={required}
+                    aria-describedby={describedBy}
                 >
                     <Div
                         className="file-upload-area"
@@ -160,7 +165,7 @@ export const FileUpload = React.forwardRef(
                         <input
                             ref={fileInputRef}
                             type="file"
-                            id={id}
+                            id={finalId}
                             name={name}
                             onChange={handleFileInput}
                             multiple={allowMultipleFiles}

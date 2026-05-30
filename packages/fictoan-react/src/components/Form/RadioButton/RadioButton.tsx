@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { Element } from "$element";
-import { FormItem } from "../FormItem/FormItem";
+import { FormItem, deriveAriaIds } from "../FormItem/FormItem";
 import { separateWrapperProps } from "../../../utils/propSeparation";
 
 // STYLES ==============================================================================================================
@@ -42,20 +42,25 @@ export const RadioButton = React.forwardRef(
         // Separate wrapper-level props (margin, padding, etc.) from input-specific props
         const { wrapperProps, inputProps } = separateWrapperProps(props);
 
+        const reactId = React.useId();
+        const finalId = id || `radio-${reactId.replace(/:/g, "")}`;
+        const { describedBy } = deriveAriaIds(finalId, helpText, errorText);
+
+        // The native <input type="radio"> below already has role="radio". The
+        // wrapper div used to duplicate that role, which made AT announce two
+        // radios per RadioButton — left as a plain wrapper now.
         return (
             <Element<RadioButtonElementType>
                 as="div"
                 data-radio-button
                 ref={ref}
-                role="radio"
-                aria-checked={checked}
                 aria-disabled={disabled}
                 className={labelFirst ? "label-first" : undefined}
                 {...wrapperProps}
             >
                 <FormItem
                     label={label}
-                    htmlFor={id}
+                    htmlFor={finalId}
                     helpText={helpText}
                     errorText={errorText}
                     required={required}
@@ -64,18 +69,21 @@ export const RadioButton = React.forwardRef(
                     <Element
                         as="input"
                         type="radio"
-                        id={id}
+                        id={finalId}
                         name={derivedName}
                         value={value}
                         checked={checked}
                         disabled={disabled}
                         required={required}
+                        aria-invalid={Boolean(errorText) || undefined}
+                        aria-required={required}
+                        aria-describedby={describedBy}
                         onChange={handleChange}
                         {...inputProps}
                     />
                     <Element
                         as={labelFirst ? "label" : "div"}
-                        htmlFor={labelFirst ? id : undefined}
+                        htmlFor={labelFirst ? finalId : undefined}
                         data-radio
                     />
                 </FormItem>

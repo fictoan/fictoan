@@ -114,8 +114,6 @@ step "Building Fictoan components..."
 # shellcheck disable=SC2164
 cd packages/fictoan-react
 pnpm build
-pnpm build:props-metadata
-success "Props metadata generated..."
 success "Fictoan React built successfully!\n\n"
 cd ../../
 

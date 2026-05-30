@@ -4,7 +4,7 @@ import React, { useMemo } from "react";
 // LOCAL COMPONENTS ====================================================================================================
 import { Div } from "../../Element/Tags";
 import { Element } from "$element";
-import { FormItem } from "../FormItem/FormItem";
+import { FormItem, deriveAriaIds } from "../FormItem/FormItem";
 
 // STYLES ==============================================================================================================
 import "./radio-group.css";
@@ -61,10 +61,14 @@ export const RadioGroup = React.forwardRef(
             classNames.push(`label-first`);
         }
 
+        const reactId = React.useId();
+        const finalGroupId = id || `radio-group-${reactId.replace(/:/g, "")}`;
+        const { describedBy } = deriveAriaIds(finalGroupId, helpText, errorText);
+
         return (
             <FormItem
                 label={label}
-                htmlFor={id}
+                htmlFor={finalGroupId}
                 helpText={helpText}
                 errorText={errorText}
                 required={required}
@@ -74,23 +78,25 @@ export const RadioGroup = React.forwardRef(
                     as="div"
                     data-radio-group
                     ref={ref}
+                    id={finalGroupId}
                     classNames={classNames}
                     role="radiogroup"
                     aria-label={label}
+                    aria-invalid={Boolean(errorText) || undefined}
+                    aria-required={required}
+                    aria-describedby={describedBy}
                     style={columns ? { gridTemplateColumns: `repeat(${columns}, 1fr)` } : undefined}
                     {...props}
                 >
                     {options.map((option, index) => {
                         const { id: optionId, value: optionValue, label: optionLabel, ...optionProps } = option;
-                        const finalId = optionId || `${id}-option-${index}`;
+                        const finalId = optionId || `${finalGroupId}-option-${index}`;
                         const isChecked = value ? value === optionValue : defaultValue === optionValue;
 
                         return (
                             <Div
                                 key={finalId}
                                 data-radio-button
-                                role="radio"
-                                aria-checked={isChecked}
                                 className={labelFirst ? "label-first" : undefined}
                             >
                                 <input

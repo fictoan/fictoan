@@ -23,6 +23,9 @@ import {
     CodeBlock,
 }from "fictoan-react";
 
+// PACKAGE META ========================================================================================================
+import { version as fictoanVersion } from "fictoan-react/package.json";
+
 // LOCAL COMPONENTS ====================================================================================================
 import { CodeComparison } from "$components/CodeComparison/CodeComparison";
 import { ComponentGrid } from "$components/ComponentGrid/ComponentGrid";
@@ -83,11 +86,11 @@ const HomePage = () => {
                             language="bash"
                             withSyntaxHighlighting
                             showCopyButton
-                            source={`pnpm add fictoan-react@2.0.0-beta.13
+                            source={`pnpm add fictoan-react@${fictoanVersion}
 # or
-yarn add fictoan-react@2.0.0-beta.13
+yarn add fictoan-react@${fictoanVersion}
 # or
-npm install fictoan-react@2.0.0-beta.13`}
+npm install fictoan-react@${fictoanVersion}`}
                         />
                     </Portion>
 

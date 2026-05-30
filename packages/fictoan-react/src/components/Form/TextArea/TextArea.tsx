@@ -12,7 +12,7 @@ import { separateWrapperProps } from "../../../utils/propSeparation";
 import "./textarea.css";
 
 // OTHER ===============================================================================================================
-import { FormItem } from "../FormItem/FormItem";
+import { FormItem, deriveAriaIds } from "../FormItem/FormItem";
 import { InputLabelCustomProps } from "../InputLabel/InputLabel";
 
 // TODO Add minimumWordLength prop
@@ -165,11 +165,18 @@ export const TextArea = React.forwardRef(
         // Separate wrapper-level props (margin, padding, etc.) from input-specific props
         const {wrapperProps, inputProps} = separateWrapperProps(props);
 
+        const reactId = React.useId();
+        const finalId = id || `textarea-${reactId.replace(/:/g, "")}`;
+        const constructedHelpText = constructHelpText();
+        const { describedBy } = deriveAriaIds(finalId, constructedHelpText, errorText);
+        const hasError = Boolean(errorText) || invalid;
+
         return (
             <FormItem
                 label={label}
-                htmlFor={id}
-                helpText={constructHelpText()}
+                hideLabel={hideLabel}
+                htmlFor={finalId}
+                helpText={constructedHelpText}
                 errorText={errorText}
                 required={required}
                 size={size}
@@ -179,7 +186,7 @@ export const TextArea = React.forwardRef(
                     as="textarea"
                     ref={setRefs}
                     data-textarea
-                    id={id}
+                    id={finalId}
                     name={name}
                     value={value}
                     rows={rows}
@@ -191,6 +198,9 @@ export const TextArea = React.forwardRef(
                     disabled={disabled}
                     required={required}
                     autoComplete={autoComplete}
+                    aria-invalid={hasError || undefined}
+                    aria-required={required}
+                    aria-describedby={describedBy}
                     onChange={handleChange}
                     {...inputProps}
                 />

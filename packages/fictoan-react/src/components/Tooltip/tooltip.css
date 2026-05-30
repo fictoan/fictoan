@@ -1,26 +1,70 @@
+/* TOOLTIP /////////////////////////////////////////////////////////////////
+   Built on popover API + CSS anchor positioning. Each tooltip references
+   its target by anchor-name (set on the target via the component). The
+   `position-area` property handles placement relative to the anchor and
+   automatically respects viewport edges via the browser's positioning
+   engine — no JS getBoundingClientRect or collision detection. */
 [data-tooltip] {
-    position         : fixed;
-    top              : -9999px; /* Initial position off-screen */
-    left             : -9999px;
-    z-index          : 100000;
-    width            : auto;
-    height           : auto;
+    /* Reset popover defaults */
+    margin           : 0;
+    border           : 0;
     padding          : 8px 12px;
+    inset            : auto;          /* override popover's default top:0;left:0 */
     background-color : var(--tooltip-bg);
     color            : var(--tooltip-text);
     border-radius    : var(--tooltip-border-radius);
     max-width        : var(--tooltip-max-width);
-    pointer-events   : none;
-    opacity          : 0;
-    visibility       : hidden;
-    transition       : opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
     font-size        : 0.875rem;
     line-height      : 1.4;
     word-wrap        : break-word;
+
+    /* Smooth fade in/out via popover + @starting-style + allow-discrete */
+    opacity    : 0;
+    transition :
+        opacity 0.2s ease-in-out,
+        overlay 0.2s ease-in-out allow-discrete,
+        display 0.2s ease-in-out allow-discrete;
 }
 
-[data-tooltip].visible {
-    opacity    : 1;
-    visibility : visible;
-    display    : block;
+/* Hover/focus tooltips ignore pointer events; click tooltips stay interactive */
+[data-tooltip]:not([data-show-on="click"]) {
+    pointer-events : none;
+}
+
+[data-tooltip]:popover-open {
+    opacity : 1;
+}
+
+@starting-style {
+    [data-tooltip]:popover-open {
+        opacity : 0;
+    }
+}
+
+/* POSITIONING ////////////////////////////////////////////////////////////
+   `position-area` is the new shorthand for placing a positioned element
+   relative to its anchor. The browser handles viewport-edge fallback via
+   position-try-fallbacks (set further below). */
+[data-tooltip][data-position="top"] {
+    position-area          : top;
+    margin-bottom          : 8px;
+    position-try-fallbacks : bottom, flip-block;
+}
+
+[data-tooltip][data-position="bottom"] {
+    position-area          : bottom;
+    margin-top             : 8px;
+    position-try-fallbacks : top, flip-block;
+}
+
+[data-tooltip][data-position="left"] {
+    position-area          : left;
+    margin-right           : 8px;
+    position-try-fallbacks : right, flip-inline;
+}
+
+[data-tooltip][data-position="right"] {
+    position-area          : right;
+    margin-left            : 8px;
+    position-try-fallbacks : left, flip-inline;
 }

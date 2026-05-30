@@ -154,6 +154,8 @@ export { ToastsProvider, useToasts, type ToastsProviderProps, type ToastFunction
 
 export { Tooltip, type TooltipProps } from "./components/Tooltip";
 
+export { useViewTransition } from "./hooks/UseViewTransition";
+
 export {
     Text,
     type TextProps,

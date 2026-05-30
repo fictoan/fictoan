@@ -5,7 +5,24 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
 // UI ==================================================================================================================
-import { Element, Row, Portion, Heading2, Heading4, Heading5, Heading6, Text, Divider, Drawer, Tabs, CodeBlock, Accordion, Section, Span, Article } from "fictoan-react";
+import {
+    Element,
+    Row,
+    Portion,
+    Heading2,
+    Heading4,
+    Heading5,
+    Heading6,
+    Text,
+    Divider,
+    Drawer,
+    Tabs,
+    CodeBlock,
+    Accordion,
+    Section,
+    Span,
+    Article,
+}from "fictoan-react";
 
 // ASSETS ==============================================================================================================
 import AppleIcon from "../../assets/icons/logo-apple.svg";
@@ -14,7 +31,13 @@ import NPMIcon from "../../assets/icons/npm.svg";
 import PNPMIcon from "../../assets/icons/pnpm.svg";
 import WindowsIcon from "../../assets/icons/logo-windows.svg";
 import YarnIcon from "../../assets/icons/yarn.svg";
-import { snippetPageSetupJSX, snippetPageSetupCSS, snippetStructure, snippetUsage, snippetInstallation } from "../../assets/code-samples/CodeSamples";
+import {
+    snippetPageSetupJSX,
+    snippetPageSetupCSS,
+    snippetStructure,
+    snippetUsage,
+    snippetInstallation,
+}from "../../assets/code-samples/CodeSamples";
 
 // STYLES ==============================================================================================================
 import "./getting-started.css";
@@ -717,10 +740,11 @@ const GettingStarted = () => {
 
                         {/* DRAWER */}
                         <Drawer
+                            id="complex-setup-drawer"
                             position="right" size="medium"
-                            showOverlay closeOnClickOutside
-                            openWhen={isComplexSetupDrawerOpen}
-                            closeWhen={() => setIsComplexSetupDrawerOpen(false)}
+                            showOverlay
+                            isOpen={isComplexSetupDrawerOpen}
+                            onClose={() => setIsComplexSetupDrawerOpen(false)}
                             padding="micro"
                         >
                             <Heading4>NextJS sucks</Heading4>
@@ -865,6 +889,36 @@ const GettingStarted = () => {
                     </Portion>
                 </Row>
 
+                <Row horizontalPadding="huge">
+                    <Portion>
+                        <Heading6 marginBottom="nano">Overriding styles</Heading6>
+
+                        <Text marginBottom="micro">
+                            Theme tokens cover most customisation, but you can also override any component&rsquo;s CSS
+                            directly. Fictoan&rsquo;s bundled stylesheet is wrapped in an <code>@layer fictoan</code>{" "}
+                            cascade layer, and any CSS you write outside a layer beats layered styles regardless of
+                            specificity — so a plain rule wins, with no <code>!important</code> and no specificity hacks:
+                        </Text>
+
+                        <CodeBlock
+                            withSyntaxHighlighting
+                            language="css"
+                            marginBottom="micro"
+                            source={`/* Your own CSS — no layer, no !important needed */
+[data-card] {
+    border-color : var(--blue);
+    padding      : 24px;
+}`}
+                        />
+
+                        <Text marginBottom="micro">
+                            The one exception is the responsive utility classes (e.g.{" "}
+                            <code>show-only-on-mobile</code>, <code>hide-on-desktop</code>), which keep{" "}
+                            <code>!important</code> on purpose so layout helpers always apply.
+                        </Text>
+                    </Portion>
+                </Row>
+
                 <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
 
                 {/* ATTRIBUTE VALUES /////////////////////////////////////////////////////////////////////////////// */}
@@ -996,19 +1050,19 @@ const GettingStarted = () => {
                                     <code>micro</code> — 24px
                                 </Text>
                                 <Text marginBottom="nano">
-                                    <code>tiny</code> — 2vmax
+                                    <code>tiny</code> — clamp(8px, 2vmax, 24px)
                                 </Text>
                                 <Text marginBottom="nano">
-                                    <code>small</code> — 4vmax
+                                    <code>small</code> — clamp(12px, 4vmax, 48px)
                                 </Text>
                                 <Text marginBottom="nano">
-                                    <code>medium</code> — 8vmax
+                                    <code>medium</code> — clamp(16px, 8vmax, 80px)
                                 </Text>
                                 <Text marginBottom="nano">
-                                    <code>large</code> — 16vmax
+                                    <code>large</code> — clamp(24px, 16vmax, 160px)
                                 </Text>
                                 <Text marginBottom="nano">
-                                    <code>huge</code> — 24vmax
+                                    <code>huge</code> — clamp(32px, 24vmax, 320px)
                                 </Text>
                             </Portion>
                         </Row>

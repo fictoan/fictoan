@@ -13,6 +13,45 @@ import "./form-item.css";
 import { InputLabel } from "../InputLabel/InputLabel";
 import { Text } from "../../Typography/Text";
 
+// CONTEXT /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// FormItem exposes ids for its help/error text plus aggregate state (hasError,
+// isRequired) so child inputs can wire aria-describedby / aria-invalid /
+// aria-required without each component re-implementing the plumbing.
+export interface FormItemContextValue {
+    helpTextId  ? : string;
+    errorTextId ? : string;
+    describedBy ? : string;
+    hasError      : boolean;
+    isRequired    : boolean;
+}
+
+export const FormItemContext = React.createContext<FormItemContextValue | null>(null);
+
+export const useFormItemContext = () : FormItemContextValue | null => React.useContext(FormItemContext);
+
+// Merge an input's own aria-describedby with whatever FormItem provides.
+// Use in form inputs as: aria-describedby={mergeDescribedBy(ownDescribedBy, ctx?.describedBy)}
+export const mergeDescribedBy = (...ids : (string | undefined | null)[]) : string | undefined => {
+    const filtered = ids.filter((s) : s is string => Boolean(s));
+    return filtered.length > 0 ? filtered.join(" ") : undefined;
+};
+
+// Single source of truth for the help/error ids and the describedBy string.
+// FormItem uses it to id its Text nodes; each form input uses the same helper
+// (with the same baseId) to compute aria-describedby on its <input>. Both sides
+// derive identical strings as long as the form input passes `htmlFor` to
+// FormItem and uses the same value as its input id.
+export const deriveAriaIds = (
+    baseId   : string | undefined,
+    helpText : unknown,
+    errorText: unknown,
+) : { helpTextId ?: string; errorTextId ?: string; describedBy ?: string } => {
+    if (!baseId) return {};
+    const helpTextId = helpText ? `${baseId}-help` : undefined;
+    const errorTextId = errorText ? `${baseId}-error` : undefined;
+    return { helpTextId, errorTextId, describedBy : mergeDescribedBy(errorTextId, helpTextId) };
+};
+
 // TYPES ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export type FormItemElementType = HTMLDivElement;
 
@@ -21,6 +60,7 @@ export interface FormItemProps extends CommonAndHTMLProps<FormItemElementType> {
     label           ? : string;
     customLabel     ? : React.ReactNode;
     htmlFor         ? : string;
+    hideLabel       ? : boolean;
     // Info section
     helpText        ? : string | React.ReactNode;
     errorText       ? : string;
@@ -94,6 +134,7 @@ export const FormItem = React.forwardRef(
             label,
             customLabel,
             htmlFor,
+            hideLabel,
             helpText,
             errorText,
             validationState,
@@ -108,47 +149,64 @@ export const FormItem = React.forwardRef(
         const hasLabel = label || customLabel;
         const hasInfoSection = helpText || errorText;
 
+        // Stable id base for help/error text. Prefer the explicit `htmlFor` so
+        // ids tie back to the user-visible input id; fall back to React.useId
+        // when the consumer didn't pass one.
+        const reactId = React.useId();
+        const baseId = htmlFor || `form-item-${reactId.replace(/:/g, "")}`;
+        const { helpTextId, errorTextId, describedBy } = deriveAriaIds(baseId, helpText, errorText);
+
+        const contextValue : FormItemContextValue = {
+            helpTextId,
+            errorTextId,
+            describedBy,
+            hasError   : Boolean(errorText),
+            isRequired : Boolean(required),
+        };
+
         return (
-            <Element<FormItemElementType>
-                as="div"
-                data-form-item
-                data-form-spaced
-                ref={ref}
-                role="group"
-                required={required}
-                className={[ size ? `size-${size}` : "", labelFirst ? "label-first" : "" ].filter(Boolean)
-                    .join(" ") || undefined}
-                {...props}
-            >
-                {/* LABEL ////////////////////////////////////////////////////////////////////////////////////// */}
-                {hasLabel && (
-                    <Div data-label-wrapper data-has-validation={validationState ? "true" : undefined}>
-                        {customLabel || (label && <InputLabel label={label} htmlFor={htmlFor} />)}
-                        {validationState && <ValidationIcon state={validationState} />}
-                    </Div>
-                )}
+            <FormItemContext.Provider value={contextValue}>
+                <Element<FormItemElementType>
+                    as="div"
+                    data-form-item
+                    data-form-spaced
+                    ref={ref}
+                    role="group"
+                    required={required}
+                    className={[ size ? `size-${size}` : "", labelFirst ? "label-first" : "" ].filter(Boolean)
+                        .join(" ") || undefined}
+                    {...props}
+                >
+                    {/* LABEL ////////////////////////////////////////////////////////////////////////////////////// */}
+                    {hasLabel && (
+                        <Div data-label-wrapper data-has-validation={validationState ? "true" : undefined}>
+                            {customLabel || (label && <InputLabel label={label} htmlFor={htmlFor} hideLabel={hideLabel} />)}
+                            {validationState && <ValidationIcon state={validationState} />}
+                        </Div>
+                    )}
 
-                {/* INPUT ////////////////////////////////////////////////////////////////////////////////////// */}
-                <Div data-input-wrapper>
-                    {children}
-                </Div>
-
-                {/* INFO SECTION /////////////////////////////////////////////////////////////////////////////// */}
-                {hasInfoSection && (
-                    <Div className="info-section vertically-center-items">
-                        {helpText && (
-                            <Text className="help-text">
-                                {helpText}
-                            </Text>
-                        )}
-                        {errorText && (
-                            <Text className="error-text">
-                                {errorText}
-                            </Text>
-                        )}
+                    {/* INPUT ////////////////////////////////////////////////////////////////////////////////////// */}
+                    <Div data-input-wrapper>
+                        {children}
                     </Div>
-                )}
-            </Element>
+
+                    {/* INFO SECTION /////////////////////////////////////////////////////////////////////////////// */}
+                    {hasInfoSection && (
+                        <Div className="info-section vertically-center-items">
+                            {helpText && (
+                                <Text id={helpTextId} className="help-text">
+                                    {helpText}
+                                </Text>
+                            )}
+                            {errorText && (
+                                <Text id={errorTextId} role="alert" className="error-text">
+                                    {errorText}
+                                </Text>
+                            )}
+                        </Div>
+                    )}
+                </Element>
+            </FormItemContext.Provider>
         );
     },
 );
