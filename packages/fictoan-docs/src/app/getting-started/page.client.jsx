@@ -825,15 +825,6 @@ const GettingStarted = () => {
                         />
 
                         <Text marginBottom="micro">
-                            Fictoan&rsquo;s bundled CSS is wrapped in an <code>@layer fictoan</code> cascade layer.
-                            Because your own styles live outside any layer, they automatically beat Fictoan&rsquo;s
-                            component styles in cascade conflicts — so you can override almost anything with a plain CSS
-                            rule, with no <code>!important</code> and no specificity battles. The responsive utility
-                            classes (e.g. <code>show-only-on-mobile</code>) keep <code>!important</code> on purpose, so
-                            those still win.
-                        </Text>
-
-                        <Text marginBottom="micro">
                             In your content files, just import the components you need at the top, and use them inside
                             the return function like so—
                         </Text>
@@ -894,6 +885,36 @@ const GettingStarted = () => {
                                 Read more about theming here
                             </Link>
                             .
+                        </Text>
+                    </Portion>
+                </Row>
+
+                <Row horizontalPadding="huge">
+                    <Portion>
+                        <Heading6 marginBottom="nano">Overriding styles</Heading6>
+
+                        <Text marginBottom="micro">
+                            Theme tokens cover most customisation, but you can also override any component&rsquo;s CSS
+                            directly. Fictoan&rsquo;s bundled stylesheet is wrapped in an <code>@layer fictoan</code>{" "}
+                            cascade layer, and any CSS you write outside a layer beats layered styles regardless of
+                            specificity — so a plain rule wins, with no <code>!important</code> and no specificity hacks:
+                        </Text>
+
+                        <CodeBlock
+                            withSyntaxHighlighting
+                            language="css"
+                            marginBottom="micro"
+                            source={`/* Your own CSS — no layer, no !important needed */
+[data-card] {
+    border-color : var(--blue);
+    padding      : 24px;
+}`}
+                        />
+
+                        <Text marginBottom="micro">
+                            The one exception is the responsive utility classes (e.g.{" "}
+                            <code>show-only-on-mobile</code>, <code>hide-on-desktop</code>), which keep{" "}
+                            <code>!important</code> on purpose so layout helpers always apply.
                         </Text>
                     </Portion>
                 </Row>

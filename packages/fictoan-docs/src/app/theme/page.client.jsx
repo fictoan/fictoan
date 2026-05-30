@@ -22,6 +22,7 @@ import {
     sampleSwitcherSetup,
     sampleThemeGlobals,
     sampleFictoanTheme,
+    sampleUseViewTransition,
 } from "./CodeSamples";
 
 const ThemeDocs = () => {
@@ -99,6 +100,16 @@ const ThemeDocs = () => {
                         animation CSS. Browsers without the API switch instantly, and the crossfade is skipped for users
                         with <code>prefers-reduced-motion: reduce</code>.
                     </Text>
+
+                    <Text marginBottom="micro">
+                        The same crossfade is available for any state change via the <code>useViewTransition</code>
+                        hook — it returns a <code>startTransition(mutation)</code> callback that runs your update inside
+                        the browser&rsquo;s View Transitions API, with the same instant fallback and reduced-motion
+                        handling:
+                    </Text>
+
+                    <CodeBlock withSyntaxHighlighting source={sampleUseViewTransition} language="jsx"
+                               marginBottom="micro" />
                 </Portion>
             </Row>
 

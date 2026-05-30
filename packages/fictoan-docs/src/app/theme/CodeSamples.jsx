@@ -122,6 +122,21 @@ export const sampleThemeGlobals = `--global-border-radius : 8px;
 --huge   : clamp(32px, 24vmax, 320px);`;
 
 
+// USE VIEW TRANSITION //////////////////////////////////////////////////////////
+export const sampleUseViewTransition = `import { useViewTransition } from "fictoan-react";
+
+const Toggle = () => {
+    const startViewTransition = useViewTransition();
+    const [isOpen, setIsOpen] = useState(false);
+
+    return (
+        <Button onClick={() => startViewTransition(() => setIsOpen(open => !open))}>
+            {isOpen ? "Close" : "Open"}
+        </Button>
+    );
+};`;
+
+
 // FULL THEME //////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const sampleFictoanTheme = `/* ACCORDION //////////////////////////////////////////////////////////////// */
 :root {
