@@ -60,6 +60,7 @@ export interface FormItemProps extends CommonAndHTMLProps<FormItemElementType> {
     label           ? : string;
     customLabel     ? : React.ReactNode;
     htmlFor         ? : string;
+    hideLabel       ? : boolean;
     // Info section
     helpText        ? : string | React.ReactNode;
     errorText       ? : string;
@@ -133,6 +134,7 @@ export const FormItem = React.forwardRef(
             label,
             customLabel,
             htmlFor,
+            hideLabel,
             helpText,
             errorText,
             validationState,
@@ -178,7 +180,7 @@ export const FormItem = React.forwardRef(
                     {/* LABEL ////////////////////////////////////////////////////////////////////////////////////// */}
                     {hasLabel && (
                         <Div data-label-wrapper data-has-validation={validationState ? "true" : undefined}>
-                            {customLabel || (label && <InputLabel label={label} htmlFor={htmlFor} />)}
+                            {customLabel || (label && <InputLabel label={label} htmlFor={htmlFor} hideLabel={hideLabel} />)}
                             {validationState && <ValidationIcon state={validationState} />}
                         </Div>
                     )}

@@ -213,6 +213,7 @@ export const InputField = React.forwardRef(
         return (
             <FormItem
                 label={label}
+                hideLabel={hideLabel}
                 htmlFor={finalId}
                 helpText={helpText}
                 errorText={errorText}

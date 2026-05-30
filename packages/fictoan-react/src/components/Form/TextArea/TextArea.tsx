@@ -174,6 +174,7 @@ export const TextArea = React.forwardRef(
         return (
             <FormItem
                 label={label}
+                hideLabel={hideLabel}
                 htmlFor={finalId}
                 helpText={constructedHelpText}
                 errorText={errorText}

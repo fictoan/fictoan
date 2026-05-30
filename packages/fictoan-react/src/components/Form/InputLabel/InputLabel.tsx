@@ -32,7 +32,7 @@ export const InputLabel = React.forwardRef(
         let classNames = [];
 
         if (hideLabel) {
-            classNames.push("visually-hidden");
+            classNames.push("sr-only");
         }
 
         return (
