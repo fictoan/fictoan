@@ -57,14 +57,12 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
   `outputDir` instead of `outDir`, and `tsconfig.json`'s `declarationDir` never fired because `composite: true` makes
   plain `tsc` a no-op. Fixed by re-pointing both fields at `./dist/index.d.ts` and dropping the dead `dist/types` from
   `files`. Follow-up: add a postbuild assertion that the declared types file exists so this can't silently regress.
-- [ ] **Build/release hygiene** — a cluster of npm-path cleanups, none individually tracked: (1) `sourcemap: true`
-  (`vite.config.js`) + tsconfig `sourceMap`/`declarationMap` ship ~110 `.map` files (one 436 KB) in `npm pack`, useless
-  since source isn't published — exclude `**/*.map` or disable for the lib build; (2) the rollup banner literal is
-  `"use client;"` with the semicolon *inside* the string (`vite.config.js:153`), emitting a dead second directive per
-  chunk — remove it and rely on the `preserveUseClient` plugin; (3) remove the dead `build:umd` script (missing
-  `vite.config.umd.js`) and the `build:props-metadata` call in `scripts/rebuild.sh`; (4) drop unused devDeps
-  `vite-plugin-lib-inject-css` and `@fullhuman/postcss-purgecss`, and the stale `$colour` alias to a nonexistent
-  `src/colour/` (`vite.config.js`).
+- [~] **Build/release hygiene** — npm-path cleanups. *Done:* removed the malformed `"use client;"` rollup banner
+  (`vite.config.js`; the real directive comes from `preserveUseClient`), the dead `build:umd` script + the
+  `build:props-metadata` call in `scripts/rebuild.sh`, and the stale `$colour` alias. *Still open:* `sourcemap: true`
+  (`vite.config.js`) + tsconfig `sourceMap`/`declarationMap` ship ~110 `.map` files in `npm pack` — prune via
+  `.npmignore` (keeps local debug maps) rather than killing emission; and drop the unused devDeps
+  `vite-plugin-lib-inject-css` + `@fullhuman/postcss-purgecss` (needs a lockfile update).
 
 ### Correctness bugs to clear
 
@@ -97,18 +95,18 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
   `tabletLandscapeSpan="7"` silently got no `grid-column: span 7` in 3 of 4 breakpoint bands. Fixed by deleting the
   single space in those three rules (verified against the span-6 twins, which build correctly). The base digit
   selectors' trailing spaces (before the block brace) are harmless and were left alone.
-- [ ] **ThemeProvider blocks SSR of its whole subtree** — `ThemeProvider.tsx:114` renders `{shouldRender && children}`
-  where `shouldRender` starts `false` (`:58`) and only flips inside a post-mount effect (`:95`), so during server render
-  and initial paint the *entire* wrapped app renders nothing (verified: static export ships an empty
-  `data-theme-provider` div). This is a full SSR/SSG outage for any consumer (including the docs site), not just a
-  theme-colour flash. Fix: render children unconditionally and resolve the persisted theme with the standard no-flash
-  pattern — expose a small pre-hydration inline script (replicating `getStorageKey()` in plain JS) for the document
-  head, then drop the gate. Note the consumer-CSP caveat (inline script needs `unsafe-inline`/nonce) and
-  regression-test hydration.
-- [ ] **`fontStyle="sans-serif"` is dead** — Text/Heading default `fontStyle="sans-serif"` and emit the class
-  `font-sans-serif` (`Text.tsx`, `Heading.tsx`), but `typography.css` only defines `.font-sans` — so the default works
-  only by accident via the inherited body font and breaks if a consumer changes the base. Rename `.font-sans` →
-  `.font-sans-serif` (it's undocumented/unused, so zero breakage).
+- [ ] **ThemeProvider SSR un-gate + docs prerender-safety** *(paired effort — attempted, reverted)* —
+  `ThemeProvider.tsx:114` renders `{shouldRender && children}` where `shouldRender` starts `false` and only flips in a
+  post-mount effect, so server/SSG render emits an empty `data-theme-provider` div, blanking the *entire* wrapped app
+  (incl. the docs) — a full SSR/SEO outage. The library fix is small (render children unconditionally + a pre-hydration
+  no-flash inline script replicating `getStorageKey()`; optional `nonce` for strict CSP). **But it can't land alone:**
+  the gate had made the docs effectively client-only, so un-gating surfaces a *cascade* of pre-existing prerender bugs
+  in the docs — render-time `getComputedStyle` in `useThemeVariables` (28 pages), `cssVariablesList is not defined` on
+  `/template`, etc. Land as one effort: the ~10-line library un-gate **plus** a docs prerender-safety pass (guard the
+  theme-config utils + audit every prerendered page). Reverted for now to keep the docs build/CI green.
+- [x] **`fontStyle="sans-serif"` is dead** — Text/Heading emit the class `font-sans-serif` by default, but
+  `typography.css` only defined `.font-sans`, so the default font class was a no-op (it only worked via the inherited
+  body font). Renamed the rule to `.font-sans-serif` (it was otherwise unused — verified).
 - [ ] **FormItemGroup `Math.random()` id** — `FormItemGroup.tsx:40` derives its fallback id from `Math.random()`, which
   is non-deterministic across server/client and causes hydration mismatches (the docs are Next). Every other form
   component uses `React.useId` for exactly this reason — including PinInputField (the fix above). Replace with `useId`
@@ -154,17 +152,14 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
   to the search input when open, so it sits on a non-focused element — move it onto the search input. **This reopens the
   shipped `aria-activedescendant` item** (above) whose placement is wrong. (This is the concrete content of the old
   "ListBox combobox pattern" item — it remains a separate project from Modal/Drawer.)
-- [ ] **RadioGroup duplicate radio role** — the RadioButton role-hygiene fix never reached RadioGroup:
-  `RadioGroup.tsx:100-101` wraps every native radio in a `<Div role="radio" aria-checked>`, so AT announces two radios
-  per option with split state. Remove `role`/`aria-checked` from the wrapper (the native input at `:104` already
-  provides them). Separately, the option-id fallback uses the raw `id` prop instead of the stable group id at
-  `RadioGroup.tsx:93`, `CheckboxAndSwitchGroup.tsx:149,274`, and `RadioTabGroup.tsx:217` — switch all four to
-  `finalGroupId`. (Size and per-radio `aria-required` are already handled correctly; don't touch those.)
-- [ ] **`hideLabel` is a no-op** — InputField/TextArea/Checkbox/Switch all expose `hideLabel` and destructure it out but
-  none forward it; FormItem has no `hideLabel` prop. And the InputLabel implementation is broken too: it pushes the
-  class `visually-hidden`, which doesn't exist (the real utility is `.sr-only`, `reset.css`). Fix end-to-end: add
-  `hideLabel` to FormItemProps, forward it through FormItem to InputLabel, pass it from each input, and change InputLabel
-  to push `sr-only`. (There is currently no working way to get a visually-hidden-but-announced label.)
+- [~] **RadioGroup duplicate radio role** — *done:* removed the wrapper `<Div role="radio" aria-checked>` around each
+  native radio (`RadioGroup.tsx`), so AT no longer announces two radios per option; the native input carries the role +
+  checked state and the CSS styles off `input:checked`. *Still open:* the option-id fallback uses the raw `id` prop
+  instead of the stable group id at `RadioGroup.tsx:93`, `CheckboxAndSwitchGroup.tsx:149,274`, and
+  `RadioTabGroup.tsx:217` — switch all four to `finalGroupId`.
+- [x] **`hideLabel` is a no-op** — fixed end-to-end: added `hideLabel` to `FormItemProps`, forwarded it through FormItem
+  to InputLabel, passed it from InputField/TextArea/Checkbox/Switch, and changed InputLabel to push `.sr-only` (it
+  previously pushed the non-existent `visually-hidden`). A visually-hidden but screen-reader-announced label now works.
 - [ ] **Range group label IDREF dangles** — both SingleThumbRange and DualThumbRange set
   `aria-labelledby` to a `{finalId}-label` id on the `role="group"` wrapper (`Range.tsx:265,516`) but nothing renders an
   element with that id (the InputLabel has `htmlFor` but no `id`), so the accessible name resolves to nothing and axe
@@ -173,29 +168,21 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
   which defeats the global `*:focus-visible` outline (`reset.css`), so keyboard focus is invisible (WCAG 2.4.7). Add a
   `[data-file-upload-area]:has(.file-input:focus-visible)` outline rule reusing the focus token — exactly as
   RadioButton/Checkbox/RadioTabs already do.
-- [ ] **Modal close button keyboard-dead; Notification dismiss lacks button semantics** — Modal's × is a `<Text>`→`<p>`
-  with `tabIndex=0` + `onClick` but no key handler (`Modal.tsx:113-122`), so it's focusable yet can't be activated by
-  keyboard (WCAG 2.1.1; Escape still works via `popover="auto"`). Notification's dismiss is a `<div>` with a manual key
-  handler but no `role="button"`. Use a native `<button type="button">` in both (as Drawer already does), delete the
-  hand-rolled key handling, and add an `appearance:none` reset to the dismiss-button CSS.
-- [ ] **Accordion ARIA is broken** — `Accordion.tsx:36-44` hardcodes `aria-labelledby="accordion-summary"` and
-  `aria-controls="accordion-content"` as literal static strings pointing at ids no element has (so the references dangle
-  and every accordion emits the same literals), and `aria-expanded` tracks the `isOpen` prop instead of the native
-  `<details>` toggle, so it goes stale on click. Native `<details>`/`<summary>` already expose disclosure; drop the
-  redundant `role`/`aria-*`, or use `useId` attached to a real summary id if a label is wanted. Pair with the tracked
-  `<details name="...">` follow-up since both touch the same attributes.
-- [ ] **Tooltip has no accessible link + click-mode bug** — `Tooltip.tsx:35-93` wires hover/focus on the target and
-  renders `<div role="tooltip" id=...>` but never sets `aria-describedby` on the target, so SR users who focus the
-  anchor get no announcement (WCAG 4.1.2). And `tooltip.css` sets `pointer-events:none` on every `[data-tooltip]`, which
-  is right for hover but makes `showOn="click"` tooltips with interactive content unclickable. Fix: set
-  `aria-describedby` in the existing effect (clean up on unmount), and scope `pointer-events:none` to hover mode via a
-  data attribute on the popover (mirroring the existing `data-position`).
-- [ ] **Pagination arrows are unlabelled** — the default `renderItem` builds first/previous/next/last as
-  `<Button kind="custom">` whose only child is an inline `<svg>` with no `aria-label`/`title`/text
-  (`Pagination.tsx:34-90`), so AT announces bare "button" controls (WCAG 4.1.2). Pass per-type `aria-label` ("Go to
-  first page", "Previous page", …) into `paginationItemProps`, add `aria-hidden="true"` to the decorative SVGs, and add
-  optional label props to `constants.ts` (mirroring `itemDisplayText`/`loadingText`) for localisation. Numeric buttons
-  are already fine.
+- [~] **Modal close button keyboard-dead; Notification dismiss lacks button semantics** — *done:* Modal's × is now a
+  native `<button type="button">` (was a `<Text>`→`<p>` with `tabIndex` + `onClick` but no key handler, WCAG 2.1.1),
+  with an `appearance`/`background`/`border` reset on `.dismiss-button`. *Still open:* Notification's dismiss is a
+  `<div>` with a manual key handler but no `role="button"` — give it native button semantics too.
+- [x] **Accordion ARIA is broken** — dropped the hardcoded `aria-labelledby="accordion-summary"` /
+  `aria-controls="accordion-content"` (dangling ids), the redundant `role`s + `tabIndex`, and the stale `aria-expanded`;
+  native `<details>`/`<summary>` provide disclosure semantics (CSS only keys off `[open]`, so no visual change). The
+  `<details name="...">` exclusive-accordion follow-up (Bet 3) is separate and still open.
+- [~] **Tooltip has no accessible link + click-mode bug** — *done:* `aria-describedby` is now set on the target in the
+  existing effect (cleaned up on unmount), so SR users who focus the anchor get the tooltip announced (WCAG 4.1.2).
+  *Still open:* `tooltip.css` sets `pointer-events:none` on every `[data-tooltip]` — right for hover but makes
+  `showOn="click"` tooltips with interactive content unclickable; scope it to hover mode via a data attribute.
+- [x] **Pagination arrows are unlabelled** — the first/previous/next/last icon buttons now get a per-type `aria-label`
+  ("Go to first page", …) and the decorative SVGs are `aria-hidden="true"` (WCAG 4.1.2). Labels are hardcoded English
+  for now; exposing them via `constants.ts` (mirroring `itemDisplayText`) for localisation is a future nicety.
 - [ ] **Over-applied live-region roles** — `Badge.tsx` always sets `role="status"`, so a static "New"/count badge
   announces as a polite live region (and a changing count spams AT). `SkeletonGroup` uses `role="alert"` (assertive) for
   loading scaffolding — should be `role="status"` + `aria-busy`, matching the existing Spinner idiom; and each Skeleton
@@ -298,12 +285,11 @@ Once the gating items are in, these unlock real improvements.
   two PRs: (1) rewrite those to direct-path imports, add a typed `./components` subpath export, and wire
   `pnpm --filter fictoan-react tree-shake` into ci.yml; (2) the riskier switch to Rollup `preserveModules`/per-component
   entries, which interacts with the post-build plugins and needs re-testing.
-- [ ] **Enable CSS minification** — `vite.config.js:140` sets `cssMinify: false`, shipping a ~589 KB raw `dist/index.css`
-  (the real story behind the "584 KB raw bundle" line). Flip it on, but the post-build rewrites (`fixCssForTurbopack`,
-  `wrapInFictoanLayer`) must run *after* minify (or fold the `}*` fix into PostCSS) — esbuild minify reintroduces `}*`
-  sequences. Worth ~18 KB gzipped (~29%, measured ~62→44 KB). (The separate `generateColourClasses.ts`
-  boilerplate-collapse saves only ~2.7 KB gzipped and changes the cascade via a zero-specificity `:where()` rule — treat
-  as a distinct, riskier item.)
+- [x] **Enable CSS minification** — flipped `cssMinify` on; `dist/index.css` dropped from ~589 KB to ~464 KB raw
+  (61.7 → 44 KB gzipped, ~28%). The post-build `fixCssForTurbopack`/`wrapInFictoanLayer` plugins run in `closeBundle` on
+  the minified bytes, so the `@layer` wrap and `}*` fix still apply — verified, lib + docs build clean. (The separate
+  `generateColourClasses.ts` boilerplate-collapse — ~2.7 KB gzipped, changes the cascade via a `:where()` rule — is
+  still a distinct, riskier item.)
 - [ ] **Card padding diverges from the global scale** — `card.css` hardcodes per-size px padding, overriding the global
   token-driven `.padding-all-*` utilities that the `padding` prop resolves to on every other Element. So `padding`
   behaves differently on Card than anywhere else. Delete the Card overrides (and the `600px` media override if
@@ -375,15 +361,12 @@ competitors to copy.
 The plain-English prop model is the differentiator. Make it official.
 
 - [x] Machine-readable component schema (shipped on `beta-18`).
-- [~] **Schema-meta taught non-existent props** — the curated examples/tips in `schema-meta.ts` (the highest-signal
-  pattern an LLM keys off) cited an API that doesn't exist: Modal/Drawer used `openWhen` (real: `isOpen`) and
-  `onCloseCallback` (real: `onClose`), and the InputField tips said `iconLeft`/`iconRight`/`helperText`/`successText`
-  (real: `innerIconLeft`/`innerIconRight`/`helpText`; no success variant — only `errorText` + `validationState`). The
-  schema is *the* AI grounding asset, so this is the worst possible bug. The strings are now fixed; **still to do:** add
-  a build-time guard in `generateSchema.ts` that tokenises JSX attribute names + backtick-quoted identifiers from every
-  example/tip and fails the build on any token not in that component's extracted props ∪ universal props (whitelisting
-  native HTML attributes like `value`/`type`/`required`), so it can't drift again. *(Regenerate the schema and `llms.txt`
-  on the next build to pick up the corrected strings.)*
+- [x] **Schema-meta taught non-existent props** — the curated examples/tips in `schema-meta.ts` cited an API that
+  doesn't exist (Modal/Drawer `openWhen`/`onCloseCallback`; InputField `iconLeft`/`helperText`/`successText`). The
+  strings are fixed, AND `generateSchema.ts` now has a build-time drift guard: it validates each example's root-tag
+  attributes against that component's real props ∪ universal props ∪ known HTML attributes and **fails the build** on
+  any unknown (tips are warn-only). Proven by reintroducing `openWhen` and watching the build fail — so the AI grounding
+  asset can't silently drift to non-existent props again.
 - [ ] **Schema completeness gaps** — the shipped `fictoan-schema.json` has holes that undercut it as a grounding asset:
   `generateSchema.ts` parses each `index.tsx`, so Toast/Notification (which re-export only their `*Provider`) get no
   entry despite an orphaned `schema-meta` Notification block; 42/58 components have an empty `description` and no
