@@ -164,6 +164,83 @@ for (const dir of componentDirs) {
 }
 
 // ---------------------------------------------------------------------------
+// Drift guard
+//
+// The curated examples in schema-meta.ts are the highest-signal pattern an LLM
+// copies, so a prop that doesn't exist there is the worst kind of bug. Validate
+// that every attribute on each example's ROOT tag is a real prop of that
+// component (custom ∪ universal) or a known native HTML attribute, and fail the
+// build otherwise. Root-tag-only scoping avoids false positives from child
+// components in the example (e.g. a <Portion> inside a <Row> example). Tips are
+// checked loosely against the union of all known names — warn only, since tips
+// legitimately mention values, sibling-component props, and concepts.
+
+const NATIVE_HTML_ATTRS = new Set([
+    "id", "className", "class", "style", "key", "ref", "role", "tabIndex",
+    "type", "value", "defaultValue", "name", "placeholder", "disabled",
+    "required", "checked", "selected", "readOnly", "htmlFor", "href", "src",
+    "alt", "title", "target", "rel", "min", "max", "step", "rows", "cols",
+    "width", "height", "colSpan", "rowSpan",
+    "onClick", "onChange", "onSubmit", "onInput", "onKeyDown", "onBlur", "onFocus",
+]);
+
+// The opening JSX tag of `componentName`, up to the first ">" that isn't part
+// of an "=>" arrow inside an attribute value.
+const openingTagOf = (snippet : string, componentName : string) : string => {
+    const start = snippet.indexOf(`<${componentName}`);
+    if (start === -1) return "";
+    for (let i = start; i < snippet.length; i++) {
+        if (snippet[i] === ">" && snippet[i - 1] !== "=") return snippet.slice(start, i);
+    }
+    return snippet.slice(start);
+};
+
+const jsxAttrNames = (tag : string) : string[] =>
+    [ ...tag.matchAll(/[\s\n]([a-zA-Z][a-zA-Z0-9]*)\s*=/g) ].map(m => m[1]);
+
+const backtickIdents = (text : string) : string[] =>
+    [ ...text.matchAll(/`([a-zA-Z][a-zA-Z0-9]*)`/g) ].map(m => m[1]);
+
+const allComponentPropNames = new Set<string>();
+for (const c of Object.values(components)) {
+    for (const p of Object.keys(c.props)) allComponentPropNames.add(p);
+}
+const tipKnown = new Set<string>([
+    ...allComponentPropNames,
+    ...universalPropNames,
+    ...NATIVE_HTML_ATTRS,
+    ...Object.values(enums).flat(),
+    ...allColours,
+]);
+
+const driftErrors : string[] = [];
+for (const [ name, comp ] of Object.entries(components)) {
+    if (!comp.example) continue;
+    const known = new Set<string>([
+        ...Object.keys(comp.props), ...universalPropNames, ...NATIVE_HTML_ATTRS,
+    ]);
+    for (const attr of jsxAttrNames(openingTagOf(comp.example, name))) {
+        if (!known.has(attr)) {
+            driftErrors.push(`${name}: example uses <${name} ${attr}=...> but "${attr}" is not a prop of ${name} (nor a universal prop or known HTML attribute).`);
+        }
+    }
+    for (const tip of comp.tips || []) {
+        for (const ident of backtickIdents(tip)) {
+            if (!tipKnown.has(ident)) {
+                console.warn(`  ~ ${name}: tip mentions \`${ident}\` — not a known prop/value; check it isn't stale.`);
+            }
+        }
+    }
+}
+
+if (driftErrors.length > 0) {
+    console.error("\n✗ Schema-meta drift — example(s) reference props that don't exist:");
+    for (const e of driftErrors) console.error(`  - ${e}`);
+    console.error("\nFix the example in src/scripts/schema-meta.ts (or the component), then rebuild.\n");
+    process.exit(1);
+}
+
+// ---------------------------------------------------------------------------
 // Compose and write
 
 const schema = {
