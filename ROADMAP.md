@@ -96,13 +96,18 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
   single space in those three rules (verified against the span-6 twins, which build correctly). The base digit
   selectors' trailing spaces (before the block brace) are harmless and were left alone.
 - [x] **ThemeProvider SSR un-gate + docs prerender-safety** — un-gated ThemeProvider (render children unconditionally +
-  a pre-hydration no-flash inline script replicating `getStorageKey()`, falling back to `currentTheme`; optional `nonce`
+  a pre-hydration no-flash inline script reading the persisted-theme key, falling back to `currentTheme`; optional `nonce`
   prop for strict CSP), fixing the SSR/SEO blackout where server/SSG rendered an empty `data-theme-provider` div. The
   docs had to be made prerender-safe to land it — the feared cascade was bounded to two fixes: guarded
   `useThemeVariables`' render-time `getComputedStyle` (falls back to declared defaults on the server) and the
   `/template` scaffold's undefined `cssVariablesList`. Audited the rest — all other browser-API use is in
   effects/handlers. Verified: the static export now ships ~20k chars of real content + the inline script; lib + docs
   build clean.
+- [x] **ThemeProvider `storageKey` prop** — replaced the hostname/port-derived localStorage key (which couldn't
+  isolate apps on a shared origin — `localhost` in dev, GitHub Pages — and diverged between SSR and client) with an
+  explicit `storageKey` prop (default `"fictoan-theme"`). One resolved key now drives the init read, the persist write,
+  and the no-flash script. Dev-only one-time warning when left default, recommending a unique value (package name).
+  Docs use `storageKey="fictoan-docs"` and document the `pkg.name` pattern.
 - [x] **`fontStyle="sans-serif"` is dead** — Text/Heading emit the class `font-sans-serif` by default, but
   `typography.css` only defined `.font-sans`, so the default font class was a no-op (it only worked via the inherited
   body font). Renamed the rule to `.font-sans-serif` (it was otherwise unused — verified).
@@ -475,6 +480,10 @@ ages better.
   button. A real and growing UI category that didn't exist in 2020.
 - [x] **`stats.html` gitignore** — was regenerated on every build and showed up as a dirty file. Added `stats.html` to
   `.gitignore` and untracked the existing copy (`git rm --cached`).
+- [ ] **Docs `version` import warning** — `src/app/page.client.tsx` and `src/components/Header/VersionBadge.tsx` import
+  a named `version` from a default-exporting module, which webpack warns about on every docs build ("only default export
+  is available soon"). Import the default and read `.version` (or fix the source module's exports). Cosmetic — the build
+  still succeeds — but noisy.
 
 ---
 
