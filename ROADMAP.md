@@ -278,13 +278,18 @@ Once the gating items are in, these unlock real improvements.
   `theme.css`/`globals.css`/`typography.css` into the schema (name, default, category, references) so the configurator,
   TS types, docs, AND an MCP/AI consumer all derive from one source — replacing the runtime `document.styleSheets`
   scraping with name-substring category guessing in `themeConfigurator.tsx`.
-- [ ] **Per-component tree-shaking is broken** — `agadoo` (the package's own `tree-shake` script) exits 1 with "Failed
-  to tree-shake dist/index.js" and isn't wired into CI; the lib build collapses all ~30 components into one shared
-  chunk, so `import { Button } from "fictoan-react"` pulls in the whole graph. A cheap mechanical cause: five components
-  deep-import siblings through the full barrel `$/components` (Form, Accordion, CodeBlock, Modal, Breadcrumbs). Ship as
-  two PRs: (1) rewrite those to direct-path imports, add a typed `./components` subpath export, and wire
-  `pnpm --filter fictoan-react tree-shake` into ci.yml; (2) the riskier switch to Rollup `preserveModules`/per-component
-  entries, which interacts with the post-build plugins and needs re-testing.
+- [x] **Per-component code-splitting** *(dead-**component** elimination — NOT prop/value stripping. Every component,
+  prop, value, and the whole schema always ship in full; this only changes what a CONSUMER's bundle ends up including
+  when they import a subset.)* — the build used to collapse all ~30 components into one ~120 KB chunk, so
+  `import { Button } from "fictoan-react"` dragged in the entire graph. Fixed: switched the lib build to Rollup
+  `preserveModules` (+ `cssCodeSplit:false` so the `@layer`/Turbopack post-build plugins still get one `dist/index.css`),
+  so dist is now one JS file per source module and the barrel re-exports from those files; rewrote the four components
+  that deep-imported the whole barrel `$/components` (Form, CodeBlock, Accordion, Breadcrumbs) to direct paths; and set
+  `sideEffects` to `["**/*.css"]` so the JS is shakeable while CSS is preserved. Verified:
+  `dist/components/Button/Button.js` imports only Element + react (no other components), and lib + docs (a real
+  consumer) build clean. Optional follow-up: a typed `./components/*` subpath export for explicit deep imports.
+  *(Aside: `agadoo` still reports "failed" — its test is "does importing the entry reduce to nothing", which a
+  CSS-bearing entry can never satisfy, so it's the wrong gate here; left as a manual check, not wired into CI.)*
 - [x] **Enable CSS minification** — flipped `cssMinify` on; `dist/index.css` dropped from ~589 KB to ~464 KB raw
   (61.7 → 44 KB gzipped, ~28%). The post-build `fixCssForTurbopack`/`wrapInFictoanLayer` plugins run in `closeBundle` on
   the minified bytes, so the `@layer` wrap and `}*` fix still apply — verified, lib + docs build clean. (The separate
