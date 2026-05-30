@@ -290,6 +290,19 @@ Once the gating items are in, these unlock real improvements.
   behaves differently on Card than anywhere else. Delete the Card overrides (and the `600px` media override if
   redundant) so the prop resolves to the same token-based utilities. If Card genuinely needs distinct padding, make it a
   deliberate `--card-padding-*` token, not a silent px override.
+- [ ] **Component base styles shadow universal colour/shape props (use cascade sub-layers)** — a component's base rule
+  (e.g. `[data-badge]`, an attribute selector at specificity 0,1,0) ties with the prop-emitted utility classes
+  (`.bg-*`, `.text-*`, `.shape-*`, also 0,1,0) and wins on source order, so `bgColour`/`textColour`/`shape`/etc.
+  silently do nothing on some components (confirmed on Badge — DevTools showed `[data-badge]`'s `background-color`
+  beating `.bg-green-light60`). Systemic, not Badge-specific. **Fix via CSS cascade sub-layers, not per-component
+  `:where()`:** split the bundle into `@layer fictoan.base` (component + global/theme CSS) and `@layer fictoan.utilities`
+  (the prop utility classes from `colours.css`/`utilities.css`), declared utilities-last, so utilities beat base
+  regardless of specificity — no per-selector churn, no regression from lowering specificity, and the "unlayered
+  consumer CSS wins" guarantee still holds on top. Crux is the build: `wrapInFictoanLayer` (`vite.config.js`) wraps the
+  whole concatenated `dist/index.css` in one layer and can't tell base from utility rules, so it needs the utility files
+  bucketed into the utilities sub-layer (per-file layer wrapping or a marker-based split). Verify per-component
+  visually. *(The tactical alternative — `:where()` on each conflicting base rule — was considered and rejected as
+  churny + regression-prone.)*
 - [ ] **No first-party dark theme** — ThemeProvider toggles a class on `documentElement` and all tokens are layered
   (component → semantic `--hue`/`--shade` → OKLCH), so a dark theme is just an override block — but the library ships
   none, forcing every consumer to hand-author dark mode (as the docs do, ~227 lines). Ship a `.theme-dark` token
