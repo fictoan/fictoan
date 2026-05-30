@@ -740,10 +740,11 @@ const GettingStarted = () => {
 
                         {/* DRAWER */}
                         <Drawer
+                            id="complex-setup-drawer"
                             position="right" size="medium"
-                            showOverlay closeOnClickOutside
-                            openWhen={isComplexSetupDrawerOpen}
-                            closeWhen={() => setIsComplexSetupDrawerOpen(false)}
+                            showOverlay
+                            isOpen={isComplexSetupDrawerOpen}
+                            onClose={() => setIsComplexSetupDrawerOpen(false)}
                             padding="micro"
                         >
                             <Heading4>NextJS sucks</Heading4>
@@ -1019,19 +1020,19 @@ const GettingStarted = () => {
                                     <code>micro</code> — 24px
                                 </Text>
                                 <Text marginBottom="nano">
-                                    <code>tiny</code> — 2vmax
+                                    <code>tiny</code> — clamp(8px, 2vmax, 24px)
                                 </Text>
                                 <Text marginBottom="nano">
-                                    <code>small</code> — 4vmax
+                                    <code>small</code> — clamp(12px, 4vmax, 48px)
                                 </Text>
                                 <Text marginBottom="nano">
-                                    <code>medium</code> — 8vmax
+                                    <code>medium</code> — clamp(16px, 8vmax, 80px)
                                 </Text>
                                 <Text marginBottom="nano">
-                                    <code>large</code> — 16vmax
+                                    <code>large</code> — clamp(24px, 16vmax, 160px)
                                 </Text>
                                 <Text marginBottom="nano">
-                                    <code>huge</code> — 24vmax
+                                    <code>huge</code> — clamp(32px, 24vmax, 320px)
                                 </Text>
                             </Portion>
                         </Row>

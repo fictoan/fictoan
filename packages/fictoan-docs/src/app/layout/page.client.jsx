@@ -501,6 +501,13 @@ const LayoutDocs = () => {
                                 </Portion>
                             </Row>
 
+                            <Text size="small" marginTop="nano" marginBottom="micro">
+                                The box resizes with the <strong>Row’s</strong> width — each Row is a CSS container —
+                                while the highlighted label tracks the <strong>viewport</strong> via
+                                <code>showOnlyOn*</code>. They line up at full width, but can differ near a breakpoint
+                                when the Row is narrower than the viewport.
+                            </Text>
+
                             <Row bgColour="slate-10" marginBottom="none" isFullHeight retainLayoutAlways>
                                 <Portion desktopSpan="1" bgColour="sky-light60" paddingTop="micro" />
                                 <Portion desktopSpan="1" bgColour="sky-light60" paddingTop="micro" />

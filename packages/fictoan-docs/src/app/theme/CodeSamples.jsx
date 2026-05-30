@@ -115,11 +115,11 @@ export const sampleThemeGlobals = `--global-border-radius : 8px;
 
 --nano   : 8px;
 --micro  : 24px;
---tiny   : 2vmax;
---small  : 4vmax;
---medium : 8vmax;
---large  : 16vmax;
---huge   : 24vmax;`;
+--tiny   : clamp(8px, 2vmax, 24px);
+--small  : clamp(12px, 4vmax, 48px);
+--medium : clamp(16px, 8vmax, 80px);
+--large  : clamp(24px, 16vmax, 160px);
+--huge   : clamp(32px, 24vmax, 320px);`;
 
 
 // FULL THEME //////////////////////////////////////////////////////////////////////////////////////////////////////////
