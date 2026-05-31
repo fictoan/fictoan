@@ -92,11 +92,16 @@ function fixCssForTurbopack() {
     };
 }
 
-// CSS files holding the universal utility classes (colour / shape / spacing
-// helpers driven by props like bgColour, textColour, shape). These must beat a
-// component's base rule on a specificity tie, so they live in a later-declared
-// cascade sub-layer.
-const UTILITY_CSS = [ "colours.css", "custom-colours.css", "utilities.css" ];
+// Only the COLOUR utility files go in the later `fictoan.utilities` sub-layer —
+// those are the ones a component's base rule shadowed (e.g. `[data-badge]`'s
+// `background-color` beating `.bg-green-light60`). `utilities.css` (padding /
+// margin / shape / …) deliberately stays in `fictoan.base`: some components
+// legitimately *refine* those utilities — e.g. Row's responsive side-padding
+// (`[data-row].padding-left-huge.padding-right-huge` + @media) overriding the flat
+// `.padding-left-huge` — and that must be settled by specificity, not flipped by
+// layer order (which would make the flat utility win and squeeze content on narrow
+// viewports).
+const UTILITY_CSS = [ "colours.css", "custom-colours.css" ];
 
 // Bucket each CSS module into a cascade sub-layer at transform time, using
 // RELATIVE layer names so wrapInFictoanLayer() can nest them inside the single

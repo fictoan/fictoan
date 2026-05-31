@@ -35,9 +35,12 @@ already half-owns.
 ## Recently shipped (on `beta-19`)
 
 - [x] **Cascade sub-layers fix prop-shadowing** — split `@layer fictoan` into ordered `fictoan.base` (component +
-  global/theme CSS) and `fictoan.utilities` (colour/utility classes) sub-layers, declared utilities-last, so universal
-  colour/shape props beat component base rules on a specificity tie (the Badge `bgColour` bug). Single outer
-  `@layer fictoan { … }` block preserved so consumer `@import` chains and the unlayered-wins guarantee are unaffected.
+  global/theme CSS + general `utilities.css`) and `fictoan.utilities` (only the colour utilities — `colours.css`),
+  declared utilities-last, so universal colour props beat the component base rules that shadowed them (the Badge
+  `bgColour` bug). Only the colour files go in the later sub-layer: spacing/shape utilities stay in `base` so components
+  can still legitimately refine them (e.g. Row's responsive side-padding overriding `.padding-left-huge` — putting that
+  utility in a later layer squeezed content on narrow viewports). Single outer `@layer fictoan { … }` block preserved so
+  consumer `@import` chains and the unlayered-wins guarantee are unaffected.
 - [x] **`<Heading>`/`<Text>` honour the themeable font** — dropped the default `fontStyle="sans-serif"` that emitted
   `.font-sans-serif` and shadowed `--heading-font`/`--paragraph-font`; an unset `fontStyle` now inherits the theme font,
   while an explicit `fontStyle` still forces a family. (Corrects the beta-18 `.font-sans` rename's side effect.)
