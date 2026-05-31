@@ -1,125 +1,42 @@
 # CHANGELOG
 
-## 2.0.0-beta.19
+## 2.0.0
 
-Two cascade fixes beta-18 surfaced — universal colour/shape props now reliably beat component defaults, and themeable
-heading/body fonts work again — plus new layout ergonomics: a clearer flex helper and length-aware spacing props.
-
-### ⚠️ Breaking & behaviour changes
-- **`stackVertically` / `stackHorizontally` renamed to `listVertically` / `listHorizontally`** (no alias). "Stack" read
-  wrong on the horizontal axis; "list" is direction-neutral and symmetric. They're now also self-contained — each sets
-  `display: flex` *and* the direction, so you no longer need `layoutAsFlexbox` alongside them.
-  - **Migration:** rename the props, and rename the `.stack-vertically` / `.stack-horizontally` classes if you target
-    them directly in CSS.
+The 2.0.0 line, folding in the `beta-18` and `beta-19` pre-releases. One-line highlights below; the detailed write-ups
+live in `ROADMAP.md`.
 
 ### Added
-- **Spacing props accept any CSS length, not just scale tokens.** `gap`, `margin` / `padding`, and every side/axis
-  variant (`marginTop`, `horizontalPadding`, `verticalMargin`, …) now take either a scale token (`"nano"`…`"huge"` —
-  emits a utility class, still the preferred path) **or** a raw CSS length string — `gap="4px"`, `padding="20vw"`,
-  `marginTop="calc(100% - 8px)"` — which is applied via inline style. Tokens stay inside `@layer fictoan` and remain
-  overridable; arbitrary lengths are treated as explicit author values. Fully backward compatible.
+- Native browser primitives — Modal, Drawer and Tooltip on the popover API (Tooltip also via CSS anchor positioning); Row is now a CSS container.
+- Whole stylesheet wrapped in `@layer fictoan`, split into ordered `fictoan.base` / `fictoan.utilities` sub-layers — unlayered consumer CSS overrides without `!important`.
+- Responsive Portion spans are container-relative — they react to the Row's rendered width via `@container`, not the viewport.
+- Per-module ES output — `import { Button } from "fictoan-react"` tree-shakes to only what you import.
+- ThemeProvider `storageKey` and `nonce` props; theme switches crossfade via the View Transitions API; new `useViewTransition()` hook.
+- Machine-readable component schema at `/fictoan-schema.json`, plus `/llms.txt`.
+- PinInputField gained `label` / `helpText` / `errorText` / `required` / `size`; `hideLabel` now works on InputField / TextArea / Checkbox / Switch.
+- `listVertically` / `listHorizontally` flex helpers — each self-implies `display: flex` plus the direction.
+- Portion `fillLeftoverWidth` — takes the columns left over after the fixed-span siblings.
+- Row `equalisePortions` — every Portion shares the width equally, by column count.
+- `columns` now works on any Element/Div — implies grid and sets that many equal columns.
+- Spacing props (`gap`, `margin`, `padding` and every variant) accept a scale token **or** any CSS length (`"4px"`, `"20vw"`, `calc(...)`).
 
 ### Fixed
-- **Universal colour & shape props no longer lose to component base styles.** A component's base rule (e.g.
-  `[data-badge] { background-color: var(--badge-bg) }`) tied on specificity with the prop-driven utility classes
-  (`.bg-*`, `.text-*`, shape, spacing, …) and won on source order, so `bgColour` / `textColour` / `shape` looked ignored
-  on Badge and other components. The bundled stylesheet now splits into ordered cascade sub-layers inside the existing
-  single `@layer fictoan` block — `@layer fictoan.base` (components, globals, theme) then `@layer fictoan.utilities` (the
-  utility classes) — so the utilities sub-layer, declared last, wins the tie regardless of specificity or source order.
-  Unlayered consumer CSS still overrides everything without `!important`, exactly as before.
-- **`<Heading>` and `<Text>` honour the themeable font again.** Both defaulted `fontStyle="sans-serif"`, which always
-  emitted `.font-sans-serif` and overrode the `--heading-font` / `--paragraph-font` theme variables (a class outranks the
-  `h1`–`h6` element selector). With no `fontStyle` set, headings now inherit `--heading-font` and text inherits
-  `--paragraph-font`; pass `fontStyle="sans-serif" | "serif" | "monospace"` to force a specific family. This corrects the
-  beta-18 `.font-sans` → `.font-sans-serif` rename, which had inadvertently made that default class take effect.
-
-## 2.0.0-beta.18
-
-Modernises the CSS layer onto native browser primitives, makes the package tree-shakeable and SSR-safe, hardens
-accessibility, and ships an AI-readable component schema. Most changes are additive — the behaviour changes that need
-your attention are flagged below, with a migration checklist at the end.
-
-### ⚠️ Breaking & behaviour changes
-
-**ThemeProvider now server-renders its children**
-- Previously it rendered nothing until it mounted on the client, so any app wrapping it produced an empty server/SSG
-  render. It now renders children during SSR and injects a small pre-hydration inline script that applies the saved
-  theme before first paint (no flash).
-- **Migration:** if you use SSR/SSG (Next, Remix, Astro, RSC), this surfaces any browser-only code (`window`,
-  `document`, `getComputedStyle`, …) you run *during render* rather than inside `useEffect` — guard it or move it into
-  an effect. The inline script needs `script-src 'unsafe-inline'`, or pass `nonce={...}` under a strict CSP.
-
-**Theme is stored under a stable, configurable key**
-- The localStorage key changed from a hostname/port-derived value to a fixed default `"fictoan-theme"`, settable via the
-  new `storageKey` prop.
-- **Migration:** returning users see their saved theme reset *once*. Pass a unique `storageKey` — your package name is
-  ideal, and it's required if multiple Fictoan apps can share an origin (localhost during dev, GitHub Pages) so they
-  don't collide. To preserve existing prefs, set `storageKey` to the old key.
-  ```tsx
-  <ThemeProvider themeList={themes} currentTheme="theme-light" storageKey="my-app">
-  ```
-
-**Responsive Portion spans are now container-relative**
-- `mobileSpan` / `tabletPortraitSpan` / `tabletLandscapeSpan` / `desktopSpan` (and Row's portion-collapse) react to the
-  parent Row's rendered width via CSS `@container`, not the viewport — a Portion in a narrow sidebar now stacks as it
-  would on a phone. Prop names are unchanged.
-- **Migration:** re-check layouts that assumed viewport breakpoints. (`hideOn*` / `showOnlyOn*` visibility props are
-  unchanged — still viewport-based.)
-
-**Spacing tokens are capped on wide screens**
-- `--tiny` through `--huge` are now `clamp(min, vmax, max)` instead of bare `vmax`, so padding/margins stop growing past
-  a cap on large monitors.
-
-**Package ships per-module ES output**
-- The build now emits one file per component (`dist/components/Button/Button.js`, …) so `import { Button } from
-  "fictoan-react"` tree-shakes — your bundle only includes what you import.
-- **Migration:** importing from `"fictoan-react"` is unchanged. Only code that deep-imported internal
-  `fictoan-react/dist/...` paths (undocumented) is affected — those paths changed.
-
-**Published TypeScript types now resolve**
-- The `types` entry previously pointed at a path the build never emitted, so TS consumers silently got *no* types. Types
-  now resolve correctly — which may surface pre-existing type errors in your code that were previously `any`.
-
-**Renamed CSS class & deprecation**
-- `.font-sans` → `.font-sans-serif` (the class `fontStyle="sans-serif"` actually emits). Only relevant if you referenced
-  `.font-sans` directly. ⚠️ This also activated `<Heading>`/`<Text>`'s default `font-sans-serif` class, which shadowed the
-  `--heading-font` / `--paragraph-font` theme variables — corrected in beta-19.
-- Drawer `closeOnClickOutside` is deprecated — dismissal (ESC + backdrop) is governed by `isDismissible` via the popover
-  API.
-
-### Added
-- **ThemeProvider:** `storageKey` and `nonce` props; theme switches crossfade automatically via the View Transitions
-  API; new `useViewTransition()` hook to animate any state change (with `prefers-reduced-motion` handling).
-- **Native browser primitives:** Modal, Drawer, and Tooltip migrated to the popover API (Tooltip also to CSS anchor
-  positioning); Row is now a CSS container; the whole stylesheet is wrapped in `@layer fictoan`, so unlayered consumer
-  CSS overrides component styles without `!important`.
-- **Forms:** PinInputField gained `label` / `helpText` / `errorText` / `required` / `size` (FormItem integration);
-  `hideLabel` now works on InputField / TextArea / Checkbox / Switch.
-- **AI-friendly:** machine-readable component schema served at `/fictoan-schema.json`, plus `/llms.txt`.
-
-### Fixed
-- Published `types` path (was zero types). CSS is now minified (~589 KB → ~464 KB raw). `Portion span="7"` responsive
-  variants (a dead selector — never applied `grid-column: span 7`). Curated schema examples taught non-existent props
-  (`openWhen`/`iconLeft`/…); corrected, with a build-time guard against future drift. ListBox controlled/uncontrolled
-  state. The global focus ring now meets WCAG 2.2 non-text contrast.
+- Published `types` path now resolves (was zero types — may surface pre-existing `any`-masked errors).
+- Universal colour/shape props no longer lose to component base styles — the `fictoan.utilities` sub-layer wins the specificity tie.
+- `<Heading>` / `<Text>` honour the themeable `--heading-font` / `--paragraph-font` again (dropped the forced `font-sans-serif` default).
+- CSS minified (~589 KB → ~464 KB raw); dead `Portion span="7"` responsive selectors; ListBox controlled/uncontrolled state; schema examples drift-guarded at build time.
+- Global focus ring now meets WCAG 2.2 non-text contrast.
 
 ### Accessibility
-- Form a11y wired throughout: `aria-describedby` / `aria-invalid` / `aria-required`, working `hideLabel`, resolved Range
-  group label, FileUpload focus ring, RadioGroup no longer announcing two radios per option.
-- Accordion / Tooltip / Pagination dangling or missing ARIA fixed; Modal and Notification close buttons are now real
-  `<button>`s (keyboard-activatable); Badge / SkeletonGroup live-region roles corrected; Toast/Notification no longer
-  double-announce.
+- Form a11y wired throughout — `aria-describedby` / `aria-invalid` / `aria-required`, working `hideLabel`, resolved Range group label, FileUpload focus ring, RadioGroup no longer double-announcing.
+- Accordion / Tooltip / Pagination ARIA fixed; Modal and Notification close buttons are real `<button>`s; Badge / SkeletonGroup live-region roles corrected; Toast / Notification no longer double-announce.
 
-### Migration checklist
-1. Bump `fictoan-react` to `2.0.0-beta.18`.
-2. Add `storageKey={/* your app name */}` to your `<ThemeProvider>` (and `nonce={...}` under a strict CSP).
-3. If you SSR/SSG: build, and fix any browser-API-in-render code the un-gate surfaces.
-4. Grep for the deprecated/renamed bits: `closeOnClickOutside`, `.font-sans`.
-5. Re-check wide-screen spacing and container-relative Portion layouts.
-6. Run your type-checker and resolve newly-surfaced type errors.
-
-## 2.0.0
 ### ⚠️ Breaking changes
+- ThemeProvider now server-renders its children (with a pre-hydration no-flash script; needs `script-src 'unsafe-inline'` or a `nonce`) — surfaces any browser-API-in-render code under SSR/SSG.
+- Theme is stored under a stable `storageKey` (default `"fictoan-theme"`) instead of a hostname-derived key — returning users reset once; pass a unique key per app.
+- Spacing tokens `--tiny`…`--huge` are capped on wide screens via `clamp()`.
+- `.font-sans` renamed to `.font-sans-serif`; Drawer `closeOnClickOutside` deprecated (dismissal via `isDismissible`).
+- `stackVertically` / `stackHorizontally` renamed to `listVertically` / `listHorizontally` (no alias).
+- Deep-import paths under `fictoan-react/dist/...` changed (per-module output); bare `"fictoan-react"` imports are unchanged.
 
 **OKLCH colour system migration**
 - All colours now use the OKLCH colour space for perceptually uniform lightness and better colour mixing

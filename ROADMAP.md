@@ -32,6 +32,28 @@ already half-owns.
 
 ---
 
+## Recently shipped (on `beta-19`)
+
+- [x] **Cascade sub-layers fix prop-shadowing** — split `@layer fictoan` into ordered `fictoan.base` (component +
+  global/theme CSS) and `fictoan.utilities` (colour/utility classes) sub-layers, declared utilities-last, so universal
+  colour/shape props beat component base rules on a specificity tie (the Badge `bgColour` bug). Single outer
+  `@layer fictoan { … }` block preserved so consumer `@import` chains and the unlayered-wins guarantee are unaffected.
+- [x] **`<Heading>`/`<Text>` honour the themeable font** — dropped the default `fontStyle="sans-serif"` that emitted
+  `.font-sans-serif` and shadowed `--heading-font`/`--paragraph-font`; an unset `fontStyle` now inherits the theme font,
+  while an explicit `fontStyle` still forces a family. (Corrects the beta-18 `.font-sans` rename's side effect.)
+- [x] **`stackVertically`/`stackHorizontally` → `listVertically`/`listHorizontally`** (no alias) — "list" is
+  direction-neutral; both now self-imply `display:flex` + the direction.
+- [x] **Length-aware spacing props** — `gap`/`margin`/`padding` (+ every side/axis variant) accept a scale token (→
+  utility class) OR any CSS length string (`"4px"`, `"20vw"`, `calc(...)`, → inline style). Backward compatible.
+- [x] **Portion `fillLeftoverWidth`** — fills the columns left after fixed-span siblings (grid: `grid-column: auto / -1`,
+  one filler; flex: `flex: 1 1 0`, multiple split). **Row `equalisePortions`** (replaces the never-wired
+  `equaliseChildren`) — every Portion shares the width equally; self-implies flex, scoped to `> [data-portion]`, no
+  `!important`, and a `:has()` rule so it yields to a `fillLeftoverWidth` sibling instead of fighting it.
+- [x] **`columns` wired on Element** — was a dead `string` prop; now a `number` that implies grid and sets
+  `grid-template-columns: repeat(N, 1fr)`, so `<Div columns={3}>` finally works.
+
+---
+
 ## Near-term — must land before 2.0 GA
 
 These are the gating items. 2.0 shouldn't go stable until these are sorted.
@@ -214,9 +236,8 @@ Once the gating items are in, these unlock real improvements.
   it — Element is light): the universal prop set is hand-maintained in *five* places with no compile-time check they
   agree — `CommonProps` (`constants.ts:38-98`), the Element destructure (`Element.tsx:32-91`), the className ternary
   array, `WRAPPER_PROP_KEYS` (`propSeparation.ts:43-106`), and the regex `CommonProps` scrape in
-  `generateSchema.ts:85-91`. This has already shipped a dead `columns` prop — typed and routed (`constants.ts:60`,
-  `Element.tsx:41`, `propSeparation.ts:66`) but emitting no class or style (`layout.css` only does `display:grid`). As a
-  cheap immediate win, delete `columns` from all three Element-side sites; the structural fix derives the destructure,
+  `generateSchema.ts:85-91`. (The once-dead `columns` prop was wired up in beta-19 — it's now a `number` that implies grid
+  and emits `grid-template-columns: repeat(N, 1fr)` — so it's no longer the drift example it was.) The structural fix derives the destructure,
   className output, wrapper-routing set, and schema extraction from one typed mapping table.
 - [ ] Add dev-only warnings for conflicting props — concrete cases: shorthand + per-side overlap (`padding="medium"` +
   `paddingLeft="huge"` — warn that the left override wins), opacity set without a matching colour, and unknown colour
@@ -290,7 +311,7 @@ Once the gating items are in, these unlock real improvements.
   behaves differently on Card than anywhere else. Delete the Card overrides (and the `600px` media override if
   redundant) so the prop resolves to the same token-based utilities. If Card genuinely needs distinct padding, make it a
   deliberate `--card-padding-*` token, not a silent px override.
-- [ ] **Component base styles shadow universal colour/shape props (use cascade sub-layers)** — a component's base rule
+- [x] **Component base styles shadow universal colour/shape props (use cascade sub-layers)** — *shipped in beta-19 (see Recently shipped above).* a component's base rule
   (e.g. `[data-badge]`, an attribute selector at specificity 0,1,0) ties with the prop-emitted utility classes
   (`.bg-*`, `.text-*`, `.shape-*`, also 0,1,0) and wins on source order, so `bgColour`/`textColour`/`shape`/etc.
   silently do nothing on some components (confirmed on Badge — DevTools showed `[data-badge]`'s `background-color`
