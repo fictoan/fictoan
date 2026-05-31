@@ -20,7 +20,7 @@ export type HeadingProps = Omit<CommonAndHTMLProps<HeadingElementType>, keyof He
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 const Heading = React.forwardRef(
-    ({ fontStyle = "sans-serif", weight, align, ...props }: HeadingProps, ref: React.Ref<HeadingElementType>) => {
+    ({ fontStyle, weight, align, ...props }: HeadingProps, ref: React.Ref<HeadingElementType>) => {
         let classNames = [];
 
         if (weight) {

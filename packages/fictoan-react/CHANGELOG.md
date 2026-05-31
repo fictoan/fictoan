@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## 2.0.0-beta.19
+
+Two cascade fixes for issues beta-18 surfaced: universal colour/shape props now reliably beat component defaults, and
+themeable heading/body fonts work again. Both are CSS-only — no API changes.
+
+### Fixed
+- **Universal colour & shape props no longer lose to component base styles.** A component's base rule (e.g.
+  `[data-badge] { background-color: var(--badge-bg) }`) tied on specificity with the prop-driven utility classes
+  (`.bg-*`, `.text-*`, shape, spacing, …) and won on source order, so `bgColour` / `textColour` / `shape` looked ignored
+  on Badge and other components. The bundled stylesheet now splits into ordered cascade sub-layers inside the existing
+  single `@layer fictoan` block — `@layer fictoan.base` (components, globals, theme) then `@layer fictoan.utilities` (the
+  utility classes) — so the utilities sub-layer, declared last, wins the tie regardless of specificity or source order.
+  Unlayered consumer CSS still overrides everything without `!important`, exactly as before.
+- **`<Heading>` and `<Text>` honour the themeable font again.** Both defaulted `fontStyle="sans-serif"`, which always
+  emitted `.font-sans-serif` and overrode the `--heading-font` / `--paragraph-font` theme variables (a class outranks the
+  `h1`–`h6` element selector). With no `fontStyle` set, headings now inherit `--heading-font` and text inherits
+  `--paragraph-font`; pass `fontStyle="sans-serif" | "serif" | "monospace"` to force a specific family. This corrects the
+  beta-18 `.font-sans` → `.font-sans-serif` rename, which had inadvertently made that default class take effect.
+
 ## 2.0.0-beta.18
 
 Modernises the CSS layer onto native browser primitives, makes the package tree-shakeable and SSR-safe, hardens
@@ -49,7 +68,8 @@ your attention are flagged below, with a migration checklist at the end.
 
 **Renamed CSS class & deprecation**
 - `.font-sans` → `.font-sans-serif` (the class `fontStyle="sans-serif"` actually emits). Only relevant if you referenced
-  `.font-sans` directly.
+  `.font-sans` directly. ⚠️ This also activated `<Heading>`/`<Text>`'s default `font-sans-serif` class, which shadowed the
+  `--heading-font` / `--paragraph-font` theme variables — corrected in beta-19.
 - Drawer `closeOnClickOutside` is deprecated — dismissal (ESC + backdrop) is governed by `isDismissible` via the popover
   API.
 
