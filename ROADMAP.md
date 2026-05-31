@@ -218,7 +218,7 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
 ### TypeScript hygiene
 
 - [ ] **ESLint flat config** — adopt the v9-style flat config.
-- [ ] **`no-explicit-any`** with targeted exceptions — replace `any` escape hatches in `Element/constants.ts:105` and
+- [x] **`no-explicit-any`** with targeted exceptions — replace `any` escape hatches in `Element/constants.ts:105` and
   `utils/classNames.ts:1`. Add a third: `ElementProps.onChange` is `FlexibleEventHandler<FormEvent<T>, any>`
   (`constants.ts:113`) and `FlexibleEventHandler` ends in `(value: any) => void` (`constants.ts:105-107`), eroding
   change-handler typing on the base Element type — parameterise the value type, or drop `onChange` from `ElementProps`
@@ -259,14 +259,14 @@ Once the gating items are in, these unlock real improvements.
   split, preserving the panel animation. Separately, OptionCard already supports controlled mode but names it
   `selectedIds`/`onSelectionChange` with `Set<string>` instead of the library-wide `value`/`defaultValue`/`onChange` +
   `string[]` — add aliases and deprecate the old names so the convention is uniform.
-- [ ] **Export foundation types + `useClickOutside`; remove dead FormItem context** — `CommonProps`,
+- [~] **Export foundation types + `useClickOutside`; remove dead FormItem context** *(exports + `useClickOutside` shipped; the dead `FormItemContext`/`useFormItemContext` removal is still pending)* — `CommonProps`,
   `CommonAndHTMLProps<T>`, and `FlexibleEventHandler` are defined in `Element/constants.ts` but not re-exported from the
   barrel, so consumers can't type a wrapper that forwards Fictoan props; `useClickOutside` is battle-tested internally
   (Sidebar, ListBox) but not exported. Add both (`ElementProps` is already exported). Separately,
   `FormItemContext`/`useFormItemContext` have zero consumers — inputs derive aria ids via `deriveAriaIds` directly — so
   remove the dead context. *(Corrects the content-gap note below that assumed `deriveAriaIds`/`mergeDescribedBy` were
   unused — they're used by 13 components; only the Context/hook are dead.)*
-- [ ] **Memoise provider context values** — `ToastsProvider` (`value={{toast}}`) and `NotificationsProvider`
+- [x] **Memoise provider context values** — `ToastsProvider` (`value={{toast}}`) and `NotificationsProvider`
   (`value={{notify}}`) build a new context value every render, so every consumer re-renders. Wrap each in `useMemo`
   keyed on the stable function. (Skip FormItem — `useFormItemContext` has zero consumers — and ThemeProvider, which has
   no spurious renders. `OptionCard` has the same pattern with real consumers if worth expanding.)
@@ -489,7 +489,7 @@ ages better.
   (`content-wrapper.css` reserves layout space; off-screen treatment is `@media max-width:900px` only), and toggling the
   `popover` attribute by viewport needs a `matchMedia` listener — so this trades a continuous mousedown/touchstart
   listener for a one-shot media-query listener plus native dismissal: a net win, not zero-JS.
-- [ ] **Redundant ARIA on native progress/meter** — `ProgressBar` and `Meter` add `aria-valuemin`/`max`/`now` to native
+- [x] **Redundant ARIA on native progress/meter** — `ProgressBar` and `Meter` add `aria-valuemin`/`max`/`now` to native
   `<progress>`/`<meter>`, duplicating the value/min/max the elements already expose through their roles (linters/axe
   flag this). Drop the redundant `aria-value{min,max,now}` (keep `aria-valuetext` — spec-supported and carries the
   suffix text native can't), keep native `value`/`max`/`min`/`low`/`high` plus a single accessible name, and reconsider
