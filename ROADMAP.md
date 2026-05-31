@@ -136,23 +136,23 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
 - [x] **`fontStyle="sans-serif"` is dead** — Text/Heading emit the class `font-sans-serif` by default, but
   `typography.css` only defined `.font-sans`, so the default font class was a no-op (it only worked via the inherited
   body font). Renamed the rule to `.font-sans-serif` (it was otherwise unused — verified).
-- [ ] **FormItemGroup `Math.random()` id** — `FormItemGroup.tsx:40` derives its fallback id from `Math.random()`, which
+- [x] **FormItemGroup `Math.random()` id** — `FormItemGroup.tsx:40` derives its fallback id from `Math.random()`, which
   is non-deterministic across server/client and causes hydration mismatches (the docs are Next). Every other form
   component uses `React.useId` for exactly this reason — including PinInputField (the fix above). Replace with `useId`
   (called unconditionally, colons stripped) to match `FormItem`/`InputField`.
-- [ ] **Breadcrumbs leaks props onto a raw `<nav>`** — `Breadcrumbs.tsx:106` renders `<nav ... {...props}>` where
+- [x] **Breadcrumbs leaks props onto a raw `<nav>`** — `Breadcrumbs.tsx:106` renders `<nav ... {...props}>` where
   `props` is `CommonAndHTMLProps`, so Fictoan universal props (`bgColour`, `classNames`, `margin`, `padding`, `shadow`,
   responsive flags) become invalid DOM attributes (React warns) or silently no-op. Route the outer nav through Element
   (`<Element as="nav" ...>`) like Card/Accordion/Tabs/Pagination, honouring the universal-prop guarantee.
-- [ ] **Callout `title` is invisible** — `Callout.tsx:39` exposes `title` only as an `aria-label` and never renders it,
+- [x] **Callout `title` is invisible** *(docs-page demo of `title` still to add)* — `Callout.tsx:39` exposes `title` only as an `aria-label` and never renders it,
   so sighted users never see the callout title the API implies. Render `title` as a visible heading (conditionally),
   switch to `aria-labelledby` pointing at it (precedent: `Tabs.tsx:152`), add title styling to `callout.css` (none
   exists), and document the prop on the docs page (its absence there is why this went unnoticed).
-- [ ] **Modal mutates the caller's `classNames`** — `Modal.tsx:35,50` destructures `classNames` from props then calls
+- [x] **Modal mutates the caller's `classNames`** — `Modal.tsx:35,50` destructures `classNames` from props then calls
   `classNames.push("show-backdrop")`, mutating the consumer's array in place (classes accumulate if the reference is
   reused across renders). Build a fresh array (`[...classNames]`) before pushing, matching the safe idiom Drawer and
   SkeletonGroup already use. Audited — Modal is the only offender.
-- [ ] **Notification exit always slides right** — `notification-item.css` hardcodes the dismiss transform to
+- [x] **Notification exit always slides right** — `notification-item.css` hardcodes the dismiss transform to
   `translateX(100%)`, but `NotificationsWrapper` supports `position="left"` with no left override, so a left-anchored
   notification slides the wrong way on dismiss. Add a `position="left"` override mirroring how Toast already varies by
   anchor (`toast-item.css`). Optionally tie the 500 ms fallback timer (`NotificationItem.tsx`) to the `0.4s` CSS
@@ -173,7 +173,7 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
   (`color-mix(..., transparent 40%)`), which measured ~2.2:1 over white and ~2.4:1 over black — both below the WCAG 2.2
   SC 1.4.11 floor of 3:1, on *every* focusable element in the framework. Fixed by dropping the `color-mix` and using
   opaque `var(--blue)` (what the prior build shipped; passes at ~4:1 / ~5:1).
-- [ ] **ListBox keyboard-open + `aria-activedescendant` defects** — the combobox div (`ListBox.tsx:298-313`,
+- [x] **ListBox keyboard-open + `aria-activedescendant` defects** — the combobox div (`ListBox.tsx:298-313`,
   `role="combobox"` `tabIndex=0`) has only `onClick` and no `onKeyDown`, so a keyboard-only user who focuses the *closed*
   ListBox can't open it; `handleKeyDown` is attached solely to the inner search input that mounts only when open. Add
   open-key handling (ArrowDown/Enter/Space) to the combobox div, guarded with `!isOpen` to avoid double-handling the
