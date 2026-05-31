@@ -103,7 +103,12 @@ export const Breadcrumbs = React.forwardRef<HTMLDivElement, BreadcrumbsProps>(
         }, []);
 
         return (
-            <nav aria-label="Breadcrumb" ref={ref} {...props}>
+            <Element
+                as="nav"
+                aria-label="Breadcrumb"
+                ref={ref}
+                {...props}
+            >
                 <Element
                     as="ul"
                     data-breadcrumbs-wrapper
@@ -112,7 +117,7 @@ export const Breadcrumbs = React.forwardRef<HTMLDivElement, BreadcrumbsProps>(
                 >
                     {processedChildren}
                 </Element>
-            </nav>
+            </Element>
         );
     },
 );

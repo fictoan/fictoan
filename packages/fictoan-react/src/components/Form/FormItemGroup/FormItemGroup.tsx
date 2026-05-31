@@ -37,7 +37,9 @@ export const FormItemGroup = React.forwardRef(
         } : FormItemGroupProps,
         ref : React.Ref<FormItemGroupElementType>,
     ) => {
-        const groupId = id || `form-group-${Math.random().toString(36).substring(2, 9)}`;
+        // useId (not Math.random) so the id is stable across server/client and doesn't cause hydration mismatches.
+        const reactId = React.useId();
+        const groupId = id || `form-group-${reactId.replace(/:/g, "")}`;
         let classNames = [];
 
         if (isJoint) {

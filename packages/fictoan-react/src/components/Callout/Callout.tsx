@@ -28,6 +28,10 @@ export const Callout = React.forwardRef(
             error   : "alert",
         };
 
+        // Render the title visibly and label the callout by it (was aria-label only — invisible to sighted users).
+        const reactId = React.useId();
+        const titleId = title ? `callout-title-${reactId.replace(/:/g, "")}` : undefined;
+
         return (
             <Element<CalloutElementType>
                 as="div"
@@ -36,9 +40,14 @@ export const Callout = React.forwardRef(
                 className={kind}
                 role={roleMap[kind]}
                 aria-live={kind === "error" || kind === "warning" ? "assertive" : "polite"}
-                aria-label={title}
+                aria-labelledby={titleId}
                 {...props}
             >
+                {title && (
+                    <p className="callout-title" id={titleId}>
+                        {title}
+                    </p>
+                )}
                 {children}
             </Element>
         );

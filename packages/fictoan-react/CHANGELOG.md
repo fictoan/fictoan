@@ -25,6 +25,11 @@ live in `ROADMAP.md`.
 - `<Heading>` / `<Text>` honour the themeable `--heading-font` / `--paragraph-font` again (dropped the forced `font-sans-serif` default).
 - CSS minified (~589 KB → ~464 KB raw); dead `Portion span="7"` responsive selectors; ListBox controlled/uncontrolled state; schema examples drift-guarded at build time.
 - Global focus ring now meets WCAG 2.2 non-text contrast.
+- Modal no longer mutates the caller's `classNames` array across renders.
+- FormItemGroup uses `useId` instead of `Math.random()` for its fallback id — no more SSR hydration mismatch.
+- Left-anchored notifications slide out to the left on dismiss (previously always slid right).
+- Breadcrumbs routes its outer `<nav>` through Element, so universal props no longer leak onto the DOM as invalid attributes.
+- Callout `title` renders as a visible heading (was `aria-label` only — invisible to sighted users), wired via `aria-labelledby`.
 
 ### Accessibility
 - Form a11y wired throughout — `aria-describedby` / `aria-invalid` / `aria-required`, working `hideLabel`, resolved Range group label, FileUpload focus ring, RadioGroup no longer double-announcing.

@@ -40,6 +40,10 @@ export const Modal = React.forwardRef(
             ...props
         }: ModalProps, ref: React.Ref<ModalElementType>,
     ) => {
+        // Work on a fresh copy — never mutate the caller's classNames array (it
+        // accumulates classes across renders if the reference is reused).
+        classNames = [ ...classNames ];
+
         const modalId       = `${id}`;
         const descriptionId = description ? `${modalId}-description` : undefined;
 
