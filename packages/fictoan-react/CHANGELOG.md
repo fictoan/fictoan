@@ -34,6 +34,7 @@ live in `ROADMAP.md`.
 ### Accessibility
 - Form a11y wired throughout — `aria-describedby` / `aria-invalid` / `aria-required`, working `hideLabel`, resolved Range group label, FileUpload focus ring, RadioGroup no longer double-announcing.
 - Accordion / Tooltip / Pagination ARIA fixed; Modal and Notification close buttons are real `<button>`s; Badge / SkeletonGroup live-region roles corrected; Toast / Notification no longer double-announce.
+- ListBox opens by keyboard when closed (ArrowDown / Enter / Space on the combobox), and `aria-activedescendant` now sits on the focused search input rather than the combobox div.
 
 ### ⚠️ Breaking changes
 - ThemeProvider now server-renders its children (with a pre-hydration no-flash script; needs `script-src 'unsafe-inline'` or a `nonce`) — surfaces any browser-API-in-render code under SSR/SSG.
