@@ -19,6 +19,10 @@ type CustomColours = "hue" | "tint" | "shade" | "analogue" | "accent";
 // prettier-ignore
 export type EmphasisTypes = "primary" | "secondary" | "tertiary" | "custom";
 export type SpacingTypes = "none" | "nano" | "micro" | "tiny" | "small" | "medium" | "large" | "huge";
+// A spacing prop accepts a scale token (preferred — emits a utility class) OR any CSS
+// length string (e.g. "4px", "20vw", "calc(100% - 8px)") which is applied via inline style.
+// The `& {}` keeps autocomplete suggesting the tokens while still allowing any string.
+export type SpacingOrLength = SpacingTypes | (string & {});
 export type ShadowTypes = "none" | "mild" | "hard" | "soft";
 export type ShapeTypes = "rounded" | "curved";
 export type OpacityTypes = "0" | "5" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90";
@@ -53,29 +57,29 @@ export interface CommonProps {
     opacity                   ? : OpacityTypes;
     // Flexbox -----------------------------------------------------------------
     layoutAsFlexbox           ? : boolean;
-    stackVertically           ? : boolean;
-    stackHorizontally         ? : boolean;
+    listVertically            ? : boolean;
+    listHorizontally          ? : boolean;
     // Grid --------------------------------------------------------------------
     layoutAsGrid              ? : boolean;
     columns                   ? : string;
     // Common ------------------------------------------------------------------
-    gap                       ? : SpacingTypes;
+    gap                       ? : SpacingOrLength;
     // Margin ------------------------------------------------------------------
-    margin                    ? : SpacingTypes;
-    horizontalMargin          ? : SpacingTypes;
-    verticalMargin            ? : SpacingTypes;
-    marginTop                 ? : SpacingTypes;
-    marginRight               ? : SpacingTypes;
-    marginBottom              ? : SpacingTypes;
-    marginLeft                ? : SpacingTypes;
+    margin                    ? : SpacingOrLength;
+    horizontalMargin          ? : SpacingOrLength;
+    verticalMargin            ? : SpacingOrLength;
+    marginTop                 ? : SpacingOrLength;
+    marginRight               ? : SpacingOrLength;
+    marginBottom              ? : SpacingOrLength;
+    marginLeft                ? : SpacingOrLength;
     // Padding -----------------------------------------------------------------
-    padding                   ? : SpacingTypes;
-    horizontalPadding         ? : SpacingTypes;
-    verticalPadding           ? : SpacingTypes;
-    paddingTop                ? : SpacingTypes;
-    paddingRight              ? : SpacingTypes;
-    paddingBottom             ? : SpacingTypes;
-    paddingLeft               ? : SpacingTypes;
+    padding                   ? : SpacingOrLength;
+    horizontalPadding         ? : SpacingOrLength;
+    verticalPadding           ? : SpacingOrLength;
+    paddingTop                ? : SpacingOrLength;
+    paddingRight              ? : SpacingOrLength;
+    paddingBottom             ? : SpacingOrLength;
+    paddingLeft               ? : SpacingOrLength;
     horizontallyCentreThis    ? : boolean;
     horizontallyCenterThis    ? : boolean;
     verticallyCentreItems     ? : boolean;

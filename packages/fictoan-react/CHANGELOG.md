@@ -2,8 +2,22 @@
 
 ## 2.0.0-beta.19
 
-Two cascade fixes for issues beta-18 surfaced: universal colour/shape props now reliably beat component defaults, and
-themeable heading/body fonts work again. Both are CSS-only — no API changes.
+Two cascade fixes beta-18 surfaced — universal colour/shape props now reliably beat component defaults, and themeable
+heading/body fonts work again — plus new layout ergonomics: a clearer flex helper and length-aware spacing props.
+
+### ⚠️ Breaking & behaviour changes
+- **`stackVertically` / `stackHorizontally` renamed to `listVertically` / `listHorizontally`** (no alias). "Stack" read
+  wrong on the horizontal axis; "list" is direction-neutral and symmetric. They're now also self-contained — each sets
+  `display: flex` *and* the direction, so you no longer need `layoutAsFlexbox` alongside them.
+  - **Migration:** rename the props, and rename the `.stack-vertically` / `.stack-horizontally` classes if you target
+    them directly in CSS.
+
+### Added
+- **Spacing props accept any CSS length, not just scale tokens.** `gap`, `margin` / `padding`, and every side/axis
+  variant (`marginTop`, `horizontalPadding`, `verticalMargin`, …) now take either a scale token (`"nano"`…`"huge"` —
+  emits a utility class, still the preferred path) **or** a raw CSS length string — `gap="4px"`, `padding="20vw"`,
+  `marginTop="calc(100% - 8px)"` — which is applied via inline style. Tokens stay inside `@layer fictoan` and remain
+  overridable; arbitrary lengths are treated as explicit author values. Fully backward compatible.
 
 ### Fixed
 - **Universal colour & shape props no longer lose to component base styles.** A component's base rule (e.g.

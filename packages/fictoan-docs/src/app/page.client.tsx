@@ -144,7 +144,7 @@ npm install fictoan-react@${fictoanVersion}`}
                             <Text>
                                 Semantic props
                                 like <code>bgColour</code>, <code>marginBottom</code>, <code>horizontallyCentreThis</code>,
-                                and <code>stackVertically</code> etc, not abbreviated utility classes to memorise. And,
+                                and <code>listVertically</code> etc, not abbreviated utility classes to memorise. And,
                                 you can use either British and US spelling for props!</Text>
                         </Card>
                     </Portion>

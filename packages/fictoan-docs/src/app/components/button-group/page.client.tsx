@@ -21,14 +21,14 @@ const ButtonGroupDocs = () => {
     const [isJoint, setIsJoint] = useState(true);
     const [spacing, setSpacing] = useState("");
     const [equaliseWidth, setEqualiseWidth] = useState(false);
-    const [stackVertically, setStackVertically] = useState(false);
+    const [listVertically, setListVertically] = useState(false);
 
-    // Notify sidebar when stackVertically changes
+    // Notify sidebar when listVertically changes
     useEffect(() => {
         window.dispatchEvent(new CustomEvent("buttonGroupOrientationChange", {
-            detail: { isVertical: stackVertically }
+            detail: { isVertical: listVertically }
         }));
-    }, [stackVertically]);
+    }, [listVertically]);
 
     // Theme configurator
     const ButtonGroupComponent = (varName: string) => {
@@ -47,7 +47,7 @@ const ButtonGroupDocs = () => {
         if (!isJoint) props.push(`    isJoint={false}`);
         if (!isJoint && spacing) props.push(`    spacing="${spacing}"`);
         if (equaliseWidth) props.push(`    equaliseWidth`);
-        if (stackVertically) props.push(`    stackVertically`);
+        if (listVertically) props.push(`    listVertically`);
 
         const propsString = props.length > 0 ? `\n${props.join("\n")}\n` : "";
         return `<ButtonGroup${propsString}>
@@ -55,7 +55,7 @@ const ButtonGroupDocs = () => {
     <Button kind="tertiary">Middle</Button>
     <Button kind="tertiary">Right</Button>
 </ButtonGroup>`;
-    }, [isJoint, spacing, equaliseWidth, stackVertically]);
+    }, [isJoint, spacing, equaliseWidth, listVertically]);
 
     return (
         <ComponentDocsLayout pageId="page-button-group">
@@ -88,7 +88,7 @@ const ButtonGroupDocs = () => {
                     isJoint={isJoint}
                     spacing={!isJoint && spacing ? spacing as any : undefined}
                     equaliseWidth={equaliseWidth}
-                    stackVertically={stackVertically}
+                    listVertically={listVertically}
                     {...themeProps}
                 >
                     <Button kind="tertiary">Left</Button>
@@ -144,10 +144,10 @@ const ButtonGroupDocs = () => {
                     />
 
                     <Checkbox
-                        id="prop-stackVertically"
-                        label="stackVertically"
-                        checked={stackVertically}
-                        onChange={(checked) => setStackVertically(checked)}
+                        id="prop-listVertically"
+                        label="listVertically"
+                        checked={listVertically}
+                        onChange={(checked) => setListVertically(checked)}
                         helpText="Stack buttons vertically instead of horizontally."
                         marginBottom="micro"
                     />

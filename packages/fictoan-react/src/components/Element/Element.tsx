@@ -7,6 +7,14 @@ import { createClassName } from "$utils/classNames";
 // OTHER ===============================================================================================================
 import { ElementProps } from "./constants";
 
+// Spacing props accept a scale token OR an arbitrary CSS length. Tokens map to a
+// utility class (stays in @layer fictoan, overridable); anything else is treated
+// as a raw length and applied via inline style.
+const SPACING_TOKENS = new Set<string>([
+    "none", "nano", "micro", "tiny", "small", "medium", "large", "huge",
+]);
+const isSpacingToken = (value: string): boolean => SPACING_TOKENS.has(value);
+
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Internally typed against HTMLElement (the underlying forwardRef call can
 // only carry one ref type). The exported cast below re-types `Element` as a
@@ -56,8 +64,8 @@ export const Element = React.forwardRef(
             isFullWidth,
             layoutAsFlexbox,
             layoutAsGrid,
-            stackVertically,
-            stackHorizontally,
+            listVertically,
+            listHorizontally,
             marginLeft,
             marginBottom,
             margin,
@@ -90,11 +98,45 @@ export const Element = React.forwardRef(
             ...minimalProps
         } = props;
 
-        // Build style object with opacity CSS custom properties
+        // Spacing props: a scale token emits a utility class; any other string is
+        // treated as a raw CSS length and applied via inline style.
+        const spacingClasses: string[] = [];
+        const spacingStyle: Record<string, string> = {};
+        const applySpacing = (
+            value      : string | undefined,
+            tokenClass : (token: string) => string,
+            cssProps   : string[],
+        ) => {
+            if (!value) return;
+            if (isSpacingToken(value)) {
+                spacingClasses.push(tokenClass(value));
+            } else {
+                cssProps.forEach((prop) => { spacingStyle[prop] = value; });
+            }
+        };
+
+        applySpacing(gap,               (t) => `gap-${t}`,                             ["gap"]);
+        applySpacing(margin,            (t) => `margin-all-${t}`,                      ["margin"]);
+        applySpacing(marginTop,         (t) => `margin-top-${t}`,                      ["marginTop"]);
+        applySpacing(marginRight,       (t) => `margin-right-${t}`,                    ["marginRight"]);
+        applySpacing(marginBottom,      (t) => `margin-bottom-${t}`,                   ["marginBottom"]);
+        applySpacing(marginLeft,        (t) => `margin-left-${t}`,                     ["marginLeft"]);
+        applySpacing(horizontalMargin,  (t) => `margin-right-${t} margin-left-${t}`,   ["marginLeft", "marginRight"]);
+        applySpacing(verticalMargin,    (t) => `margin-top-${t} margin-bottom-${t}`,   ["marginTop", "marginBottom"]);
+        applySpacing(padding,           (t) => `padding-all-${t}`,                     ["padding"]);
+        applySpacing(paddingTop,        (t) => `padding-top-${t}`,                     ["paddingTop"]);
+        applySpacing(paddingRight,      (t) => `padding-right-${t}`,                   ["paddingRight"]);
+        applySpacing(paddingBottom,     (t) => `padding-bottom-${t}`,                  ["paddingBottom"]);
+        applySpacing(paddingLeft,       (t) => `padding-left-${t}`,                    ["paddingLeft"]);
+        applySpacing(horizontalPadding, (t) => `padding-right-${t} padding-left-${t}`, ["paddingLeft", "paddingRight"]);
+        applySpacing(verticalPadding,   (t) => `padding-top-${t} padding-bottom-${t}`, ["paddingTop", "paddingBottom"]);
+
+        // Build style object: user style + opacity custom properties + arbitrary spacing
         const computedStyle = {
             ...style,
             ...(bgOpacity && { "--bg-opacity": Number(bgOpacity) / 100 }),
             ...(borderOpacity && { "--border-opacity": Number(borderOpacity) / 100 }),
+            ...spacingStyle,
         } as React.CSSProperties;
 
         return (
@@ -120,8 +162,6 @@ export const Element = React.forwardRef(
                         hideOnMobile && "hide-on-mobile",
                         hideOnTabletLandscape && "hide-on-tablet-landscape",
                         hideOnTabletPortrait && "hide-on-tablet-portrait",
-                        horizontalMargin && `margin-right-${horizontalMargin} margin-left-${horizontalMargin}`,
-                        horizontalPadding && `padding-right-${horizontalPadding} padding-left-${horizontalPadding}`,
                         horizontallyCenterThis && "horizontally-centre-this",
                         horizontallyCentreThis && "horizontally-centre-this",
                         isClickable && "is-clickable",
@@ -129,20 +169,9 @@ export const Element = React.forwardRef(
                         isFullWidth && "full-width",
                         layoutAsFlexbox && "layout-flexbox",
                         layoutAsGrid && "layout-grid",
-                        stackVertically && "stack-vertically",
-                        stackHorizontally && "stack-horizontally",
-                        gap && `gap-${gap}`,
-                        marginLeft && `margin-left-${marginLeft}`,
-                        marginBottom && `margin-bottom-${marginBottom}`,
-                        margin && `margin-all-${margin}`,
-                        marginRight && `margin-right-${marginRight}`,
-                        marginTop && `margin-top-${marginTop}`,
+                        listVertically && "list-vertically",
+                        listHorizontally && "list-horizontally",
                         opacity && `opacity-${opacity}`,
-                        paddingBottom && `padding-bottom-${paddingBottom}`,
-                        paddingLeft && `padding-left-${paddingLeft}`,
-                        padding && `padding-all-${padding}`,
-                        paddingRight && `padding-right-${paddingRight}`,
-                        paddingTop && `padding-top-${paddingTop}`,
                         pushItemsToEnds && "push-to-ends",
                         shadow && `shadow-${shadow}`,
                         shape && `shape-${shape}`,
@@ -155,12 +184,10 @@ export const Element = React.forwardRef(
                         strokeColour && `stroke-${strokeColour}`,
                         textColor && `text-${textColor}`,
                         textColour && `text-${textColour}`,
-                        verticalMargin && `margin-top-${verticalMargin} margin-bottom-${verticalMargin}`,
-                        verticalPadding && `padding-top-${verticalPadding} padding-bottom-${verticalPadding}`,
                         verticallyCenterItems && "vertically-centre-items",
                         verticallyCentreItems && "vertically-centre-items",
                         weight && `weight-${weight}`,
-                    ].concat(classNames),
+                    ].concat(spacingClasses, classNames),
                 )}
             />
         );
