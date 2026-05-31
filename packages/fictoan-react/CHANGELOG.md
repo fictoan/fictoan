@@ -18,6 +18,7 @@ live in `ROADMAP.md`.
 - Row `equalisePortions` — every Portion shares the width equally, by column count.
 - `columns` now works on any Element/Div — implies grid and sets that many equal columns.
 - Spacing props (`gap`, `margin`, `padding` and every variant) accept a scale token **or** any CSS length (`"4px"`, `"20vw"`, `calc(...)`).
+- Public exports for typing wrappers that forward fictoan props: `CommonProps`, `CommonAndHTMLProps`, `FlexibleEventHandler`, plus the `useClickOutside` hook.
 
 ### Fixed
 - Published `types` path now resolves (was zero types — may surface pre-existing `any`-masked errors).
@@ -30,11 +31,14 @@ live in `ROADMAP.md`.
 - Left-anchored notifications slide out to the left on dismiss (previously always slid right).
 - Breadcrumbs routes its outer `<nav>` through Element, so universal props no longer leak onto the DOM as invalid attributes.
 - Callout `title` renders as a visible heading (was `aria-label` only — invisible to sighted users), wired via `aria-labelledby`.
+- `ToastsProvider` / `NotificationsProvider` memoise their context value, so consumers no longer re-render on every provider render.
+- Dropped the `any`-typed `onChange` override on the base Element type (it now inherits the native handler) and the `any` in `createClassName`.
 
 ### Accessibility
 - Form a11y wired throughout — `aria-describedby` / `aria-invalid` / `aria-required`, working `hideLabel`, resolved Range group label, FileUpload focus ring, RadioGroup no longer double-announcing.
 - Accordion / Tooltip / Pagination ARIA fixed; Modal and Notification close buttons are real `<button>`s; Badge / SkeletonGroup live-region roles corrected; Toast / Notification no longer double-announce.
 - ListBox opens by keyboard when closed (ArrowDown / Enter / Space on the combobox), and `aria-activedescendant` now sits on the focused search input rather than the combobox div.
+- `<progress>` / `<meter>` drop the redundant `aria-valuemin` / `-max` / `-now` (the native role already exposes value/min/max; `aria-valuetext` kept for the suffix text); Meter is no longer a `role="region"` landmark.
 
 ### ⚠️ Breaking changes
 - ThemeProvider now server-renders its children (with a pre-hydration no-flash script; needs `script-src 'unsafe-inline'` or a `nonce`) — surfaces any browser-API-in-render code under SSR/SSG.

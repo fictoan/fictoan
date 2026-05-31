@@ -180,6 +180,9 @@ export {
     type OpacityTypes,
     type WeightTypes,
     type ButtonVariantTypes,
+    type CommonProps,
+    type CommonAndHTMLProps,
+    type FlexibleEventHandler,
 } from "./components/Element/constants";
 
 export {
@@ -187,3 +190,5 @@ export {
     type ColourDefinition,
     type OklchColourName,
 } from "./styles/colours";
+
+export { useClickOutside } from "./hooks/UseClickOutside";

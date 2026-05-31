@@ -1,5 +1,5 @@
 // REACT CORE ==========================================================================================================
-import { ElementType, FormEvent, HTMLProps } from "react";
+import { ElementType, HTMLProps } from "react";
 
 // STYLES ==============================================================================================================
 import { oklchColourDefinitions, type OklchColourName } from "../../styles/colours";
@@ -106,7 +106,7 @@ export interface CommonAndHTMLProps<T extends {}>
 
 // Fictoan has two different types of event handlers, one for standard events and one for direct values
 // This generic event handler type is a union of the two
-export type FlexibleEventHandler<T, V = any> =
+export type FlexibleEventHandler<T, V = unknown> =
     | ((event : T) => void)
     | ((value : V) => void);
 
@@ -114,5 +114,4 @@ export interface ElementProps<T extends {}> extends CommonProps, Omit<HTMLProps<
     as        ? : ElementType;
     className ? : string;
     ariaLabel ? : string;
-    onChange  ? : FlexibleEventHandler<FormEvent<T>, any>;
 }

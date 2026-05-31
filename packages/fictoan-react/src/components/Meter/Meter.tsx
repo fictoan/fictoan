@@ -83,8 +83,6 @@ export const Meter = React.forwardRef(
         return (
             <Element<HTMLDivElement>
                 as="div"
-                role="region"
-                aria-label={ariaLabel || "Meter indicator"}
                 {...wrapperProps}
             >
                 {label && (
@@ -118,9 +116,6 @@ export const Meter = React.forwardRef(
                         {...inputProps}
                         style={{height}}
                         aria-label={label || ariaLabel || "Progress meter"}
-                        aria-valuemin={min}
-                        aria-valuemax={max}
-                        aria-valuenow={value}
                         aria-valuetext={getValueDescription()}
                         aria-describedby={description ? `meter-description-${label?.toLowerCase()
                             .replace(/\s+/g, "-")}` : undefined}
