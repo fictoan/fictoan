@@ -32,6 +32,12 @@ export const listOfBaseElementProps = {
             defaultValue : "",
         },
         {
+            name         : "columns",
+            description  : "Lays the element out as a grid with this many equal columns — implies <code>layoutAsGrid</code>, so you don’t need both.",
+            values       : ["any number, e.g. 2, 3, 4"],
+            defaultValue : "",
+        },
+        {
             name         : "gap",
             description  : "Space between flex/grid children. Accepts a spacing token, or any CSS length such as <code>4px</code>, <code>20vw</code> or <code>calc(...)</code>.",
             values       : ["none", "nano", "micro", "tiny", "small", "medium", "large", "huge"],
@@ -93,7 +99,7 @@ export const listOfBaseElementProps = {
         },
         {
             name         : "layoutAsFlexbox",
-            description  : "Makes the element a flexbox. You can use <code>equaliseChildren</code> / <code>equalizeChildren</code> to make the children equal width.",
+            description  : "Makes the element a flexbox container. The directional helpers <code>listVertically</code> / <code>listHorizontally</code> set this for you.",
             values       : [],
             defaultValue : "",
         },

@@ -92,6 +92,43 @@ const LayoutDocs = () => {
                 <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
 
                 {/* //////////////////////////////////////////////////////////////////////////////////////////////// */}
+                {/*   FLUID + EQUAL PORTIONS  */}
+                {/* //////////////////////////////////////////////////////////////////////////////////////////////// */}
+                <Row horizontalPadding="huge">
+                    <Portion>
+                        <Heading4 marginBottom="nano">Fill the leftover width</Heading4>
+                        <Text marginBottom="micro">
+                            Give a <code>Portion</code> the <code>fillLeftoverWidth</code> prop and it takes whatever
+                            space the fixed-span siblings leave behind — no column arithmetic needed. In a default
+                            (grid) Row, use it on a single Portion; in a flexbox Row (<code>layout="flexbox"</code>) you
+                            can have several and they split the remainder evenly.
+                        </Text>
+
+                        <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton marginBottom="micro" source={`<Row>
+    <Portion desktopSpan="one-third">Fixed third</Portion>
+    <Portion fillLeftoverWidth>Takes the remaining two-thirds</Portion>
+</Row>`} />
+
+                        <Heading4 marginTop="small" marginBottom="nano">Equal portions</Heading4>
+                        <Text marginBottom="micro">
+                            Add <code>equalisePortions</code> to a <code>Row</code> and every <code>Portion</code> shares
+                            the width equally, whatever their spans — two become half each, four a quarter each, and so
+                            on, driven by column count rather than content. It switches the Row to flex for you, so you
+                            don&rsquo;t also need <code>layout="flexbox"</code>. (If a Portion in the same Row uses{" "}
+                            <code>fillLeftoverWidth</code>, that wins and equalising steps aside.)
+                        </Text>
+
+                        <CodeBlock withSyntaxHighlighting language="jsx" showCopyButton marginBottom="micro" source={`<Row equalisePortions>
+    <Portion>One</Portion>
+    <Portion>Two</Portion>
+    <Portion>Three</Portion>
+</Row>`} />
+                    </Portion>
+                </Row>
+
+                <Divider kind="primary" horizontalMargin="huge" verticalMargin="small" />
+
+                {/* //////////////////////////////////////////////////////////////////////////////////////////////// */}
                 {/*   BASICS  */}
                 {/* //////////////////////////////////////////////////////////////////////////////////////////////// */}
                 <Element as="section" id="basics">

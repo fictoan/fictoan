@@ -61,7 +61,7 @@ export interface CommonProps {
     listHorizontally          ? : boolean;
     // Grid --------------------------------------------------------------------
     layoutAsGrid              ? : boolean;
-    columns                   ? : string;
+    columns                   ? : number;
     // Common ------------------------------------------------------------------
     gap                       ? : SpacingOrLength;
     // Margin ------------------------------------------------------------------

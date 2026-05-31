@@ -16,6 +16,7 @@ interface RowCustomProps {
     retainLayoutOnMobile          ? : boolean;
     retainLayoutAlways            ? : boolean;
     allowUltraWide                ? : boolean;
+    equalisePortions              ? : boolean;
     groupLabel                    ? : string;
 }
 
@@ -35,6 +36,7 @@ export const Row = React.forwardRef(
             retainLayoutOnMobile,
             retainLayoutAlways,
             allowUltraWide,
+            equalisePortions,
             groupLabel,
             ...props
         } : RowProps,
@@ -43,22 +45,21 @@ export const Row = React.forwardRef(
         // CLASS NAMES -------------------------------------------------------------------------------------------------
         let classNames = [];
 
-        if (layout) {
-            classNames.push(`layout-${layout}`);
+        // equalisePortions needs a flex Row, so it forces the flexbox layout
+        // regardless of the `layout` prop.
+        const resolvedLayout = equalisePortions ? "flexbox" : layout;
+
+        if (resolvedLayout) {
+            classNames.push(`layout-${resolvedLayout}`);
+        }
+
+        if (equalisePortions) {
+            classNames.push("equalise-portions");
         }
 
         if (gutters) {
             classNames.push(gutters === "none" ? "no-gutters" : `${gutters}-gutters`);
         }
-
-        // Add medium gutters by default for grid layouts only, remove them for flexbox layouts
-        //
-        // if (conditionalGutters) {
-        // }
-
-        // if (equaliseChildren || equalizeChildren) {
-        //     classNames.push("equalise-children");
-        // }
 
         if (retainLayoutOnTabletLandscape) {
             classNames.push("retain-layout-on-tablet-landscape");

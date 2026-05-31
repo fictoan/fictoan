@@ -136,6 +136,7 @@ export const Element = React.forwardRef(
             ...style,
             ...(bgOpacity && { "--bg-opacity": Number(bgOpacity) / 100 }),
             ...(borderOpacity && { "--border-opacity": Number(borderOpacity) / 100 }),
+            ...(columns && { gridTemplateColumns: `repeat(${columns}, 1fr)` }),
             ...spacingStyle,
         } as React.CSSProperties;
 
@@ -168,7 +169,7 @@ export const Element = React.forwardRef(
                         isFullHeight && "full-height",
                         isFullWidth && "full-width",
                         layoutAsFlexbox && "layout-flexbox",
-                        layoutAsGrid && "layout-grid",
+                        (layoutAsGrid || columns) && "layout-grid",
                         listVertically && "list-vertically",
                         listHorizontally && "list-horizontally",
                         opacity && `opacity-${opacity}`,
