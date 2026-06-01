@@ -34,6 +34,11 @@ jobs :
             -   name : Install dependencies
                 run  : pnpm install
 
+            # Unit tests run against `src` in jsdom — no build needed, so this
+            # gates the PR early and fails fast before the slower builds below.
+            -   name : Test fictoan-react
+                run  : pnpm --filter fictoan-react test
+
             # `pnpm --filter fictoan-react build` runs:
             #   - tsc (type-check the library)
             #   - vite build (bundle CSS + JS, emit declarations)

@@ -54,6 +54,14 @@ already half-owns.
   `!important`, and a `:has()` rule so it yields to a `fillLeftoverWidth` sibling instead of fighting it.
 - [x] **`columns` wired on Element** — was a dead `string` prop; now a `number` that implies grid and sets
   `grid-template-columns: repeat(N, 1fr)`, so `<Div columns={3}>` finally works.
+- [x] **jsdom test tier (Vitest + RTL + jest-dom + vitest-axe)** — first automated tests for the library: 36 spec files,
+  551 tests, wired into `turbo` (`test` task) and CI (runs before the builds). Covers the prop→className/style/attribute
+  contract (Element, propSeparation, the beta-18/19 spacing/layout work), interaction (ListBox keyboard, Tabs, Accordion,
+  Pagination, OptionCard, Form controls, providers), attribute-level contracts for the popover trio (Modal/Drawer/Tooltip),
+  and a per-component `axe()` smoke. jsdom shims for Popover/`:popover-open`/ResizeObserver/scrollIntoView/canvas live in
+  `vitest.setup.ts`; matcher types are pulled into each spec via `vitest-matchers.ts` (test files are excluded from the
+  build tsconfig, so they sit in the editor's inferred project). Browser/visual tier (cascade, container queries, popover
+  lifecycle, geometry, contrast) is explicitly deferred — see the Tests gate below.
 
 ---
 
@@ -69,13 +77,32 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
 - [~] **Gate publish on CI** — `publish.yml` already runs `pnpm --filter fictoan-react build` before `npm publish`, so a
   broken build can't publish. What's left is making the *PR* show red before merge — handled by enabling branch
   protection with the new CI job as a required check (configuration step, not code).
-- [ ] **Tests for high-traffic components** — Vitest + React Testing Library. Start with Button, InputField, Select,
-  ListBox, Modal, Drawer, Tabs, Toast, Pagination, ThemeProvider. Add Playwright + axe for a11y and visual regressions
-  once the unit set is in place. Once a `test` script exists, add a `pnpm test` step to ci.yml. Starting state: the
-  `test` script is still the `exit 1` stub (`package.json`), there are zero specs, and CI runs no tests. Make a
-  per-component `axe()` smoke test an explicit *early* deliverable — most of the a11y bugs found in the audit below
-  (duplicate ids, unlabelled buttons, redundant `aria-value*`, nested live regions, dangling IDREFs) are exactly what
-  axe catches automatically.
+- [~] **Tests for high-traffic components** — jsdom unit/interaction/a11y tier **shipped on `beta-19`** (Vitest + RTL +
+  jest-dom + vitest-axe; 36 files / 551 tests; `test` task in turbo; `pnpm test` step in ci.yml; per-component `axe()`
+  smoke included). What's left for GA: the **browser/visual tier** (Vitest browser mode or Playwright-CT, Chromium) for
+  the things jsdom can't assert — the `@layer` cascade precedence against built `dist/index.css`, container-query
+  responsive grid (Row/Portion), the Popover open/close lifecycle (Modal/Drawer) and anchor-positioned Tooltip placement,
+  `color-mix`/`::backdrop`, and geometry (RadioTabGroup slider, ListBox open-direction, Range pointer math).
+- [ ] **Fix the bugs the test suite surfaced** (the specs currently *characterise* these — pin current behaviour green —
+  so each fix flips its test from asserting the violation to `toHaveNoViolations()`/correct output):
+  - **High — Tabs** (`Tabs.tsx:113`): `role="tablist"` wraps tabs in `<ul><li>`, so the `tab`s aren't owned by the
+    tablist → axe `aria-required-children` + `aria-required-parent` on any Tabs. Put `role="none"` on the ul/li (or drop
+    the list wrapper / use `aria-owns`).
+  - **High — ListBox** (`ListBox.tsx:294`): the `role="combobox"` has no accessible name (`htmlFor` only names native
+    controls) → `aria-input-field-name`. Give it `aria-label`/`aria-labelledby` → the label's id.
+  - **Medium — Row** (`Row.tsx:94`): hardcodes `role="grid"` on every Row, but children aren't `role="row"` → axe
+    `aria-required-children` on essentially all real usage. A layout primitive shouldn't claim grid semantics (drop the
+    role, or make it opt-in).
+  - **Medium — Switch** (`Switch.tsx:79`): renders a bare checkbox with no `role="switch"`/`aria-checked` — indistinct
+    from Checkbox to AT.
+  - **Medium — FormItemGroup** (`FormItemGroup.tsx:65`): its `data-form-spaced` is clobbered by `Element.tsx:151`
+    (re-emitted after the spread), so the marker never reaches the DOM.
+  - **Medium — Table** (`Table.tsx:71,68`): `aria-colcount` is dead for any multi-section table and `aria-rowcount`
+    counts sections (thead+tbody = 2), not rows.
+  - **Low — Pagination** (`Pagination.tsx:25`): `defaultRenderItem` drops the `key`, so numbered pages render without
+    React keys (warning each render). Plus ~40 other low-severity notes captured during authoring (redundant `aria-label`s,
+    empty `class=""`/`style` attrs, Tabs' uncancelled 150ms timer, TextArea forced-controlled, RadioTabGroup `bgColour`
+    no-op, etc.).
 - [x] **Broken published types entry** — `package.json` pointed `types`/`exports.types` at `./dist/types/index.d.ts`,
   which the build never produced (the real declarations land at `./dist/index.d.ts`), so every TS consumer of the beta
   got *no* types — gutting the IDE/AI-friendly thesis. Two compounding causes: `vite.config.js` used the misspelled

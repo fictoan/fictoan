@@ -215,6 +215,7 @@ export default defineConfig({
         dts({
             insertTypesEntry : true,
             include          : ["src/**/*"],
+            exclude          : ["src/**/*.test.ts", "src/**/*.test.tsx"],
             outputDir        : "dist/types",
             skipDiagnostics  : false,
             compilerOptions  : {
