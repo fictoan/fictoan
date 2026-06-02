@@ -8,9 +8,6 @@ import { Element } from "$element";
 // STYLES ==============================================================================================================
 import "./breadcrumbs.css";
 
-// OTHER ===============================================================================================================
-import { Text } from "$components/Typography";
-
 export type BreadcrumbsElementType = HTMLDivElement;
 
 export interface BreadcrumbsProps extends CommonAndHTMLProps<BreadcrumbsElementType> {
@@ -52,14 +49,11 @@ const BreadcrumbItem = React.forwardRef<HTMLLIElement, BreadcrumbItemProps>(
 );
 
 const Separator : React.FC<SeparatorProps> = ({separator}) => (
-    <Text
-        className="breadcrumb-separator"
-        aria-hidden="true"
-        role="presentation"
-        margin="none"
-    >
-        {separator}
-    </Text>
+    <li aria-hidden="true" role="presentation">
+        <span className="breadcrumb-separator">
+            {separator}
+        </span>
+    </li>
 );
 
 export const Breadcrumbs = React.forwardRef<HTMLDivElement, BreadcrumbsProps>(

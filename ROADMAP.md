@@ -99,8 +99,16 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
   - **Table** — removed the broken `aria-rowcount`/`aria-colcount` derivation (and the dead `hasColSpan` prop); the
     native table + DOM convey structure.
   - **Pagination** — `defaultRenderItem` now forwards the React `key`.
-  - *Still open:* the ~40 low-severity notes captured during authoring (redundant `aria-label`s, empty `class=""`/`style`
-    attrs, Tabs' uncancelled 150ms timer, TextArea forced-controlled, RadioTabGroup `bgColour` no-op, etc.).
+  - **Low-severity sweep (done):** Row `retainLayoutAlways` array entries; Divider's empty inline `style`; Meter
+    description id via `useId` (was the duplicate `meter-description-undefined`) + accurate default name; RadioTabGroup
+    `bgColour` wired (was a no-op) and the dead `name` attr dropped from the group div; ListBox's redundant `aria-owns`
+    removed; Badge's redundant auto `aria-label` for string children removed; Tabs' 150ms exit timer now cancelled on
+    unmount/re-switch; Breadcrumbs separator now a valid `<li>` child (was a `<p>` directly in `<ul>`); Skeleton's
+    indeterminate progressbar drops `aria-valuemin/max`.
+  - *Deliberately left (intentional / design decisions, not bugs):* `onChange` emitting a boolean (typed API), TextArea's
+    controlled default, Button having no first-class link/`href` mode, Card always `role="region"`, OptionCardsGroup
+    grouping role, the Toast/Notification id scheme, ThemeProvider's mount-time write, Table's `summary` prop, etc. —
+    these need an API/UX call rather than a mechanical fix.
 - [x] **Broken published types entry** — `package.json` pointed `types`/`exports.types` at `./dist/types/index.d.ts`,
   which the build never produced (the real declarations land at `./dist/index.d.ts`), so every TS consumer of the beta
   got *no* types — gutting the IDE/AI-friendly thesis. Two compounding causes: `vite.config.js` used the misspelled

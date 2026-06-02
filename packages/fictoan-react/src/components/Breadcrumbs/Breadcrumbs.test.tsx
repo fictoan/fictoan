@@ -109,8 +109,12 @@ describe("Breadcrumbs — separators", () => {
         const separators = container.querySelectorAll(".breadcrumb-separator");
         expect(separators).toHaveLength(2);
         separators.forEach((sep) => {
-            expect(sep).toHaveAttribute("aria-hidden", "true");
-            expect(sep).toHaveAttribute("role", "presentation");
+            // The separator must be a valid <ul> child, so it lives inside an
+            // <li> that carries the presentational a11y semantics.
+            const listItem = sep.closest("li");
+            expect(listItem).not.toBeNull();
+            expect(listItem).toHaveAttribute("aria-hidden", "true");
+            expect(listItem).toHaveAttribute("role", "presentation");
             expect(sep).toHaveTextContent("/");
         });
     });

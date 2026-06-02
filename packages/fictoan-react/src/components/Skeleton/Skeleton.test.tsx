@@ -83,13 +83,16 @@ describe("Skeleton — dimensions", () => {
 });
 
 describe("Skeleton — ARIA contract", () => {
-    it("exposes a busy progressbar with a 0-100 range", () => {
+    it("exposes a busy, indeterminate progressbar", () => {
         render(<Skeleton data-testid="sk" />);
         const el = screen.getByTestId("sk");
         expect(el).toHaveAttribute("role", "progressbar");
         expect(el).toHaveAttribute("aria-busy", "true");
-        expect(el).toHaveAttribute("aria-valuemin", "0");
-        expect(el).toHaveAttribute("aria-valuemax", "100");
+        // An indeterminate progressbar omits the value range; valuemin/valuemax
+        // would imply a determinate range.
+        expect(el).not.toHaveAttribute("aria-valuemin");
+        expect(el).not.toHaveAttribute("aria-valuemax");
+        expect(el).not.toHaveAttribute("aria-valuenow");
     });
 
     it("uses the default loading label as name and valuetext", () => {

@@ -40,6 +40,7 @@ live in `ROADMAP.md`.
 - ListBox opens by keyboard when closed (ArrowDown / Enter / Space on the combobox), and `aria-activedescendant` now sits on the focused search input rather than the combobox div.
 - `<progress>` / `<meter>` drop the redundant `aria-valuemin` / `-max` / `-now` (the native role already exposes value/min/max; `aria-valuetext` kept for the suffix text); Meter is no longer a `role="region"` landmark.
 - Tabs' tablist now owns its tabs (`role="none"` on the list wrappers); ListBox's combobox has an accessible name; Row drops the hardcoded `role="grid"` (opt-in `role="group"` via `groupLabel`); Switch is exposed as `role="switch"`; FormItemGroup actually emits its spacing marker; Pagination items render with React keys. (Found and fixed by the new test suite.)
+- Low-severity polish: RadioTabGroup's `bgColour` now applies (was a silent no-op); removed redundant ARIA (Badge's auto `aria-label` for text children, ListBox's `aria-owns`, Skeleton's `aria-valuemin`/`-max`); Meter description ids are unique (via `useId`); Breadcrumbs separators are valid `<ul>` children; Tabs cancels its exit-animation timer on unmount.
 
 ### ⚠️ Breaking changes
 - ThemeProvider now server-renders its children (with a pre-hydration no-flash script; needs `script-src 'unsafe-inline'` or a `nonce`) — surfaces any browser-API-in-render code under SSR/SSG.

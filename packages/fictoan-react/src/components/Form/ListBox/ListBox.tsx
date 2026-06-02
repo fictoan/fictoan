@@ -320,7 +320,6 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                         aria-haspopup="listbox"
                         aria-expanded={isOpen}
                         aria-controls={`${listboxId}-listbox`}
-                        aria-owns={`${listboxId}-listbox`}
                         aria-invalid={Boolean(errorText) || undefined}
                         aria-required={required}
                         aria-describedby={describedBy}

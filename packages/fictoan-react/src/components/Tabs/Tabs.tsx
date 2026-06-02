@@ -46,16 +46,34 @@ export const Tabs = React.forwardRef(
         // Refs for keyboard navigation to focus the tab buttons
         const tabButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
+        // Holds the pending exit-animation timer so rapid switching / unmount
+        // mid-transition can clear it instead of committing a stale tab.
+        const exitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
         // V2's performant animation logic
         const handleTabChange = useCallback((tab : TabType) => {
             if (activeTab?.key !== tab.key) {
                 setIsExiting(true);
-                setTimeout(() => {
+                // Cancel any in-flight transition before queuing a new one.
+                if (exitTimerRef.current !== null) {
+                    clearTimeout(exitTimerRef.current);
+                }
+                exitTimerRef.current = setTimeout(() => {
                     setActiveTab(tab);
                     setIsExiting(false);
+                    exitTimerRef.current = null;
                 }, 150); // Animation duration
             }
         }, [ activeTab?.key ]);
+
+        // Clear any pending exit-animation timer on unmount.
+        useEffect(() => {
+            return () => {
+                if (exitTimerRef.current !== null) {
+                    clearTimeout(exitTimerRef.current);
+                }
+            };
+        }, []);
 
         useEffect(() => {
             if (tabs.length > 0) {

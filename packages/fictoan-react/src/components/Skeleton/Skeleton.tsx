@@ -98,8 +98,6 @@ export const Skeleton = React.forwardRef((
             style={style}
             role="progressbar"
             aria-busy="true"
-            aria-valuemin={0}
-            aria-valuemax={100}
             aria-valuetext={effectiveLabel}
             aria-label={effectiveLabel}
             {...props}

@@ -72,7 +72,7 @@ describe("Meter — ARIA contract (redundant ARIA removed)", () => {
         expect(screen.getByTestId("a").querySelector("[data-meter]")).toHaveAttribute("aria-label", "Battery");
 
         render(<div data-testid="b"><Meter {...baseProps} /></div>);
-        expect(screen.getByTestId("b").querySelector("[data-meter]")).toHaveAttribute("aria-label", "Progress meter");
+        expect(screen.getByTestId("b").querySelector("[data-meter]")).toHaveAttribute("aria-label", "Meter");
     });
 
     it("keeps a descriptive aria-valuetext with value, percentage and status", () => {
@@ -120,19 +120,36 @@ describe("Meter — label meta block", () => {
 });
 
 describe("Meter — description wiring", () => {
-    it("wires aria-describedby to the sr-only description node by id", () => {
+    it("wires aria-describedby to the sr-only description node by a colon-free useId-derived id", () => {
         render(
             <div data-testid="m">
                 <Meter {...baseProps} label="Disk Usage" description="Almost full" />
             </div>,
         );
         const meter = getMeter();
-        const describedById = meter.getAttribute("aria-describedby");
-        expect(describedById).toBe("meter-description-disk-usage");
+        const describedById = meter.getAttribute("aria-describedby") as string;
+        // The id is derived from React.useId (not the label slug) so it is stable and
+        // unique per instance; the colons useId emits are stripped to keep it selector-safe.
+        expect(describedById).toMatch(/^meter-description-/);
+        expect(describedById).not.toContain(":");
 
         const descNode = screen.getByTestId("m").querySelector(`#${describedById}`) as HTMLElement;
         expect(descNode).not.toBeNull();
         expect(descNode).toHaveClass("sr-only");
+        expect(descNode).toHaveTextContent("Almost full");
+    });
+
+    it("emits a unique, non-undefined description id even without a label", () => {
+        render(
+            <div data-testid="m">
+                <Meter {...baseProps} description="Almost full" />
+            </div>,
+        );
+        const describedById = getMeter().getAttribute("aria-describedby") as string;
+        expect(describedById).not.toContain("undefined");
+
+        const descNode = screen.getByTestId("m").querySelector(`#${describedById}`) as HTMLElement;
+        expect(descNode).not.toBeNull();
         expect(descNode).toHaveTextContent("Almost full");
     });
 

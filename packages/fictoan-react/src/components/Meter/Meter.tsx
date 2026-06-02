@@ -56,6 +56,11 @@ export const Meter = React.forwardRef(
         optimum,
         ...props
     } : MeterProps, ref : React.Ref<MeterElementType>) => {
+        // useId (not the label slug) so the description id is stable and unique even
+        // without a label; strip the colons useId emits so it is selector-safe.
+        const reactId       = React.useId();
+        const descriptionId = `meter-description-${reactId.replace(/:/g, "")}`;
+
         const optimumPositionPercent = optimum ? (
             (optimum - min) / (max - min)
         ) * 100 : 0;
@@ -115,10 +120,9 @@ export const Meter = React.forwardRef(
                         optimum={optimum}
                         {...inputProps}
                         style={{height}}
-                        aria-label={label || ariaLabel || "Progress meter"}
+                        aria-label={label || ariaLabel || "Meter"}
                         aria-valuetext={getValueDescription()}
-                        aria-describedby={description ? `meter-description-${label?.toLowerCase()
-                            .replace(/\s+/g, "-")}` : undefined}
+                        aria-describedby={description ? descriptionId : undefined}
                     />
 
                     {showOptimumMarker && optimum && (
@@ -134,7 +138,7 @@ export const Meter = React.forwardRef(
 
                 {description && (
                     <div
-                        id={`meter-description-${label?.toLowerCase().replace(/\s+/g, "-")}`}
+                        id={descriptionId}
                         className="sr-only"
                     >
                         {description}

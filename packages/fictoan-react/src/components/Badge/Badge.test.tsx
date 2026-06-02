@@ -94,15 +94,20 @@ describe("Badge — colour props pass through to Element", () => {
     });
 });
 
-describe("Badge — string children become the aria-label", () => {
-    it("mirrors string children onto aria-label", () => {
+describe("Badge — aria-label", () => {
+    it("does not set aria-label for plain-string children (the visible text already names it)", () => {
         render(<Badge data-testid="b">Beta</Badge>);
-        expect(screen.getByTestId("b")).toHaveAttribute("aria-label", "Beta");
+        expect(screen.getByTestId("b")).not.toHaveAttribute("aria-label");
     });
 
     it("does not set aria-label when children are not a plain string", () => {
         render(<Badge data-testid="b"><span>Beta</span></Badge>);
         expect(screen.getByTestId("b")).not.toHaveAttribute("aria-label");
+    });
+
+    it("keeps an explicitly-passed aria-label", () => {
+        render(<Badge data-testid="b" aria-label="New items">Beta</Badge>);
+        expect(screen.getByTestId("b")).toHaveAttribute("aria-label", "New items");
     });
 });
 
