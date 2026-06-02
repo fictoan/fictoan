@@ -66,8 +66,9 @@ already half-owns.
   the built `dist/index.css` (injected raw so the *real* @layer cascade is exercised — components aren't imported for
   cascade specs, since their source CSS would inject unlayered and beat the layered rules). Covers the jsdom-impossible
   cases: the `@layer` cascade precedence (the Badge `bgColour` override bug), `color-mix` bgOpacity, container-query
-  responsive grid (Row/Portion), and the Popover open/close lifecycle (Modal). `pnpm test` stays jsdom-fast; CI builds
-  then runs the browser tier after `playwright install --with-deps chromium`.
+  responsive grid (Row/Portion), the Popover open/close lifecycle (Modal), and Tooltip placement via CSS anchor
+  positioning (above/below/left/right per `position-area`). `pnpm test` stays jsdom-fast; CI builds then runs the
+  browser tier after `playwright install --with-deps chromium`.
 
 ---
 
@@ -85,8 +86,8 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
   protection with the new CI job as a required check (configuration step, not code).
 - [x] **Tests for high-traffic components** — done: jsdom tier (547 tests) **and** the browser/visual tier (real
   Chromium) both shipped on `beta-19` (see Recently shipped above). Optional later extensions to the browser tier:
-  anchor-positioned Tooltip placement, `::backdrop`, the Drawer popover lifecycle, and geometry (RadioTabGroup slider,
-  ListBox open-direction, Range pointer math).
+  `::backdrop`, the Drawer popover lifecycle, and geometry (RadioTabGroup slider, ListBox open-direction, Range pointer
+  math).
 - [x] **Fix the bugs the test suite surfaced** — the high/medium a11y/correctness bugs found while authoring the specs
   are fixed, and each spec flipped from characterising the violation to asserting the correct output:
   - **Tabs** — `role="none"` on the `<ul>`/`<li>` wrappers so the `role="tab"` buttons are the tablist's owned children
