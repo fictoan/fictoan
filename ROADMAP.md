@@ -83,26 +83,20 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
   the things jsdom can't assert — the `@layer` cascade precedence against built `dist/index.css`, container-query
   responsive grid (Row/Portion), the Popover open/close lifecycle (Modal/Drawer) and anchor-positioned Tooltip placement,
   `color-mix`/`::backdrop`, and geometry (RadioTabGroup slider, ListBox open-direction, Range pointer math).
-- [ ] **Fix the bugs the test suite surfaced** (the specs currently *characterise* these — pin current behaviour green —
-  so each fix flips its test from asserting the violation to `toHaveNoViolations()`/correct output):
-  - **High — Tabs** (`Tabs.tsx:113`): `role="tablist"` wraps tabs in `<ul><li>`, so the `tab`s aren't owned by the
-    tablist → axe `aria-required-children` + `aria-required-parent` on any Tabs. Put `role="none"` on the ul/li (or drop
-    the list wrapper / use `aria-owns`).
-  - **High — ListBox** (`ListBox.tsx:294`): the `role="combobox"` has no accessible name (`htmlFor` only names native
-    controls) → `aria-input-field-name`. Give it `aria-label`/`aria-labelledby` → the label's id.
-  - **Medium — Row** (`Row.tsx:94`): hardcodes `role="grid"` on every Row, but children aren't `role="row"` → axe
-    `aria-required-children` on essentially all real usage. A layout primitive shouldn't claim grid semantics (drop the
-    role, or make it opt-in).
-  - **Medium — Switch** (`Switch.tsx:79`): renders a bare checkbox with no `role="switch"`/`aria-checked` — indistinct
-    from Checkbox to AT.
-  - **Medium — FormItemGroup** (`FormItemGroup.tsx:65`): its `data-form-spaced` is clobbered by `Element.tsx:151`
-    (re-emitted after the spread), so the marker never reaches the DOM.
-  - **Medium — Table** (`Table.tsx:71,68`): `aria-colcount` is dead for any multi-section table and `aria-rowcount`
-    counts sections (thead+tbody = 2), not rows.
-  - **Low — Pagination** (`Pagination.tsx:25`): `defaultRenderItem` drops the `key`, so numbered pages render without
-    React keys (warning each render). Plus ~40 other low-severity notes captured during authoring (redundant `aria-label`s,
-    empty `class=""`/`style` attrs, Tabs' uncancelled 150ms timer, TextArea forced-controlled, RadioTabGroup `bgColour`
-    no-op, etc.).
+- [x] **Fix the bugs the test suite surfaced** — the high/medium a11y/correctness bugs found while authoring the specs
+  are fixed, and each spec flipped from characterising the violation to asserting the correct output:
+  - **Tabs** — `role="none"` on the `<ul>`/`<li>` wrappers so the `role="tab"` buttons are the tablist's owned children
+    (no more `aria-required-children` / `aria-required-parent`).
+  - **ListBox** — the `role="combobox"` carries `aria-label={label}` (`htmlFor` can't name a role'd div).
+  - **Row** — dropped the hardcoded `role="grid"`; exposes `role="group"` only when a `groupLabel` is provided.
+  - **Switch** — `role="switch"` on the input so AT announces toggle (on/off) semantics, not a plain checkbox.
+  - **FormItemGroup** — passes the semantic `inheritFormSpacing` prop (Element emits `data-form-spaced` from it) instead
+    of the raw attribute Element clobbered.
+  - **Table** — removed the broken `aria-rowcount`/`aria-colcount` derivation (and the dead `hasColSpan` prop); the
+    native table + DOM convey structure.
+  - **Pagination** — `defaultRenderItem` now forwards the React `key`.
+  - *Still open:* the ~40 low-severity notes captured during authoring (redundant `aria-label`s, empty `class=""`/`style`
+    attrs, Tabs' uncancelled 150ms timer, TextArea forced-controlled, RadioTabGroup `bgColour` no-op, etc.).
 - [x] **Broken published types entry** — `package.json` pointed `types`/`exports.types` at `./dist/types/index.d.ts`,
   which the build never produced (the real declarations land at `./dist/index.d.ts`), so every TS consumer of the beta
   got *no* types — gutting the IDE/AI-friendly thesis. Two compounding causes: `vite.config.js` used the misspelled

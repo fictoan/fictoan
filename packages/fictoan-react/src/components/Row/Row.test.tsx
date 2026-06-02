@@ -23,9 +23,14 @@ describe("Row — base markup", () => {
         expect(row).toHaveAttribute("data-row");
     });
 
-    it("exposes role=grid", () => {
+    it("has no ARIA role by default (a layout primitive, not a data grid)", () => {
         render(<Row data-testid="row">cells</Row>);
-        expect(rowOf()).toHaveAttribute("role", "grid");
+        expect(rowOf()).not.toHaveAttribute("role");
+    });
+
+    it("exposes role=group only when a groupLabel is provided", () => {
+        render(<Row data-testid="row" groupLabel="Pricing tiers">cells</Row>);
+        expect(rowOf()).toHaveAttribute("role", "group");
     });
 
     it("carries Element's default marginBottom='tiny' class", () => {
@@ -144,30 +149,15 @@ describe("Row — assorted flags & labelling", () => {
 });
 
 describe("Row — a11y", () => {
-    // Row hardcodes role="grid", so a clean axe pass requires the full grid
-    // structure (grid > row > gridcell). See the `findings` note: a normal Row
-    // whose children are plain content / Portions trips `aria-required-children`.
-    it("has no axe violations when wired as a complete grid (grid > row > gridcell)", async () => {
-        const { container } = render(
-            <Row groupLabel="Feature grid">
-                <div role="row">
-                    <div role="gridcell">First</div>
-                    <div role="gridcell">Second</div>
-                </div>
-            </Row>,
-        );
+    // Row no longer claims role="grid", so its normal usage (plain / Portion
+    // children) is clean — no aria-required-children, and no grid scaffolding needed.
+    it("has no axe violations as a plain layout row", async () => {
+        const { container } = render(<Row>Plain content</Row>);
         expect(await axe(container)).toHaveNoViolations();
     });
 
-    // Characterisation baseline: this is how Row is normally used (plain /
-    // Portion children, no nested role="row"). It currently FAILS aria-required-
-    // children because of the hardcoded role="grid". Asserting the violation
-    // pins the current behaviour so the suite stays green and the regression is
-    // visible if the role is ever changed.
-    it("a Row with non-grid children currently reports aria-required-children (baseline)", async () => {
-        const { container } = render(<Row groupLabel="Feature grid">Plain content</Row>);
-        const results = await axe(container);
-        const ids = (results.violations as Array<{ id : string }>).map((v) => v.id);
-        expect(ids).toContain("aria-required-children");
+    it("has no axe violations as a labelled group", async () => {
+        const { container } = render(<Row groupLabel="Feature row">Plain content</Row>);
+        expect(await axe(container)).toHaveNoViolations();
     });
 });

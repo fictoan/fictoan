@@ -111,9 +111,12 @@ export const Tabs = React.forwardRef(
                 {...props}
             >
                 <Nav data-tabs-nav role="tablist" aria-label="Tab Navigation">
-                    <ul className="tab-labels-list">
+                    {/* role="none" on the list + items removes their list semantics from the
+                        a11y tree so the role="tab" buttons become the tablist's owned children
+                        (otherwise axe flags aria-required-children / aria-required-parent). */}
+                    <ul className="tab-labels-list" role="none">
                         {tabs.map((tab, i) => (
-                            <li key={tab.key}>
+                            <li key={tab.key} role="none">
                                 <Element<HTMLButtonElement>
                                     as="button"
                                     ref={(el) => { tabButtonRefs.current[i] = el; }}

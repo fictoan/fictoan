@@ -290,13 +290,10 @@ describe("ListBox — multi-select", () => {
 });
 
 describe("ListBox — a11y", () => {
-    // CHARACTERISATION: the role="combobox" div has NO accessible name. The visible
-    // <label htmlFor> targets the combobox div's id, but htmlFor only names native
-    // form controls — it does not name an ARIA-role element. So axe reports exactly
-    // one violation: "aria-input-field-name". This is a real, pre-existing bug (see
-    // findings); the test pins the CURRENT behaviour so a regression that adds a NEW
-    // violation, or a fix that removes this one, both surface here.
-    it("open state has only the known combobox-name violation (pre-existing bug)", async () => {
+    // The combobox now carries its own aria-label (htmlFor on the visible <label>
+    // only names native controls, not a role="combobox" div), so the open listbox
+    // has a proper accessible name and reports no violations.
+    it("open state has no axe violations", async () => {
         const user = userEvent.setup();
         const { container } = render(
             <ListBox label="Favourite fruit" options={OPTIONS} helpText="Choose one" />,
@@ -304,8 +301,6 @@ describe("ListBox — a11y", () => {
         await user.click(getCombobox());
         expect(screen.getByRole("listbox")).toBeInTheDocument();
 
-        const results = await axe(container);
-        const ids = (results.violations ?? []).map(v => v.id).sort();
-        expect(ids).toEqual([ "aria-input-field-name" ]);
+        expect(await axe(container)).toHaveNoViolations();
     });
 });

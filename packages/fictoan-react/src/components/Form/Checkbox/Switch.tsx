@@ -79,6 +79,7 @@ export const Switch = React.forwardRef(
                 <Element<SwitchElementType>
                     as="input"
                     type="checkbox"
+                    role="switch"
                     ref={ref}
                     id={finalId}
                     name={derivedName}

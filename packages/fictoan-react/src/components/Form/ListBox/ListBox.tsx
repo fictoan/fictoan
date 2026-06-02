@@ -314,6 +314,9 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                         onClick={() => !disabled && setIsOpen(!isOpen)}
                         onKeyDown={handleComboboxKeyDown}
                         role="combobox"
+                        // `htmlFor` on the visible <label> only names native controls, not a
+                        // role="combobox" div — so give the combobox its own accessible name.
+                        aria-label={label}
                         aria-haspopup="listbox"
                         aria-expanded={isOpen}
                         aria-controls={`${listboxId}-listbox`}

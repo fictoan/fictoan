@@ -19,7 +19,6 @@ export interface TableCustomProps {
     isFullWidth         ? : boolean;
     caption             ? : string; // Accessible table caption
     summary             ? : string; // Description of table structure for complex tables
-    hasColSpan          ? : boolean; // Indicates if table has colspan/rowspan for screen readers
 }
 
 export type TableElementType = HTMLTableElement;
@@ -36,7 +35,6 @@ export const Table = React.forwardRef(
             alignText,
             caption,
             summary,
-            hasColSpan,
             children,
             ...props
         }: TableProps,
@@ -64,31 +62,16 @@ export const Table = React.forwardRef(
             classNames.push(`align-text-${alignText}`);
         }
 
-        // Get row count if children exist
-        const rowCount = React.Children.count(children);
-
-        // Get column count from first row if possible
-        const getColumnCount = () => {
-            if (!children || !React.isValidElement(children)) return undefined;
-
-            const firstRow = React.Children.toArray(children)[0];
-            if (React.isValidElement(firstRow)) {
-                const rowProps = firstRow.props as { children?: React.ReactNode };
-                if (rowProps.children) {
-                    return React.Children.count(rowProps.children);
-                }
-            }
-            return undefined;
-        };
-
+        // No aria-rowcount / aria-colcount: those are for virtualised/paginated tables where the
+        // DOM holds only a subset of rows. This Table renders all children, so the native <table>
+        // semantics convey the counts — deriving them from arbitrary children was wrong anyway
+        // (counted thead+tbody as 2 rows; colcount was dead for any multi-section table).
         return (
             <Element<TableElementType>
                 as="table"
                 classNames={classNames}
                 ref={ref}
                 role="table"
-                aria-rowcount={rowCount || undefined}
-                aria-colcount={hasColSpan ? undefined : getColumnCount()}
                 summary={summary}
                 {...props}
             >

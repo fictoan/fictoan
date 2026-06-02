@@ -24,17 +24,16 @@ describe("FormItemGroup — rendering & structure", () => {
         expect(grp).toHaveAttribute("data-form-item-group");
     });
 
-    it("does NOT actually emit data-form-spaced (Element overrides it — see findings)", () => {
-        // FormItemGroup passes `data-form-spaced` via {...props}, but Element
-        // unconditionally re-sets data-form-spaced={inheritFormSpacing || undefined}
-        // AFTER spreading those props, so the passthrough value is dropped.
-        // This characterises the current (buggy) behaviour, not the intent.
+    it("emits data-form-spaced (via the inheritFormSpacing prop)", () => {
+        // FormItemGroup now passes the semantic `inheritFormSpacing` prop, which
+        // Element turns into data-form-spaced — instead of a raw attribute that
+        // Element's own data-form-spaced={inheritFormSpacing || undefined} clobbered.
         render(
             <FormItemGroup legend="Contact details" data-testid="grp">
                 <span>child</span>
             </FormItemGroup>,
         );
-        expect(screen.getByTestId("grp")).not.toHaveAttribute("data-form-spaced");
+        expect(screen.getByTestId("grp")).toHaveAttribute("data-form-spaced");
     });
 
     it("renders its children", () => {

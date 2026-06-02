@@ -39,6 +39,7 @@ live in `ROADMAP.md`.
 - Accordion / Tooltip / Pagination ARIA fixed; Modal and Notification close buttons are real `<button>`s; Badge / SkeletonGroup live-region roles corrected; Toast / Notification no longer double-announce.
 - ListBox opens by keyboard when closed (ArrowDown / Enter / Space on the combobox), and `aria-activedescendant` now sits on the focused search input rather than the combobox div.
 - `<progress>` / `<meter>` drop the redundant `aria-valuemin` / `-max` / `-now` (the native role already exposes value/min/max; `aria-valuetext` kept for the suffix text); Meter is no longer a `role="region"` landmark.
+- Tabs' tablist now owns its tabs (`role="none"` on the list wrappers); ListBox's combobox has an accessible name; Row drops the hardcoded `role="grid"` (opt-in `role="group"` via `groupLabel`); Switch is exposed as `role="switch"`; FormItemGroup actually emits its spacing marker; Pagination items render with React keys. (Found and fixed by the new test suite.)
 
 ### ⚠️ Breaking changes
 - ThemeProvider now server-renders its children (with a pre-hydration no-flash script; needs `script-src 'unsafe-inline'` or a `nonce`) — surfaces any browser-API-in-render code under SSR/SSG.
@@ -47,6 +48,7 @@ live in `ROADMAP.md`.
 - `.font-sans` renamed to `.font-sans-serif`; Drawer `closeOnClickOutside` deprecated (dismissal via `isDismissible`).
 - `stackVertically` / `stackHorizontally` renamed to `listVertically` / `listHorizontally` (no alias).
 - Deep-import paths under `fictoan-react/dist/...` changed (per-module output); bare `"fictoan-react"` imports are unchanged.
+- Table drops the non-functional `hasColSpan` prop and no longer emits `aria-rowcount` / `aria-colcount` (they were derived incorrectly; native table semantics convey structure).
 
 **OKLCH colour system migration**
 - All colours now use the OKLCH colour space for perceptually uniform lightness and better colour mixing

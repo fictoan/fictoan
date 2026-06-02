@@ -91,7 +91,10 @@ export const Row = React.forwardRef(
                 ref={ref}
                 classNames={[ classNames.join(" ") ]}
                 marginBottom="tiny"
-                role="grid"
+                // Row is a visual layout primitive, not a data grid — claiming role="grid"
+                // demands role="row"/"gridcell" children it never has (axe aria-required-children).
+                // Expose a named group only when the caller gives it a groupLabel.
+                role={groupLabel ? "group" : undefined}
                 aria-label={groupLabel}
                 {...props}
             />

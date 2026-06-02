@@ -62,7 +62,9 @@ export const FormItemGroup = React.forwardRef(
             <Element<FormItemGroupElementType>
                 as="div"
                 data-form-item-group
-                data-form-spaced
+                // Use the semantic prop: Element emits `data-form-spaced` from this. Passing the
+                // raw attribute is clobbered by Element's own `data-form-spaced={inheritFormSpacing || undefined}`.
+                inheritFormSpacing
                 ref={ref}
                 id={groupId}
                 role="group"

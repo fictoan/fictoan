@@ -7,21 +7,22 @@ import { axe } from "vitest-axe";
 import { Switch } from "./Switch";
 
 // Switch is the Checkbox twin: same FormItem wrapper, same <input type="checkbox">
-// under the hood, styled as a toggle. The accessible role is therefore "checkbox"
-// (there is no role="switch" applied). These tests pin that markup contract plus
-// the controlled state / onChange-emits-boolean / disabled / ARIA plumbing.
+// under the hood, styled as a toggle — but it carries role="switch" so assistive
+// tech announces toggle (on/off) semantics rather than a plain checkbox. These
+// tests pin that markup contract plus the controlled state / onChange-emits-boolean
+// / disabled / ARIA plumbing.
 
 describe("Switch — rendering & structure", () => {
-    it("renders a checkbox input (toggle styled, role stays checkbox)", () => {
+    it("renders an <input type=checkbox> exposed as role=switch", () => {
         render(<Switch label="Dark mode" />);
-        const input = screen.getByRole("checkbox", { name : "Dark mode" });
+        const input = screen.getByRole("switch", { name : "Dark mode" });
         expect(input.tagName).toBe("INPUT");
         expect(input).toHaveAttribute("type", "checkbox");
     });
 
     it("associates the visible label to the input via htmlFor/id (useId)", () => {
         render(<Switch label="Dark mode" />);
-        const input = screen.getByRole("checkbox", { name : "Dark mode" });
+        const input = screen.getByRole("switch", { name : "Dark mode" });
         const label = screen.getByText("Dark mode");
 
         expect(label.tagName).toBe("LABEL");
@@ -31,14 +32,14 @@ describe("Switch — rendering & structure", () => {
 
     it("honours an explicit id and derives name from id", () => {
         render(<Switch id="theme" label="Theme" />);
-        const input = screen.getByRole("checkbox", { name : "Theme" });
+        const input = screen.getByRole("switch", { name : "Theme" });
         expect(input).toHaveAttribute("id", "theme");
         expect(input).toHaveAttribute("name", "theme");
     });
 
     it("uses an explicit name over the id", () => {
         render(<Switch id="theme" name="preference" label="Theme" />);
-        expect(screen.getByRole("checkbox")).toHaveAttribute("name", "preference");
+        expect(screen.getByRole("switch")).toHaveAttribute("name", "preference");
     });
 
     it("renders the decorative switch element with the size class", () => {
@@ -58,18 +59,18 @@ describe("Switch — rendering & structure", () => {
 describe("Switch — controlled checked state", () => {
     it("reflects checked={true}", () => {
         render(<Switch label="On" checked onChange={() => {}} />);
-        expect(screen.getByRole("checkbox")).toBeChecked();
+        expect(screen.getByRole("switch")).toBeChecked();
     });
 
     it("reflects checked={false}", () => {
         render(<Switch label="Off" checked={false} onChange={() => {}} />);
-        expect(screen.getByRole("checkbox")).not.toBeChecked();
+        expect(screen.getByRole("switch")).not.toBeChecked();
     });
 
     it("stays on when controlled and the prop is not updated", async () => {
         const user = userEvent.setup();
         render(<Switch label="Locked on" checked onChange={() => {}} />);
-        const input = screen.getByRole("checkbox");
+        const input = screen.getByRole("switch");
         expect(input).toBeChecked();
 
         await user.click(input);
@@ -83,7 +84,7 @@ describe("Switch — onChange wiring", () => {
         const onChange = vi.fn();
         render(<Switch label="Toggle" onChange={onChange} />);
 
-        await user.click(screen.getByRole("checkbox"));
+        await user.click(screen.getByRole("switch"));
         expect(onChange).toHaveBeenCalledTimes(1);
         expect(onChange).toHaveBeenCalledWith(true);
     });
@@ -93,7 +94,7 @@ describe("Switch — onChange wiring", () => {
         const onChange = vi.fn();
         render(<Switch label="Toggle" defaultChecked onChange={onChange} />);
 
-        await user.click(screen.getByRole("checkbox"));
+        await user.click(screen.getByRole("switch"));
         expect(onChange).toHaveBeenCalledWith(false);
     });
 
@@ -102,7 +103,7 @@ describe("Switch — onChange wiring", () => {
         const onChange = vi.fn();
         render(<Switch label="Toggle" onChange={onChange} />);
 
-        await user.click(screen.getByRole("checkbox"));
+        await user.click(screen.getByRole("switch"));
         expect(typeof onChange.mock.calls[0][0]).toBe("boolean");
     });
 });
@@ -110,7 +111,7 @@ describe("Switch — onChange wiring", () => {
 describe("Switch — disabled", () => {
     it("renders the disabled attribute", () => {
         render(<Switch label="No" disabled />);
-        expect(screen.getByRole("checkbox")).toBeDisabled();
+        expect(screen.getByRole("switch")).toBeDisabled();
     });
 
     it("does not fire onChange when disabled and clicked", async () => {
@@ -118,7 +119,7 @@ describe("Switch — disabled", () => {
         const onChange = vi.fn();
         render(<Switch label="No" disabled onChange={onChange} />);
 
-        await user.click(screen.getByRole("checkbox"));
+        await user.click(screen.getByRole("switch"));
         expect(onChange).not.toHaveBeenCalled();
     });
 });
@@ -126,21 +127,21 @@ describe("Switch — disabled", () => {
 describe("Switch — required & validation ARIA", () => {
     it("sets aria-required and required when required", () => {
         render(<Switch label="Must" required />);
-        const input = screen.getByRole("checkbox");
+        const input = screen.getByRole("switch");
         expect(input).toBeRequired();
         expect(input).toHaveAttribute("aria-required", "true");
     });
 
     it("wires aria-describedby to a help-text node when helpText is given", () => {
         render(<Switch id="sw" label="Help me" helpText="Some guidance" />);
-        const input = screen.getByRole("checkbox");
+        const input = screen.getByRole("switch");
         expect(input).toHaveAttribute("aria-describedby", "sw-help");
         expect(document.getElementById("sw-help")).toHaveTextContent("Some guidance");
     });
 
     it("sets aria-invalid and wires error text when errorText is given", () => {
         render(<Switch id="sw" label="Oops" errorText="Required" />);
-        const input = screen.getByRole("checkbox");
+        const input = screen.getByRole("switch");
         expect(input).toHaveAttribute("aria-invalid", "true");
         expect(input).toHaveAttribute("aria-describedby", "sw-error");
         const error = document.getElementById("sw-error");
@@ -150,7 +151,7 @@ describe("Switch — required & validation ARIA", () => {
 
     it("does not set aria-invalid when there is no error", () => {
         render(<Switch label="Fine" />);
-        expect(screen.getByRole("checkbox")).not.toHaveAttribute("aria-invalid");
+        expect(screen.getByRole("switch")).not.toHaveAttribute("aria-invalid");
     });
 });
 

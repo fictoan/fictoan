@@ -245,14 +245,10 @@ describe("Tabs — switching (click + keyboard)", () => {
 });
 
 describe("Tabs — a11y", () => {
-    // CHARACTERISATION: the component nests its tabs as <nav role="tablist"><ul>
-    // <li><button role="tab">…, so the role="tab" buttons are NOT direct children
-    // of the role="tablist" element. axe flags this as aria-required-children
-    // (tablist must contain tab) AND aria-required-parent (tab must be inside a
-    // tablist). This is a real, currently-present a11y bug — see findings. The
-    // assertions below pin the CURRENT (violating) state so the suite stays
-    // green; flip them to toHaveNoViolations() once the markup is fixed.
-    it("currently reports the tablist/tab nesting violations (characterisation)", async () => {
+    // role="none" on the <ul>/<li> wrappers means the role="tab" buttons are the
+    // tablist's effective children, so the aria-required-children / aria-required-parent
+    // pair that used to fire no longer does.
+    it("has no axe violations (tab buttons are owned by the tablist)", async () => {
         const { container } = render(
             <Tabs
                 tabs={[
@@ -262,28 +258,6 @@ describe("Tabs — a11y", () => {
             />,
         );
 
-        const results = await axe(container);
-        const violationIds = (results.violations ?? []).map((v : { id : string }) => v.id);
-
-        expect(violationIds).toContain("aria-required-children");
-        expect(violationIds).toContain("aria-required-parent");
-    });
-
-    it("has no a11y violations OTHER than the known tablist nesting ones", async () => {
-        const { container } = render(
-            <Tabs
-                tabs={[
-                    { key : "details",  label : "Details",  content : "Account details go here." },
-                    { key : "security", label : "Security", content : "Security settings go here." },
-                ]}
-            />,
-        );
-
-        const results = await axe(container);
-        const knownIds = [ "aria-required-children", "aria-required-parent" ];
-        const unexpected = (results.violations ?? []).filter(
-            (v : { id : string }) => !knownIds.includes(v.id),
-        );
-        expect(unexpected).toEqual([]);
+        expect(await axe(container)).toHaveNoViolations();
     });
 });

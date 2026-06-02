@@ -150,54 +150,14 @@ describe("Table — caption", () => {
     });
 });
 
-describe("Table — derived aria counts (structural, current behaviour)", () => {
-    it("aria-rowcount counts DIRECT children (thead + tbody = 2 here, not the row count)", () => {
+describe("Table — aria counts removed", () => {
+    // aria-rowcount / aria-colcount were unreliable for a composable table (they
+    // counted thead+tbody as the row count, and colcount was dead for any
+    // multi-section table) and are only meant for virtualised/paginated tables.
+    // They are no longer emitted — the native <table> + DOM convey the structure.
+    it("does not emit aria-rowcount or aria-colcount", () => {
         render(<SampleTable data-testid="tbl" />);
-        // CHARACTERISATION: rowCount = React.Children.count(children) = 2
-        // (the <thead> and the <tbody>), NOT the four <tr>. See findings.
-        expect(screen.getByTestId("tbl")).toHaveAttribute("aria-rowcount", "2");
-    });
-
-    it("aria-colcount is ABSENT for a normal multi-section table", () => {
-        render(<SampleTable data-testid="tbl" />);
-        // CHARACTERISATION: getColumnCount() bails on its very first guard —
-        // `!React.isValidElement(children)` is true because `children` is an
-        // ARRAY (<thead> + <tbody>), so it returns undefined and the attribute
-        // is never emitted. The colcount feature is effectively dead for any
-        // table with more than one top-level child. See findings.
-        expect(screen.getByTestId("tbl")).not.toHaveAttribute("aria-colcount");
-    });
-
-    it("aria-colcount IS derived when there is exactly one top-level child", () => {
-        // A <colgroup> is a valid single direct child of <table>; its three
-        // <col> children let us exercise the guard's happy path without an
-        // invalid <tr>-under-<table> nesting warning.
-        render(
-            <Table data-testid="tbl">
-                <colgroup>
-                    <col />
-                    <col />
-                    <col />
-                </colgroup>
-            </Table>,
-        );
-        // CHARACTERISATION: with a single direct child, the guard passes and
-        // the count becomes the number of that child's children — 3 here.
-        expect(screen.getByTestId("tbl")).toHaveAttribute("aria-colcount", "3");
-    });
-
-    it("hasColSpan suppresses aria-colcount", () => {
-        render(<SampleTable data-testid="tbl" hasColSpan />);
         const table = screen.getByTestId("tbl");
-        expect(table).not.toHaveAttribute("aria-colcount");
-        // aria-rowcount is still emitted
-        expect(table).toHaveAttribute("aria-rowcount", "2");
-    });
-
-    it("omits both aria counts when there are no children", () => {
-        render(<Table data-testid="tbl" />);
-        const table = screen.getByTestId("tbl");
-        // rowCount === 0 -> `0 || undefined` -> attribute absent
         expect(table).not.toHaveAttribute("aria-rowcount");
         expect(table).not.toHaveAttribute("aria-colcount");
     });
