@@ -1,5 +1,7 @@
+// TESTS ===============================================================================================================
 import { describe, it, expect } from "vitest";
 
+// OTHER ===============================================================================================================
 import { separateFictoanFromHTMLProps, separateWrapperProps } from "./propSeparation";
 
 // propSeparation is the gate that decides which props are Fictoan recipe props

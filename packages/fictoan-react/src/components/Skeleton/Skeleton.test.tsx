@@ -1,8 +1,10 @@
-import { describe, it, expect } from "vitest";
+// TESTS ===============================================================================================================
 import "../../../vitest-matchers";
-import { render, screen } from "@testing-library/react";
 import { axe } from "vitest-axe";
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
 
+// OTHER ===============================================================================================================
 import { Skeleton, SkeletonGroup } from "./Skeleton";
 
 // Skeleton + SkeletonGroup are presentational wrappers over Element. Skeleton

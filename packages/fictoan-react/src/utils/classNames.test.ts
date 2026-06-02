@@ -1,4 +1,7 @@
+// TESTS ===============================================================================================================
 import { describe, it, expect } from "vitest";
+
+// OTHER ===============================================================================================================
 import { createClassName } from "./classNames";
 
 // Smoke test for the test harness as much as for the function: if this runs

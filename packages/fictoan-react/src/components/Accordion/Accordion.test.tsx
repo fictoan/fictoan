@@ -1,10 +1,12 @@
-// OTHER ===============================================================================================================
+// TESTS ===============================================================================================================
 import "../../../vitest-matchers";
 import userEvent from "@testing-library/user-event";
-import { Accordion } from "./Accordion";
 import { axe } from "vitest-axe";
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
+
+// OTHER ===============================================================================================================
+import { Accordion } from "./Accordion";
 
 // Accordion is a thin wrapper over the native <details>/<summary> disclosure
 // widget: it renders `as="details"`, tags the element with

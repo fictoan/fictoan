@@ -1,9 +1,13 @@
-import { describe, it, expect, vi } from "vitest";
-import "../../../../vitest-matchers";
-import { render, screen, act } from "@testing-library/react";
-import { axe } from "vitest-axe";
+// REACT CORE ==========================================================================================================
 import { useState } from "react";
 
+// TESTS ===============================================================================================================
+import "../../../../vitest-matchers";
+import { axe } from "vitest-axe";
+import { describe, it, expect, vi } from "vitest";
+import { render, screen, act } from "@testing-library/react";
+
+// OTHER ===============================================================================================================
 import { ToastsProvider, useToasts } from "./ToastsProvider";
 
 // ToastsProvider exposes an imperative `toast(message, duration?)` via the

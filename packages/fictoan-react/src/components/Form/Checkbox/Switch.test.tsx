@@ -1,9 +1,11 @@
-import { describe, it, expect, vi } from "vitest";
+// TESTS ===============================================================================================================
 import "../../../../vitest-matchers";
-import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
+import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
 
+// OTHER ===============================================================================================================
 import { Switch } from "./Switch";
 
 // Switch is the Checkbox twin: same FormItem wrapper, same <input type="checkbox">

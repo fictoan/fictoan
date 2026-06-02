@@ -1,10 +1,14 @@
-import { describe, it, expect, vi } from "vitest";
-import "../../../../vitest-matchers";
+// REACT CORE ==========================================================================================================
 import { useState } from "react";
-import { render, screen } from "@testing-library/react";
+
+// TESTS ===============================================================================================================
+import "../../../../vitest-matchers";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
+import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
 
+// OTHER ===============================================================================================================
 import { TextArea } from "./TextArea";
 
 // TextArea wraps a native <textarea> in a FormItem. It is always controlled

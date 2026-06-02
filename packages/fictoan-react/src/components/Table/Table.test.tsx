@@ -1,18 +1,19 @@
-import { describe, it, expect } from "vitest";
+// TESTS ===============================================================================================================
 import "../../../vitest-matchers";
-import { render, screen } from "@testing-library/react";
 import { axe } from "vitest-axe";
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
 
+// OTHER ===============================================================================================================
 import { Table } from "./Table";
 
 // Table is a thin, COMPOSABLE wrapper over Element<table>: the consumer passes
 // real <thead>/<tbody>/<tr>/<th>/<td> children, and Table only layers on the
 // recipe classes (borders / striping / hover / alignment / full-width), an
-// optional <caption>, a deprecated `summary` passthrough, and a pair of
-// aria-rowcount / aria-colcount counters derived from the child tree. These
-// tests pin that public output. NOTE: the aria-*count derivation counts DIRECT
-// children, not <tr>/<th>, so the emitted numbers are structural, not semantic
-// — see findings. The tests below assert the CURRENT actual values.
+// optional <caption>, and a deprecated `summary` passthrough. These tests pin
+// that public output. (The old aria-rowcount / aria-colcount derivation was
+// removed — it counted direct children, not rows/cells; the native table conveys
+// structure. See the "aria counts removed" block below.)
 
 // A small, realistic, accessibly-named table used across the cases below.
 const SampleTable = (props: React.ComponentProps<typeof Table>) => (

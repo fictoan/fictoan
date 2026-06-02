@@ -1,9 +1,11 @@
-import { describe, it, expect } from "vitest";
-import "../../../vitest-matchers";
-import { render, screen } from "@testing-library/react";
-import { axe } from "vitest-axe";
-
+// LOCAL COMPONENTS ====================================================================================================
 import { Element } from "./Element";
+
+// TESTS ===============================================================================================================
+import "../../../vitest-matchers";
+import { axe } from "vitest-axe";
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
 
 // Element is the prop engine for the whole library: every recipe prop becomes a
 // className or an inline style here. These tests pin that contract — they are

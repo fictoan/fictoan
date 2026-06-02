@@ -1,8 +1,10 @@
-import { describe, it, expect } from "vitest";
+// TESTS ===============================================================================================================
 import "../../../vitest-matchers";
-import { render, screen } from "@testing-library/react";
 import { axe } from "vitest-axe";
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
 
+// OTHER ===============================================================================================================
 import { Heading1, Heading2, Heading3, Heading4, Heading5, Heading6 } from "./Heading";
 
 // Heading1..6 are thin wrappers over Element: each fixes the tag (h1..h6) and

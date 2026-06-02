@@ -1,8 +1,10 @@
-import { describe, it, expect } from "vitest";
+// TESTS ===============================================================================================================
 import "../../../vitest-matchers";
-import { render, screen } from "@testing-library/react";
 import { axe } from "vitest-axe";
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
 
+// OTHER ===============================================================================================================
 import { Spinner } from "./Spinner";
 
 // Spinner is a thin presentational wrapper over Element: it renders a <div>
