@@ -20,6 +20,8 @@ packages/fictoan-docs/public/fictoan-schema.json
 
 # Testing
 coverage
+# Vitest browser-mode failure screenshots
+__screenshots__
 
 # Debug
 npm-debug.log*

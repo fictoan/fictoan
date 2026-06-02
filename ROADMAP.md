@@ -55,13 +55,19 @@ already half-owns.
 - [x] **`columns` wired on Element** — was a dead `string` prop; now a `number` that implies grid and sets
   `grid-template-columns: repeat(N, 1fr)`, so `<Div columns={3}>` finally works.
 - [x] **jsdom test tier (Vitest + RTL + jest-dom + vitest-axe)** — first automated tests for the library: 36 spec files,
-  551 tests, wired into `turbo` (`test` task) and CI (runs before the builds). Covers the prop→className/style/attribute
-  contract (Element, propSeparation, the beta-18/19 spacing/layout work), interaction (ListBox keyboard, Tabs, Accordion,
-  Pagination, OptionCard, Form controls, providers), attribute-level contracts for the popover trio (Modal/Drawer/Tooltip),
-  and a per-component `axe()` smoke. jsdom shims for Popover/`:popover-open`/ResizeObserver/scrollIntoView/canvas live in
-  `vitest.setup.ts`; matcher types are pulled into each spec via `vitest-matchers.ts` (test files are excluded from the
-  build tsconfig, so they sit in the editor's inferred project). Browser/visual tier (cascade, container queries, popover
-  lifecycle, geometry, contrast) is explicitly deferred — see the Tests gate below.
+  547 tests, wired into `turbo` (`test` task) and CI. Covers the prop→className/style/attribute contract (Element,
+  propSeparation, the beta-18/19 spacing/layout work), interaction (ListBox keyboard, Tabs, Accordion, Pagination,
+  OptionCard, Form controls, providers), attribute-level contracts for the popover trio (Modal/Drawer/Tooltip), and a
+  per-component `axe()` smoke. jsdom shims for Popover/`:popover-open`/ResizeObserver/scrollIntoView/canvas live in
+  `vitest.setup.ts`; matcher types are pulled into each spec via `vitest-matchers.ts` (specs are excluded from the build
+  tsconfig, so they sit in the editor's inferred project).
+- [x] **Browser/visual test tier (Vitest browser mode, real Chromium via Playwright)** — one runner, two projects
+  (`vitest --project unit` / `--project browser`); browser specs live in `src/browser/*.browser.test.tsx` and run against
+  the built `dist/index.css` (injected raw so the *real* @layer cascade is exercised — components aren't imported for
+  cascade specs, since their source CSS would inject unlayered and beat the layered rules). Covers the jsdom-impossible
+  cases: the `@layer` cascade precedence (the Badge `bgColour` override bug), `color-mix` bgOpacity, container-query
+  responsive grid (Row/Portion), and the Popover open/close lifecycle (Modal). `pnpm test` stays jsdom-fast; CI builds
+  then runs the browser tier after `playwright install --with-deps chromium`.
 
 ---
 
@@ -77,12 +83,10 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
 - [~] **Gate publish on CI** — `publish.yml` already runs `pnpm --filter fictoan-react build` before `npm publish`, so a
   broken build can't publish. What's left is making the *PR* show red before merge — handled by enabling branch
   protection with the new CI job as a required check (configuration step, not code).
-- [~] **Tests for high-traffic components** — jsdom unit/interaction/a11y tier **shipped on `beta-19`** (Vitest + RTL +
-  jest-dom + vitest-axe; 36 files / 551 tests; `test` task in turbo; `pnpm test` step in ci.yml; per-component `axe()`
-  smoke included). What's left for GA: the **browser/visual tier** (Vitest browser mode or Playwright-CT, Chromium) for
-  the things jsdom can't assert — the `@layer` cascade precedence against built `dist/index.css`, container-query
-  responsive grid (Row/Portion), the Popover open/close lifecycle (Modal/Drawer) and anchor-positioned Tooltip placement,
-  `color-mix`/`::backdrop`, and geometry (RadioTabGroup slider, ListBox open-direction, Range pointer math).
+- [x] **Tests for high-traffic components** — done: jsdom tier (547 tests) **and** the browser/visual tier (real
+  Chromium) both shipped on `beta-19` (see Recently shipped above). Optional later extensions to the browser tier:
+  anchor-positioned Tooltip placement, `::backdrop`, the Drawer popover lifecycle, and geometry (RadioTabGroup slider,
+  ListBox open-direction, Range pointer math).
 - [x] **Fix the bugs the test suite surfaced** — the high/medium a11y/correctness bugs found while authoring the specs
   are fixed, and each spec flipped from characterising the violation to asserting the correct output:
   - **Tabs** — `role="none"` on the `<ul>`/`<li>` wrappers so the `role="tab"` buttons are the tablist's owned children
