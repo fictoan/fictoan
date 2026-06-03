@@ -17,6 +17,7 @@ export interface PortionCustomProps {
         tabletLandscapeSpan ? : SpanTypes;
         tabletPortraitSpan  ? : SpanTypes;
         mobileSpan          ? : SpanTypes;
+        fillLeftoverWidth   ? : boolean;
         isHorizontal        ? : boolean;
         role                ? : string;
 }
@@ -32,6 +33,7 @@ export const Portion = React.forwardRef(
             mobileSpan,
             tabletLandscapeSpan,
             tabletPortraitSpan,
+            fillLeftoverWidth,
             isHorizontal,
             role,
             ...props
@@ -57,8 +59,12 @@ export const Portion = React.forwardRef(
             if (mobileSpan) {
                 classNames.push(`${mobileSpan}-on-mobile`);
             }
-        } else {
+        } else if (!fillLeftoverWidth) {
             classNames.push("whole");
+        }
+
+        if (fillLeftoverWidth) {
+            classNames.push("fill-leftover-width");
         }
 
         if (isHorizontal) {

@@ -60,8 +60,8 @@ const WRAPPER_PROP_KEYS: (keyof CommonProps)[] = [
     "opacity",
     // Layout
     "layoutAsFlexbox",
-    "stackVertically",
-    "stackHorizontally",
+    "listVertically",
+    "listHorizontally",
     "layoutAsGrid",
     "columns",
     "gap",

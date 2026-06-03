@@ -1,8 +1,8 @@
 /* FLEXBOX ////////////////////////////////////////////////////////////////// */
 .layout-flexbox { display : flex; }
 
-.stack-vertically { flex-direction : column; }
-.stack-horizontally { flex-direction : row; }
+.list-vertically { display : flex; flex-direction : column; }
+.list-horizontally { display : flex; flex-direction : row; }
 
 /* Flexbox layout directions ------------------------------------------------ */
 .horizontal-layout { flex-direction : row; }

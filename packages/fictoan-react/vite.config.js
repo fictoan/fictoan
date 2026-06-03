@@ -92,10 +92,49 @@ function fixCssForTurbopack() {
     };
 }
 
-// Wrap the entire bundled stylesheet in @layer fictoan so consumer styles
-// (defined outside any layer) win cascade conflicts regardless of specificity.
-// Standard pattern for design systems — lets users override anything without
-// having to escalate to !important or write higher-specificity selectors.
+// Only the COLOUR utility files go in the later `fictoan.utilities` sub-layer —
+// those are the ones a component's base rule shadowed (e.g. `[data-badge]`'s
+// `background-color` beating `.bg-green-light60`). `utilities.css` (padding /
+// margin / shape / …) deliberately stays in `fictoan.base`: some components
+// legitimately *refine* those utilities — e.g. Row's responsive side-padding
+// (`[data-row].padding-left-huge.padding-right-huge` + @media) overriding the flat
+// `.padding-left-huge` — and that must be settled by specificity, not flipped by
+// layer order (which would make the flat utility win and squeeze content on narrow
+// viewports).
+const UTILITY_CSS = [ "colours.css", "custom-colours.css" ];
+
+// Bucket each CSS module into a cascade sub-layer at transform time, using
+// RELATIVE layer names so wrapInFictoanLayer() can nest them inside the single
+// outer `@layer fictoan { … }` block:
+//   @layer utilities { … }  — the universal utility classes
+//   @layer base      { … }  — everything else (components, globals, theme)
+// Once wrapped they become fictoan.base / fictoan.utilities — both sub-layers of
+// `fictoan`, so unlayered consumer CSS still overrides anything without
+// !important. The base-before-utilities ORDER is pinned by the order statement
+// wrapInFictoanLayer() injects, so a prop utility (.bg-*, .text-*) always wins
+// over a component base rule (e.g. [data-badge] { background-color: … })
+// regardless of where each rule physically lands in the bundle.
+function layerCssByType() {
+    return {
+        name    : "layer-css-by-type",
+        enforce : "pre",
+        transform(code, id) {
+            const file = id.split("?")[0];
+            if (!file.endsWith(".css")) return null;
+            const isUtility = UTILITY_CSS.some((name) => file.endsWith("/" + name));
+            const layer = isUtility ? "utilities" : "base";
+            return { code : `@layer ${layer} {\n${code}\n}`, map : null };
+        },
+    };
+}
+
+// Wrap the whole bundle in ONE `@layer fictoan { … }` block (same external shape
+// as before sub-layers existed — critical because consumers do
+// `@import "fictoan-react/dist/index.css"` FIRST, then @import their own fonts /
+// theme CSS; CSS forbids @import after a @layer *block*, so emitting bare
+// top-level @layer blocks here silently drops those later @imports).
+// Inside, an `@layer base, utilities;` statement pins the sub-layer order so the
+// utilities sub-layer (declared last) wins specificity ties over base.
 function wrapInFictoanLayer() {
     return {
         name: "wrap-in-fictoan-layer",
@@ -109,8 +148,8 @@ function wrapInFictoanLayer() {
                     const css = readFileSync(cssPath, "utf-8");
                     // Don't double-wrap if a previous run already added the layer.
                     if (css.trimStart().startsWith("@layer fictoan")) return;
-                    writeFileSync(cssPath, `@layer fictoan {\n${css}\n}\n`);
-                    console.log("Wrapped CSS in @layer fictoan");
+                    writeFileSync(cssPath, `@layer fictoan {\n@layer base, utilities;\n${css}\n}\n`);
+                    console.log("Wrapped CSS in @layer fictoan (base, utilities)");
                 } catch (e) {
                     console.warn("Could not wrap CSS in @layer:", e.message);
                 }
@@ -168,6 +207,7 @@ export default defineConfig({
     },
     plugins : [
         generateColors(),
+        layerCssByType(),
         svgr(),
         preserveUseClient(),
         createVisualizer(),
@@ -175,6 +215,7 @@ export default defineConfig({
         dts({
             insertTypesEntry : true,
             include          : ["src/**/*"],
+            exclude          : ["src/**/*.test.ts", "src/**/*.test.tsx"],
             outputDir        : "dist/types",
             skipDiagnostics  : false,
             compilerOptions  : {

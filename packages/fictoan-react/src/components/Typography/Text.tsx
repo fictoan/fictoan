@@ -19,7 +19,7 @@ export type TextProps = Omit<CommonAndHTMLProps<TextElementType>, keyof TextCust
 
 export const Text = React.forwardRef(
     (
-        {weight, size, fontStyle = "sans-serif", align, isSubtext, ...props} : TextProps,
+        {weight, size, fontStyle, align, isSubtext, ...props} : TextProps,
         ref : React.Ref<TextElementType>,
     ) => {
         let classNames = [];

@@ -37,7 +37,9 @@ export const FormItemGroup = React.forwardRef(
         } : FormItemGroupProps,
         ref : React.Ref<FormItemGroupElementType>,
     ) => {
-        const groupId = id || `form-group-${Math.random().toString(36).substring(2, 9)}`;
+        // useId (not Math.random) so the id is stable across server/client and doesn't cause hydration mismatches.
+        const reactId = React.useId();
+        const groupId = id || `form-group-${reactId.replace(/:/g, "")}`;
         let classNames = [];
 
         if (isJoint) {
@@ -60,7 +62,9 @@ export const FormItemGroup = React.forwardRef(
             <Element<FormItemGroupElementType>
                 as="div"
                 data-form-item-group
-                data-form-spaced
+                // Use the semantic prop: Element emits `data-form-spaced` from this. Passing the
+                // raw attribute is clobbered by Element's own `data-form-spaced={inheritFormSpacing || undefined}`.
+                inheritFormSpacing
                 ref={ref}
                 id={groupId}
                 role="group"

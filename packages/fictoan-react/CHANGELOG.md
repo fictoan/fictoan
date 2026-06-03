@@ -1,91 +1,55 @@
 # CHANGELOG
 
-## 2.0.0-beta.18
+## 2.0.0
 
-Modernises the CSS layer onto native browser primitives, makes the package tree-shakeable and SSR-safe, hardens
-accessibility, and ships an AI-readable component schema. Most changes are additive — the behaviour changes that need
-your attention are flagged below, with a migration checklist at the end.
-
-### ⚠️ Breaking & behaviour changes
-
-**ThemeProvider now server-renders its children**
-- Previously it rendered nothing until it mounted on the client, so any app wrapping it produced an empty server/SSG
-  render. It now renders children during SSR and injects a small pre-hydration inline script that applies the saved
-  theme before first paint (no flash).
-- **Migration:** if you use SSR/SSG (Next, Remix, Astro, RSC), this surfaces any browser-only code (`window`,
-  `document`, `getComputedStyle`, …) you run *during render* rather than inside `useEffect` — guard it or move it into
-  an effect. The inline script needs `script-src 'unsafe-inline'`, or pass `nonce={...}` under a strict CSP.
-
-**Theme is stored under a stable, configurable key**
-- The localStorage key changed from a hostname/port-derived value to a fixed default `"fictoan-theme"`, settable via the
-  new `storageKey` prop.
-- **Migration:** returning users see their saved theme reset *once*. Pass a unique `storageKey` — your package name is
-  ideal, and it's required if multiple Fictoan apps can share an origin (localhost during dev, GitHub Pages) so they
-  don't collide. To preserve existing prefs, set `storageKey` to the old key.
-  ```tsx
-  <ThemeProvider themeList={themes} currentTheme="theme-light" storageKey="my-app">
-  ```
-
-**Responsive Portion spans are now container-relative**
-- `mobileSpan` / `tabletPortraitSpan` / `tabletLandscapeSpan` / `desktopSpan` (and Row's portion-collapse) react to the
-  parent Row's rendered width via CSS `@container`, not the viewport — a Portion in a narrow sidebar now stacks as it
-  would on a phone. Prop names are unchanged.
-- **Migration:** re-check layouts that assumed viewport breakpoints. (`hideOn*` / `showOnlyOn*` visibility props are
-  unchanged — still viewport-based.)
-
-**Spacing tokens are capped on wide screens**
-- `--tiny` through `--huge` are now `clamp(min, vmax, max)` instead of bare `vmax`, so padding/margins stop growing past
-  a cap on large monitors.
-
-**Package ships per-module ES output**
-- The build now emits one file per component (`dist/components/Button/Button.js`, …) so `import { Button } from
-  "fictoan-react"` tree-shakes — your bundle only includes what you import.
-- **Migration:** importing from `"fictoan-react"` is unchanged. Only code that deep-imported internal
-  `fictoan-react/dist/...` paths (undocumented) is affected — those paths changed.
-
-**Published TypeScript types now resolve**
-- The `types` entry previously pointed at a path the build never emitted, so TS consumers silently got *no* types. Types
-  now resolve correctly — which may surface pre-existing type errors in your code that were previously `any`.
-
-**Renamed CSS class & deprecation**
-- `.font-sans` → `.font-sans-serif` (the class `fontStyle="sans-serif"` actually emits). Only relevant if you referenced
-  `.font-sans` directly.
-- Drawer `closeOnClickOutside` is deprecated — dismissal (ESC + backdrop) is governed by `isDismissible` via the popover
-  API.
+The 2.0.0 line, folding in the `beta-18` and `beta-19` pre-releases. One-line highlights below; the detailed write-ups
+live in `ROADMAP.md`.
 
 ### Added
-- **ThemeProvider:** `storageKey` and `nonce` props; theme switches crossfade automatically via the View Transitions
-  API; new `useViewTransition()` hook to animate any state change (with `prefers-reduced-motion` handling).
-- **Native browser primitives:** Modal, Drawer, and Tooltip migrated to the popover API (Tooltip also to CSS anchor
-  positioning); Row is now a CSS container; the whole stylesheet is wrapped in `@layer fictoan`, so unlayered consumer
-  CSS overrides component styles without `!important`.
-- **Forms:** PinInputField gained `label` / `helpText` / `errorText` / `required` / `size` (FormItem integration);
-  `hideLabel` now works on InputField / TextArea / Checkbox / Switch.
-- **AI-friendly:** machine-readable component schema served at `/fictoan-schema.json`, plus `/llms.txt`.
+- Native browser primitives — Modal, Drawer and Tooltip on the popover API (Tooltip also via CSS anchor positioning); Row is now a CSS container.
+- Whole stylesheet wrapped in `@layer fictoan`, split into ordered `fictoan.base` / `fictoan.utilities` sub-layers — unlayered consumer CSS overrides without `!important`.
+- Responsive Portion spans are container-relative — they react to the Row's rendered width via `@container`, not the viewport.
+- Per-module ES output — `import { Button } from "fictoan-react"` tree-shakes to only what you import.
+- ThemeProvider `storageKey` and `nonce` props; theme switches crossfade via the View Transitions API; new `useViewTransition()` hook.
+- Machine-readable component schema at `/fictoan-schema.json`, plus `/llms.txt`.
+- PinInputField gained `label` / `helpText` / `errorText` / `required` / `size`; `hideLabel` now works on InputField / TextArea / Checkbox / Switch.
+- `listVertically` / `listHorizontally` flex helpers — each self-implies `display: flex` plus the direction.
+- Portion `fillLeftoverWidth` — takes the columns left over after the fixed-span siblings.
+- Row `equalisePortions` — every Portion shares the width equally, by column count.
+- `columns` now works on any Element/Div — implies grid and sets that many equal columns.
+- Spacing props (`gap`, `margin`, `padding` and every variant) accept a scale token **or** any CSS length (`"4px"`, `"20vw"`, `calc(...)`).
+- Public exports for typing wrappers that forward fictoan props: `CommonProps`, `CommonAndHTMLProps`, `FlexibleEventHandler`, plus the `useClickOutside` hook.
 
 ### Fixed
-- Published `types` path (was zero types). CSS is now minified (~589 KB → ~464 KB raw). `Portion span="7"` responsive
-  variants (a dead selector — never applied `grid-column: span 7`). Curated schema examples taught non-existent props
-  (`openWhen`/`iconLeft`/…); corrected, with a build-time guard against future drift. ListBox controlled/uncontrolled
-  state. The global focus ring now meets WCAG 2.2 non-text contrast.
+- Published `types` path now resolves (was zero types — may surface pre-existing `any`-masked errors).
+- Universal colour props no longer lose to component base styles — colour utilities now sit in the later `fictoan.utilities` sub-layer, so they win the specificity tie (other utilities stay in `fictoan.base` so components can still refine them, e.g. Row's responsive side-padding).
+- `<Heading>` / `<Text>` honour the themeable `--heading-font` / `--paragraph-font` again (dropped the forced `font-sans-serif` default).
+- CSS minified (~589 KB → ~464 KB raw); dead `Portion span="7"` responsive selectors; ListBox controlled/uncontrolled state; schema examples drift-guarded at build time.
+- Global focus ring now meets WCAG 2.2 non-text contrast.
+- Modal no longer mutates the caller's `classNames` array across renders.
+- FormItemGroup uses `useId` instead of `Math.random()` for its fallback id — no more SSR hydration mismatch.
+- Left-anchored notifications slide out to the left on dismiss (previously always slid right).
+- Breadcrumbs routes its outer `<nav>` through Element, so universal props no longer leak onto the DOM as invalid attributes.
+- Callout `title` renders as a visible heading (was `aria-label` only — invisible to sighted users), wired via `aria-labelledby`.
+- `ToastsProvider` / `NotificationsProvider` memoise their context value, so consumers no longer re-render on every provider render.
+- Dropped the `any`-typed `onChange` override on the base Element type (it now inherits the native handler) and the `any` in `createClassName`.
 
 ### Accessibility
-- Form a11y wired throughout: `aria-describedby` / `aria-invalid` / `aria-required`, working `hideLabel`, resolved Range
-  group label, FileUpload focus ring, RadioGroup no longer announcing two radios per option.
-- Accordion / Tooltip / Pagination dangling or missing ARIA fixed; Modal and Notification close buttons are now real
-  `<button>`s (keyboard-activatable); Badge / SkeletonGroup live-region roles corrected; Toast/Notification no longer
-  double-announce.
+- Form a11y wired throughout — `aria-describedby` / `aria-invalid` / `aria-required`, working `hideLabel`, resolved Range group label, FileUpload focus ring, RadioGroup no longer double-announcing.
+- Accordion / Tooltip / Pagination ARIA fixed; Modal and Notification close buttons are real `<button>`s; Badge / SkeletonGroup live-region roles corrected; Toast / Notification no longer double-announce.
+- ListBox opens by keyboard when closed (ArrowDown / Enter / Space on the combobox), and `aria-activedescendant` now sits on the focused search input rather than the combobox div.
+- `<progress>` / `<meter>` drop the redundant `aria-valuemin` / `-max` / `-now` (the native role already exposes value/min/max; `aria-valuetext` kept for the suffix text); Meter is no longer a `role="region"` landmark.
+- Tabs' tablist now owns its tabs (`role="none"` on the list wrappers); ListBox's combobox has an accessible name; Row drops the hardcoded `role="grid"` (opt-in `role="group"` via `groupLabel`); Switch is exposed as `role="switch"`; FormItemGroup actually emits its spacing marker; Pagination items render with React keys. (Found and fixed by the new test suite.)
+- Low-severity polish: RadioTabGroup's `bgColour` now applies (was a silent no-op); removed redundant ARIA (Badge's auto `aria-label` for text children, ListBox's `aria-owns`, Skeleton's `aria-valuemin`/`-max`); Meter description ids are unique (via `useId`); Breadcrumbs separators are valid `<ul>` children; Tabs cancels its exit-animation timer on unmount.
 
-### Migration checklist
-1. Bump `fictoan-react` to `2.0.0-beta.18`.
-2. Add `storageKey={/* your app name */}` to your `<ThemeProvider>` (and `nonce={...}` under a strict CSP).
-3. If you SSR/SSG: build, and fix any browser-API-in-render code the un-gate surfaces.
-4. Grep for the deprecated/renamed bits: `closeOnClickOutside`, `.font-sans`.
-5. Re-check wide-screen spacing and container-relative Portion layouts.
-6. Run your type-checker and resolve newly-surfaced type errors.
-
-## 2.0.0
 ### ⚠️ Breaking changes
+- ThemeProvider now server-renders its children (with a pre-hydration no-flash script; needs `script-src 'unsafe-inline'` or a `nonce`) — surfaces any browser-API-in-render code under SSR/SSG.
+- Theme is stored under a stable `storageKey` (default `"fictoan-theme"`) instead of a hostname-derived key — returning users reset once; pass a unique key per app.
+- Spacing tokens `--tiny`…`--huge` are capped on wide screens via `clamp()`.
+- `.font-sans` renamed to `.font-sans-serif`; Drawer `closeOnClickOutside` deprecated (dismissal via `isDismissible`).
+- `stackVertically` / `stackHorizontally` renamed to `listVertically` / `listHorizontally` (no alias).
+- Deep-import paths under `fictoan-react/dist/...` changed (per-module output); bare `"fictoan-react"` imports are unchanged.
+- Table drops the non-functional `hasColSpan` prop and no longer emits `aria-rowcount` / `aria-colcount` (they were derived incorrectly; native table semantics convey structure).
 
 **OKLCH colour system migration**
 - All colours now use the OKLCH colour space for perceptually uniform lightness and better colour mixing

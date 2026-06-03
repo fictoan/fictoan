@@ -88,3 +88,8 @@
         opacity   : 0;
     }
 }
+
+/* Left-anchored notifications slide out to the left on dismiss (default slides right). */
+[data-notifications-wrapper].left [data-notification-item].dismissed {
+    transform : translateX(-100%);
+}

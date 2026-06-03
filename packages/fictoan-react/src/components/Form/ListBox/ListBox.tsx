@@ -237,6 +237,19 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
             }
         };
 
+        // When CLOSED, the combobox div is the only focusable element — the search input
+        // that carries handleKeyDown mounts only while open. Without this a keyboard-only
+        // user can't open the ListBox. Guarded by !isOpen so it only handles opening;
+        // once open, focus moves to the search input which takes over.
+        const handleComboboxKeyDown = (event: KeyboardEvent) => {
+            if (disabled || isOpen) return;
+            if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                setIsOpen(true);
+                setActiveIndex(0);
+            }
+        };
+
         useClickOutside(dropdownRef, () => {
             setIsOpen(false);
             setActiveIndex(-1);
@@ -299,12 +312,14 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                         className="list-box-input-wrapper"
                         id={listboxId}
                         onClick={() => !disabled && setIsOpen(!isOpen)}
+                        onKeyDown={handleComboboxKeyDown}
                         role="combobox"
+                        // `htmlFor` on the visible <label> only names native controls, not a
+                        // role="combobox" div — so give the combobox its own accessible name.
+                        aria-label={label}
                         aria-haspopup="listbox"
                         aria-expanded={isOpen}
                         aria-controls={`${listboxId}-listbox`}
-                        aria-owns={`${listboxId}-listbox`}
-                        aria-activedescendant={isOpen ? activeOptionId : undefined}
                         aria-invalid={Boolean(errorText) || undefined}
                         aria-required={required}
                         aria-describedby={describedBy}
@@ -383,6 +398,7 @@ export const ListBox = React.forwardRef<ListBoxElementType, ListBoxProps>(
                                     onChange={handleSearchChange}
                                     onKeyDown={handleKeyDown}
                                     aria-controls={`${listboxId}-listbox`}
+                                    aria-activedescendant={activeOptionId}
                                     aria-label="Search options"
                                     isFullWidth
                                 />

@@ -1,6 +1,6 @@
 {
     "name"                 : "fictoan-react",
-    "version"              : "2.0.0-beta.18",
+    "version"              : "2.0.0-beta.19",
     "description"          : "A full-featured, designer-friendly, yet performant framework with plain-English props and focus on rapid iteration.",
     "repository"           : {
         "type" : "git",
@@ -33,7 +33,10 @@
         "build"            : "tsc && vite build && pnpm exec tsx src/scripts/generateSchema.ts",
         "build:schema"     : "pnpm exec tsx src/scripts/generateSchema.ts",
         "tree-shake"       : "agadoo",
-        "test"             : "echo \"Error: no test specified\" && exit 1",
+        "test"             : "vitest run --project unit",
+        "test:watch"       : "vitest --project unit",
+        "test:browser"     : "vitest run --project browser",
+        "test:all"         : "vitest run",
         "generate-colours" : "tsx src/scripts/generateColourClasses.ts"
     },
     "keywords"             : [
@@ -61,15 +64,21 @@
     "devDependencies"      : {
         "@csstools/postcss-color-mix-function" : "^3.0.12",
         "@fullhuman/postcss-purgecss"          : "^7.0.2",
+        "@testing-library/jest-dom"            : "^6.4.0",
+        "@testing-library/react"               : "^16.0.0",
+        "@testing-library/user-event"          : "^14.5.0",
         "@types/node"                          : "^22",
         "@types/prismjs"                       : "^1.26.4",
         "@types/react"                         : "^19",
         "@types/react-dom"                     : "^19",
         "@vitejs/plugin-react"                 : "^5.1.2",
+        "@vitest/browser"                      : "^3.2.6",
         "agadoo"                               : "^3.0.0",
         "autoprefixer"                         : "^10.4.14",
         "glob"                                 : "^10.3.10",
         "html-react-parser"                    : "^5.1.15",
+        "jsdom"                                : "^25.0.0",
+        "playwright"                           : "^1.49.0",
         "postcss"                              : "^8.4.30",
         "postcss-nesting"                      : "^12.0.1",
         "prismjs"                              : "^1.29.0",
@@ -83,7 +92,9 @@
         "vite"                                 : "6.4.1",
         "vite-plugin-dts"                      : "^3.6.4",
         "vite-plugin-lib-inject-css"           : "^1.3.0",
-        "vite-plugin-svgr"                     : "^4.2.0"
+        "vite-plugin-svgr"                     : "^4.2.0",
+        "vitest"                               : "^3.2.6",
+        "vitest-axe"                           : "^0.1.0"
     },
     "peerDependencies"     : {
         "prismjs"   : "^1.29.0",

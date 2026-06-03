@@ -34,12 +34,27 @@ jobs :
             -   name : Install dependencies
                 run  : pnpm install
 
+            # Unit tests run against `src` in jsdom — no build needed, so this
+            # gates the PR early and fails fast before the slower builds below.
+            -   name : Test fictoan-react
+                run  : pnpm --filter fictoan-react test
+
             # `pnpm --filter fictoan-react build` runs:
             #   - tsc (type-check the library)
             #   - vite build (bundle CSS + JS, emit declarations)
             #   - generateSchema.ts (fail if schema gen blows up)
             -   name : Build fictoan-react
                 run  : pnpm --filter fictoan-react build
+
+            # The browser tier (real Chromium via Playwright) verifies what jsdom
+            # can't — the @layer cascade, container queries, color-mix and the
+            # Popover lifecycle — against the built dist/index.css, so it runs
+            # after the build. Chromium needs its OS deps on the CI runner.
+            -   name : Install Playwright Chromium
+                run  : pnpm --filter fictoan-react exec playwright install --with-deps chromium
+
+            -   name : Browser tests (fictoan-react)
+                run  : pnpm --filter fictoan-react test:browser
 
             # `next build` runs a full type-check across the docs app, so this
             # catches docs-side breakage (broken imports, prop signature drift

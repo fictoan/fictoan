@@ -27,7 +27,7 @@ const defaultRenderItem = (
     }: RenderItemProps) => {
     if (type === "ellipsis") {
         return (
-            <Text className="pagination-ellipsis">...</Text>
+            <Text key={key} className="pagination-ellipsis">...</Text>
         );
     }
 
@@ -89,6 +89,7 @@ const defaultRenderItem = (
 
     return (
         <Button
+            key={key}
             kind="custom"
             {...paginationItemProps}
         >

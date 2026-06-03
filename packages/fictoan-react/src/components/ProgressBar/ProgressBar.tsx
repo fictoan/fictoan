@@ -85,9 +85,6 @@ export const ProgressBar = React.forwardRef(
                     value={validValue}
                     max={max}
                     aria-label={label}
-                    aria-valuemin={0}
-                    aria-valuemax={max}
-                    aria-valuenow={validValue}
                     aria-valuetext={`${label ? `${label}: ` : ""}${progressText}`}
                     shape={shape}
                     {...props}

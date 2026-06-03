@@ -1,5 +1,5 @@
 // REACT CORE ==========================================================================================================
-import React, { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import React, { createContext, useContext, useState, useCallback, useMemo, ReactNode } from "react";
 
 // INTERNAL ============================================================================================================
 import { NotificationsWrapper } from "../NotificationsWrapper/NotificationsWrapper";
@@ -137,7 +137,7 @@ export const NotificationsProvider = ({
     }, [baseNotify, addNotification])();
 
     return (
-        <NotificationsContext.Provider value={{ notify }}>
+        <NotificationsContext.Provider value={useMemo(() => ({ notify }), [notify])}>
             {children}
 
             <NotificationsWrapper

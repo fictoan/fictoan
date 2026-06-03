@@ -133,6 +133,14 @@
         flex        : 0 0 100%
     }
 
+    /* fillLeftoverWidth — take whatever columns remain after the fixed-span
+       siblings. Grid Row: span to the final line. Flex Row: grow into the free
+       space (and multiple fillers split it). */
+    &.fill-leftover-width {
+        grid-column : auto / -1;
+        flex        : 1 1 0;
+    }
+
     /* Container-relative breakpoints: a Portion's on-mobile / on-tablet-X
        variants activate when its parent Row's rendered width falls in the
        matching band, not when the viewport does. This means a Portion

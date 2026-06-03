@@ -445,9 +445,9 @@ export const ComponentGrid = () => {
                                     <Portion desktopSpan="one-third" mobileSpan="half" key={card.id}>
                                         <OptionCard
                                             id={card.id}
-                                            padding="small" shape="rounded"
+                                            padding="nano" shape="rounded"
                                         >
-                                            <Text align="centre">{card.content}</Text>
+                                            <Text>{card.content}</Text>
                                         </OptionCard>
                                     </Portion>
                                 ))}

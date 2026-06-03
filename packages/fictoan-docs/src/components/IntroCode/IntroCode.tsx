@@ -203,7 +203,7 @@ export const IntroCode = () => {
 
                     <Portion {...portion2Props} className={`demo-portion ${vizMode ? "border-red" : ""}`}>
                         <Heading5 {...subHeading1Props}>
-                            No abbreviations to decode. No documentation to dig through. Just readable syntax.
+                            No abbreviations to decode. No documentation to interpret. Just readable syntax.
                         </Heading5>
 
                         <Heading5 {...subHeading2Props}>
@@ -250,6 +250,7 @@ export const IntroCode = () => {
                         >
                             {[
                                 `<Row horizontalPadding="medium" marginTop="tiny" marginBottom="small"> {/* Try "none", "small", "medium", "large" or "huge" */}`,
+                                `    {/* == This is the left-side portion ======================= */}`,
                                 `    <Portion desktopSpan="half"> {/* Try "one-third", or whole numbers between 1–24 */}`,
                                 `        <Heading4 marginBottom="micro">`,
                                 `            Props that make sense at first glance`,
@@ -258,12 +259,13 @@ export const IntroCode = () => {
                                 `            Get started &rarr;`,
                                 `        </Button>`,
                                 `    </Portion> \n`,
-                                `    <Portion desktopSpan="half"> {/* Try adding mobileSpan="half" */}`,
+                                `    {/* == This is the right-side portion ====================== */}`,
+                                `    <Portion desktopSpan="half"> {/* Edit this to occupy the remaining space */}`,
                                 `        <Heading5 weight="400" marginBottom="micro">`,
-                                `            No abbreviations to decode. No documentation to dig through. Just readable syntax.`,
+                                `            No abbreviations to decode. No documentation to interpret. Just readable syntax.`,
                                 `        </Heading5>\n`,
                                 `        <Heading5 weight="400" marginBottom="micro">`,
-                                `            Go ahead—try editing this code.`,
+                                `            Go ahead—edit the code below.`,
                                 `        </Heading5>`,
                                 `    </Portion>`,
                                 `</Row>`,

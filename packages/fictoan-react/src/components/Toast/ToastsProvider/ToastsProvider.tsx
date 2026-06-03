@@ -1,5 +1,5 @@
 // REACT CORE ==========================================================================================================
-import React, { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import React, { createContext, useContext, useState, useCallback, useMemo, ReactNode } from "react";
 
 // INTERNAL ============================================================================================================
 import { ToastsWrapper } from "../ToastsWrapper/ToastsWrapper";
@@ -52,7 +52,7 @@ export const ToastsProvider = ({
     }, []);
 
     return (
-        <ToastsContext.Provider value={{ toast }}>
+        <ToastsContext.Provider value={useMemo(() => ({ toast }), [toast])}>
             {children}
 
             <ToastsWrapper anchor={anchor}>

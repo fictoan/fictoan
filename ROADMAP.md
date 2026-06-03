@@ -32,6 +32,46 @@ already half-owns.
 
 ---
 
+## Recently shipped (on `beta-19`)
+
+- [x] **Cascade sub-layers fix prop-shadowing** — split `@layer fictoan` into ordered `fictoan.base` (component +
+  global/theme CSS + general `utilities.css`) and `fictoan.utilities` (only the colour utilities — `colours.css`),
+  declared utilities-last, so universal colour props beat the component base rules that shadowed them (the Badge
+  `bgColour` bug). Only the colour files go in the later sub-layer: spacing/shape utilities stay in `base` so components
+  can still legitimately refine them (e.g. Row's responsive side-padding overriding `.padding-left-huge` — putting that
+  utility in a later layer squeezed content on narrow viewports). Single outer `@layer fictoan { … }` block preserved so
+  consumer `@import` chains and the unlayered-wins guarantee are unaffected.
+- [x] **`<Heading>`/`<Text>` honour the themeable font** — dropped the default `fontStyle="sans-serif"` that emitted
+  `.font-sans-serif` and shadowed `--heading-font`/`--paragraph-font`; an unset `fontStyle` now inherits the theme font,
+  while an explicit `fontStyle` still forces a family. (Corrects the beta-18 `.font-sans` rename's side effect.)
+- [x] **`stackVertically`/`stackHorizontally` → `listVertically`/`listHorizontally`** (no alias) — "list" is
+  direction-neutral; both now self-imply `display:flex` + the direction.
+- [x] **Length-aware spacing props** — `gap`/`margin`/`padding` (+ every side/axis variant) accept a scale token (→
+  utility class) OR any CSS length string (`"4px"`, `"20vw"`, `calc(...)`, → inline style). Backward compatible.
+- [x] **Portion `fillLeftoverWidth`** — fills the columns left after fixed-span siblings (grid: `grid-column: auto / -1`,
+  one filler; flex: `flex: 1 1 0`, multiple split). **Row `equalisePortions`** (replaces the never-wired
+  `equaliseChildren`) — every Portion shares the width equally; self-implies flex, scoped to `> [data-portion]`, no
+  `!important`, and a `:has()` rule so it yields to a `fillLeftoverWidth` sibling instead of fighting it.
+- [x] **`columns` wired on Element** — was a dead `string` prop; now a `number` that implies grid and sets
+  `grid-template-columns: repeat(N, 1fr)`, so `<Div columns={3}>` finally works.
+- [x] **jsdom test tier (Vitest + RTL + jest-dom + vitest-axe)** — first automated tests for the library: 36 spec files,
+  547 tests, wired into `turbo` (`test` task) and CI. Covers the prop→className/style/attribute contract (Element,
+  propSeparation, the beta-18/19 spacing/layout work), interaction (ListBox keyboard, Tabs, Accordion, Pagination,
+  OptionCard, Form controls, providers), attribute-level contracts for the popover trio (Modal/Drawer/Tooltip), and a
+  per-component `axe()` smoke. jsdom shims for Popover/`:popover-open`/ResizeObserver/scrollIntoView/canvas live in
+  `vitest.setup.ts`; matcher types are pulled into each spec via `vitest-matchers.ts` (specs are excluded from the build
+  tsconfig, so they sit in the editor's inferred project).
+- [x] **Browser/visual test tier (Vitest browser mode, real Chromium via Playwright)** — one runner, two projects
+  (`vitest --project unit` / `--project browser`); browser specs live in `src/browser/*.browser.test.tsx` and run against
+  the built `dist/index.css` (injected raw so the *real* @layer cascade is exercised — components aren't imported for
+  cascade specs, since their source CSS would inject unlayered and beat the layered rules). Covers the jsdom-impossible
+  cases: the `@layer` cascade precedence (the Badge `bgColour` override bug), `color-mix` bgOpacity, container-query
+  responsive grid (Row/Portion), the Popover open/close lifecycle (Modal), and Tooltip placement via CSS anchor
+  positioning (above/below/left/right per `position-area`). `pnpm test` stays jsdom-fast; CI builds then runs the
+  browser tier after `playwright install --with-deps chromium`.
+
+---
+
 ## Near-term — must land before 2.0 GA
 
 These are the gating items. 2.0 shouldn't go stable until these are sorted.
@@ -44,13 +84,32 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
 - [~] **Gate publish on CI** — `publish.yml` already runs `pnpm --filter fictoan-react build` before `npm publish`, so a
   broken build can't publish. What's left is making the *PR* show red before merge — handled by enabling branch
   protection with the new CI job as a required check (configuration step, not code).
-- [ ] **Tests for high-traffic components** — Vitest + React Testing Library. Start with Button, InputField, Select,
-  ListBox, Modal, Drawer, Tabs, Toast, Pagination, ThemeProvider. Add Playwright + axe for a11y and visual regressions
-  once the unit set is in place. Once a `test` script exists, add a `pnpm test` step to ci.yml. Starting state: the
-  `test` script is still the `exit 1` stub (`package.json`), there are zero specs, and CI runs no tests. Make a
-  per-component `axe()` smoke test an explicit *early* deliverable — most of the a11y bugs found in the audit below
-  (duplicate ids, unlabelled buttons, redundant `aria-value*`, nested live regions, dangling IDREFs) are exactly what
-  axe catches automatically.
+- [x] **Tests for high-traffic components** — done: jsdom tier (547 tests) **and** the browser/visual tier (real
+  Chromium) both shipped on `beta-19` (see Recently shipped above). Optional later extensions to the browser tier:
+  `::backdrop`, the Drawer popover lifecycle, and geometry (RadioTabGroup slider, ListBox open-direction, Range pointer
+  math).
+- [x] **Fix the bugs the test suite surfaced** — the high/medium a11y/correctness bugs found while authoring the specs
+  are fixed, and each spec flipped from characterising the violation to asserting the correct output:
+  - **Tabs** — `role="none"` on the `<ul>`/`<li>` wrappers so the `role="tab"` buttons are the tablist's owned children
+    (no more `aria-required-children` / `aria-required-parent`).
+  - **ListBox** — the `role="combobox"` carries `aria-label={label}` (`htmlFor` can't name a role'd div).
+  - **Row** — dropped the hardcoded `role="grid"`; exposes `role="group"` only when a `groupLabel` is provided.
+  - **Switch** — `role="switch"` on the input so AT announces toggle (on/off) semantics, not a plain checkbox.
+  - **FormItemGroup** — passes the semantic `inheritFormSpacing` prop (Element emits `data-form-spaced` from it) instead
+    of the raw attribute Element clobbered.
+  - **Table** — removed the broken `aria-rowcount`/`aria-colcount` derivation (and the dead `hasColSpan` prop); the
+    native table + DOM convey structure.
+  - **Pagination** — `defaultRenderItem` now forwards the React `key`.
+  - **Low-severity sweep (done):** Row `retainLayoutAlways` array entries; Divider's empty inline `style`; Meter
+    description id via `useId` (was the duplicate `meter-description-undefined`) + accurate default name; RadioTabGroup
+    `bgColour` wired (was a no-op) and the dead `name` attr dropped from the group div; ListBox's redundant `aria-owns`
+    removed; Badge's redundant auto `aria-label` for string children removed; Tabs' 150ms exit timer now cancelled on
+    unmount/re-switch; Breadcrumbs separator now a valid `<li>` child (was a `<p>` directly in `<ul>`); Skeleton's
+    indeterminate progressbar drops `aria-valuemin/max`.
+  - *Deliberately left (intentional / design decisions, not bugs):* `onChange` emitting a boolean (typed API), TextArea's
+    controlled default, Button having no first-class link/`href` mode, Card always `role="region"`, OptionCardsGroup
+    grouping role, the Toast/Notification id scheme, ThemeProvider's mount-time write, Table's `summary` prop, etc. —
+    these need an API/UX call rather than a mechanical fix.
 - [x] **Broken published types entry** — `package.json` pointed `types`/`exports.types` at `./dist/types/index.d.ts`,
   which the build never produced (the real declarations land at `./dist/index.d.ts`), so every TS consumer of the beta
   got *no* types — gutting the IDE/AI-friendly thesis. Two compounding causes: `vite.config.js` used the misspelled
@@ -111,23 +170,23 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
 - [x] **`fontStyle="sans-serif"` is dead** — Text/Heading emit the class `font-sans-serif` by default, but
   `typography.css` only defined `.font-sans`, so the default font class was a no-op (it only worked via the inherited
   body font). Renamed the rule to `.font-sans-serif` (it was otherwise unused — verified).
-- [ ] **FormItemGroup `Math.random()` id** — `FormItemGroup.tsx:40` derives its fallback id from `Math.random()`, which
+- [x] **FormItemGroup `Math.random()` id** — `FormItemGroup.tsx:40` derives its fallback id from `Math.random()`, which
   is non-deterministic across server/client and causes hydration mismatches (the docs are Next). Every other form
   component uses `React.useId` for exactly this reason — including PinInputField (the fix above). Replace with `useId`
   (called unconditionally, colons stripped) to match `FormItem`/`InputField`.
-- [ ] **Breadcrumbs leaks props onto a raw `<nav>`** — `Breadcrumbs.tsx:106` renders `<nav ... {...props}>` where
+- [x] **Breadcrumbs leaks props onto a raw `<nav>`** — `Breadcrumbs.tsx:106` renders `<nav ... {...props}>` where
   `props` is `CommonAndHTMLProps`, so Fictoan universal props (`bgColour`, `classNames`, `margin`, `padding`, `shadow`,
   responsive flags) become invalid DOM attributes (React warns) or silently no-op. Route the outer nav through Element
   (`<Element as="nav" ...>`) like Card/Accordion/Tabs/Pagination, honouring the universal-prop guarantee.
-- [ ] **Callout `title` is invisible** — `Callout.tsx:39` exposes `title` only as an `aria-label` and never renders it,
+- [x] **Callout `title` is invisible** *(docs-page demo of `title` still to add)* — `Callout.tsx:39` exposes `title` only as an `aria-label` and never renders it,
   so sighted users never see the callout title the API implies. Render `title` as a visible heading (conditionally),
   switch to `aria-labelledby` pointing at it (precedent: `Tabs.tsx:152`), add title styling to `callout.css` (none
   exists), and document the prop on the docs page (its absence there is why this went unnoticed).
-- [ ] **Modal mutates the caller's `classNames`** — `Modal.tsx:35,50` destructures `classNames` from props then calls
+- [x] **Modal mutates the caller's `classNames`** — `Modal.tsx:35,50` destructures `classNames` from props then calls
   `classNames.push("show-backdrop")`, mutating the consumer's array in place (classes accumulate if the reference is
   reused across renders). Build a fresh array (`[...classNames]`) before pushing, matching the safe idiom Drawer and
   SkeletonGroup already use. Audited — Modal is the only offender.
-- [ ] **Notification exit always slides right** — `notification-item.css` hardcodes the dismiss transform to
+- [x] **Notification exit always slides right** — `notification-item.css` hardcodes the dismiss transform to
   `translateX(100%)`, but `NotificationsWrapper` supports `position="left"` with no left override, so a left-anchored
   notification slides the wrong way on dismiss. Add a `position="left"` override mirroring how Toast already varies by
   anchor (`toast-item.css`). Optionally tie the 500 ms fallback timer (`NotificationItem.tsx`) to the `0.4s` CSS
@@ -148,7 +207,7 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
   (`color-mix(..., transparent 40%)`), which measured ~2.2:1 over white and ~2.4:1 over black — both below the WCAG 2.2
   SC 1.4.11 floor of 3:1, on *every* focusable element in the framework. Fixed by dropping the `color-mix` and using
   opaque `var(--blue)` (what the prior build shipped; passes at ~4:1 / ~5:1).
-- [ ] **ListBox keyboard-open + `aria-activedescendant` defects** — the combobox div (`ListBox.tsx:298-313`,
+- [x] **ListBox keyboard-open + `aria-activedescendant` defects** — the combobox div (`ListBox.tsx:298-313`,
   `role="combobox"` `tabIndex=0`) has only `onClick` and no `onKeyDown`, so a keyboard-only user who focuses the *closed*
   ListBox can't open it; `handleKeyDown` is attached solely to the inner search input that mounts only when open. Add
   open-key handling (ArrowDown/Enter/Space) to the combobox div, guarded with `!isOpen` to avoid double-handling the
@@ -193,7 +252,7 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
 ### TypeScript hygiene
 
 - [ ] **ESLint flat config** — adopt the v9-style flat config.
-- [ ] **`no-explicit-any`** with targeted exceptions — replace `any` escape hatches in `Element/constants.ts:105` and
+- [x] **`no-explicit-any`** with targeted exceptions — replace `any` escape hatches in `Element/constants.ts:105` and
   `utils/classNames.ts:1`. Add a third: `ElementProps.onChange` is `FlexibleEventHandler<FormEvent<T>, any>`
   (`constants.ts:113`) and `FlexibleEventHandler` ends in `(value: any) => void` (`constants.ts:105-107`), eroding
   change-handler typing on the base Element type — parameterise the value type, or drop `onChange` from `ElementProps`
@@ -214,9 +273,8 @@ Once the gating items are in, these unlock real improvements.
   it — Element is light): the universal prop set is hand-maintained in *five* places with no compile-time check they
   agree — `CommonProps` (`constants.ts:38-98`), the Element destructure (`Element.tsx:32-91`), the className ternary
   array, `WRAPPER_PROP_KEYS` (`propSeparation.ts:43-106`), and the regex `CommonProps` scrape in
-  `generateSchema.ts:85-91`. This has already shipped a dead `columns` prop — typed and routed (`constants.ts:60`,
-  `Element.tsx:41`, `propSeparation.ts:66`) but emitting no class or style (`layout.css` only does `display:grid`). As a
-  cheap immediate win, delete `columns` from all three Element-side sites; the structural fix derives the destructure,
+  `generateSchema.ts:85-91`. (The once-dead `columns` prop was wired up in beta-19 — it's now a `number` that implies grid
+  and emits `grid-template-columns: repeat(N, 1fr)` — so it's no longer the drift example it was.) The structural fix derives the destructure,
   className output, wrapper-routing set, and schema extraction from one typed mapping table.
 - [ ] Add dev-only warnings for conflicting props — concrete cases: shorthand + per-side overlap (`padding="medium"` +
   `paddingLeft="huge"` — warn that the left override wins), opacity set without a matching colour, and unknown colour
@@ -235,14 +293,14 @@ Once the gating items are in, these unlock real improvements.
   split, preserving the panel animation. Separately, OptionCard already supports controlled mode but names it
   `selectedIds`/`onSelectionChange` with `Set<string>` instead of the library-wide `value`/`defaultValue`/`onChange` +
   `string[]` — add aliases and deprecate the old names so the convention is uniform.
-- [ ] **Export foundation types + `useClickOutside`; remove dead FormItem context** — `CommonProps`,
+- [~] **Export foundation types + `useClickOutside`; remove dead FormItem context** *(exports + `useClickOutside` shipped; the dead `FormItemContext`/`useFormItemContext` removal is still pending)* — `CommonProps`,
   `CommonAndHTMLProps<T>`, and `FlexibleEventHandler` are defined in `Element/constants.ts` but not re-exported from the
   barrel, so consumers can't type a wrapper that forwards Fictoan props; `useClickOutside` is battle-tested internally
   (Sidebar, ListBox) but not exported. Add both (`ElementProps` is already exported). Separately,
   `FormItemContext`/`useFormItemContext` have zero consumers — inputs derive aria ids via `deriveAriaIds` directly — so
   remove the dead context. *(Corrects the content-gap note below that assumed `deriveAriaIds`/`mergeDescribedBy` were
   unused — they're used by 13 components; only the Context/hook are dead.)*
-- [ ] **Memoise provider context values** — `ToastsProvider` (`value={{toast}}`) and `NotificationsProvider`
+- [x] **Memoise provider context values** — `ToastsProvider` (`value={{toast}}`) and `NotificationsProvider`
   (`value={{notify}}`) build a new context value every render, so every consumer re-renders. Wrap each in `useMemo`
   keyed on the stable function. (Skip FormItem — `useFormItemContext` has zero consumers — and ThemeProvider, which has
   no spurious renders. `OptionCard` has the same pattern with real consumers if worth expanding.)
@@ -290,7 +348,7 @@ Once the gating items are in, these unlock real improvements.
   behaves differently on Card than anywhere else. Delete the Card overrides (and the `600px` media override if
   redundant) so the prop resolves to the same token-based utilities. If Card genuinely needs distinct padding, make it a
   deliberate `--card-padding-*` token, not a silent px override.
-- [ ] **Component base styles shadow universal colour/shape props (use cascade sub-layers)** — a component's base rule
+- [x] **Component base styles shadow universal colour/shape props (use cascade sub-layers)** — *shipped in beta-19 (see Recently shipped above).* a component's base rule
   (e.g. `[data-badge]`, an attribute selector at specificity 0,1,0) ties with the prop-emitted utility classes
   (`.bg-*`, `.text-*`, `.shape-*`, also 0,1,0) and wins on source order, so `bgColour`/`textColour`/`shape`/etc.
   silently do nothing on some components (confirmed on Badge — DevTools showed `[data-badge]`'s `background-color`
@@ -465,7 +523,7 @@ ages better.
   (`content-wrapper.css` reserves layout space; off-screen treatment is `@media max-width:900px` only), and toggling the
   `popover` attribute by viewport needs a `matchMedia` listener — so this trades a continuous mousedown/touchstart
   listener for a one-shot media-query listener plus native dismissal: a net win, not zero-JS.
-- [ ] **Redundant ARIA on native progress/meter** — `ProgressBar` and `Meter` add `aria-valuemin`/`max`/`now` to native
+- [x] **Redundant ARIA on native progress/meter** — `ProgressBar` and `Meter` add `aria-valuemin`/`max`/`now` to native
   `<progress>`/`<meter>`, duplicating the value/min/max the elements already expose through their roles (linters/axe
   flag this). Drop the redundant `aria-value{min,max,now}` (keep `aria-valuetext` — spec-supported and carries the
   suffix text native can't), keep native `value`/`max`/`min`/`low`/`high` plus a single accessible name, and reconsider

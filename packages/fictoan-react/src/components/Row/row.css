@@ -21,8 +21,11 @@
         flex-wrap : wrap;
     }
 
-    &.layout-flexbox.equalise-children > * {
-        flex : 1 !important;
+    /* equalisePortions — every Portion shares the Row equally, ignoring spans.
+       Scoped to Portions, no !important (specificity already wins). Steps aside
+       (via :has) when a Portion claims the leftover, so the two don't fight. */
+    &.layout-flexbox.equalise-portions:not(:has(> [data-portion].fill-leftover-width)) > [data-portion] {
+        flex : 1 1 0;
     }
 
     /* COMMON /////////////////////////////////////////////////////////////// */

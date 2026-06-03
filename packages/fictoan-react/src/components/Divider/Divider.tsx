@@ -38,7 +38,7 @@ export const Divider = React.forwardRef(
                 aria-orientation="horizontal"
                 aria-label={label}
                 {...props}
-                style={{height : height}}
+                style={height ? {height : height} : undefined}
             />
         );
     },
