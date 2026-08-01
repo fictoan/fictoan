@@ -146,9 +146,9 @@ export { Spinner, type SpinnerProps } from "./components/Spinner";
 
 export { Table, type TableProps } from "./components/Table";
 
-export { Tabs, type TabsProps } from "./components/Tabs";
+export { Tabs, type TabsProps, type TabType } from "./components/Tabs";
 
-export { ThemeProvider, type ThemeProviderProps, useTheme } from "./components/ThemeProvider";
+export { ThemeProvider, type ThemeProviderProps, type SetThemeOptions, useTheme } from "./components/ThemeProvider";
 
 export { ToastsProvider, useToasts, type ToastsProviderProps, type ToastFunction } from "./components/Toast";
 

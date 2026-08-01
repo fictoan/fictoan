@@ -2,7 +2,7 @@
 import "../../../vitest-matchers";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 
 // OTHER ===============================================================================================================
@@ -243,6 +243,86 @@ describe("Tabs — switching (click + keyboard)", () => {
         await new Promise((resolve) => setTimeout(resolve, 200));
         expect(screen.getAllByRole("tab")[0]).toHaveAttribute("aria-selected", "true");
         expect(screen.getByRole("tabpanel")).toHaveTextContent("Panel one content");
+    });
+});
+
+describe("Tabs — controlled mode (activeTab + onTabChange)", () => {
+    it("initially displays the tab named by activeTab", () => {
+        render(<Tabs tabs={tabs} activeTab="two" />);
+        expect(screen.getByRole("tab", { name : "Tab two" })).toHaveAttribute("aria-selected", "true");
+        expect(screen.getByRole("tabpanel")).toHaveTextContent("Panel two content");
+    });
+
+    it("follows activeTab prop changes through the exit animation", async () => {
+        const { rerender } = render(<Tabs tabs={tabs} activeTab="one" />);
+
+        rerender(<Tabs tabs={tabs} activeTab="three" />);
+
+        await waitFor(() => {
+            expect(screen.getByRole("tab", { name : "Tab three" })).toHaveAttribute("aria-selected", "true");
+        });
+        expect(screen.getByRole("tabpanel")).toHaveTextContent("Panel three content");
+    });
+
+    it("clicks only notify via onTabChange — the component does not self-transition", async () => {
+        const user = userEvent.setup();
+        const onTabChange = vi.fn();
+        render(<Tabs tabs={tabs} activeTab="one" onTabChange={onTabChange} />);
+
+        await user.click(screen.getByRole("tab", { name : "Tab two" }));
+        expect(onTabChange).toHaveBeenCalledWith("two");
+
+        // Give the (unwanted) transition timer ample time — the displayed tab
+        // must still be the one the host's prop names.
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        expect(screen.getByRole("tab", { name : "Tab one" })).toHaveAttribute("aria-selected", "true");
+        expect(screen.getByRole("tabpanel")).toHaveTextContent("Panel one content");
+    });
+
+    it("an unknown activeTab key leaves the displayed tab in place", async () => {
+        const { rerender } = render(<Tabs tabs={tabs} activeTab="two" />);
+
+        rerender(<Tabs tabs={tabs} activeTab="does-not-exist" />);
+
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        expect(screen.getByRole("tab", { name : "Tab two" })).toHaveAttribute("aria-selected", "true");
+        expect(screen.getByRole("tabpanel")).toHaveTextContent("Panel two content");
+    });
+
+    it("uncontrolled mode still fires onTabChange as a notification AND self-transitions", async () => {
+        const user = userEvent.setup();
+        const onTabChange = vi.fn();
+        render(<Tabs tabs={tabs} onTabChange={onTabChange} />);
+
+        await user.click(screen.getByRole("tab", { name : "Tab two" }));
+        expect(onTabChange).toHaveBeenCalledWith("two");
+
+        await waitFor(() => {
+            expect(screen.getByRole("tab", { name : "Tab two" })).toHaveAttribute("aria-selected", "true");
+        });
+    });
+});
+
+describe("Tabs — lazyMount", () => {
+    it("mounts only the active panel; inactive panels are absent from the DOM", () => {
+        render(<Tabs tabs={tabs} lazyMount />);
+
+        expect(document.getElementById("tab-panel-one")).not.toHaveAttribute("hidden");
+        expect(document.getElementById("tab-panel-two")).toBeNull();
+        expect(document.getElementById("tab-panel-three")).toBeNull();
+    });
+
+    it("switching tabs mounts the new panel and unmounts the old one", async () => {
+        const user = userEvent.setup();
+        render(<Tabs tabs={tabs} lazyMount />);
+
+        await user.click(screen.getByRole("tab", { name : "Tab two" }));
+
+        await waitFor(() => {
+            expect(document.getElementById("tab-panel-two")).not.toHaveAttribute("hidden");
+        });
+        expect(screen.getByRole("tabpanel")).toHaveTextContent("Panel two content");
+        expect(document.getElementById("tab-panel-one")).toBeNull();
     });
 });
 

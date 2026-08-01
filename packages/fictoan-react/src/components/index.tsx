@@ -152,10 +152,10 @@ export { Spinner, type SpinnerProps } from "./Spinner";
 export { Table, type TableProps } from "./Table";
 
 // TABS ================================================================================================================
-export { Tabs, type TabsProps } from "./Tabs";
+export { Tabs, type TabsProps, type TabType } from "./Tabs";
 
 // THEME PROVIDER ======================================================================================================
-export { ThemeProvider, type ThemeProviderProps, useTheme } from "./ThemeProvider";
+export { ThemeProvider, type ThemeProviderProps, type SetThemeOptions, useTheme } from "./ThemeProvider";
 
 // TOAST ===============================================================================================================
 export { ToastsProvider, useToasts, type ToastsProviderProps, type ToastFunction } from "./Toast";
