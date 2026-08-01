@@ -24,7 +24,7 @@ import {
 }from "fictoan-react";
 
 // PACKAGE META ========================================================================================================
-import { version as fictoanVersion } from "fictoan-react/package.json";
+import fictoanPackage from "fictoan-react/package.json";
 
 // LOCAL COMPONENTS ====================================================================================================
 import { CodeComparison } from "$components/CodeComparison/CodeComparison";
@@ -86,11 +86,11 @@ const HomePage = () => {
                             language="bash"
                             withSyntaxHighlighting
                             showCopyButton
-                            source={`pnpm add fictoan-react@${fictoanVersion}
+                            source={`pnpm add fictoan-react@${fictoanPackage.version}
 # or
-yarn add fictoan-react@${fictoanVersion}
+yarn add fictoan-react@${fictoanPackage.version}
 # or
-npm install fictoan-react@${fictoanVersion}`}
+npm install fictoan-react@${fictoanPackage.version}`}
                         />
                     </Portion>
 

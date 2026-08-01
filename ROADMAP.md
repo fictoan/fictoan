@@ -116,12 +116,15 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
   `outputDir` instead of `outDir`, and `tsconfig.json`'s `declarationDir` never fired because `composite: true` makes
   plain `tsc` a no-op. Fixed by re-pointing both fields at `./dist/index.d.ts` and dropping the dead `dist/types` from
   `files`. Follow-up: add a postbuild assertion that the declared types file exists so this can't silently regress.
-- [~] **Build/release hygiene** — npm-path cleanups. *Done:* removed the malformed `"use client;"` rollup banner
+- [x] **Build/release hygiene** — npm-path cleanups. *Done:* removed the malformed `"use client;"` rollup banner
   (`vite.config.js`; the real directive comes from `preserveUseClient`), the dead `build:umd` script + the
-  `build:props-metadata` call in `scripts/rebuild.sh`, and the stale `$colour` alias. *Still open:* `sourcemap: true`
-  (`vite.config.js`) + tsconfig `sourceMap`/`declarationMap` ship ~110 `.map` files in `npm pack` — prune via
-  `.npmignore` (keeps local debug maps) rather than killing emission; and drop the unused devDeps
-  `vite-plugin-lib-inject-css` + `@fullhuman/postcss-purgecss` (needs a lockfile update).
+  `build:props-metadata` call in `scripts/rebuild.sh`, and the stale `$colour` alias. *Sourcemaps pruned from the
+  tarball:* `sourcemap: true` + tsconfig `sourceMap`/`declarationMap` stay on (local debug maps kept), but the ~170
+  `.map` files are now excluded from `npm pack` via a **`"!**/*.map"` negation in package.json `files` — not
+  `.npmignore`**. *(Correction to the original plan: a `files` allowlist overrides `.npmignore`, so the `.npmignore`
+  route left all 174 maps in the tarball; the `files` negation drops it 353→179 files, ~1.3 MB→~762 KB unpacked.)*
+  *Also done:* dropped the unused devDeps `vite-plugin-lib-inject-css` + `@fullhuman/postcss-purgecss` (lockfile updated,
+  −11 packages; lib still builds clean).
 
 ### Correctness bugs to clear
 
@@ -167,6 +170,20 @@ These are the gating items. 2.0 shouldn't go stable until these are sorted.
   explicit `storageKey` prop (default `"fictoan-theme"`). One resolved key now drives the init read, the persist write,
   and the no-flash script. Dev-only one-time warning when left default, recommending a unique value (package name).
   Docs use `storageKey="fictoan-docs"` and document the `pkg.name` pattern.
+- [x] **ThemeProvider fires a view transition on mount → console noise** — the mount `useEffect`
+  (`ThemeProvider.tsx`) called `setTheme(...)`, and `setTheme` wrapped the `<html>` class change in
+  `document.startViewTransition()` while discarding the returned transition's `ready` promise. On hydration (and on
+  every dev Fast Refresh) the transition is skipped and that unhandled `ready` rejection logs `Transition was aborted
+  because of invalid state` — repeatedly in dev. Harmless but noisy/confusing (surfaced from a downstream app).
+  **Fixed:** `setTheme` now takes a second `{ animate = true }` arg (exported `SetThemeOptions` — also a free public
+  opt-out for programmatic switches) and the mount effect calls it with `animate: false`, so the theme applies
+  instantly; the no-flash inline `<script>` has already painted it before hydration, so the crossfade there was a no-op
+  anyway. *Correction to the original note:* the mount call is **not** redundant — only the crossfade is. `setTheme` is
+  what sanitises an invalid persisted theme against `themeList` (the `useState` initialiser and the no-flash script both
+  skip that validation), so it must keep running; we just drop the animation. **Also hardened:** the real-toggle path
+  now `.catch()`-es the `ready` promise, so a genuinely skipped transition (overlapping toggles, a hidden tab) no longer
+  leaks an unhandled rejection either. Covered by 3 new ThemeProvider specs (no transition on mount, exactly one on a
+  user switch, rejection swallowed).
 - [x] **`fontStyle="sans-serif"` is dead** — Text/Heading emit the class `font-sans-serif` by default, but
   `typography.css` only defined `.font-sans`, so the default font class was a no-op (it only worked via the inherited
   body font). Renamed the rule to `.font-sans-serif` (it was otherwise unused — verified).
@@ -444,9 +461,9 @@ The plain-English prop model is the differentiator. Make it official.
 - [x] `llms.txt` (shipped on `beta-18`).
 - [~] **`llms.txt` upkeep + discoverability** — *discoverability done:* footer links + `<head>` `rel=alternate` links
   to `/llms.txt` and `/fictoan-schema.json`, a new `public/robots.txt`, and the Portion entry reworded to
-  `@container`-based. *Still open:* `public/llms.txt` has dead links (`/components/row` & `/components/portion` 404 —
-  they live at `/layout`; `/components/spinner` has no page) and documents `FormBuilder`, which the library and schema
-  don't expose; the schema's `$schema` points at `https://fictoan.io/schema/v1.json`, which is never built or served.
+  `@container`-based. *Dead links fixed:* `/components/row` & `/components/portion` now point at `/layout`, the
+  non-existent `FormBuilder` entry was dropped, and Spinner now has a real docs page (so its link is valid). *Still
+  open:* the schema's `$schema` points at `https://fictoan.io/schema/v1.json`, which is never built or served.
   Generating the component index from the schema removes the whole drift class but needs a slug-resolution layer.
 - [ ] **`@fictoan/mcp` server** — an MCP server exposing tools like `list_components`, `get_prop_signature`,
   `find_component_by_intent`. AI assistants using Cursor / Claude / Copilot can ground completions in real schema
@@ -551,10 +568,10 @@ ages better.
   button. A real and growing UI category that didn't exist in 2020.
 - [x] **`stats.html` gitignore** — was regenerated on every build and showed up as a dirty file. Added `stats.html` to
   `.gitignore` and untracked the existing copy (`git rm --cached`).
-- [ ] **Docs `version` import warning** — `src/app/page.client.tsx` and `src/components/Header/VersionBadge.tsx` import
-  a named `version` from a default-exporting module, which webpack warns about on every docs build ("only default export
-  is available soon"). Import the default and read `.version` (or fix the source module's exports). Cosmetic — the build
-  still succeeds — but noisy.
+- [x] **Docs `version` import warning** — `src/app/page.client.tsx` and `src/components/Header/VersionBadge.tsx` imported
+  a named `version` from a default-exporting module, which webpack warned about on every docs build ("only default export
+  is available soon"). Fixed: both now default-import the package.json and read `.version`. Verified — the docs build is
+  now warning-free.
 
 ---
 

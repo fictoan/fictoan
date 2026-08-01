@@ -1781,6 +1781,12 @@ const docsMetadata = {
             path        : "/components/skeleton",
             icon        : SkeletonIcon,
         },
+        spinner           : {
+            title       : "Spinner",
+            description : "Loading indicator for in-progress operations",
+            path        : "/components/spinner",
+            icon        : ProgressBarIcon, // reuse: no dedicated spinner icon
+        },
         table             : {
             title       : "Table",
             description : "Display tabular data",

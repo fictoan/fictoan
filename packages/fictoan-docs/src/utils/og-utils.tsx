@@ -54,6 +54,7 @@ const ICON_MAP: Record<string, string> = {
     "sidebar"         : "new-icons/sidebar.svg",
     "sidebar-item"    : "new-icons/sidebar.svg",
     "skeleton"        : "new-icons/skeleton.svg",
+    "spinner"         : "new-icons/meter.svg",
     "table"           : "new-icons/table.svg",
     "tabs"            : "new-icons/tabs.svg",
     "toast"           : "new-icons/toast.svg",
