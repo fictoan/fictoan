@@ -189,6 +189,67 @@ describe("ThemeProvider — reads initial value from localStorage", () => {
     });
 });
 
+// startViewTransition is absent in jsdom, so these tests stub it to assert the
+// animate contract: the mount path applies the theme instantly (animate:false,
+// no spurious abort on hydration/Fast Refresh), real user switches crossfade,
+// and a rejected `ready` promise (a skipped transition) is swallowed.
+type VTDocument = Document & {
+    startViewTransition ? : (cb: () => void) => { ready ? : Promise<unknown> };
+};
+
+describe("ThemeProvider — view transitions", () => {
+    afterEach(() => {
+        (document as VTDocument).startViewTransition = undefined;
+    });
+
+    it("does not start a view transition on mount (instant apply)", () => {
+        const startViewTransition = vi.fn((cb: () => void) => {
+            cb();
+            return { ready: Promise.resolve() };
+        });
+        (document as VTDocument).startViewTransition = startViewTransition;
+
+        renderProvider();
+
+        expect(startViewTransition).not.toHaveBeenCalled();
+        expect(document.documentElement.className).toBe("dawn");
+    });
+
+    it("starts exactly one view transition on a user-initiated switch", async () => {
+        const startViewTransition = vi.fn((cb: () => void) => {
+            cb();
+            return { ready: Promise.resolve() };
+        });
+        (document as VTDocument).startViewTransition = startViewTransition;
+
+        const user = userEvent.setup();
+        renderProvider();
+
+        await user.click(screen.getByRole("button", { name : "to-midnight" }));
+
+        // 1 = the click; mount and the effect re-run both pass animate:false.
+        expect(startViewTransition).toHaveBeenCalledTimes(1);
+        expect(document.documentElement.className).toBe("midnight");
+    });
+
+    it("swallows a skipped-transition rejection (class still applies)", async () => {
+        const startViewTransition = vi.fn((cb: () => void) => {
+            cb();
+            return { ready: Promise.reject(new Error("Transition was aborted because of invalid state")) };
+        });
+        (document as VTDocument).startViewTransition = startViewTransition;
+
+        const user = userEvent.setup();
+        renderProvider();
+
+        await user.click(screen.getByRole("button", { name : "to-midnight" }));
+
+        expect(document.documentElement.className).toBe("midnight");
+        // Let the rejected `ready` settle; our .catch handles it, so nothing escapes.
+        await Promise.resolve();
+    });
+});
+
 describe("ThemeProvider — a11y", () => {
     it("has no axe violations with realistic content", async () => {
         const { container } = render(

@@ -8,10 +8,23 @@ import { Element } from "$element";
 const DEFAULT_STORAGE_KEY = "fictoan-theme";
 let hasWarnedDefaultKey = false;
 
-// Create a tuple type for the theme context
-type ThemeContextType = [string, React.Dispatch<React.SetStateAction<string>>];
+/** Options for the theme setter. */
+export interface SetThemeOptions {
+    /** Crossfade between themes via the View Transitions API. Defaults to `true`;
+     *  pass `false` for an instant switch (used internally on mount, where the
+     *  no-flash script has already painted the theme so there's nothing to
+     *  crossfade). */
+    animate ? : boolean;
+}
 
-const defaultContext: ThemeContextType = ["", (_) => {}];
+/** The theme setter: the same call shape as a React state dispatcher, plus an
+ *  optional `options` arg to control the crossfade. */
+type SetThemeFunction = (value: React.SetStateAction<string>, options?: SetThemeOptions) => void;
+
+// Create a tuple type for the theme context
+type ThemeContextType = [string, SetThemeFunction];
+
+const defaultContext: ThemeContextType = ["", () => {}];
 const ThemeContext = React.createContext<ThemeContextType | undefined>(undefined);
 
 export const useTheme = (): ThemeContextType => {
@@ -52,7 +65,9 @@ export const ThemeProvider = React.forwardRef(
             getTheme(resolvedKey) || currentTheme);
 
         const setTheme = useCallback(
-            (value: React.SetStateAction<string>) => {
+            (value: React.SetStateAction<string>, options?: SetThemeOptions) => {
+                const animate = options?.animate ?? true;
+
                 // Handle both direct values and updater functions
                 const newTheme = typeof value === "function"
                     ? value(themeState)
@@ -65,19 +80,26 @@ export const ThemeProvider = React.forwardRef(
                 // The visible theme switch is documentElement.className changing,
                 // which all theme-* CSS rules cascade off. Wrap that mutation in
                 // a view transition so consumers get a smooth crossfade between
-                // themes without writing animation CSS. Falls back to instant
-                // change on browsers that don't support the API.
+                // themes without writing animation CSS. Falls back to an instant
+                // change when the API is unavailable or animation is opted out.
                 const applyClass = () => {
                     document.documentElement.className = "";
                     document.documentElement.classList.add(finalTheme);
                 };
 
                 const doc = typeof document !== "undefined"
-                    ? document as Document & { startViewTransition?: (cb: () => void) => unknown }
+                    ? document as Document & {
+                        startViewTransition ? : (cb: () => void) => { ready ? : Promise<unknown> };
+                    }
                     : null;
 
-                if (doc && typeof doc.startViewTransition === "function") {
-                    doc.startViewTransition(applyClass);
+                if (animate && doc && typeof doc.startViewTransition === "function") {
+                    // A skipped transition (overlapping toggles, a hidden tab)
+                    // rejects the ViewTransition's `ready` promise; left unhandled
+                    // it logs "Transition was aborted because of invalid state".
+                    // Swallow that expected rejection so it doesn't reach the console.
+                    const transition = doc.startViewTransition(applyClass);
+                    transition?.ready?.catch(() => {});
                 } else if (typeof document !== "undefined") {
                     applyClass();
                 }
@@ -94,7 +116,12 @@ export const ThemeProvider = React.forwardRef(
 
         useEffect(() => {
             const theme = getTheme(resolvedKey);
-            setTheme(theme || currentTheme);
+            // Apply instantly on mount: the no-flash <script> has already painted
+            // this theme before hydration, so a crossfade here has identical
+            // before/after snapshots and only fires a spurious aborted transition
+            // (noisy on every dev Fast Refresh). setTheme still runs so an invalid
+            // persisted theme is sanitised against themeList.
+            setTheme(theme || currentTheme, { animate: false });
 
             if (
                 storageKey === undefined && !hasWarnedDefaultKey &&
