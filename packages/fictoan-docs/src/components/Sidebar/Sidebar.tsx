@@ -327,6 +327,13 @@ export const Sidebar = ({ sidebarState, setSidebarState, showSidebarOnMobile, se
                     </SidebarItem>
                 </Link>
 
+                <Link href="/components/spinner" className={`${pathname === "/components/spinner" ? "active" : ""}`}>
+                    <SidebarItem onClick={closeMobileSidebar}>
+                        <ProgressIcon />
+                        <Text weight="400">Spinner</Text>
+                    </SidebarItem>
+                </Link>
+
                 <Link href="/components/table" className={`${pathname === "/components/table" ? "active" : ""}`}>
                     <SidebarItem onClick={closeMobileSidebar}>
                         <TableIcon />

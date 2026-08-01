@@ -47,6 +47,7 @@ export function generateStaticParams() {
         "select",
         "sidebar",
         "skeleton",
+        "spinner",
         "table",
         "tabs",
         "toast",

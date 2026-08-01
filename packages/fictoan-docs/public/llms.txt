@@ -38,8 +38,8 @@ Key points to remember when generating Fictoan code:
 
 ## Layout
 
-- [Row](https://fictoan.io/components/row): the 24-column grid primitive, capped and centred at 2400px.
-- [Portion](https://fictoan.io/components/portion): column-spanning children of Row whose responsive spans (mobileSpan/tabletPortraitSpan/tabletLandscapeSpan/desktopSpan) react to the parent Row's rendered width via CSS @container queries, not the viewport.
+- [Row](https://fictoan.io/layout): the 24-column grid primitive, capped and centred at 2400px.
+- [Portion](https://fictoan.io/layout): column-spanning children of Row whose responsive spans (mobileSpan/tabletPortraitSpan/tabletLandscapeSpan/desktopSpan) react to the parent Row's rendered width via CSS @container queries, not the viewport.
 - [Card](https://fictoan.io/components/card): surface container with shadow, border, and shape.
 
 ## Form components
@@ -56,7 +56,6 @@ Key points to remember when generating Fictoan code:
 - [PinInputField](https://fictoan.io/components/pin-input-field): OTP / verification code input.
 - [FileUpload](https://fictoan.io/components/input-field): file picker.
 - [OptionCard](https://fictoan.io/components/option-cards): card-style radio/checkbox group.
-- [FormBuilder](https://fictoan.io/components/form-builder): schema-driven form generation.
 
 ## Interactive components
 
