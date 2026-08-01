@@ -19,6 +19,9 @@ live in `ROADMAP.md`.
 - `columns` now works on any Element/Div — implies grid and sets that many equal columns.
 - Spacing props (`gap`, `margin`, `padding` and every variant) accept a scale token **or** any CSS length (`"4px"`, `"20vw"`, `calc(...)`).
 - Public exports for typing wrappers that forward fictoan props: `CommonProps`, `CommonAndHTMLProps`, `FlexibleEventHandler`, plus the `useClickOutside` hook.
+- Tabs controlled mode — `activeTab` + `onTabChange` alongside the uncontrolled `defaultActiveTab`, so hosts can observe and drive the active tab; `TabType` is now exported and `defaultActiveTab` is typed `string`.
+- Tabs `lazyMount` — renders only the active panel instead of mounting every panel behind `hidden`, so content that measures its container at mount time (charts, maps) always sees a visible box.
+- ThemeProvider's `setTheme` takes a second `{ animate }` options arg (exported `SetThemeOptions`) — a public opt-out of the crossfade for programmatic switches.
 
 ### Fixed
 - Published `types` path now resolves (was zero types — may surface pre-existing `any`-masked errors).
@@ -32,6 +35,7 @@ live in `ROADMAP.md`.
 - Breadcrumbs routes its outer `<nav>` through Element, so universal props no longer leak onto the DOM as invalid attributes.
 - Callout `title` renders as a visible heading (was `aria-label` only — invisible to sighted users), wired via `aria-labelledby`.
 - `ToastsProvider` / `NotificationsProvider` memoise their context value, so consumers no longer re-render on every provider render.
+- ThemeProvider no longer fires a view transition on mount — ends the repeated "Transition was aborted because of invalid state" console noise on hydration and dev Fast Refresh; a genuinely skipped crossfade (overlapping toggles, hidden tab) no longer leaks an unhandled rejection either.
 - Dropped the `any`-typed `onChange` override on the base Element type (it now inherits the native handler) and the `any` in `createClassName`.
 
 ### Accessibility
