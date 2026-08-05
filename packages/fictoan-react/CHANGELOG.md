@@ -47,6 +47,7 @@ live in `ROADMAP.md`.
 - Low-severity polish: RadioTabGroup's `bgColour` now applies (was a silent no-op); removed redundant ARIA (Badge's auto `aria-label` for text children, ListBox's `aria-owns`, Skeleton's `aria-valuemin`/`-max`); Meter description ids are unique (via `useId`); Breadcrumbs separators are valid `<ul>` children; Tabs cancels its exit-animation timer on unmount.
 
 ### ⚠️ Breaking changes
+- Button defaults to `type="button"` — a native `<button>` inside a `<form>` defaults to `type="submit"`, so an onClick-only Button placed in a Form silently submitted it (the copy-button-resubmits-the-form trap). Forms relying on that implicit submit must now say `type="submit"` on their submit button.
 - ThemeProvider now server-renders its children (with a pre-hydration no-flash script; needs `script-src 'unsafe-inline'` or a `nonce`) — surfaces any browser-API-in-render code under SSR/SSG.
 - Theme is stored under a stable `storageKey` (default `"fictoan-theme"`) instead of a hostname-derived key — returning users reset once; pass a unique key per app.
 - Spacing tokens `--tiny`…`--huge` are capped on wide screens via `clamp()`.

@@ -23,7 +23,11 @@ export type ButtonProps = Omit<CommonAndHTMLProps<ButtonElementType>, keyof Butt
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const Button = React.forwardRef(
-    ({size = "medium", shape, kind, variant, isLoading, label, ...props} : ButtonProps, ref : React.Ref<ButtonElementType>) => {
+    // type defaults to "button" — a native <button> inside a <form> defaults
+    // to type="submit", so an onClick-only Button placed in a Form silently
+    // submits it (the copy-button-resubmits-the-form trap). Pass
+    // type="submit" explicitly on the one button per form that should submit.
+    ({size = "medium", shape, kind, variant, isLoading, label, type = "button", ...props} : ButtonProps, ref : React.Ref<ButtonElementType>) => {
         let classNames = [];
 
         if (kind) {
@@ -51,6 +55,7 @@ export const Button = React.forwardRef(
                 as="button"
                 data-button
                 ref={ref}
+                type={type}
                 classNames={classNames}
                 aria-label={label}
                 aria-disabled={props.disabled || isLoading}
