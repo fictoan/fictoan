@@ -128,6 +128,32 @@ describe("Button — rendered element", () => {
     });
 });
 
+describe("Button — form semantics", () => {
+    // A native <button> inside a <form> defaults to type="submit", so an
+    // onClick-only Button placed in a Form used to submit it silently.
+    // Button pins type="button" unless the consumer says otherwise.
+    it("defaults type to \"button\"", () => {
+        render(<Button>Copy</Button>);
+        expect(screen.getByRole("button", { name: "Copy" })).toHaveAttribute("type", "button");
+    });
+
+    it("honours an explicit type=\"submit\"", () => {
+        render(<Button type="submit">Save</Button>);
+        expect(screen.getByRole("button", { name: "Save" })).toHaveAttribute("type", "submit");
+    });
+
+    it("does not submit an enclosing form on click by default", async () => {
+        const onSubmit = vi.fn((e : React.FormEvent) => e.preventDefault());
+        render(
+            <form onSubmit={onSubmit}>
+                <Button>Copy</Button>
+            </form>,
+        );
+        await userEvent.click(screen.getByRole("button", { name: "Copy" }));
+        expect(onSubmit).not.toHaveBeenCalled();
+    });
+});
+
 describe("Button — a11y", () => {
     it("has no axe violations for a labelled button", async () => {
         const { container } = render(<Button kind="primary">Submit form</Button>);

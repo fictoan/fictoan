@@ -35,6 +35,10 @@ export interface OptionCardsProviderProps {
     selectionLimit          ? : number;
     defaultSelectedIds      ? : Set<string>;  // Uncontrolled mode - initial selection
     selectedIds             ? : Set<string>;  // Controlled mode - external state
+    // Wrap every option in Card chrome. Absent, options render bare — the
+    // selection behaviour and tick overlay on top of whatever the children
+    // bring, and their own styling governs.
+    showOptionsAsCards      ? : boolean;
 }
 
 export interface OptionCardProps extends CardProps {
@@ -50,27 +54,29 @@ export interface OptionCardsGroupRef {
 }
 
 interface OptionCardsContextType {
-    isSelected       : (id: string) => boolean;
-    toggleSelection  : (id: string) => void;
-    showTickIcon   ? : boolean;
-    tickPosition   ? : TickPosition;
-    selectAll      ? : () => void;
-    selectNone     ? : () => void;
-    selectInverse  ? : () => void;
-    registerOption   : (id: string, disabled: boolean) => void;
-    unregisterOption : (id: string) => void;
+    isSelected         : (id: string) => boolean;
+    toggleSelection    : (id: string) => void;
+    showTickIcon     ? : boolean;
+    tickPosition     ? : TickPosition;
+    showOptionsAsCards ? : boolean;
+    selectAll        ? : () => void;
+    selectNone       ? : () => void;
+    selectInverse    ? : () => void;
+    registerOption     : (id: string, disabled: boolean) => void;
+    unregisterOption   : (id: string) => void;
 }
 
 const OptionCardsContext = createContext<OptionCardsContextType>({
-    isSelected       : () => false,
-    toggleSelection  : () => {},
-    showTickIcon     : false,
-    tickPosition     : "top-right",
-    selectAll        : () => {},
-    selectNone       : () => {},
-    selectInverse    : () => {},
-    registerOption   : () => {},
-    unregisterOption : () => {},
+    isSelected         : () => false,
+    toggleSelection    : () => {},
+    showTickIcon       : false,
+    tickPosition       : "top-right",
+    showOptionsAsCards : false,
+    selectAll          : () => {},
+    selectNone         : () => {},
+    selectInverse      : () => {},
+    registerOption     : () => {},
+    unregisterOption   : () => {},
 });
 
 // COMPONENT ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,6 +91,7 @@ export const OptionCardsGroup = React.forwardRef<OptionCardsGroupRef, OptionCard
             selectionLimit,
             defaultSelectedIds,
             selectedIds: selectedIdsProp,
+            showOptionsAsCards = false,
             ...props
         },
         ref
@@ -198,6 +205,7 @@ export const OptionCardsGroup = React.forwardRef<OptionCardsGroupRef, OptionCard
             toggleSelection,
             showTickIcon,
             tickPosition,
+            showOptionsAsCards,
             selectAll,
             selectNone,
             selectInverse,
@@ -230,8 +238,16 @@ export const useOptionCardsGroup = () => {
     return { selectAll, selectNone, selectInverse };
 };
 
+// Card-only cosmetics. When the group renders options bare, the child
+// component owns all styling — these props on the wrapper would fight it,
+// so passing any of them is a hard error rather than a silent no-op.
+const CARD_ONLY_PROPS = [
+    "shape", "heading", "padding", "shadow",
+    "bgColour", "bgColor", "borderColour", "borderColor",
+] as const;
+
 export const OptionCard: React.FC<OptionCardProps> = ({ id, children, disabled = false, ...props }) => {
-    const { isSelected, toggleSelection, showTickIcon, registerOption, unregisterOption } = useContext(OptionCardsContext);
+    const { isSelected, toggleSelection, showTickIcon, showOptionsAsCards, registerOption, unregisterOption } = useContext(OptionCardsContext);
     const [showDeselect, setShowDeselect] = useState(false);
     const [isInitialHover, setIsInitialHover] = useState(true);
 
@@ -241,7 +257,23 @@ export const OptionCard: React.FC<OptionCardProps> = ({ id, children, disabled =
         return () => unregisterOption(id);
     }, [id, disabled, registerOption, unregisterOption]);
 
+    if (!showOptionsAsCards) {
+        const offending = CARD_ONLY_PROPS.filter(
+            (key) => (props as Record<string, unknown>)[key] !== undefined,
+        );
+        if (offending.length > 0) {
+            throw new Error(
+                `OptionCard: ${offending.join(", ")} ${offending.length === 1 ? "has" : "have"} no home without ` +
+                `showOptionsAsCards on the OptionCardsGroup — the option renders bare, so style the child instead.`,
+            );
+        }
+    }
+
     let classNames = [];
+
+    if (!showOptionsAsCards) {
+        classNames.push("bare");
+    }
 
     if (isSelected(id)) {
         classNames.push("selected");
@@ -286,7 +318,7 @@ export const OptionCard: React.FC<OptionCardProps> = ({ id, children, disabled =
 
     return (
         <Element<CardElementType>
-            as={Card}
+            as={showOptionsAsCards ? Card : Div}
             data-option-card
             role="button"
             tabIndex={disabled ? -1 : 0}

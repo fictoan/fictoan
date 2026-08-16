@@ -18,7 +18,7 @@ import { OptionCard, OptionCardsGroup } from "./OptionCard";
 // and lives in the future browser tier.
 
 describe("OptionCard — rendering & ARIA", () => {
-    it("renders each card as role=button with the option-card data attribute", () => {
+    it("renders each option as role=button with the option-card data attribute", () => {
         render(
             <OptionCardsGroup>
                 <OptionCard id="a">Alpha</OptionCard>
@@ -30,9 +30,56 @@ describe("OptionCard — rendering & ARIA", () => {
         expect(cards).toHaveLength(2);
         cards.forEach((card) => {
             expect(card).toHaveAttribute("data-option-card");
-            // Card supplies data-card; OptionCard layers data-option-card on top.
-            expect(card).toHaveAttribute("data-card");
         });
+    });
+
+    it("renders options bare by default — no Card chrome, the bare class on", () => {
+        render(
+            <OptionCardsGroup>
+                <OptionCard id="a">Alpha</OptionCard>
+            </OptionCardsGroup>,
+        );
+
+        const option = screen.getByRole("button");
+        expect(option).not.toHaveAttribute("data-card");
+        expect(option).toHaveClass("bare");
+    });
+
+    it("wraps options in Card chrome when the group passes showOptionsAsCards", () => {
+        render(
+            <OptionCardsGroup showOptionsAsCards>
+                <OptionCard id="a">Alpha</OptionCard>
+            </OptionCardsGroup>,
+        );
+
+        const option = screen.getByRole("button");
+        // Card supplies data-card; OptionCard layers data-option-card on top.
+        expect(option).toHaveAttribute("data-card");
+        expect(option).not.toHaveClass("bare");
+    });
+
+    it("throws when card-only cosmetics are passed to a bare option", () => {
+        // Silence React's error boundary noise for the expected throw
+        const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+
+        expect(() =>
+            render(
+                <OptionCardsGroup>
+                    <OptionCard id="a" shape="rounded" padding="nano">Alpha</OptionCard>
+                </OptionCardsGroup>,
+            ),
+        ).toThrow(/shape, padding/);
+
+        // The same cosmetics are legitimate once the group shows cards
+        expect(() =>
+            render(
+                <OptionCardsGroup showOptionsAsCards>
+                    <OptionCard id="a" shape="rounded" padding="nano">Alpha</OptionCard>
+                </OptionCardsGroup>,
+            ),
+        ).not.toThrow();
+
+        consoleError.mockRestore();
     });
 
     it("is keyboard-focusable when enabled and pulled out of the tab order when disabled", () => {

@@ -6,6 +6,7 @@ The 2.0.0 line, folding in the `beta-18` and `beta-19` pre-releases. One-line hi
 live in `ROADMAP.md`.
 
 ### Added
+- OptionCardsGroup `showOptionsAsCards` — options now render bare by default: the selection behaviour, a11y wiring and tick overlay sit on top of whatever the children bring, and the child component's own styling governs. Pass the prop on the group to wrap every option in the previous Card chrome. Card-only cosmetics (`shape`, `padding`, `shadow`, colours) on a bare OptionCard throw, rather than silently fighting the child.
 - Native browser primitives — Modal, Drawer and Tooltip on the popover API (Tooltip also via CSS anchor positioning); Row is now a CSS container.
 - Whole stylesheet wrapped in `@layer fictoan`, split into ordered `fictoan.base` / `fictoan.utilities` sub-layers — unlayered consumer CSS overrides without `!important`.
 - Responsive Portion spans are container-relative — they react to the Row's rendered width via `@container`, not the viewport.
@@ -47,6 +48,8 @@ live in `ROADMAP.md`.
 - Low-severity polish: RadioTabGroup's `bgColour` now applies (was a silent no-op); removed redundant ARIA (Badge's auto `aria-label` for text children, ListBox's `aria-owns`, Skeleton's `aria-valuemin`/`-max`); Meter description ids are unique (via `useId`); Breadcrumbs separators are valid `<ul>` children; Tabs cancels its exit-animation timer on unmount.
 
 ### ⚠️ Breaking changes
+- OptionCard no longer wraps children in a Card by default — the absence of chrome is the default, and the option inherits its look from its children. Add `showOptionsAsCards` to the OptionCardsGroup to restore the old appearance; any `shape`/`padding`-style props on the cards themselves now throw without it.
+- Button defaults to `type="button"` — a native `<button>` inside a `<form>` defaults to `type="submit"`, so an onClick-only Button placed in a Form silently submitted it (the copy-button-resubmits-the-form trap). Forms relying on that implicit submit must now say `type="submit"` on their submit button.
 - ThemeProvider now server-renders its children (with a pre-hydration no-flash script; needs `script-src 'unsafe-inline'` or a `nonce`) — surfaces any browser-API-in-render code under SSR/SSG.
 - Theme is stored under a stable `storageKey` (default `"fictoan-theme"`) instead of a hostname-derived key — returning users reset once; pass a unique key per app.
 - Spacing tokens `--tiny`…`--huge` are capped on wide screens via `clamp()`.

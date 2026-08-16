@@ -3,6 +3,9 @@
 }
 
 [data-option-card] {
+    /* The tick/deselect icons anchor here — Card brings its own position,
+       the bare Div wrapper needs one too */
+    position    : relative;
     user-select : none;
     transition  : all 0.2s;
 
@@ -14,29 +17,35 @@
 
     &:not(.disabled) { cursor : pointer; }
 
-    &:hover {
-        z-index    : 500;
-        border     : var(--option-card-border-width) solid var(--option-card-border-hover);
-        background : var(--option-card-bg-hover);
-        box-shadow : 0 1px 2px rgba(0, 0, 0, 0.04), 0 12px 24px rgba(0, 0, 0, 0.08);
+    /* Behaviour, both modes: the tick previews on hover */
+    &:hover:not(.selected) .tick-icon {
+        display : block;
 
-        &:not(.selected) .tick-icon {
-            display : block;
+        circle { fill : var(--option-card-tick-bg-hover); }
+        path { stroke : var(--option-card-tick-line-hover); }
+    }
 
-            circle { fill : var(--option-card-tick-bg-hover); }
-            path { stroke : var(--option-card-tick-line-hover); }
+    /* CARD CHROME ========================================================== */
+    /* Only when the group opts in via showOptionsAsCards — bare options are
+       styled entirely by their children */
+    &:not(.bare) {
+        &:hover {
+            z-index    : 500;
+            border     : var(--option-card-border-width) solid var(--option-card-border-hover);
+            background : var(--option-card-bg-hover);
+            box-shadow : 0 1px 2px rgba(0, 0, 0, 0.04), 0 12px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        &:active { box-shadow : none; }
+
+        &.selected {
+            background-color : var(--option-card-bg-selected);
+            border           : var(--option-card-border-width) solid var(--option-card-border-selected);
         }
     }
 
-    &:active { box-shadow : none; }
-
-    &.selected {
-        background-color : var(--option-card-bg-selected);
-        border           : var(--option-card-border-width) solid var(--option-card-border-selected);
-
-        .tick-icon {
-            display : block;
-        }
+    &.selected .tick-icon {
+        display : block;
     }
 
     &.show-deselect {
