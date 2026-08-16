@@ -53,6 +53,7 @@ const OptionCardsDocs = () => {
     const codeString = useMemo(() => {
         const groupProps = [];
         groupProps.push(`    ref={optionCardsRef}`);
+        groupProps.push(`    showOptionsAsCards`);
         if (allowMultipleSelections) groupProps.push(`    allowMultipleSelections`);
         if (!showTickIcon) groupProps.push(`    showTickIcon={false}`);
         if (tickPosition !== "top-right") groupProps.push(`    tickPosition="${tickPosition}"`);
@@ -93,8 +94,10 @@ const optionCardsRef = useRef<OptionCardsGroupRef>(null);
                 <Divider kind="tertiary" verticalMargin="micro" />
 
                 <Text>
-                    Supports single and multiple selections, with an optional tick icon indicator. Cards accept any
-                    React node as children.
+                    Supports single and multiple selections, with an optional tick icon indicator. Options accept any
+                    React node as children, and render bare by default&mdash;your child component&rsquo;s own styling
+                    governs, with the tick overlaid. Pass <code>showOptionsAsCards</code> on the group to wrap every
+                    option in Card chrome instead.
                 </Text>
             </Div>
 
@@ -102,6 +105,7 @@ const optionCardsRef = useRef<OptionCardsGroupRef>(null);
             <Div id="demo-component">
                 <OptionCardsGroup
                     ref={optionCardsRef}
+                    showOptionsAsCards
                     allowMultipleSelections={allowMultipleSelections}
                     showTickIcon={showTickIcon}
                     tickPosition={tickPosition}

@@ -437,6 +437,7 @@ export const ComponentGrid = () => {
                 <Card shape="rounded" className="component-wrapper" isFullHeight>
                     <Div className="component-card">
                         <OptionCardsGroup
+                            showOptionsAsCards
                             allowMultipleSelections
                             showTickIcon
                         >

@@ -154,6 +154,7 @@ export const ColourConfigurator : React.FC = () => {
                 {/* STEP 1 — COLOUR */}
                 <ColourCarousel label="First, pick a colour">
                     <OptionCardsGroup
+                        showOptionsAsCards
                         showTickIcon
                         onSelectionChange={(selectedIds) => {
                             const colorId = Array.from(selectedIds)[0];
@@ -187,6 +188,7 @@ export const ColourConfigurator : React.FC = () => {
                 {/* STEP 2 — LUMINANCE */}
                 <ColourCarousel label="...then, luminance">
                     <OptionCardsGroup
+                        showOptionsAsCards
                         showTickIcon
                         onSelectionChange={(selectedIds) => {
                             const luminanceId = Array.from(selectedIds)[0];
@@ -242,6 +244,7 @@ export const ColourConfigurator : React.FC = () => {
                 {/* STEP 3 — OPACITY */}
                 <ColourCarousel label="...finally, opacity">
                     <OptionCardsGroup
+                        showOptionsAsCards
                         showTickIcon
                         onSelectionChange={(selectedIds) => {
                             const opacityId = Array.from(selectedIds)[0];
