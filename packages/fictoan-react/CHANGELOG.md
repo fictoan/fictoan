@@ -25,6 +25,8 @@ live in `ROADMAP.md`.
 - ThemeProvider's `setTheme` takes a second `{ animate }` options arg (exported `SetThemeOptions`) — a public opt-out of the crossfade for programmatic switches.
 
 ### Fixed
+- Tabs' tab-strip buttons carry `type="button"` — inside a `<form>` they defaulted to submit, so switching tabs attempted a submission and fired the browser's required-field validation (the same class of bug as Button's, fixed earlier).
+- OptionCard's tick/deselect icons sit above positioned children (`z-index`) — a bare option whose child renders its own Card painted over them.
 - Published `types` path now resolves (was zero types — may surface pre-existing `any`-masked errors).
 - Universal colour props no longer lose to component base styles — colour utilities now sit in the later `fictoan.utilities` sub-layer, so they win the specificity tie (other utilities stay in `fictoan.base` so components can still refine them, e.g. Row's responsive side-padding).
 - `<Heading>` / `<Text>` honour the themeable `--heading-font` / `--paragraph-font` again (dropped the forced `font-sans-serif` default).

@@ -179,6 +179,7 @@ export const Tabs = React.forwardRef(
                             <li key={tab.key} role="none">
                                 <Element<HTMLButtonElement>
                                     as="button"
+                                    type="button"
                                     ref={(el) => { tabButtonRefs.current[i] = el; }}
                                     id={`tab-${tab.key}`}
                                     role="tab"

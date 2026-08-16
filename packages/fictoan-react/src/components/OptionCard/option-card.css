@@ -62,10 +62,13 @@
     }
 
     /* THE ICONS ============================================================ */
+    /* z-index keeps the icons above positioned children — a bare option
+       whose child brings its own Card would otherwise paint over them */
     .tick-icon,
     .deselect-icon {
         display        : none;
         position       : absolute;
+        z-index        : 1;
         width          : 24px;
         height         : 24px;
         transition     : all 0.2s;
