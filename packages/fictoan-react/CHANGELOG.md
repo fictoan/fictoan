@@ -25,6 +25,7 @@ live in `ROADMAP.md`.
 - ThemeProvider's `setTheme` takes a second `{ animate }` options arg (exported `SetThemeOptions`) — a public opt-out of the crossfade for programmatic switches.
 
 ### Fixed
+- Standalone `Skeleton`s animate — the component always stamped its own `effect-*` class, but only the `SkeletonGroup`-scoped animation selectors existed, so a `Skeleton` outside a group rendered as a static block with no shimmer.
 - Tabs' tab-strip buttons carry `type="button"` — inside a `<form>` they defaulted to submit, so switching tabs attempted a submission and fired the browser's required-field validation (the same class of bug as Button's, fixed earlier).
 - OptionCard's tick/deselect icons sit above positioned children (`z-index`) — a bare option whose child renders its own Card painted over them.
 - Published `types` path now resolves (was zero types — may surface pre-existing `any`-masked errors).
