@@ -47,6 +47,27 @@
     }
 }
 
+/* Animations — standalone skeletons. The component always stamps its own
+ effect-* class, but only the group-scoped selectors above existed, so a
+ Skeleton outside a SkeletonGroup rendered as a static block. These mirror
+ the group rules for the element's own class. */
+[data-skeleton].effect-pulse {
+    animation : skeleton-pulse 1.5s ease-in-out 0.5s infinite;
+}
+
+[data-skeleton].effect-wave {
+    &::after {
+        content    : "";
+        position   : absolute;
+        top        : 0;
+        left       : 0;
+        right      : 0;
+        bottom     : 0;
+        background : linear-gradient(90deg, transparent, var(--skeleton-highlight), transparent);
+        animation  : skeleton-wave 1.6s linear 0.5s infinite;
+    }
+}
+
 /* SPACING CLASSES ////////////////////////////////////////////////////////// */
 [data-skeleton-group].direction-vertical.spacing-nano > [data-skeleton] { margin-bottom : 4px; }
 [data-skeleton-group].direction-vertical.spacing-micro > [data-skeleton] { margin-bottom : 8px; }
