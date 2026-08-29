@@ -304,16 +304,15 @@ export const CodeBlock = React.forwardRef((
                 aria-label={`Code in ${language}`}
             >
                 {/* Line Numbers */}
-                {showLineNumbers &&
-                    Array.from(Array(lines.length).keys()).map((index) => (
-                        <span
-                            key={index}
-                            className="line-numbers"
-                            aria-hidden="true"
-                        >
-                            {index + 1}
-                        </span>
-                    ))}
+                {showLineNumbers && (
+                    <div className="line-numbers-gutter" aria-hidden="true">
+                        {Array.from(Array(lines.length).keys()).map((index) => (
+                            <span key={index} className="line-numbers">
+                                {index + 1}
+                            </span>
+                        ))}
+                    </div>
+                )}
 
                 {/* Code Content */}
                 <code

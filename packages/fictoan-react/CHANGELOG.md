@@ -25,6 +25,8 @@ live in `ROADMAP.md`.
 - ThemeProvider's `setTheme` takes a second `{ animate }` options arg (exported `SetThemeOptions`) — a public opt-out of the crossfade for programmatic switches.
 
 ### Fixed
+- CodeBlock line numbers no longer drift on long files — the gutter was floated spans locked to the theme's fixed line-height, so a consumer whose code font metrics differed (or who overrode font size or line-height) accumulated a per-row offset until the final lines rendered unnumbered below the gutter. The gutter is now a flex column that inherits the pre's font and line-height, keeping every row in lockstep with the code's line boxes.
+- CodeBlock tolerates a trailing newline in `source` — it previously produced one more gutter entry than rendered lines, leaving the last line unnumbered.
 - CodeBlock highlights dynamically imported grammars on first view — `setPrismModule(Prism)` passes the Prism module singleton, so React's same-reference bailout skipped the re-render after a grammar registered itself by mutating `Prism.languages` in place; the first view of any language outside Prism core rendered as plain text and only highlighted on the next visit. Grammar readiness is now tracked in state and re-triggers the highlight exactly once.
 - Standalone `Skeleton`s animate — the component always stamped its own `effect-*` class, but only the `SkeletonGroup`-scoped animation selectors existed, so a `Skeleton` outside a group rendered as a static block with no shimmer.
 - Tabs' tab-strip buttons carry `type="button"` — inside a `<form>` they defaulted to submit, so switching tabs attempted a submission and fired the browser's required-field validation (the same class of bug as Button's, fixed earlier).
