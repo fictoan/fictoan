@@ -78,6 +78,10 @@ export const CodeBlock = React.forwardRef((
             : source ?? "";
     }
 
+    // A trailing newline desyncs the line-number floats from the rendered
+    // lines, leaving the final line outside the gutter — normalise it away
+    initialCode = initialCode.replace(/(?:\r\n|\r|\n)+$/, "");
+
     // Dynamically load Prism and language support when syntax highlighting is enabled
     useEffect(() => {
         if (!withSyntaxHighlighting) return;
