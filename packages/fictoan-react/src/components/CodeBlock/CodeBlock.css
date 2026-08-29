@@ -178,25 +178,29 @@
 
 
     /* LINE NUMBERS ========================================================= */
+    /*
+    The gutter is a flex column beside the code, not floats — its rows inherit
+    the pre's font and line-height, so they stay in lockstep with the code's
+    line boxes instead of drifting when metrics differ.
+    */
     &.show-line-numbers pre {
+        display      : flex;
         padding-left : 16px;
-        position     : relative;
+    }
 
-        > div {
-            display : flex;
-        }
+    & .line-numbers-gutter {
+        display        : flex;
+        flex-direction : column;
+        flex-shrink    : 0;
+        min-width      : 32px;
+        margin-right   : 32px;
+        text-align     : right;
+        user-select    : none;
+        color          : var(--code-block-line-numbers);
     }
 
     & .line-numbers {
-        width        : 32px;
-        text-align   : right;
-        margin-right : 32px;
-        user-select  : none;
-        color        : var(--code-block-line-numbers);
-        float        : left;
-        clear        : left;
-        line-height  : var(--code-block-line-height);
+        display     : block;
+        line-height : inherit;
     }
-
-    & .l-o-c { flex : 1; }
 }
