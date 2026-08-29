@@ -25,6 +25,7 @@ live in `ROADMAP.md`.
 - ThemeProvider's `setTheme` takes a second `{ animate }` options arg (exported `SetThemeOptions`) — a public opt-out of the crossfade for programmatic switches.
 
 ### Fixed
+- CodeBlock highlights dynamically imported grammars on first view — `setPrismModule(Prism)` passes the Prism module singleton, so React's same-reference bailout skipped the re-render after a grammar registered itself by mutating `Prism.languages` in place; the first view of any language outside Prism core rendered as plain text and only highlighted on the next visit. Grammar readiness is now tracked in state and re-triggers the highlight exactly once.
 - Standalone `Skeleton`s animate — the component always stamped its own `effect-*` class, but only the `SkeletonGroup`-scoped animation selectors existed, so a `Skeleton` outside a group rendered as a static block with no shimmer.
 - Tabs' tab-strip buttons carry `type="button"` — inside a `<form>` they defaulted to submit, so switching tabs attempted a submission and fired the browser's required-field validation (the same class of bug as Button's, fixed earlier).
 - OptionCard's tick/deselect icons sit above positioned children (`z-index`) — a bare option whose child renders its own Card painted over them.
