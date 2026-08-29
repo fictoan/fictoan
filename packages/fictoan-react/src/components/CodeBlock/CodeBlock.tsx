@@ -58,6 +58,13 @@ export const CodeBlock = React.forwardRef((
     const [ isLoading, setIsLoading ] = useState(withSyntaxHighlighting);
     const [ codeElement, setCodeElement ] = useState<HTMLElement | null>(null);
 
+    // Prism is a module singleton, so setPrismModule(Prism) bails out of
+    // re-rendering after the first call — language grammars register by
+    // mutating Prism.languages in place, which React cannot see. This tracks
+    // which language's grammar is actually ready, so highlighting re-runs
+    // once the dynamically imported grammar has landed.
+    const [ readyLanguage, setReadyLanguage ] = useState<string | null>(null);
+
     const preRef = useRef<HTMLPreElement>(null);
 
     // Determine the code content from either children or source prop
@@ -97,6 +104,7 @@ export const CodeBlock = React.forwardRef((
                 }
 
                 setPrismModule(Prism);
+                setReadyLanguage(language);
             } catch (error : any) {
                 // Check if it's a "module not found" error (prismjs not installed)
                 if (error?.code === "ERR_MODULE_NOT_FOUND" || error?.message?.includes("Cannot find module")) {
@@ -214,11 +222,12 @@ export const CodeBlock = React.forwardRef((
         };
     }, [ makeEditable, handleInput, codeElement ]);
 
-    // Initial highlighting when component loads
+    // Initial highlighting when component loads, re-run when a dynamically
+    // imported grammar becomes ready
     useEffect(() => {
         if (!codeElement || !prismModule) return;
         highlightCode(initialCode);
-    }, [ highlightCode, initialCode, prismModule, codeElement ]);
+    }, [ highlightCode, initialCode, prismModule, codeElement, readyLanguage ]);
 
     const copyToClipboard = async () => {
         try {
