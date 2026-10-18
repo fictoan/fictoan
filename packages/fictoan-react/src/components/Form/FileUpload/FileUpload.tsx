@@ -26,6 +26,11 @@ export type FileUploadProps = InputLabelCustomProps & CommonProps & {
     capture             ? : "user" | "environment";
     height              ? : string;
     onChange            ? : (files : File[]) => void;
+    // Controlled mode: the files to show as badges. When set, the component
+    // renders this list and never its own, so a parent can clear it (after a
+    // save, on cancel) or seed it. Leave it out for the uncontrolled default,
+    // where the component keeps the picked files itself.
+    files               ? : File[];
     instructionMainText ? : string;
     instructionSubText  ? : string;
     badgeBgColour       ? : ColourPropTypes;
@@ -58,6 +63,8 @@ export const FileUpload = React.forwardRef(
             capture,
             height = "120px",
             onChange,
+            files : controlledFiles,
+            disabled = false,
             className = "",
             instructionMainText = "Drag and drop or click to upload",
             instructionSubText = "You can add multiple files",
@@ -71,13 +78,26 @@ export const FileUpload = React.forwardRef(
         } : FileUploadProps,
         ref : React.Ref<FileUploadElementType>,
     ) => {
-        const [ files, setFiles ] = useState<File[]>([]);
+        // Uncontrolled by default; a `files` prop takes over the list and the
+        // internal state is left alone
+        const [ internalFiles, setInternalFiles ] = useState<File[]>([]);
+        const isControlled = controlledFiles !== undefined;
+        const files = isControlled ? controlledFiles : internalFiles;
+
         const [ isDragging, setIsDragging ] = useState(false);
         const fileInputRef = useRef<HTMLInputElement>(null);
+
+        // Every change to the list goes through here, so the callback always
+        // carries the list the badges will show
+        const commitFiles = (next : File[]) => {
+            if (!isControlled) setInternalFiles(next);
+            onChange?.(next);
+        };
 
         const handleDragOver = (e : React.DragEvent) => {
             e.preventDefault();
             e.stopPropagation();
+            if (disabled) return;
             setIsDragging(true);
         };
 
@@ -92,35 +112,28 @@ export const FileUpload = React.forwardRef(
             e.stopPropagation();
             setIsDragging(false);
 
-            const droppedFiles = Array.from(e.dataTransfer.files);
-            handleFiles(droppedFiles);
+            if (disabled) return;
+            handleFiles(Array.from(e.dataTransfer.files));
         };
 
+        // A cancelled picker fires a change with an empty list; it is not a
+        // pick, so neither the badges nor the callback see it
         const handleFiles = (newFiles : File[]) => {
-            if (!allowMultipleFiles) {
-                const fileToAdd = newFiles[0];
-                setFiles([ fileToAdd ]);
-                onChange?.([ fileToAdd ]);
-            } else {
-                setFiles(prevFiles => [ ...prevFiles, ...newFiles ]);
-                onChange?.([ ...files, ...newFiles ]);
-            }
+            if (disabled || newFiles.length === 0) return;
+            commitFiles(allowMultipleFiles ? [ ...files, ...newFiles ] : [ newFiles[0] ]);
         };
 
         const handleFileInput = (e : React.ChangeEvent<HTMLInputElement>) => {
-            if (e.target.files) {
-                const selectedFiles = Array.from(e.target.files);
-                handleFiles(selectedFiles);
-            }
+            handleFiles(Array.from(e.target.files ?? []));
         };
 
         const removeFile = (indexToRemove : number) => {
-            const updatedFiles = files.filter((_, index) => index !== indexToRemove);
-            setFiles(updatedFiles);
-            onChange?.(updatedFiles);
+            if (disabled) return;
+            commitFiles(files.filter((_, index) => index !== indexToRemove));
         };
 
         const openFileDialog = () => {
+            if (disabled) return;
             fileInputRef.current?.click();
         };
 
@@ -147,11 +160,13 @@ export const FileUpload = React.forwardRef(
                     className={[
                         "file-upload-wrapper",
                         isDragging ? "dragging" : "",
+                        disabled ? "disabled" : "",
                         className,
                     ].filter(Boolean).join(" ")}
                     aria-label={ariaLabel || label}
                     aria-invalid={ariaInvalid || invalid || Boolean(errorText) || undefined}
                     aria-required={required}
+                    aria-disabled={disabled || undefined}
                     aria-describedby={describedBy}
                 >
                     <Div
@@ -171,6 +186,7 @@ export const FileUpload = React.forwardRef(
                             multiple={allowMultipleFiles}
                             accept={accept}
                             capture={capture}
+                            disabled={disabled}
                             className="file-input"
                         />
 
@@ -191,9 +207,12 @@ export const FileUpload = React.forwardRef(
                                     key={`${file.name}-${index}`}
                                     size="small"
                                     shape="rounded"
-                                    actionIcon="cross"
-                                    onActionClick={() => removeFile(index)}
-                                    actionAriaLabel={`Remove ${file.name}`}
+                                    // No cross while disabled: the list can't change
+                                    {...(disabled ? {} : {
+                                        actionIcon      : "cross" as const,
+                                        onActionClick   : () => removeFile(index),
+                                        actionAriaLabel : `Remove ${file.name}`,
+                                    })}
                                     bgColour={badgeBgColour}
                                     textColour={badgeTextColour}
                                 >
