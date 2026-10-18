@@ -19,6 +19,25 @@
     background-color : var(--file-upload-area-bg-hover);
 }
 
+/* DISABLED ///////////////////////////////////////////////////////////////// */
+/* Same treatment as the other inputs: the input tokens' disabled colours, no
+   hover or drag feedback, and the pointer says so. */
+[data-file-upload-area].disabled .file-upload-area,
+[data-file-upload-area].disabled .file-upload-area:hover {
+    border-color     : var(--input-border-disabled);
+    background-color : var(--input-bg-disabled);
+    cursor           : not-allowed;
+    transform        : none;
+}
+
+[data-file-upload-area].disabled .file-input {
+    cursor : not-allowed;
+}
+
+[data-file-upload-area].disabled .file-upload-content p {
+    color : var(--input-text-disabled);
+}
+
 .file-input {
     position : absolute;
     width    : 100%;
